@@ -14,19 +14,20 @@ export async function getUsers(): Promise<UserResource[]> {
     }
 }
 
-export async function updateUserAbwesend(userId: string, abwesend: boolean): Promise<void> {
+export async function updateUserAbwesend(userId: string, abwesend: boolean): Promise<UserResource> {
     try {
         // Finde den Benutzer in der Datenbank anhand der ID
         const user = await User.findById(userId);
         if (!user) {
             throw new Error('Benutzer nicht gefunden');
         }
-        
+
         // Aktualisiere den Abwesenheitsstatus des Benutzers
         user.abwesend = abwesend;
-        
+
         // Speichere die Änderungen in der Datenbank
         await user.save();
+        return user.toObject()
     } catch (error) {
         throw new Error(`Fehler beim Aktualisieren der Abwesenheit des Benutzers: ${error.message}`);
     }
