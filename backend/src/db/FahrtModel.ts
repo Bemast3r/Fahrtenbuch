@@ -19,9 +19,9 @@ const fahrtSchema = new Schema<IFahrt>({
     kennzeichen: { type: Schema.Types.ObjectId, ref: User, required: true },
     kilometerstand: { type: Number, required: true },
     kilometerende: { type: Number, required: true },
-    lenkzeit: { type: Number, required: true },
-    arbeitszeit: { type: Number, required: true },
-    pause: { type: Number, required: true },
+    lenkzeit: { type: Number, default: 0 },
+    arbeitszeit: { type: Number, default: 0 },
+    pause: { type: Number, default: 24 }, // weiß nicht ob das Sinnvoll ist aber mal sehen.
     createdAt: { type: Date },
 }, { timestamps: true });
 

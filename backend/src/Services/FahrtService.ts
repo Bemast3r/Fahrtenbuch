@@ -1,7 +1,18 @@
+import { Fahrt } from "db/FahrtModel";
 import { UserResource } from "db/Resources";
 
 // // Admin kann alle Fahrten sehen.
-export async function getFahrten() { }
+export async function getFahrten() { 
+    try {
+        // Alle Benutzer aus der Datenbank abrufen und nach Nachnamen sortieren
+        const users = await Fahrt.find().sort({ nachname: 1 });
+
+        // Die Ergebnisse zurückgeben
+        return users.map(user => user.toObject());
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen der Benutzer: ${error.message}`);
+    }
+}
 // // User kann seine Fahrten sehen
 export async function getMeineFahrten(user: UserResource) { }
 // // Admin holt sich die Fahrten von einem User
