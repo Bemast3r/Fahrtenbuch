@@ -1,5 +1,6 @@
 
 export type UserResource = {
+    id:string;
     name: string;
     nachname: string;
     username: string;
