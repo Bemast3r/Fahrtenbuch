@@ -15,6 +15,7 @@ export interface IUser {
         datum: Date;
         kennzeichen: string;
     }[];
+    abwesend: boolean
 }
 
 export interface IUserMethods {
@@ -34,7 +35,8 @@ const userSchema = new Schema<IUser, IUserMethods>({
     fahrzeuge: [{
         datum: { type: Date, required: true, default: Date.now },
         kennzeichen: { type: String, required: true }
-    }]
+    }],
+    abwesend: {type:Boolean, default: false}
 }, { timestamps: true });
 
 userSchema.method("isPasswordCorrect", async function (passwordCandidate: string): Promise<boolean> {
