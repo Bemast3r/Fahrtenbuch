@@ -30,7 +30,7 @@ const userSchema = new Schema<IUser, IUserMethods>({
     admin: { type: Boolean, default: false },
     createdAt: { type: Date },
     fahrzeuge: [{
-        datum: { type: Date, required: true },
+        datum: { type: Date, required: true, default: Date.now },
         kennzeichen: { type: String, required: true }
     }]
 }, { timestamps: true });
