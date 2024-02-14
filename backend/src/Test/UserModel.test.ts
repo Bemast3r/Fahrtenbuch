@@ -81,3 +81,15 @@ test("isPasswordCorrect test", async () => {
   const isCorrect = await newUser.isPasswordCorrect("test123");
   expect(isCorrect).toBe(true);
 });
+
+test("isPasswordCorrect test", async () => {
+  const newUser = await User.create({
+    name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [
+      { datum: new Date(), kennzeichen: "ABC123" },
+      { datum: new Date(), kennzeichen: "XYZ789" }
+    ], abwesend: false
+  });
+  newUser.password = "123123132"
+  const isCorrect = await newUser.isPasswordCorrect("test123");
+  expect(isCorrect).rejects.toThrow();
+});
