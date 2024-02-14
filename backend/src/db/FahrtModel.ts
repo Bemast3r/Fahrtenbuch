@@ -1,9 +1,9 @@
 import { Model, model, Schema, Types } from "mongoose";
 import { User } from "./UserModel";
 
-interface IFahrt {
+export interface IFahrt {
     fahrer: Types.ObjectId; // User
-    kennzeichen: Types.ObjectId; // Referenz auf das Kennzeichenmodell
+    kennzeichen: string; // Referenz auf das Kennzeichenmodell
     kilometerstand: number; //kilometerstand    
     kilometerende: number; //Kilometerstand am Ende 
     lenkzeit: number; // Arbeit mit Fahren
@@ -16,7 +16,7 @@ type FahrtModel = Model<IFahrt>;
 
 const fahrtSchema = new Schema<IFahrt>({
     fahrer: { type: Schema.Types.ObjectId, ref: User, required: true },
-    kennzeichen: { type: Schema.Types.ObjectId, ref: User, required: true },
+    kennzeichen: { type: String, required: true },
     kilometerstand: { type: Number, required: true },
     kilometerende: { type: Number, required: true },
     lenkzeit: { type: Number, default: 0 },
