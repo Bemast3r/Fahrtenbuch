@@ -1,6 +1,6 @@
 import { Fahrt, IFahrt } from "../db/FahrtModel"
 import { Types } from "mongoose";
-import TestDB from "./TestDb";
+import TestDB from "../Services/TestDb";
 import { IUser, User } from "../db/UserModel";
 
 let userUmut: IUser & { _id: Types.ObjectId; }

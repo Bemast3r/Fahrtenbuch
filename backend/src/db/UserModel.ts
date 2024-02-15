@@ -12,7 +12,7 @@ export interface IUser {
     admin?: boolean
     createdAt?: Date
     fahrzeuge: {
-        datum: Date;
+        datum: string;
         kennzeichen: string;
     }[];
     abwesend: boolean
@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser, IUserMethods>({
     admin: { type: Boolean, default: false },
     createdAt: { type: Date },
     fahrzeuge: [{
-        datum: { type: Date, required: true, default: Date.now },
+        datum: { type: String, default: new Date().toLocaleString() },
         kennzeichen: { type: String, required: true }
     }],
     abwesend: {type:Boolean, default: false}

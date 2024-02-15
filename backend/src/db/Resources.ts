@@ -1,6 +1,6 @@
 
 export type UserResource = {
-    id:string;
+    id?:string;
     name: string;
     nachname: string;
     username: string;
@@ -8,7 +8,7 @@ export type UserResource = {
     password?: string;
     createdAt?: Date;
     fahrzeuge?: {
-        datum: Date;
+        datum: string,
         kennzeichen: string;
     }[];
     abwesend?:boolean
