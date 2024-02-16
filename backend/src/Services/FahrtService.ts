@@ -1,5 +1,5 @@
-import { Fahrt } from "db/FahrtModel";
-import { FahrtResource, UserResource } from "db/Resources";
+import { Fahrt } from "../db/FahrtModel";
+import { FahrtResource, UserResource } from "../db/Resources";
 
 // // Admin kann alle Fahrten sehen.
 export async function getFahrten() {
@@ -14,12 +14,9 @@ export async function getFahrten() {
     }
 }
 // // User kann seine Fahrten sehen
-export async function getMeineFahrten(fahrer: FahrtResource) {
+export async function getMeineFahrten(userid: string) {
     try {
-        const id = fahrer.fahrerid
-        if (!id) {
-            throw new Error("User id fehlt.")
-        }
+        const id = userid;
         const fahrt = await Fahrt.find({ fahrer: id })
 
         return fahrt.map(fahrt => fahrt.toObject())
@@ -50,7 +47,7 @@ export async function createUserFahrt(fahrt: FahrtResource) {
 }
 
 // // Admin kann im nachträglich sachen bearbeiten. 
-export async function updateUserfahrt(fahrtResource: FahrtResource) { 
+export async function updateUserfahrt(fahrtResource: FahrtResource) {
 
     const newFahrt = await Fahrt.findByIdAndUpdate(fahrtResource.id, fahrtResource, { new: true });
     // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
@@ -59,7 +56,7 @@ export async function updateUserfahrt(fahrtResource: FahrtResource) {
     }
 }
 // // Admin kann Fahrten löschen 
-export async function deleteFahrt(fahrtid: string) { 
+export async function deleteFahrt(fahrtid: string) {
     try {
         await Fahrt.findByIdAndDelete(fahrtid);
     } catch (error) {
