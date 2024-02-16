@@ -16,25 +16,33 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
     return userResource;
 }
 
+export async function updateUser(userResource: UserResource): Promise<UserResource> {
+    if (!userResource.id) {
+        throw new Error("User ID missing, cannot update.");
+    }
+    const user = await User.findById(userResource.id).exec();
+    if (!user) {
+        throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
+    }
+    if (userResource.name) user.name = userResource.name;
+    if (userResource.nachname) user.nachname = userResource.nachname;
+    if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
+    if (userResource.username) user.username = userResource.username;
+    if (userResource.password) user.password = userResource.password;
+    if (userResource.abwesend) user.abwesend = userResource.abwesend;
+
+    const savedUser = await user.save();
+    return mapUserToResource(savedUser)
+}
+
+
+
 export async function getUsersFromDB(): Promise<UserResource[]> {
     const users = await User.find().sort({ nachname: 1 });
     const userResources = await Promise.all(users.map(user => mapUserToResource(user)));
     return userResources;
 }
 
-export async function updateUserAbwesend(userId: string, abwesend: boolean): Promise<UserResource> {
-    try {
-        const user = await User.findById(userId).exec();
-        if (!user) {
-            throw new Error('Benutzer nicht gefunden');
-        }
-        user.abwesend = abwesend;
-        await user.save();
-        return mapUserToResource(user);
-    } catch (error) {
-        throw new Error(`Fehler beim Aktualisieren der Abwesenheit des Benutzers: ${error.message}`);
-    }
-}
 
 export async function changeUser(userId: string, updatedUserFields: Partial<UserResource>): Promise<UserResource> {
     try {
@@ -85,6 +93,7 @@ export async function createUser(userResource: UserResource): Promise<UserResour
         admin: userResource.admin,
         password: userResource.password
     });
+
     return mapUserToResource(user);
 }
 

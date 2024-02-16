@@ -1,5 +1,5 @@
 import TestDB from "../Services/TestDb";
-import { getUsersFromDB, updateUserAbwesend, changeUser, changeCar, createUser, deleteUser } from "../Services/UserService";
+import { getUsersFromDB, changeUser, changeCar, createUser, deleteUser, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import { IUser, User } from "../db/UserModel";
 import mongoose, { Types } from "mongoose";
@@ -38,15 +38,10 @@ describe("UserService Tests", () => {
         });
     });
 
-    test("updateUserAbwesend should update user's abwesend status", async () => {
-        const updatedUser = await updateUserAbwesend(user1._id.toString(), true);
-        expect(updatedUser.abwesend).toBe(true);
-    });
-
     test("changeUser should update user's details", async () => {
         const updatedUserDetails = {
-            ...user2, 
-            name: "AUTO" 
+            ...user2,
+            name: "AUTO"
         };
         const updatedUser = await changeUser(user2._id.toString(), updatedUserDetails);
         expect(updatedUser.id).toBe(user2._id.toString())
@@ -99,33 +94,23 @@ describe('Negativtests für Benutzerservice-Funktionen', () => {
         expect(await getUsersFromDB()).toEqual([]);
     });
 
-    test('Fehler beim Aktualisieren der Abwesenheit des Benutzers', async () => {
-        // Erstellen Sie einen Benutzer in der Testdatenbank
-        const user: IUser = { name: 'Test', nachname: 'User', username: 'testuser', password: 'password', admin: false, createdAt: new Date(), fahrzeuge: [], abwesend: false };
-        await User.create(user);
-
-        // Geben Sie eine ungültige Benutzer-ID an, um einen Fehler beim Aktualisieren der Abwesenheit zu erzwingen
-        const userId = String(new mongoose.Types.ObjectId);
-        await expect(updateUserAbwesend(userId, true)).rejects.toThrow('Benutzer nicht gefunden');
-    });
-
     test('Fehler beim Ändern des Benutzers', async () => {
         // Geben Sie eine ungültige Benutzer-ID an, um einen Fehler beim Ändern des Benutzers zu erzwingen
-        let userId:string = String(new mongoose.Types.ObjectId);
+        let userId: string = String(new mongoose.Types.ObjectId);
         const userResource = {
             name: 'Test',
             nachname: 'User',
             username: 'testuser',
             admin: false,
             createdAt: new Date(),
-            fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS"}],
+            fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS" }],
             abwesend: false
         };
 
         // Erwarten Sie, dass die Änderung des Benutzers mit der ungültigen ID einen Fehler wirft
         await expect(changeUser(userId, userResource)).rejects.toThrow('Benutzer nicht gefunden');
     });
-    
+
     test('Fehler beim Erstellen eines Benutzers', async () => {
         // Erstellen Sie absichtlich einen Benutzer mit fehlenden erforderlichen Attributen, um einen Fehler beim Erstellen zu erzwingen
         const invalidUser: Partial<IUser> = { username: 'testuser', password: 'password' };
@@ -137,4 +122,46 @@ describe('Negativtests für Benutzerservice-Funktionen', () => {
         const invalidUserId = 'invalidUserId';
         await expect(deleteUser(invalidUserId)).rejects.toThrow('Fehler beim Löschen des Benutzers');
     });
+});
+test("updateUser should update user's details", async () => {
+    const user3 = await createUser(
+        {
+            name: 'Test',
+            nachname: 'User',
+            username: 'testuser',
+            password: "password",
+            admin: false,
+            createdAt: new Date(),
+            fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS" }],
+            abwesend: false
+        })
+    const updatedUserDetails = {
+        ...user3, 
+        name: "UPFATED DUDE",
+        abwesend: true
+    };
+    const updatedUser = await updateUser(updatedUserDetails);
+    expect(updatedUser.name).toBe("UPFATED DUDE")
+    expect(updatedUser.abwesend).toBeTruthy()
+});
+
+test("Create a user 3 ", async () => {
+    // const updatedUserDetails = {
+    //     ...user2, 
+    //     name: "AUTO",
+    //     abwesend: true
+    // };
+
+    const user3 = await createUser(
+        {
+            name: 'Test',
+            nachname: 'User',
+            username: 'testuser',
+            password: "password",
+            admin: false,
+            createdAt: new Date(),
+            fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS" }],
+            abwesend: false
+        })
+    expect(user3.id).toBeDefined()
 });

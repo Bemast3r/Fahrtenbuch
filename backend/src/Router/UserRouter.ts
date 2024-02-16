@@ -17,6 +17,9 @@ userRouter.get("/users", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
+            if(req.role !== "a"){
+                return res.sendStatus(403)
+            }
             const users = await getUsersFromDB();
             return res.send(users); // 200 by default
         } catch (err) {
@@ -37,6 +40,9 @@ userRouter.delete("/delete/:id", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
+            if(req.role !== "a"){
+                return res.sendStatus(403)
+            }
             const user = matchedData(req) as UserResource
             const deleted = await deleteUser(user.id);
             return res.send(deleted); // 200 by default
@@ -60,6 +66,9 @@ userRouter.post("/user/create", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
+            if(req.role !== "a"){
+                return res.sendStatus(403)
+            }
             const userRes = matchedData(req) as UserResource
             const user = await createUser(userRes);
             return res.send(user); // 200 by default
@@ -88,6 +97,9 @@ userRouter.put("/user/car/change", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
+            if(req.role !== "a"){
+                return res.sendStatus(403)
+            }
             const userRes = req.body as UserResource; // Annahme: Die Benutzerressource ist im Anforderungskörper enthalten
             const newCar = { kennzeichen: req.body.fahrzeuge[0].kennzeichen }; // Annahme: Ändern Sie nur ein Fahrzeug auf einmal
             const user = await changeCar(userRes, newCar);
@@ -98,5 +110,17 @@ userRouter.put("/user/car/change", requiresAuthentication,
         }
     }
 )
+
+
+/**
+ * Suche einen User
+ */
+
+
+/**
+ * Ändere einen User.
+ */
+
+
 
 export default userRouter;
