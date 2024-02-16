@@ -65,7 +65,12 @@ export async function changeUser(userId: string, updatedUserFields: Partial<User
     }
 }
 
-
+/**
+ * Fügt ein weiteres Auto hinzu
+ * @param user 
+ * @param newCar 
+ * @returns 
+ */
 export async function changeCar(user: UserResource, newCar: { kennzeichen: string }): Promise<UserResource> {
     try {
         const userdb = await User.findById(user.id).exec();
