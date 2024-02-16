@@ -4,9 +4,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRouter from "Router/UserRouter";
-import fahrrouter from "Router/FahrtRouter";
-import loginRouter from "Login/LoginRouter";
+import userRouter from "./Router/UserRouter";
+import fahrrouter from "./Router/FahrtRouter";
+import loginRouter from "./Login/LoginRouter";
 dotenv.config();
 
 const PORT: number = 5000
@@ -33,10 +33,8 @@ app.use(bodyParser.json());
 app.use("/api/user", userRouter)
 app.use("/api/threadpage", fahrrouter)
 app.use("/api/login", loginRouter);
-
-
-
 app.use(bodyParser.json())
+app.get("/", (_, res) => { res.send('SKM Server läuft') })
 
 const server = http.createServer(app)
 
