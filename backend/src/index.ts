@@ -4,6 +4,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import userRouter from "Router/UserRouter";
+import fahrrouter from "Router/FahrtRouter";
+import loginRouter from "Login/LoginRouter";
 dotenv.config();
 
 const PORT: number = 5000
@@ -26,6 +29,11 @@ app.use(function (request: any, response: any, next: any) {
 
 app.use("*", express.json({ limit: "5mb" }));
 app.use(bodyParser.json());
+
+app.use("/api/user", userRouter)
+app.use("/api/threadpage", fahrrouter)
+app.use("/api/login", loginRouter);
+
 
 
 app.use(bodyParser.json())

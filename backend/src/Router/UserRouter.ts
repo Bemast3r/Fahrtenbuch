@@ -1,6 +1,6 @@
-import { requiresAuthentication } from "Middleware/auth";
-import { changeCar, createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "Services/UserService";
-import { UserResource } from "db/Resources";
+import { requiresAuthentication } from "../Middleware/auth";
+import { changeCar, createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "../Services/UserService";
+import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
 

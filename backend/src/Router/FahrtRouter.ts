@@ -1,6 +1,6 @@
-import { requiresAuthentication } from "Middleware/auth";
-import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "Services/FahrtService";
-import { FahrtResource } from "db/Resources";
+import { requiresAuthentication } from "../Middleware/auth";
+import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
+import { FahrtResource } from "../db/Resources";
 import express from "express";
 import { body, validationResult, matchedData, param } from "express-validator";
 
@@ -136,3 +136,4 @@ fahrrouter.post("/user/fahrt/bearbeiten",
     }
 );
 
+export default fahrrouter
