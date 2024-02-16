@@ -29,7 +29,7 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
     if (userResource.username) user.username = userResource.username;
     if (userResource.password) user.password = userResource.password;
-    if (userResource.abwesend) user.abwesend = userResource.abwesend;
+    if (typeof userResource.abwesend === 'boolean') user.abwesend = userResource.abwesend;
 
     const savedUser = await user.save();
     return mapUserToResource(savedUser)
@@ -108,4 +108,10 @@ export async function deleteUser(userId: string): Promise<void> {
     } catch (error) {
         throw new Error(`Fehler beim Löschen des Benutzers: ${error.message}`);
     }
+}
+
+export async function getUser(userid:string) {
+    const user = await User.findById(userid).exec();
+    // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
+    return await mapUserToResource(user)
 }

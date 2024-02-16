@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "Middleware/auth";
-import { changeCar, createUser, deleteUser, getUsersFromDB } from "Services/UserService";
+import { changeCar, createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "Services/UserService";
 import { UserResource } from "db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -10,14 +10,14 @@ export const userRouter = express.Router();
 /**
  * Holt alle User
  */
-userRouter.get("/users", requiresAuthentication,
+userRouter.get("/admin/users", requiresAuthentication,
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if(req.role !== "a"){
+            if (req.role !== "a") {
                 return res.sendStatus(403)
             }
             const users = await getUsersFromDB();
@@ -32,7 +32,7 @@ userRouter.get("/users", requiresAuthentication,
 /**
  * Löscht den Benutzer
  */
-userRouter.delete("/delete/:id", requiresAuthentication,
+userRouter.delete("/admin/delete/:id", requiresAuthentication,
     param("id").isMongoId(),
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -40,7 +40,7 @@ userRouter.delete("/delete/:id", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if(req.role !== "a"){
+            if (req.role !== "a") {
                 return res.sendStatus(403)
             }
             const user = matchedData(req) as UserResource
@@ -56,7 +56,7 @@ userRouter.delete("/delete/:id", requiresAuthentication,
 /**
  * Erstellt einen Benutzer 
  */
-userRouter.post("/user/create", requiresAuthentication,
+userRouter.post("/admin/user/erstellen", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
@@ -66,7 +66,7 @@ userRouter.post("/user/create", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if(req.role !== "a"){
+            if (req.role !== "a") {
                 return res.sendStatus(403)
             }
             const userRes = matchedData(req) as UserResource
@@ -83,11 +83,14 @@ userRouter.post("/user/create", requiresAuthentication,
  * Ändert das Auto
  */
 
-userRouter.put("/user/car/change", requiresAuthentication,
+userRouter.put("/user/auto/wechseln", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
+    body("password").isString(),
+    body("abwesend").isBoolean(),
+    body("admin").isBoolean(),
     // Das Datum sollte automatisch gesetzt werden.
     // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 
     body('fahrzeuge.*.kennzeichen').isString().notEmpty().withMessage('kennzeichen ist erforderlich und muss eine Zeichenkette sein'),
@@ -97,9 +100,6 @@ userRouter.put("/user/car/change", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if(req.role !== "a"){
-                return res.sendStatus(403)
-            }
             const userRes = req.body as UserResource; // Annahme: Die Benutzerressource ist im Anforderungskörper enthalten
             const newCar = { kennzeichen: req.body.fahrzeuge[0].kennzeichen }; // Annahme: Ändern Sie nur ein Fahrzeug auf einmal
             const user = await changeCar(userRes, newCar);
@@ -116,11 +116,60 @@ userRouter.put("/user/car/change", requiresAuthentication,
  * Suche einen User
  */
 
+userRouter.get("/admin/finde/user/:id", requiresAuthentication,
+    param("id").isMongoId(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const user = getUser(req.params.id)
+            return user
+        } catch (error) {
+            res.status(400);
+            next(error);
+        }
+    }
+)
+
 
 /**
  * Ändere einen User.
  */
 
+userRouter.put("/admin/user/aendern", requiresAuthentication,
+    body("name").isString(),
+    body("nachname").isString(),
+    body("username").isString(),
+    body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
+    body("password").isString(),
+    body("abwesend").isBoolean(),
+    body("admin").isBoolean(),
+    // Das Datum sollte automatisch gesetzt werden.
+    // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 
+    body('fahrzeuge.*.kennzeichen').isString().notEmpty().withMessage('kennzeichen ist erforderlich und muss eine Zeichenkette sein'),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const userRes = req.body as UserResource; // Annahme: Die Benutzerressource ist im Anforderungskörper enthalten
+            const user = await updateUser(userRes);
+            return res.send(user);
+        } catch (error) {
+            res.status(400);
+            next(error);
+        }
+    }
+)
 
 
 export default userRouter;

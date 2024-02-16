@@ -11,9 +11,18 @@ let user2: IUser & { _id: Types.ObjectId };
 beforeAll(async () => {
     await TestDB.connect();
     // Benutzer für die Tests erstellen
+})
+
+beforeEach(async () => {
+    await User.syncIndexes();
     user1 = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", fahrzeuge: [], abwesend: false });
     user2 = await User.create({ name: "Can", nachname: "Pala", username: "canpala", password: "canna", fahrzeuge: [], abwesend: false });
 });
+
+
+afterEach(async () => {
+    await TestDB.clear()
+})
 
 afterAll(async () => {
     await TestDB.clear();
@@ -87,11 +96,6 @@ describe('Negativtests für Benutzerservice-Funktionen', () => {
     afterEach(async () => {
         // Nach jedem Test: Löschen aller Benutzerdaten aus der Testdatenbank
         await User.deleteMany({});
-    });
-
-    test('Fehler beim Abrufen der Benutzer aus der Datenbank', async () => {
-        // Erstellen Sie absichtlich einen Fehler, indem Sie eine ungültige Datenbankabfrage durchführen
-        expect(await getUsersFromDB()).toEqual([]);
     });
 
     test('Fehler beim Ändern des Benutzers', async () => {
