@@ -1,8 +1,8 @@
 import { requiresAuthentication } from "Middleware/auth";
-import { createUserFahrt, getFahrten } from "Services/FahrtService";
+import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "Services/FahrtService";
 import { FahrtResource } from "db/Resources";
 import express from "express";
-import { body, validationResult, matchedData } from "express-validator";
+import { body, validationResult, matchedData, param } from "express-validator";
 
 export const fahrrouter = express.Router();
 
@@ -10,10 +10,16 @@ export const fahrrouter = express.Router();
 /**
  * Erstellt eine Fahrt 
  */
-fahrrouter.post("/fahrt/erstellen", requiresAuthentication,
-    body("name").isString(),
-    body("nachname").isString(),
-    body("username").isString(),
+fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
+    body("id").optional().isMongoId(),
+    body("fahrerid").isString(),
+    body("kennzeichen").isString(),
+    body("kilometerstand").isString(),
+    body("kilometerende").isString(),
+    body("lenkzeit").optional().isString(),
+    body("arbeitszeit").optional().isString(),
+    body("pause").optional().isString(),
+
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -34,17 +40,14 @@ fahrrouter.post("/fahrt/erstellen", requiresAuthentication,
  * Bekomme alle Fahrten
  */
 
-fahrrouter.get("/fahrten", requiresAuthentication,
-    body("name").isString(),
-    body("nachname").isString(),
-    body("username").isString(),
+fahrrouter.get("/admin/alle/fahrten", requiresAuthentication,
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if(req.role !== "a"){
+            if (req.role !== "a") {
                 return res.sendStatus(403)
             }
             const user = await getFahrten();
@@ -56,20 +59,22 @@ fahrrouter.get("/fahrten", requiresAuthentication,
     }
 );
 
-fahrrouter.get("/fahrten/meine", requiresAuthentication,
-    body("name").isString(),
-    body("nachname").isString(),
-    body("username").isString(),
+
+/**
+ * Fahrten von einem User über seine Id 
+ */
+fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
+    param("id").isMongoId(),
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if(req.role !== "a"){
+            if (req.role !== "a") {
                 return res.sendStatus(403)
             }
-            const user = await getFahrten();
+            const user = await getUserFahrten(req.params.id);
             return res.send(user); // 200 by default
         } catch (err) {
             res.status(400);
@@ -77,3 +82,57 @@ fahrrouter.get("/fahrten/meine", requiresAuthentication,
         }
     }
 );
+
+/**
+ * Lösch fahrt
+ */
+
+fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
+    param("id").isMongoId(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const user = await deleteFahrt(req.params.id);
+            return res.send(user); // 200 by default
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+fahrrouter.post("/user/fahrt/bearbeiten",
+    requiresAuthentication,
+    body("id").optional().isMongoId(),
+    body("fahrerid").isString(),
+    body("kennzeichen").isString(),
+    body("kilometerstand").isString(),
+    body("kilometerende").isString(),
+    body("lenkzeit").optional().isString(),
+    body("arbeitszeit").optional().isString(),
+    body("pause").optional().isString(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403);
+            }
+            const resource = matchedData(req) as FahrtResource
+            const fahrt = await updateUserfahrt(resource); 
+            return res.send(fahrt); // 200 by default
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+

@@ -60,6 +60,8 @@ userRouter.post("/admin/user/erstellen", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
+    body("password").isString(),
+
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

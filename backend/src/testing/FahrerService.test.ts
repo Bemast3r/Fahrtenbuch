@@ -2,7 +2,7 @@ import { User, IUser } from "../db/UserModel";
 import mongoose, { Types } from "mongoose";
 import TestDB from "../Services/TestDb";
 import { Fahrt, IFahrt } from "../db/FahrtModel";
-import { createUserFahrt, deleteFahrt, getFahrten, getMeineFahrten, updateUserfahrt } from "../Services/FahrtService";
+import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
 
 let Fahrer: IUser & { _id: Types.ObjectId };
 let fahrt: IFahrt & { _id: Types.ObjectId };
@@ -41,7 +41,7 @@ describe("getFahrten Tests", () => {
 
 describe("getMeineFahrten Tests", () => {
     it("sollte die Fahrten des Benutzers abrufen", async () => {
-        const meineFahrten = await getMeineFahrten(Fahrer._id.toString() );
+        const meineFahrten = await getUserFahrten(Fahrer._id.toString() );
         expect(meineFahrten.length).toBeGreaterThan(0);
     });
 });

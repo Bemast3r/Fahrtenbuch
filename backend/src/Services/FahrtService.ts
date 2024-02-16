@@ -14,7 +14,7 @@ export async function getFahrten() {
     }
 }
 // // User kann seine Fahrten sehen
-export async function getMeineFahrten(userid: string) {
+export async function getUserFahrten(userid: string) {
     try {
         const id = userid;
         const fahrt = await Fahrt.find({ fahrer: id })
