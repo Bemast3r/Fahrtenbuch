@@ -16,6 +16,30 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
     return userResource;
 }
 
+export async function getUser(userid:string) {
+    const user = await User.findById(userid).exec();
+    // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
+    return await mapUserToResource(user);
+}
+
+export async function getUsersFromDB(): Promise<UserResource[]> {
+    const users = await User.find().sort({ nachname: 1 });
+    const userResources = await Promise.all(users.map(user => mapUserToResource(user)));
+    return userResources;
+}
+
+export async function createUser(userResource: UserResource): Promise<UserResource> {
+    const user = await User.create({
+        name: userResource.name,
+        nachname: userResource.nachname,
+        username: userResource.username,
+        admin: userResource.admin,
+        password: userResource.password
+    });
+
+    return mapUserToResource(user);
+}
+
 export async function updateUser(userResource: UserResource): Promise<UserResource> {
     if (!userResource.id) {
         throw new Error("User ID missing, cannot update.");
@@ -33,14 +57,6 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
 
     const savedUser = await user.save();
     return mapUserToResource(savedUser)
-}
-
-
-
-export async function getUsersFromDB(): Promise<UserResource[]> {
-    const users = await User.find().sort({ nachname: 1 });
-    const userResources = await Promise.all(users.map(user => mapUserToResource(user)));
-    return userResources;
 }
 
 
@@ -89,29 +105,10 @@ export async function changeCar(user: UserResource, newCar: { kennzeichen: strin
     }
 }
 
-
-export async function createUser(userResource: UserResource): Promise<UserResource> {
-    const user = await User.create({
-        name: userResource.name,
-        nachname: userResource.nachname,
-        username: userResource.username,
-        admin: userResource.admin,
-        password: userResource.password
-    });
-
-    return mapUserToResource(user);
-}
-
 export async function deleteUser(userId: string): Promise<void> {
     try {
         await User.findByIdAndDelete(userId);
     } catch (error) {
         throw new Error(`Fehler beim Löschen des Benutzers: ${error.message}`);
     }
-}
-
-export async function getUser(userid:string) {
-    const user = await User.findById(userid).exec();
-    // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
-    return await mapUserToResource(user)
 }
