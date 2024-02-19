@@ -7,15 +7,16 @@ import Loading from './Components/LoadingIndicator';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from './Components/Login';
+import FahrtErstellen from './Components/fahrtErstellen';
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
       <RouterProvider
           router={createBrowserRouter([{
               path: "/",
-              element: <Login />,
+              element: <FahrtErstellen />,
               children: [
-                  { path: "", element: <Loading /> },
+                  { path: "/erstellen", element: <FahrtErstellen /> },
               ],
               // errorElement: <App /> /* TODO: create a nice looking error page */
           }])}

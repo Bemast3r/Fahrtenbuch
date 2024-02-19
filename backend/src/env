@@ -1,3 +1,0 @@
-MONGO_URL=mongodb+srv://skmadmin:skmadmin.password@datenbank.1aohchm.mongodb.net/
-process.env.JWT_SECRET=skmsecret2222
-process.env.JWT_TTL=1d
