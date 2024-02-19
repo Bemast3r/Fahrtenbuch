@@ -2,7 +2,7 @@ TN:
 SF:src\Services\FahrtService.ts
 FN:5,getFahrten
 FN:11,(anonymous_1)
-FN:17,getMeineFahrten
+FN:17,getUserFahrten
 FN:22,(anonymous_3)
 FN:31,createUserFahrt
 FN:50,updateUserfahrt
@@ -11,7 +11,7 @@ FNF:7
 FNH:7
 FNDA:1,getFahrten
 FNDA:1,(anonymous_1)
-FNDA:1,getMeineFahrten
+FNDA:1,getUserFahrten
 FNDA:1,(anonymous_3)
 FNDA:1,createUserFahrt
 FNDA:1,updateUserfahrt
