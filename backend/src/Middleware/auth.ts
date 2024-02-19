@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyJWT } from "../../Login/authentication/LoginService";
+import { verifyJWT } from "../Login/authentication/LoginService";
 
 /**
  * Typdefinitions for TypeScript.

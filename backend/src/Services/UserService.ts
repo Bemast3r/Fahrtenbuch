@@ -1,81 +1,95 @@
-import { UserResource } from "db/Resources";
-import { User } from "db/UserModel";
+import { UserResource } from "../db/Resources";
+import { IUser, User } from "../db/UserModel";
+import { Types } from "mongoose"
 
-// Admin kann alle User holen
-export async function getUsers(): Promise<UserResource[]> {
-    try {
-        // Alle Benutzer aus der Datenbank abrufen und nach Nachnamen sortieren
-        const users = await User.find().sort({ nachname: 1 });
-
-        // Die Ergebnisse zurückgeben
-        return users.map(user => user.toObject());
-    } catch (error) {
-        throw new Error(`Fehler beim Abrufen der Benutzer: ${error.message}`);
-    }
+async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promise<UserResource> {
+    const userResource: UserResource = {
+        id: user._id.toString(),
+        name: user.name,
+        nachname: user.nachname,
+        username: user.username,
+        admin: user.admin,
+        createdAt: user.createdAt,
+        fahrzeuge: user.fahrzeuge,
+        abwesend: user.abwesend
+    };
+    return userResource;
 }
 
-export async function updateUserAbwesend(userId: string, abwesend: boolean): Promise<UserResource> {
+export async function updateUser(userResource: UserResource): Promise<UserResource> {
+    if (!userResource.id) {
+        throw new Error("User ID missing, cannot update.");
+    }
+    const user = await User.findById(userResource.id).exec();
+    if (!user) {
+        throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
+    }
+    if (userResource.name) user.name = userResource.name;
+    if (userResource.nachname) user.nachname = userResource.nachname;
+    if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
+    if (userResource.username) user.username = userResource.username;
+    if (userResource.password) user.password = userResource.password;
+    if (typeof userResource.abwesend === 'boolean') user.abwesend = userResource.abwesend;
+
+    const savedUser = await user.save();
+    return mapUserToResource(savedUser)
+}
+
+
+
+export async function getUsersFromDB(): Promise<UserResource[]> {
+    const users = await User.find().sort({ nachname: 1 });
+    const userResources = await Promise.all(users.map(user => mapUserToResource(user)));
+    return userResources;
+}
+
+
+export async function changeUser(userId: string, updatedUserFields: Partial<UserResource>): Promise<UserResource> {
     try {
-        // Finde den Benutzer in der Datenbank anhand der ID
+        // Suchen Sie den Benutzer anhand der ID
         const user = await User.findById(userId);
         if (!user) {
             throw new Error('Benutzer nicht gefunden');
         }
 
-        // Aktualisiere den Abwesenheitsstatus des Benutzers
-        user.abwesend = abwesend;
+        // Aktualisieren Sie nur die übergebenen Felder
+        Object.assign(user, updatedUserFields);
 
-        // Speichere die Änderungen in der Datenbank
+        // Speichern Sie die Änderungen in der Datenbank
         await user.save();
-        return user.toObject()
-    } catch (error) {
-        throw new Error(`Fehler beim Aktualisieren der Abwesenheit des Benutzers: ${error.message}`);
-    }
-}
 
-// Admin kann user ändern
-export async function changeUser(userId: string, userResource: UserResource): Promise<UserResource> {
-    try {
-        // Aktualisiere den Benutzer in der Datenbank
-        const updatedUser = await User.findByIdAndUpdate(userId, userResource, { new: true });
-        // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
-        if (!updatedUser) {
-            throw new Error('Benutzer nicht gefunden');
-        }
-
-        return updatedUser.toObject();
+        // Geben Sie die aktualisierten Benutzerdetails zurück
+        return mapUserToResource(user);
     } catch (error) {
         throw new Error(`Fehler beim Ändern des Benutzers: ${error.message}`);
     }
 }
 
-
-// User kann sein Auto wechseln
-export async function changeCar(user: UserResource, newCar: { datum: Date; kennzeichen: string }): Promise<UserResource> {
+/**
+ * Fügt ein weiteres Auto hinzu
+ * @param user 
+ * @param newCar 
+ * @returns 
+ */
+export async function changeCar(user: UserResource, newCar: { kennzeichen: string }): Promise<UserResource> {
     try {
-        // Finde den Benutzer in der Datenbank
         const userdb = await User.findById(user.id).exec();
         if (!userdb) {
             throw new Error('Benutzer nicht gefunden');
         }
-
-        // Füge das neue Auto zum Array der Fahrzeuge hinzu
         if (!userdb.fahrzeuge) {
             userdb.fahrzeuge = [];
         }
-        userdb.fahrzeuge.push(newCar);
-
-        // Speichere die Änderungen in der Datenbank
+        // Setze das aktuelle Datum und die aktuelle Uhrzeit für das neue Fahrzeug
+        userdb.fahrzeuge.push({ datum: new Date().toLocaleString(), kennzeichen: newCar.kennzeichen });
         await userdb.save();
-
-        // Gib den aktualisierten Benutzer zurück
-        return userdb.toObject();
+        return mapUserToResource(userdb);
     } catch (error) {
         throw new Error(`Fehler beim Ändern des Autos: ${error.message}`);
     }
 }
 
-// Erstelle User nur admin in Router einstellen.
+
 export async function createUser(userResource: UserResource): Promise<UserResource> {
     const user = await User.create({
         name: userResource.name,
@@ -84,14 +98,20 @@ export async function createUser(userResource: UserResource): Promise<UserResour
         admin: userResource.admin,
         password: userResource.password
     });
-    return { id: user.id, name: user.name, nachname: user.nachname, username: user.username, admin: user.admin! }
+
+    return mapUserToResource(user);
 }
 
 export async function deleteUser(userId: string): Promise<void> {
     try {
-        // Benutzer in der Datenbank anhand der ID löschen
         await User.findByIdAndDelete(userId);
     } catch (error) {
         throw new Error(`Fehler beim Löschen des Benutzers: ${error.message}`);
     }
+}
+
+export async function getUser(userid:string) {
+    const user = await User.findById(userid).exec();
+    // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
+    return await mapUserToResource(user)
 }
