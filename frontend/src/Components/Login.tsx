@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./login.css";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
+import { LoginContext, getLoginInfo, removeJWT, setJWT } from "./Logincontext";
 
 
 const Login = () => {
@@ -16,15 +17,17 @@ const Login = () => {
         event.preventDefault();
         setLoading(true);
         await delay(500);
-        console.log(`Username :${inputUsername}, Password :${inputPassword}`);
-        console.log(await login({ username: inputUsername, password: inputPassword }))
-        if (inputUsername !== "admin" || inputPassword !== "admin") {
-            setShow(true);
+        try {
+            const jwt = await login({ username: inputUsername, password: inputPassword })
+            setJWT(jwt.access_token)
+        } catch (error: any) {
+            setShow(true)
+            setError(error.toString())
         }
         setLoading(false);
     };
 
-    const handlePassword = () => { console.log("Vergessen") };
+    const handlePassword = () => { };
 
     function delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
@@ -55,7 +58,7 @@ const Login = () => {
                         onClose={() => setShow(false)}
                         dismissible
                     >
-                        Incorrect username or password.
+                        {error}
                     </Alert>
                 ) : (
                     <div />

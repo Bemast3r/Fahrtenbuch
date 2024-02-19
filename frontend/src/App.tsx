@@ -1,24 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { LoginContext, getLoginInfo } from './Components/Logincontext';
+import { UserContext } from './Components/UserContext';
+import { UserResource } from './util/Resources';
+import { useLocation } from 'react-router-dom';
+import { getUsers } from './Api/api';
 
 function App() {
+
+  const [loginInfo, setLoginInfo] = useState(getLoginInfo());
+  const [userInfo, setUserInfo] = useState<UserResource | null>(null);
+
+
+  useEffect(() => {
+    async function getUserData() {
+      if (!loginInfo)
+        return;
+      try {
+        setUserInfo(await getUsers(loginInfo.userID));
+      } catch (error) { }
+    }
+    getUserData();
+  }, [loginInfo, userInfo]);
+
+  const route: string = useLocation().pathname.substring(1);
+
+  const getRouteName = (): string => {
+    let routeName: string = route;
+
+    if (routeName.endsWith("/")) {
+      routeName.slice(0, routeName.length - 1);
+    }
+
+    return routeName.split("/")[0];
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
+        <UserContext.Provider value={[userInfo, setUserInfo]}>
+
+          <p>
+            Edit <code>src/App.tsx</code> and save to reload.
+          </p>
+        </UserContext.Provider>
+      </LoginContext.Provider>
+
     </div>
   );
 }
