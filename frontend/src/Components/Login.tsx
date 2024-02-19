@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./login.css";
-import Logo from "../images/eskm_logo.jpeg"
 import Loading from "./LoadingIndicator";
-import BackgroundImage from "../images/eskm_logo.jpeg"; 
 
 
 const Login = () => {
@@ -24,7 +22,7 @@ const Login = () => {
         setLoading(false);
     };
 
-    const handlePassword = () => { };
+    const handlePassword = () => {console.log("Vergessen")};
 
     function delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,7 +31,7 @@ const Login = () => {
     return (
         <div
             className="sign-in__wrapper"
-            style={{ backgroundImage: BackgroundImage }}
+            style={{}}
         >
             {/* Overlay */}
             <div className="sign-in__backdrop"></div>
@@ -88,9 +86,6 @@ const Login = () => {
                         Log In
                     </Button>
                 ) : (
-                    //   <Button className="w-100" variant="primary" type="submit" disabled>
-                    //     Logging In...
-                    //   </Button>
                     <Loading />
                 )}
                 <div className="d-grid justify-content-end">
