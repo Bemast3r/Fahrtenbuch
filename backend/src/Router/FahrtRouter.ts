@@ -37,6 +37,23 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
 );
 
 /**
+ * Fahrt beendet
+ */
+fahrrouter.post("/user/fahrt/beenden", requiresAuthentication)
+
+
+/**
+ * Fahrt beendet
+ */
+fahrrouter.post("/user/fahrt/pause", requiresAuthentication,)
+
+/**
+ * Fahrt lenkzeit
+ */
+fahrrouter.post("/user/fahrt/lenkzeit", requiresAuthentication,)
+
+
+/**
  * Bekomme alle Fahrten
  */
 

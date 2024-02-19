@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./login.css";
 import Loading from "./LoadingIndicator";
+import { login } from "../Api/api";
 
 
 const Login = () => {
@@ -16,13 +17,14 @@ const Login = () => {
         setLoading(true);
         await delay(500);
         console.log(`Username :${inputUsername}, Password :${inputPassword}`);
+        console.log(await login({ email: inputUsername, password: inputPassword }))
         if (inputUsername !== "admin" || inputPassword !== "admin") {
             setShow(true);
         }
         setLoading(false);
     };
 
-    const handlePassword = () => {console.log("Vergessen")};
+    const handlePassword = () => { console.log("Vergessen") };
 
     function delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
@@ -86,7 +88,7 @@ const Login = () => {
                         Log In
                     </Button>
                 ) : (
-                    <Loading/>
+                    <Loading />
                 )}
                 <div className="d-grid justify-content-end">
                     <Button
