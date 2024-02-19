@@ -3,13 +3,13 @@ const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 
 
-export async function login(loginData: { email: string, password: string }): Promise<LoginResource> {
-    if (!loginData.email)
+export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
+    if (!loginData.username)
         throw new Error("email not defined");
     if (!loginData.password)
         throw new Error("password not defined");
 
-    const response = await fetch(`http://localhost:5000/api/login/`, {
+    const response = await fetch(`http://localhost:5000/api/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

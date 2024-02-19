@@ -8,7 +8,7 @@ import { login } from "../Api/api";
 const Login = () => {
     const [inputUsername, setInputUsername] = useState("");
     const [inputPassword, setInputPassword] = useState("");
-
+    const [error, setError] = useState("")
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,7 @@ const Login = () => {
         setLoading(true);
         await delay(500);
         console.log(`Username :${inputUsername}, Password :${inputPassword}`);
-        console.log(await login({ email: inputUsername, password: inputPassword }))
+        console.log(await login({ username: inputUsername, password: inputPassword }))
         if (inputUsername !== "admin" || inputPassword !== "admin") {
             setShow(true);
         }

@@ -14,7 +14,6 @@ loginRouter.post("/",
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            console.log("Hello")
             const data = matchedData(req);
             const jwtString = await verifyPasswordAndCreateJWT(data.email, data.password);
             if (!jwtString) {
