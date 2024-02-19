@@ -56,7 +56,7 @@ const FahrtErstellen = () => {
                     </Row>
 
                     <Form.Group className="mb-3 form-group" controlId="formGridCheckbox">
-                        <Form.Check type="checkbox" label="Krank?" className="checkbox-label" onChange={handleCheckboxChange} />
+                        <Form.Check type="checkbox" label="Ich bin krank" className="checkbox-label" onChange={handleCheckboxChange} />
                     </Form.Group>
 
                     <Button variant="primary" type="submit" className="submit-button">
