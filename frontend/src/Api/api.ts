@@ -19,20 +19,20 @@ export async function login(loginData: { username: string, password: string }): 
     });
 
     if (!response)
-        throw String("Something went wrong when connecting to the server, please try again later.");
+        throw new Error("Beim Verbinden mit dem Server ist ein Fehler aufgetreten. Bitte versuche es später erneut.");
     if (response.status === 400 || response.status === 401)
-        throw String("Your login details are incorrect, please try again.");
-    if (response.status === 403)
-        throw String("Your account is not verified yet. Please click on the link in the confirmation mail to verify your account.");
+        throw new Error("Ihre Anmeldeinformationen sind falsch. Bitte versuchen Sie es erneut.");
     if (response.status === 405)
-        throw String("The server encountered an unknown error, pleasy try again later.");
-    if (response.status !== 201){
-        alert(response.status)
-        throw String("An error occurred, please try again.");
+        throw new Error("Der Server hat einen unbekannten Fehler festgestellt. Bitte versuchen Sie es später erneut.");
+    if (response.status !== 201) {
+        throw new Error("Es ist ein Fehler aufgetreten. Bitte versuche es erneut.");
+    }
+    if (!response.ok) {
+        throw new Error("Versuche es erneut.")
     }
     const result: LoginResource = await response.json();
     if (!result.access_token || !result.token_type)
-        throw String("The server returned an invalid response, please try again later.");
+        throw String("Der Server hat eine ungültige Antwort zurückgegeben. Bitte versuche es später erneut.");
     return result;
 }
 

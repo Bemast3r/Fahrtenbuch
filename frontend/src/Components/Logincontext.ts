@@ -22,7 +22,7 @@ export function getLoginInfo(): LoginInfo | null {
 
     if (Date.now() >= exp * 1000) {
         removeJWT();
-        alert("Session expired\nYou need to log in again");
+        alert("Melde dich erneut an.");
         return null;
     }
 
