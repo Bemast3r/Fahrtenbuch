@@ -5,11 +5,11 @@ import { User } from "../../db/UserModel"
  * If no user with the given email exists or the password is incorrect, only success is returned as false. 
  */
 /* istanbul ignore next */
-export async function login(email: string, password: string): Promise<{ success: boolean, id?: string, username?: string, role?: "u" | "a"  }> {
+export async function login(username: string, password: string): Promise<{ success: boolean, id?: string, username?: string, role?: "u" | "a"  }> {
     if (!password) {
         throw new Error("password is not defined");
     }
-    const user = await User.findOne({ email: email.toLowerCase() }).exec();
+    const user = await User.findOne({ username: username }).exec();
     // Check if user exists
     if (!user) {
         return { success: false };
