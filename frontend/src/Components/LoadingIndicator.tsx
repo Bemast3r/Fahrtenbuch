@@ -1,8 +1,13 @@
 import Spinner from 'react-bootstrap/Spinner'
 
 
-function Loading() {
-  return <Spinner animation="grow"/>;
-}
+const Loading = () => {
+  return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner animation="grow" />
+      </div>
+  );
+};
+
 
 export default Loading;

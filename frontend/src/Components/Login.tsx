@@ -86,7 +86,7 @@ const Login = () => {
                         Log In
                     </Button>
                 ) : (
-                    <Loading />
+                    <Loading/>
                 )}
                 <div className="d-grid justify-content-end">
                     <Button
