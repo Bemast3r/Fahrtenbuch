@@ -3,7 +3,7 @@ import React from "react";
 
 export interface LoginInfo {
     userID: string;
-    role: "u" | "m" | "a";
+    role: "u" | "a";
 }
 
 const JWT_NAME = "jwt";
@@ -15,10 +15,10 @@ export function getLoginInfo(): LoginInfo | null {
     if (!jwt)
         return null;
 
-    const payload: JwtPayload & { role: "u" | "m" | "a" } = jwtDecode(jwt);
+    const payload: JwtPayload & { role: "u" | "a" } = jwtDecode(jwt);
     const exp: number = Number(payload.exp ?? 0);
     const userID: string | undefined = payload.sub;
-    const role: "a" | "u" | "m" = payload.role;
+    const role: "a" | "u" = payload.role;
 
     if (Date.now() >= exp * 1000) {
         removeJWT();

@@ -1,4 +1,5 @@
-import { LoginResource } from "../util/Resources";
+import { getJWT } from "../Components/Logincontext";
+import { LoginResource, UserResource } from "../util/Resources";
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 
@@ -34,3 +35,38 @@ export async function login(loginData: { username: string, password: string }): 
         throw String("The server returned an invalid response, please try again later.");
     return result;
 }
+
+export async function getUsers(userID: string): Promise<UserResource> {
+    try {
+        if (!userID)
+            throw new Error("userID not defined");
+
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("no jwt found");
+
+        const response = await fetch(`${BASE_URL}/admin/users`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt}`
+            }
+        });
+
+        if (!response || !response.ok)
+            throw new Error("network response was not OK");
+
+        const result: any = await response.json();
+        if (!result)
+            throw new Error("invalid result from server");
+        if (!result.id || !result.email || !result.name)
+            throw new Error("result from server is missing fields");
+        const votedPosts = new Map<string, boolean>();
+        result.votedPosts.forEach((obj: { postID: string, vote: boolean }) => { votedPosts.set(obj.postID, obj.vote); });
+        result.votedPosts = votedPosts;
+        return result as UserResource;
+
+    } catch (error) {
+        throw new Error("Error occurred during get: " + error);
+    }
+}
+
