@@ -50,19 +50,26 @@ const FahrtErstellen = () => {
                     </Row>
 
                     <Row className="mb-4">
-                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox1">
+                        <Form.Group as={Col} controlId="formGridOrt" className="form-group">
+                            <Form.Label className="form-label">Ort der Fahrtaufnahme</Form.Label>
+                            <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} />
+                        </Form.Group>
+                    </Row>
+
+                    <Row className="mb-5">
+                        <Form.Group className="checkbox1" controlId="formGridCheckbox1">
                             <Form.Check type="checkbox" label="Kein Fahrzeug geführt" className="checkbox-label1" onChange={() => handleCheckboxChange("formGridCheckbox1")} />
                         </Form.Group>
 
-                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox2">
+                        <Form.Group className="checkbox2" controlId="formGridCheckbox2">
                             <Form.Check type="checkbox" label="Ich bin krank" className="checkbox-label2" onChange={() => handleCheckboxChange("formGridCheckbox2")} />
                         </Form.Group>
 
-                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox3">
+                        <Form.Group className="checkbox3" controlId="formGridCheckbox3">
                             <Form.Check type="checkbox" label="Ich habe Urlaub" className="checkbox-label3" onChange={() => handleCheckboxChange("formGridCheckbox3")} />
                         </Form.Group>
 
-                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox4">
+                        <Form.Group className="checkbox4" controlId="formGridCheckbox4">
                             <Form.Check type="checkbox" label="Ich habe frei" className="checkbox-label4" onChange={() => handleCheckboxChange("formGridCheckbox4")} />
                         </Form.Group>
                     </Row>
