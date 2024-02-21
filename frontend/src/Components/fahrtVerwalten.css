@@ -1,0 +1,60 @@
+/* fahrtVerwalten.css */
+
+body {
+    background-color: #FdF5E6;
+    margin: 0;
+  }
+  
+  .container {
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: transparent;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90%;
+    max-width: 95%;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    overflow-y: auto;
+    max-height: 200px;
+    min-width: 90%;
+    max-width: 95%;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .button-group button {
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .log-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .results {
+    margin-top: 20px;
+  }
+  
