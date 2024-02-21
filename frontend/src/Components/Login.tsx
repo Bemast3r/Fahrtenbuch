@@ -4,6 +4,7 @@ import "./login.css";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
 import { LoginContext, getLoginInfo, removeJWT, setJWT } from "./Logincontext";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
@@ -12,6 +13,7 @@ const Login = () => {
     const [error, setError] = useState("")
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -20,6 +22,7 @@ const Login = () => {
         try {
             const jwt = await login({ username: inputUsername, password: inputPassword })
             setJWT(jwt.access_token)
+            navigate("/test") // User wird redirected nachdem Login
         } catch (error: any) {
             setShow(true)
             setError(error.toString())

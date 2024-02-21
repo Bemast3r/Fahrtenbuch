@@ -13,11 +13,12 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <RouterProvider
           router={createBrowserRouter([{
               path: "/",
-              element: <Login />,
+            //   element: <Login />,
               children: [
-                  { path: "", element: <Loading /> },
+                  { path: "", element: <Login /> },
+                  { path: "test", element: <Loading /> },
               ],
-              // errorElement: <App /> /* TODO: create a nice looking error page */
+            //   errorElement: <App /> /* TODO: create a nice looking error page */
           }])}
           fallbackElement={<Loading />}
       />
