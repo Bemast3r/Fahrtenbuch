@@ -1,7 +1,7 @@
 import { Fahrt } from "../db/FahrtModel";
 import { FahrtResource, UserResource } from "../db/Resources";
 
-// // Admin kann alle Fahrten sehen.
+// Admin kann alle Fahrten sehen
 export async function getFahrten() {
     try {
         // Alle Benutzer aus der Datenbank abrufen und nach Nachnamen sortieren
@@ -13,7 +13,8 @@ export async function getFahrten() {
         throw new Error(`Fehler beim Abrufen der Benutzer: ${error.message}`);
     }
 }
-// // User kann seine Fahrten sehen
+
+// User kann seine Fahrten sehen
 export async function getUserFahrten(userid: string) {
     try {
         const id = userid;
@@ -24,10 +25,10 @@ export async function getUserFahrten(userid: string) {
         throw new Error(`Fehler beim Abrufen der Fahrten: ${error.message}`)
     }
 }
-// // // Admin holt sich die Fahrten von einem User Sinnlos?
+// Admin holt sich die Fahrten von einem User Sinnlos?
 // export async function getUserFahrten(user: UserResource) { }
 
-// // User erstellt eine Fahrt.
+// User erstellt eine Fahrt
 export async function createUserFahrt(fahrt: FahrtResource) {
     try {
         const newFahrt = new Fahrt({
@@ -46,7 +47,7 @@ export async function createUserFahrt(fahrt: FahrtResource) {
     }
 }
 
-// // Admin kann im nachträglich sachen bearbeiten. 
+// Admin kann im nachträglich sachen bearbeiten
 export async function updateUserfahrt(fahrtResource: FahrtResource) {
 
     const newFahrt = await Fahrt.findByIdAndUpdate(fahrtResource.id, fahrtResource, { new: true });
@@ -55,7 +56,8 @@ export async function updateUserfahrt(fahrtResource: FahrtResource) {
         throw new Error('Fahrt nicht gefunden');
     }
 }
-// // Admin kann Fahrten löschen 
+
+// Admin kann Fahrten löschen 
 export async function deleteFahrt(fahrtid: string) {
     try {
         await Fahrt.findByIdAndDelete(fahrtid);
@@ -63,4 +65,3 @@ export async function deleteFahrt(fahrtid: string) {
         throw new Error(`Fehler beim Löschen der Fahrt: ${error.message}`);
     }
 }
-

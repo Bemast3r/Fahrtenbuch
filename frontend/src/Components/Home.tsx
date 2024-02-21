@@ -1,44 +1,45 @@
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import "./home.css";
-import { useEffect, useState } from 'react';
-import { getJWT, setJWT } from './Logincontext';
+    import Button from 'react-bootstrap/Button';
+    import Form from 'react-bootstrap/Form';
+    import "./home.css";
+    import { useEffect, useState } from 'react';
+    import { getJWT, setJWT } from './Logincontext';
+    import { useNavigate } from 'react-router-dom';
 
 
 
-const Home = () => {
+    const Home = () => {
 
-    const jwt = getJWT()
+        const jwt = getJWT()
+        const navigate = useNavigate()
 
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt)
-        } else {
-            return;
-        }
-    }, [jwt])
+        useEffect(() => {
+            if (jwt) {
+                setJWT(jwt)
+            } else {
+                navigate("/")
+                return;
+            }
+        }, [jwt])
 
-    return (
-        <div className="form-wrapper">
-            <h2 className="form-header">Kontrollbuch</h2>
-            <h3 className="form-header2">SKM</h3>
-            <div className="form-container">
-                <Form>
-                    <Button variant="primary" type="submit" className="submit-button">
-                        Fahrt erstellen
-                    </Button>
-                    <Button variant="primary" type="submit" className="submit-button2">
-                        Fahrt bearbeiten
-                    </Button>
-                    <Button variant="danger" type="submit" className="submit-button3">
-                        Fahrt beenden
-                    </Button>
-                </Form>
+        return (
+            <div className="form-wrapper">
+                <h2 className="align-top">Kontrollbuch</h2>
+                <h3 className="align-top">SKM</h3>
+                <div className="form-container">
+                    <Form>
+                        <Button variant="primary" type="submit" className="submit-button2">
+                            Fahrt erstellen
+                        </Button>
+                        <Button variant="primary" type="submit" className="submit-button2">
+                            Fahrt bearbeiten
+                        </Button>
+                        <Button variant="danger" type="submit" className="submit-button3">
+                            Fahrt beenden
+                        </Button>
+                    </Form>
+                </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
 
-export default Home;
+    export default Home;

@@ -58,6 +58,7 @@
     transition: background-color 0.15s ease-in-out;
     padding: 2rem;
     margin-bottom: 2rem;
+    height: 104,8;
   }
 
   .submit-button2 {
@@ -71,6 +72,7 @@
     cursor: pointer;
     transition: background-color 0.15s ease-in-out;
     padding: 2rem;
+    margin-bottom: 2rem;
   }
   
   .submit-button3 {
@@ -83,24 +85,9 @@
     cursor: pointer;
     transition: background-color 0.15s ease-in-out;
     padding: 2rem;
-    margin-top: 2rem;
   }
   
 
   .submit-button:hover {
     background-color: #0056b3;
-  }
-  
-  /* ---------- HEADER STYLING ---------- */
-  .form-header {
-    font-size: 3rem;
-    position: absolute;
-    top: 100px;
-    color: #333;
-  }
-  .form-header2 {
-    font-size: 3rem;
-    position: absolute;
-    top: 150px;
-    color: #333;
   }
