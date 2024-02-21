@@ -8,59 +8,67 @@ import { useState } from 'react';
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
 
-    const handleCheckboxChange = () => {
-        setDisableFields(!disableFields);
+    const handleCheckboxChange = (checkboxId: string) => {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.id !== checkboxId) {
+                (checkbox as HTMLInputElement).checked = false;
+            }
+        });
+        setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
     return (
         <div className="form-wrapper">
+            <h2 className="form-header">Fahrt erstellen</h2>
             <div className="form-container">
                 <Form>
-                    <Row className="mb-3">
+                    <Row className="mb-1">
                         <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
-                            <Form.Label className="form-label">Fahrer</Form.Label>
-                            <Form.Control type="text" placeholder="Fahrer" className="form-control" disabled={disableFields} />
+                            <Form.Label className="form-label">Name</Form.Label>
+                            <Form.Control type="text" placeholder="Name" className="form-control" disabled={disableFields} />
                         </Form.Group>
 
+                        <Form.Group as={Col} controlId="formGridDatum" className="form-group">
+                            <Form.Label className="form-label">Datum</Form.Label>
+                            <Form.Control type="date" placeholder="Datum" className="form-control" />
+                        </Form.Group>
+                    </Row>
+
+                    <Row className="mb-2">
                         <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group">
                             <Form.Label className="form-label">Kennzeichen</Form.Label>
                             <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} />
                         </Form.Group>
                     </Row>
 
-                    <Form.Group className="mb-3 form-group" controlId="formGridLenkzeit">
-                        <Form.Label className="form-label">Lenkzeit</Form.Label>
-                        <Form.Control type="number" placeholder="Lenkzeit" className="form-control" disabled={disableFields} />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3 form-group" controlId="formGridArbeitszeit">
-                        <Form.Label className="form-label">Arbeitszeit</Form.Label>
-                        <Form.Control type="number" placeholder="Arbeitszeit" className="form-control" disabled={disableFields} />
-                    </Form.Group>
-
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group">
-                            <Form.Label className="form-label">Kilometerstand</Form.Label>
-                            <Form.Control type="number" className="form-control" disabled={disableFields} />
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formGridKilometerende" className="form-group">
-                            <Form.Label className="form-label">Kilometerende</Form.Label>
-                            <Form.Control type="number" className="form-control" disabled={disableFields} />
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formGridPause" className="form-group">
-                            <Form.Label className="form-label">Pause</Form.Label>
-                            <Form.Control type="number" className="form-control" disabled={disableFields} />
+                            <Form.Label className="form-label">Kilometerstand (Beginn)</Form.Label>
+                            <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} />
                         </Form.Group>
                     </Row>
 
-                    <Form.Group className="mb-3 form-group" controlId="formGridCheckbox">
-                        <Form.Check type="checkbox" label="Ich bin krank" className="checkbox-label" onChange={handleCheckboxChange} />
-                    </Form.Group>
+                    <Row className="mb-4">
+                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox1">
+                            <Form.Check type="checkbox" label="Kein Fahrzeug geführt" className="checkbox-label1" onChange={() => handleCheckboxChange("formGridCheckbox1")} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox2">
+                            <Form.Check type="checkbox" label="Ich bin krank" className="checkbox-label2" onChange={() => handleCheckboxChange("formGridCheckbox2")} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox3">
+                            <Form.Check type="checkbox" label="Ich habe Urlaub" className="checkbox-label3" onChange={() => handleCheckboxChange("formGridCheckbox3")} />
+                        </Form.Group>
+
+                        <Form.Group className="mb-4 form-group" controlId="formGridCheckbox4">
+                            <Form.Check type="checkbox" label="Ich habe frei" className="checkbox-label4" onChange={() => handleCheckboxChange("formGridCheckbox4")} />
+                        </Form.Group>
+                    </Row>
 
                     <Button variant="primary" type="submit" className="submit-button">
-                        Absenden
+                        Fahrt beginnen
                     </Button>
                 </Form>
             </div>
