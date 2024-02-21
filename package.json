@@ -1,5 +1,12 @@
 {
   "devDependencies": {
-    "@types/node": "^20.11.19"
+    "@types/node": "^20.11.19",
+    "concurrently": "^8.2.2"
+  },
+  "scripts": {
+    "backend": "npm start --prefix backend",
+    "frontend": "npm start --prefix frontend",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "update": "npm install && cd frontend && npm install && cd ../backend && npm install && echo Updated dependencies for all 3 directories"
   }
 }
