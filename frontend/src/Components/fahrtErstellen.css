@@ -1,4 +1,8 @@
 /* ---------- FORM STYLING ---------- */
+.body {
+  background-color: #FdF5E6;
+}
+
 .form-wrapper {
   display: flex;
   flex-direction: column;
@@ -20,10 +24,6 @@
 
 .form-container form {
   width: 100%;
-}
-
-.form-group {
-  margin-bottom: 1rem;
 }
 
 .form-label {
@@ -49,6 +49,22 @@
   margin-left: 0.5rem;
 }
 
+.checkbox1 {
+  margin-bottom: 1rem; /* Ändere den Abstand nach deinen Vorlieben */
+}
+
+.checkbox2 {
+  margin-bottom: 1rem; /* Ändere den Abstand nach deinen Vorlieben */
+}
+
+.checkbox3 {
+  margin-bottom: 1rem; /* Ändere den Abstand nach deinen Vorlieben */
+}
+
+.checkbox4 {
+  margin-bottom: -1rem; /* Ändere den Abstand nach deinen Vorlieben */
+}
+
 .submit-button {
   width: 100%;
   padding: 0.75rem;
@@ -68,6 +84,6 @@
 /* ---------- HEADER STYLING ---------- */
 .form-header {
   font-size: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
   color: #333;
 }
