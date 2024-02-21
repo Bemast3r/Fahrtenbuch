@@ -1,36 +1,32 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './home.css'; // Stil-Datei importieren
-import { getJWT, setJWT } from './Logincontext';
-
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import "./home.css";
+import { useState } from 'react';
 
 const Home = () => {
-    const navigate = useNavigate()
-    const jwt = getJWT()
-
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt)
-        } else {
-            navigate("/")
-            return;
-        }
-    }, [jwt])
 
     return (
-        <div className='container2'> {/* Hinzufügen der Klasse container */}
-            <h1 className='title'>Kontrollbuch</h1> {/* Hinzufügen der Klasse title */}
-            <div className="container"> {/* Hinzufügen der Klasse button-container */}
-                <Link to="/fahrt-erstellen">
-                    <button className='button'>Fahrt erstellen</button>
-                </Link>
-                <Link to="/fahrt-bearbeiten">
-                    <button className='button'>Fahrt bearbeiten</button>
-                </Link>
-            </div>
+        <div className="form-wrapper">
+            <h2 className="form-header">Kontrollbuch</h2>
+            <h3 className="form-header2">SKM</h3>
+            <div className="form-container">
+                <Form>
+                <Button variant="primary" type="submit" className="submit-button">
+                        Fahrt erstellen
+                    </Button>
+                    <Button variant="primary" type="submit" className="submit-button2">
+                        Fahrt bearbeiten
+                    </Button>
 
+                    <Button variant="danger" type="submit" className="submit-button3">
+                        Fahrt beenden
+                    </Button>
+                </Form>
+            </div>
         </div>
     );
-};
+}
 
 export default Home;

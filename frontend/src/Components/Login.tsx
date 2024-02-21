@@ -29,7 +29,6 @@ const Login = () => {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
-        await delay(500);
         try {
             const jwt = await login({ username: inputUsername, password: inputPassword })
             setJWT(jwt.access_token)
@@ -42,10 +41,6 @@ const Login = () => {
     };
 
     const handlePassword = () => { };
-
-    function delay(ms: number) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
 
     return (
         <div
@@ -97,9 +92,9 @@ const Login = () => {
                         required
                     />
                 </Form.Group>
-                <Form.Group className="mb-2" controlId="checkbox">
+                {/* <Form.Group className="mb-2" controlId="checkbox">
                     <Form.Check type="checkbox" label="Remember me" />
-                </Form.Group>
+                </Form.Group> */}
                 {!loading ? (
                     <Button className="w-100" variant="primary" type="submit">
                         Log In
