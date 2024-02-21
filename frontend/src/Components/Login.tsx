@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./login.css";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
-import { LoginContext, getLoginInfo, removeJWT, setJWT } from "./Logincontext";
+import { getJWT, setJWT } from "./Logincontext";
 import { useNavigate } from "react-router-dom";
 
 
@@ -15,6 +15,17 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
+
+    const jwt = getJWT()
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt)
+        } else {
+            return;
+        }
+    }, [jwt])
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
@@ -22,7 +33,7 @@ const Login = () => {
         try {
             const jwt = await login({ username: inputUsername, password: inputPassword })
             setJWT(jwt.access_token)
-            navigate("/test") // User wird redirected nachdem Login
+            navigate("/home") // User wird redirected nachdem Login
         } catch (error: any) {
             setShow(true)
             setError(error.toString())

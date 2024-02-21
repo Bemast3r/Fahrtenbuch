@@ -1,0 +1,45 @@
+.container {
+    display: flex; /* Verwendet Flexbox */
+    flex-direction: column; /* Stapelt die Elemente vertikal */
+    align-items: center; /* Zentriert die Elemente horizontal */
+    justify-content: center; /* Zentriert die Elemente vertikal */
+    height: 90vh; /* Setzt die Höhe des Containers auf 100% der Bildschirmhöhe */
+    background-color: #FdF5E6 ;
+    text-align: center; /* Zentriert den Text horizontal */
+    margin-top: 20px; /* Setzt den oberen Abstand des Titels */
+    font-size: 4rem;
+  }
+
+  .container2{
+    background-color: #FdF5E6;
+  }
+
+  
+  .button-container {
+    display: flex; /* Verwendet Flexbox */
+    justify-content: center; /* Zentriert die Elemente horizontal */
+    width: 100%; /* Nimmt die gesamte Breite des Containers ein */
+  }
+  
+  .button {
+    margin: 10px; /* Setzt den äußeren Abstand der Buttons */
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    height: 250px;
+    width: 200px;
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 3rem;
+  }
+  
