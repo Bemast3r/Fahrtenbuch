@@ -3,9 +3,22 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./home.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getJWT, setJWT } from './Logincontext';
+
+
 
 const Home = () => {
+
+    const jwt = getJWT()
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt)
+        } else {
+            return;
+        }
+    }, [jwt])
 
     return (
         <div className="form-wrapper">
@@ -13,13 +26,12 @@ const Home = () => {
             <h3 className="form-header2">SKM</h3>
             <div className="form-container">
                 <Form>
-                <Button variant="primary" type="submit" className="submit-button">
+                    <Button variant="primary" type="submit" className="submit-button">
                         Fahrt erstellen
                     </Button>
                     <Button variant="primary" type="submit" className="submit-button2">
                         Fahrt bearbeiten
                     </Button>
-
                     <Button variant="danger" type="submit" className="submit-button3">
                         Fahrt beenden
                     </Button>
