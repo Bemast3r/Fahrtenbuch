@@ -11,7 +11,7 @@ import { UserResource } from '../util/Resources';
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
-    const [user, setUser] = useState<UserResource | null>(null);
+    const [user, setUser] = useState<UserResource | null>(null)
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -25,21 +25,16 @@ const FahrtErstellen = () => {
         }
     }, [jwt])
 
-    useEffect(() => {
-        // declare the data fetching function
-        const fetchData = async () => {
-            const id = getLoginInfo()
-            const data = await getUser(id!.userID);
-            setUser(data)
-            console.log(user)
-        }
+    async function load() {
+        const id = getLoginInfo()
+        const user = await getUser(id!.userID)
+        console.log(user)
+        setUser(user)
+    }
 
-        // call the function
-        fetchData()
-            // make sure to catch any error
-            .catch(console.error);
-    }, [])
+    useEffect(() => { load() }, [])
 
+    console.log(user)
     const handleCheckboxChange = (checkboxId: string) => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach((checkbox) => {
@@ -49,13 +44,6 @@ const FahrtErstellen = () => {
         });
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
-
-    let name = ""
-    console.log(user)
-    if (user) {
-        name = user?.nachname + user?.name
-    }
-
 
     return (
         <div className="form-wrapper">
@@ -70,7 +58,6 @@ const FahrtErstellen = () => {
                                 placeholder="Name"
                                 className="form-control"
                                 disabled={disableFields}
-                                value={name ? name : ''} // Hier wird der Wert des Namensfelds mit user?.nameuser?.vorname gefüllt, wenn verfügbar
                             />
                         </Form.Group>
 
