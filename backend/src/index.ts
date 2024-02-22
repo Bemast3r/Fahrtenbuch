@@ -10,7 +10,7 @@ import loginRouter from "./Login/LoginRouter";
 dotenv.config();
 
 const PORT: number = 5000
-const app = express()
+export const app = express()
 
 app.use(cors({
     credentials: true

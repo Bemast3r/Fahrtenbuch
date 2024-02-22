@@ -19,7 +19,10 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
 export async function getUser(userid:string) {
     const user = await User.findById(userid).exec();
     // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
-    return await mapUserToResource(user);
+    
+    const mapped = await mapUserToResource(user)
+    console.log(mapped)
+    return mapped
 }
 
 export async function getUsersFromDB(): Promise<UserResource[]> {
@@ -37,7 +40,8 @@ export async function createUser(userResource: UserResource): Promise<UserResour
         password: userResource.password
     });
 
-    return mapUserToResource(user);
+    const mapped = await mapUserToResource(user)
+    return mapped
 }
 
 export async function updateUser(userResource: UserResource): Promise<UserResource> {
@@ -56,7 +60,8 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (typeof userResource.abwesend === 'boolean') user.abwesend = userResource.abwesend;
 
     const savedUser = await user.save();
-    return mapUserToResource(savedUser)
+    const mapped = await mapUserToResource(savedUser)
+    return mapped
 }
 
 
@@ -72,10 +77,11 @@ export async function changeUser(userId: string, updatedUserFields: Partial<User
         Object.assign(user, updatedUserFields);
 
         // Speichern Sie die Änderungen in der Datenbank
-        await user.save();
+        const x = await user.save();
 
         // Geben Sie die aktualisierten Benutzerdetails zurück
-        return mapUserToResource(user);
+        const mapped = await mapUserToResource(x)
+        return mapped
     } catch (error) {
         throw new Error(`Fehler beim Ändern des Benutzers: ${error.message}`);
     }
@@ -98,8 +104,9 @@ export async function changeCar(user: UserResource, newCar: { kennzeichen: strin
         }
         // Setze das aktuelle Datum und die aktuelle Uhrzeit für das neue Fahrzeug
         userdb.fahrzeuge.push({ datum: new Date().toLocaleString(), kennzeichen: newCar.kennzeichen });
-        await userdb.save();
-        return mapUserToResource(userdb);
+        const x = await userdb.save();
+        const mapped = await mapUserToResource(x)
+        return mapped ;
     } catch (error) {
         throw new Error(`Fehler beim Ändern des Autos: ${error.message}`);
     }

@@ -4,7 +4,7 @@ import { User } from "./UserModel";
 export interface IFahrt {
     fahrer: Types.ObjectId; // User
     kennzeichen: string; // Referenz auf das Kennzeichenmodell
-    kilometerstand: number; //kilometerstand    
+    kilometerstand: number; //kilometerstand
     kilometerende: number; //Kilometerstand am Ende 
     lenkzeit: {
         start: Date;
@@ -44,3 +44,4 @@ const fahrtSchema = new Schema<IFahrt>({
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);
+﻿

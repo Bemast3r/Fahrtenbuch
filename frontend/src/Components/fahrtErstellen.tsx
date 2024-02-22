@@ -3,11 +3,37 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getJWT, setJWT, getLoginInfo } from './Logincontext';
+import { getUser } from '../Api/api';
+import { UserResource } from '../util/Resources';
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
+    const [user, setUser] = useState<UserResource | null>(null)
 
+    const jwt = getJWT()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt)
+        } else {
+            navigate("/")
+            return;
+        }
+    }, [jwt])
+
+    async function load() {
+        const id = getLoginInfo()
+        const user = await getUser(id!.userID)
+        setUser(user)
+    }
+
+    useEffect(() => { load() }, [])
+
+    console.log(user)
     const handleCheckboxChange = (checkboxId: string) => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach((checkbox) => {
@@ -26,12 +52,18 @@ const FahrtErstellen = () => {
                     <Row className="mb-1">
                         <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
                             <Form.Label className="form-label">Name</Form.Label>
-                            <Form.Control type="text" placeholder="Name" className="form-control" disabled={disableFields} />
+                            <Form.Control
+                                type="text"
+                                placeholder="Name"
+                                className="form-control"
+                                disabled={disableFields}
+                                value={user ? user.name : ""}
+                            />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridDatum" className="form-group">
                             <Form.Label className="form-label">Datum</Form.Label>
-                            <Form.Control type="date" placeholder="Datum" className="form-control" />
+                            <Form.Control type="date" placeholder="Datum" className="form-control" value={Date.now().toString()} />
                         </Form.Group>
                     </Row>
 
