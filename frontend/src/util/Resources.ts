@@ -32,7 +32,7 @@ export type FahrtResource = {
         start: Date;
         stop: Date;
     }[]; // Arbeiten ohne Fahren
-    // createdAt?: Date; // Datum der Fahrt
+    createdAt?: Date; // Datum der Fahrt
 }
 
 

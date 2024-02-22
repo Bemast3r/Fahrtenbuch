@@ -1,6 +1,7 @@
 // FahrtVerwalten.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css'; // Importiere die CSS-Datei
+import { getJWT, setJWT } from './Logincontext';
 
 interface LogEntry {
   action: string;
@@ -18,6 +19,16 @@ const FahrtVerwalten: React.FC = () => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [showWorkStarted, setShowWorkStarted] = useState<boolean>(false);
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
+
+  const jwt = getJWT()
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt)
+        } else {
+            return;
+        }
+    }, [jwt])
 
   const startStopTimer = (
     isRunning: boolean,
