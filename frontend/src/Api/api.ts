@@ -70,14 +70,16 @@ export async function getUsers(userID: string): Promise<UserResource> {
 
 export async function getUser(userID:string): Promise<UserResource> {
     try {
+        console.log("IM FETCH")
         const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/${userID}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt}`
             }
         });
+        console.log("NACH FETCH")
         let x =  await response.json()
-        console.log("Das ist die Response" + x)
+        console.log("Das ist die Response" + response)
         if(!response || !response.ok){
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }
