@@ -21,7 +21,6 @@ export async function getUser(userid:string) {
     // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
     
     const mapped = await mapUserToResource(user)
-    console.log(mapped)
     return mapped
 }
 

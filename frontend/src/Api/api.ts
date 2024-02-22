@@ -1,5 +1,5 @@
 import { getJWT } from "../Components/Logincontext";
-import { LoginResource, UserResource } from "../util/Resources";
+import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 const jwt = getJWT()
@@ -80,6 +80,30 @@ export async function getUser(userID:string): Promise<UserResource> {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }
         const result: UserResource = await response.json();
+        if(!result){
+            throw new Error("Result ist nicht ok.")
+        } 
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource>{
+    try {
+        
+        const response = await fetch(`http://localhost:5000/api/user/user/fahrt/erstellen`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ fahrerid: fahrt.fahrerid, fahrzeug: {kennzeichen: fahrt.kennzeichen}, kilometerstand: fahrt.kilometerstand })
+        });
+        if(!response || !response.ok){
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: FahrtResource = await response.json();
         if(!result){
             throw new Error("Result ist nicht ok.")
         } 

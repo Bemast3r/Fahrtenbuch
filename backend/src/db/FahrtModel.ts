@@ -19,6 +19,7 @@ export interface IFahrt {
         stop: Date;
     }[]; // Arbeiten ohne Fahren
     createdAt: Date; // Wann es gestartet worden ist
+    startpunkt: string
 }
 
 type FahrtModel = Model<IFahrt>;
@@ -41,6 +42,7 @@ const fahrtSchema = new Schema<IFahrt>({
         stop: { type: Date }
     }], // weiß nicht ob das Sinnvoll ist aber mal sehen.
     createdAt: { type: Date },
+    startpunkt: {type: String}
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);
