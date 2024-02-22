@@ -63,7 +63,7 @@ const FahrtErstellen = () => {
 
                         <Form.Group as={Col} controlId="formGridDatum" className="form-group">
                             <Form.Label className="form-label">Datum</Form.Label>
-                            <Form.Control type="date" placeholder="Datum" className="form-control" value={Date.now().toString()} />
+                            <Form.Control type="date" placeholder="Datum" className="form-control" value={Date.now} />
                         </Form.Group>
                     </Row>
 
