@@ -40,10 +40,6 @@ function App() {
     <div className="App">
       <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
         <UserContext.Provider value={[userInfo, setUserInfo]}>
-
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
         </UserContext.Provider>
       </LoginContext.Provider>
 

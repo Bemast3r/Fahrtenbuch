@@ -10,7 +10,7 @@ import loginRouter from "./Login/LoginRouter";
 dotenv.config();
 
 const PORT: number = 5000
-const app = express()
+export const app = express()
 
 app.use(cors({
     credentials: true
@@ -31,7 +31,7 @@ app.use("*", express.json({ limit: "5mb" }));
 app.use(bodyParser.json());
 
 app.use("/api/user", userRouter)
-app.use("/api/threadpage", fahrrouter)
+app.use("/api/fahrt", fahrrouter)
 app.use("/api/login", loginRouter);
 app.use(bodyParser.json())
 app.get("/", (_, res) => { res.send('SKM Server läuft') })

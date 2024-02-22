@@ -7,7 +7,7 @@ import { hash, compare } from "bcryptjs";
 export interface IUser {
     name: string
     nachname: string
-    username:string
+    username: string
     password: string
     admin?: boolean
     createdAt?: Date
@@ -15,7 +15,7 @@ export interface IUser {
         datum: string;
         kennzeichen: string;
     }[];
-    abwesend: boolean
+    abwesend: string
 }
 
 export interface IUserMethods {
@@ -24,10 +24,9 @@ export interface IUserMethods {
 
 type UserModel = Model<IUser, {}, IUserMethods>;
 
-
 const userSchema = new Schema<IUser, IUserMethods>({
     name: { type: String, required: true },
-    username: { type: String, required: true, unique:true },
+    username: { type: String, required: true, unique: true },
     nachname: { type: String, required: true },
     password: { type: String, required: true },
     admin: { type: Boolean, default: false },
@@ -36,7 +35,7 @@ const userSchema = new Schema<IUser, IUserMethods>({
         datum: { type: String, default: new Date().toLocaleString() },
         kennzeichen: { type: String, required: true }
     }],
-    abwesend: {type:Boolean, default: false}
+    abwesend: { type: String}
 }, { timestamps: true });
 
 userSchema.method("isPasswordCorrect", async function (passwordCandidate: string): Promise<boolean> {

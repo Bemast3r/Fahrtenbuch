@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./login.css";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
-import { LoginContext, getLoginInfo, removeJWT, setJWT } from "./Logincontext";
+import { getJWT, setJWT } from "./Logincontext";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
@@ -12,14 +13,27 @@ const Login = () => {
     const [error, setError] = useState("")
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
+
+
+    const jwt = getJWT()
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt)
+            navigate("/home")
+        } else {
+            return;
+        }
+    }, [jwt])
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
-        await delay(500);
         try {
             const jwt = await login({ username: inputUsername, password: inputPassword })
             setJWT(jwt.access_token)
+            navigate("/home") // User wird redirected nachdem Login
         } catch (error: any) {
             setShow(true)
             setError(error.toString())
@@ -28,10 +42,6 @@ const Login = () => {
     };
 
     const handlePassword = () => { };
-
-    function delay(ms: number) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
 
     return (
         <div
@@ -83,9 +93,9 @@ const Login = () => {
                         required
                     />
                 </Form.Group>
-                <Form.Group className="mb-2" controlId="checkbox">
+                {/* <Form.Group className="mb-2" controlId="checkbox">
                     <Form.Check type="checkbox" label="Remember me" />
-                </Form.Group>
+                </Form.Group> */}
                 {!loading ? (
                     <Button className="w-100" variant="primary" type="submit">
                         Log In

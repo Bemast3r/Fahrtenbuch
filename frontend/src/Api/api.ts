@@ -1,7 +1,8 @@
 import { getJWT } from "../Components/Logincontext";
-import { LoginResource, UserResource } from "../util/Resources";
+import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
+const jwt = getJWT()
 
 
 export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
@@ -45,7 +46,7 @@ export async function getUsers(userID: string): Promise<UserResource> {
         if (!jwt)
             throw new Error("no jwt found");
 
-        const response = await fetch(`${BASE_URL}/admin/users`, {
+        const response = await fetch(`${BASE_URL}/api/admin/users`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt}`
@@ -60,9 +61,6 @@ export async function getUsers(userID: string): Promise<UserResource> {
             throw new Error("invalid result from server");
         if (!result.id || !result.email || !result.name)
             throw new Error("result from server is missing fields");
-        const votedPosts = new Map<string, boolean>();
-        result.votedPosts.forEach((obj: { postID: string, vote: boolean }) => { votedPosts.set(obj.postID, obj.vote); });
-        result.votedPosts = votedPosts;
         return result as UserResource;
 
     } catch (error) {
@@ -70,3 +68,46 @@ export async function getUsers(userID: string): Promise<UserResource> {
     }
 }
 
+export async function getUser(userID: string): Promise<UserResource> {
+    try {
+        const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/${userID}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt}`
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: UserResource = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
+    try {
+        const response = await fetch(`http://localhost:5000/api/fahrt/user/fahrt/erstellen`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen , kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt })
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: FahrtResource = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}

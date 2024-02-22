@@ -6,53 +6,6 @@ import { body, validationResult, matchedData, param } from "express-validator";
 
 export const fahrrouter = express.Router();
 
-
-/**
- * Erstellt eine Fahrt 
- */
-fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
-    body("id").optional().isMongoId(),
-    body("fahrerid").isString(),
-    body("kennzeichen").isString(),
-    body("kilometerstand").isString(),
-    body("kilometerende").isString(),
-    body("lenkzeit").optional().isString(),
-    body("arbeitszeit").optional().isString(),
-    body("pause").optional().isString(),
-
-    async (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        try {
-            const fahr = matchedData(req) as FahrtResource
-            const fahrt = await createUserFahrt(fahr);
-            return res.send(fahrt); // 200 by default
-        } catch (err) {
-            res.status(400);
-            next(err);
-        }
-    }
-);
-
-/**
- * Fahrt beendet
- */
-fahrrouter.post("/user/fahrt/beenden", requiresAuthentication)
-
-
-/**
- * Fahrt beendet
- */
-fahrrouter.post("/user/fahrt/pause", requiresAuthentication,)
-
-/**
- * Fahrt lenkzeit
- */
-fahrrouter.post("/user/fahrt/lenkzeit", requiresAuthentication,)
-
-
 /**
  * Bekomme alle Fahrten
  */
@@ -75,7 +28,6 @@ fahrrouter.get("/admin/alle/fahrten", requiresAuthentication,
         }
     }
 );
-
 
 /**
  * Fahrten von einem User über seine Id 
@@ -101,22 +53,27 @@ fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
 );
 
 /**
- * Lösch fahrt
+ * Erstellt eine Fahrt 
  */
+fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
+    body("id").optional().isMongoId(),
+    body("fahrerid").isString(),
+    body("kennzeichen").isString(),
+    body("kilometerstand").isNumeric(),
+    body("startpunkt").isString(),
 
-fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
-    param("id").isMongoId(),
     async (req, res, next) => {
         const errors = validationResult(req);
+        console.log(req.body)
         if (!errors.isEmpty()) {
+            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if (req.role !== "a") {
-                return res.sendStatus(403)
-            }
-            const user = await deleteFahrt(req.params.id);
-            return res.send(user); // 200 by default
+            const fahr = matchedData(req) as FahrtResource
+            console.log(fahr)
+            const fahrt = await createUserFahrt(fahr);
+            return res.send(fahrt); // 200 by default
         } catch (err) {
             res.status(400);
             next(err);
@@ -144,7 +101,7 @@ fahrrouter.post("/user/fahrt/bearbeiten",
                 return res.sendStatus(403);
             }
             const resource = matchedData(req) as FahrtResource
-            const fahrt = await updateUserfahrt(resource); 
+            const fahrt = await updateUserfahrt(resource);
             return res.send(fahrt); // 200 by default
         } catch (err) {
             res.status(400);
@@ -153,4 +110,27 @@ fahrrouter.post("/user/fahrt/bearbeiten",
     }
 );
 
-export default fahrrouter
+/**
+ * Löscht fahrt
+ */
+fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
+    param("id").isMongoId(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const user = await deleteFahrt(req.params.id);
+            return res.send(user); // 200 by default
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+export default fahrrouter;
