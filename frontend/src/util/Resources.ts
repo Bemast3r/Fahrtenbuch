@@ -20,9 +20,18 @@ export type FahrtResource = {
     kennzeichen: string; // Kennzeichen des Fahrzeugs
     kilometerstand: number;
     kilometerende: number;
-    lenkzeit?: number; // Zeit, die der Fahrer am Steuer verbracht hat (in Minuten z.B.)
-    arbeitszeit?: number; // Gesamte Arbeitszeit des Fahrers (in Minuten z.B.)
-    pause?: number; // Dauer der Pause des Fahrers (in Minuten z.B.)
+    lenkzeit: {
+        start: Date;
+        stop: Date;
+    }[]; // Arbeit mit Fahren
+    pause: {
+        start: Date;
+        stop: Date;
+    }[] // Normal Pause
+    arbeitszeit: {
+        start: Date;
+        stop: Date;
+    }[]; // Arbeiten ohne Fahren
     // createdAt?: Date; // Datum der Fahrt
 }
 

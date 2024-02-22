@@ -7,6 +7,8 @@ import Login from './Components/Login';
 import Home from './Components/Home';
 import Loading from './Components/LoadingIndicator';
 import FahrtErstellen from './Components/FahrtErstellen';
+import FahrtVerwalten from './Components/FahrtVerwalten';
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,6 +18,7 @@ ReactDOM.render(
         <Route path="home" element={<Home />} />
         <Route path="test" element={<Loading />} />
         <Route path="create" element={<FahrtErstellen />} />
+        <Route path="verwalten" element={<FahrtVerwalten />} />
       </Routes>
     </Router>
   </React.StrictMode>,
