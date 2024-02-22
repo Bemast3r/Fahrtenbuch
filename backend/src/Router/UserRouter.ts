@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { changeCar, createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -75,37 +75,6 @@ userRouter.post("/admin/user/erstellen", requiresAuthentication,
         } catch (err) {
             res.status(400);
             next(err);
-        }
-    }
-);
-
-/**
- * Ändert das Auto
- */
-userRouter.put("/user/auto/wechseln", requiresAuthentication,
-    body("name").isString(),
-    body("nachname").isString(),
-    body("username").isString(),
-    body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
-    body("password").isString(),
-    body("abwesend").isBoolean(),
-    body("admin").isBoolean(),
-    // Das Datum sollte automatisch gesetzt werden.
-    // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 
-    body('fahrzeuge.*.kennzeichen').isString().notEmpty().withMessage('kennzeichen ist erforderlich und muss eine Zeichenkette sein'),
-    async (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        try {
-            const userRes = req.body as UserResource; // Annahme: Die Benutzerressource ist im Anforderungskörper enthalten
-            const newCar = { kennzeichen: req.body.fahrzeuge[0].kennzeichen }; // Annahme: Ändern Sie nur ein Fahrzeug auf einmal
-            const user = await changeCar(userRes, newCar);
-            return res.send(user);
-        } catch (error) {
-            res.status(400);
-            next(error);
         }
     }
 );

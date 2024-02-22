@@ -18,6 +18,7 @@ export async function login(username: string, password: string): Promise<{ succe
     if (!(await user.isPasswordCorrect(password))) {
         return { success: false };
     }
+    
     if (user.admin) {
         // If admin give role "a"
         return { success: true, id: user._id.toString(), username: user.username, role: "a" };
