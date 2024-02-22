@@ -21,6 +21,7 @@ const Login = () => {
     useEffect(() => {
         if (jwt) {
             setJWT(jwt)
+            navigate("/home")
         } else {
             return;
         }

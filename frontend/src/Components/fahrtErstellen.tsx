@@ -47,17 +47,19 @@ const FahrtErstellen = () => {
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
         const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const stratpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
-
+        if (!kennzeichen || !kilometerstand || !stratpunkt) {
+            return;
+        }
         if (user) {
             let fahrtResource: FahrtResource = {
                 fahrerid: user.id!,
-                kennzeichen: kennzeichen || "",
+                kennzeichen: kennzeichen.toString(),
                 kilometerstand: kilometerstand,
-                startpunkt: stratpunkt
+                startpunkt: stratpunkt.toString()
             };
             await postFahrt(fahrtResource)
         }
-        navigate("/verwalten");
+        navigate("/verwalten", {});
     }
 
     const currentDate = new Date();
@@ -89,28 +91,28 @@ const FahrtErstellen = () => {
 
                         <Form.Group as={Col} controlId="formGridDatum" className="form-group">
                             <Form.Label className="form-label">Datum</Form.Label>
-                            <Form.Control type="text" placeholder="Datum" className="form-control" value={americanDateFormat} disabled={true} required/>
+                            <Form.Control type="text" placeholder="Datum" className="form-control" value={americanDateFormat} disabled={true} required />
                         </Form.Group>
                     </Row>
 
                     <Row className="mb-2">
                         <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group">
                             <Form.Label className="form-label">Kennzeichen</Form.Label>
-                            <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} required/>
+                            <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} required />
                         </Form.Group>
                     </Row>
 
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group" >
                             <Form.Label className="form-label">Kilometerstand (Beginn)</Form.Label>
-                            <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} required/>
+                            <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} required />
                         </Form.Group>
                     </Row>
 
                     <Row className="mb-4">
                         <Form.Group as={Col} controlId="formGridOrt" className="form-group">
                             <Form.Label className="form-label">Ort der Fahrtaufnahme</Form.Label>
-                            <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} required/>
+                            <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} required />
                         </Form.Group>
                     </Row>
 

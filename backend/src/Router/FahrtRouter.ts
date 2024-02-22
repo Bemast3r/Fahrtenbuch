@@ -59,19 +59,19 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
     body("kennzeichen").isString(),
-    body("kilometerstand").isString(),
-    body("kilometerende").isString(),
-    body("lenkzeit").optional().isString(),
-    body("arbeitszeit").optional().isString(),
-    body("pause").optional().isString(),
+    body("kilometerstand").isNumeric(),
+    body("startpunkt").isString(),
 
     async (req, res, next) => {
         const errors = validationResult(req);
+        console.log(req.body)
         if (!errors.isEmpty()) {
+            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
             const fahr = matchedData(req) as FahrtResource
+            console.log(fahr)
             const fahrt = await createUserFahrt(fahr);
             return res.send(fahrt); // 200 by default
         } catch (err) {
