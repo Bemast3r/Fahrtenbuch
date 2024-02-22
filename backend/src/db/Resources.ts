@@ -1,6 +1,6 @@
 
 export type UserResource = {
-    id?:string;
+    id?: string;
     name: string;
     nachname: string;
     username: string;
@@ -11,11 +11,11 @@ export type UserResource = {
         datum: string,
         kennzeichen: string;
     }[];
-    abwesend?:boolean
+    abwesend?: boolean
 }
 
 export type FahrtResource = {
-    id?:string
+    id?: string
     fahrerid: string; // ID des Fahrers
     kennzeichen: string; // Kennzeichen des Fahrzeugs
     kilometerstand: number;
