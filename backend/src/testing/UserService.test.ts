@@ -1,5 +1,5 @@
 import TestDB from "../Services/TestDb";
-import { getUsersFromDB, changeUser, changeCar, createUser, deleteUser, updateUser } from "../Services/UserService";
+import { getUsersFromDB, changeUser, createUser, deleteUser, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import { IUser, User } from "../db/UserModel";
 import mongoose, { Types } from "mongoose";
@@ -15,8 +15,8 @@ beforeAll(async () => {
 
 beforeEach(async () => {
     await User.syncIndexes();
-    user1 = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", fahrzeuge: [], abwesend: false });
-    user2 = await User.create({ name: "Can", nachname: "Pala", username: "canpala", password: "canna", fahrzeuge: [], abwesend: false });
+    user1 = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", fahrzeuge: [], abwesend: "false" });
+    user2 = await User.create({ name: "Can", nachname: "Pala", username: "canpala", password: "canna", fahrzeuge: [], abwesend: "false" });
 });
 
 
@@ -56,14 +56,6 @@ describe("UserService Tests", () => {
         expect(updatedUser.id).toBe(user2._id.toString())
         expect(updatedUser.name).toBe("AUTO");
     });
-
-    test("changeCar should add new car to user's fahrzeuge array", async () => {
-        const newCar = { kennzeichen: "ABC123" };
-        const updatedUser = await changeCar(user1, newCar);
-        const foundCar = updatedUser.fahrzeuge.find(car => car.kennzeichen === newCar.kennzeichen);
-        expect(foundCar).toBeDefined();
-    });
-
 
     test("createUser should create a new user", async () => {
         const newUserResource: UserResource = {
@@ -108,7 +100,7 @@ describe('Negativtests für Benutzerservice-Funktionen', () => {
             admin: false,
             createdAt: new Date(),
             fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS" }],
-            abwesend: false
+            abwesend: "false"
         };
 
         // Erwarten Sie, dass die Änderung des Benutzers mit der ungültigen ID einen Fehler wirft
@@ -137,12 +129,12 @@ test("updateUser should update user's details", async () => {
             admin: false,
             createdAt: new Date(),
             fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS" }],
-            abwesend: false
+            abwesend: "false"
         })
     const updatedUserDetails = {
         ...user3, 
         name: "UPFATED DUDE",
-        abwesend: true
+        abwesend: "true"
     };
     const updatedUser = await updateUser(updatedUserDetails);
     expect(updatedUser.name).toBe("UPFATED DUDE")
@@ -165,7 +157,7 @@ test("Create a user 3 ", async () => {
             admin: false,
             createdAt: new Date(),
             fahrzeuge: [{ datum: Date.now().toLocaleString(), kennzeichen: "AAVVVS" }],
-            abwesend: false
+            abwesend: "false"
         })
     expect(user3.id).toBeDefined()
 });

@@ -57,7 +57,7 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (userResource.username) user.username = userResource.username;
     if (userResource.password) user.password = userResource.password;
     if (userResource.fahrzeuge) user.fahrzeuge = userResource.fahrzeuge;
-    if (typeof userResource.abwesend === 'boolean') user.abwesend = userResource.abwesend;
+    if (userResource.abwesend) user.abwesend = userResource.abwesend;
 
     const savedUser = await user.save();
     const mapped = await mapUserToResource(savedUser)

@@ -15,7 +15,7 @@ let userid: string
 beforeAll(async () => { await TestDB.connect(); });
 beforeEach(async () => {
     User.syncIndexes();
-    user = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", admin: true, fahrzeuge: [], abwesend: false });
+    user = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", admin: true, fahrzeuge: [], abwesend: "false" });
     userid = user._id.toString()
 
     // Login um Token zu erhalten
@@ -51,7 +51,7 @@ test('GET /api/admin/finde/user/:id - should return a specific user for admin', 
 
 test('POST /api/admin/user/erstellen - should create a new user for admin', async () => {
     const request = supertest(app);
-    const userData = { name: "John", nachname: "Doe", username: "johndoe", password: "password123", admin: true, fahrzeuge: [""], abwesend: false };
+    const userData = { name: "John", nachname: "Doe", username: "johndoe", password: "password123", admin: true, fahrzeuge: [""], abwesend: "false" };
     const res = await request.post('/api/user/admin/user/erstellen').send(userData).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
@@ -64,7 +64,7 @@ test('POST /api/admin/user/erstellen - should create a new user for admin', asyn
 
 test('PUT /api/admin/user/aendern - should update a specific user for admin', async () => {
     const request = supertest(app);
-    const updatedUserData = { id: userid, name: "Satorou", nachname: "Gojo", username: "GojoDerDünne", password: "abcABC123!!!!", fahrzeuge: [{  datum: Date.now(), kennzeichen: "Merces Benzer AMG"} ], abwesend: true, admin: true };
+    const updatedUserData = { id: userid, name: "Satorou", nachname: "Gojo", username: "GojoDerDünne", password: "abcABC123!!!!", fahrzeuge: [{  datum: Date.now(), kennzeichen: "Merces Benzer AMG"} ], abwesend: "true", admin: true };
     const res = await request.put(`/api/user/admin/user/aendern`).send(updatedUserData).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
