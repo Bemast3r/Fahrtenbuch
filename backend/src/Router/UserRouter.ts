@@ -43,7 +43,7 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
                 return res.sendStatus(403)
             }
             const user = await getUser(req.params.id)
-            return user
+            return res.send(user)
         } catch (error) {
             res.status(400);
             next(error);

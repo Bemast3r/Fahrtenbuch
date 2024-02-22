@@ -28,7 +28,6 @@ const FahrtErstellen = () => {
     async function load() {
         const id = getLoginInfo()
         const user = await getUser(id!.userID)
-        console.log(user)
         setUser(user)
     }
 
@@ -58,12 +57,13 @@ const FahrtErstellen = () => {
                                 placeholder="Name"
                                 className="form-control"
                                 disabled={disableFields}
+                                value={user ? user.name : ""}
                             />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridDatum" className="form-group">
                             <Form.Label className="form-label">Datum</Form.Label>
-                            <Form.Control type="date" placeholder="Datum" className="form-control" />
+                            <Form.Control type="date" placeholder="Datum" className="form-control" value={Date.now().toString()} />
                         </Form.Group>
                     </Row>
 

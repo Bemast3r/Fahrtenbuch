@@ -19,7 +19,9 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
 export async function getUser(userid:string) {
     const user = await User.findById(userid).exec();
     // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
+    
     const mapped = await mapUserToResource(user)
+    console.log(mapped)
     return mapped
 }
 
