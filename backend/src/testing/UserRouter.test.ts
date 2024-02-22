@@ -4,7 +4,7 @@ import mongoose, { Types } from "mongoose";
 import { Fahrt, IFahrt } from "../db/FahrtModel";
 import supertest from "supertest"
 import { LoginResource } from "../db/Resources";
-import  app  from "../testing/testindex";
+import app from "../testing/testindex";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -29,17 +29,20 @@ beforeEach(async () => {
 
     // Login um Token zu erhalten
     const request = supertest(app);
-    const loginData = { username: "SKM", password: "abcABC123!"};
+
+    const loginData = { username: "umutaydin", password: "umut21" };
     const response = await request.post(`/api/login`).send(loginData);
-    console.log(response.body)
     const loginResource = response.body as LoginResource;
     token = loginResource.access_token;
     expect(token).toBeDefined();
+
+
 });
 afterEach(async () => { await TestDB.clear(); });
 afterAll(async () => { await TestDB.close(); });
 
 // --------------------------------------------------------- GET TESTS -----------------------------------------------------------------------
+
 
 
 test('GET /api/admin/users - should return all users for admin', async () => {

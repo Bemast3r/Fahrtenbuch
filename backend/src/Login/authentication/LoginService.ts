@@ -10,6 +10,8 @@ const jwtSecret = process.env.JWT_SECRET;
 const jwtTTL = process.env.JWT_TTL;
 
 export async function verifyPasswordAndCreateJWT(username: string, password: string): Promise<string | undefined> {
+
+    
     const secret = jwtSecret
     if (!secret) {
         throw Error("JWT_SECRET not set.");
@@ -24,14 +26,12 @@ export async function verifyPasswordAndCreateJWT(username: string, password: str
     if ((loginResult).success === false) {
         return undefined;
     }
-
     const timeInSec = Math.floor(Date.now() / 1000);
     const payload: JwtPayload = {
         sub: loginResult.id,
         iat: timeInSec, // Issued At
         role: loginResult.role
     };
-
     return sign(payload, secret, { algorithm: "HS512", expiresIn: ttl });
 }
 
@@ -52,7 +52,6 @@ export function verifyJWT(jwtString: string | undefined): { userId: string, role
 
     try {
         const payload = verify(jwtString, secret);
-
         if (
             typeof payload === 'object' &&
             "sub" in payload && payload.sub &&

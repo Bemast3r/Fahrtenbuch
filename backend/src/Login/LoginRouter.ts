@@ -14,10 +14,8 @@ loginRouter.post("/",
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            const data = matchedData(req);
-            console.log(data)
+            const data = matchedData(req);            
             const jwtString = await verifyPasswordAndCreateJWT(data.username, data.password);
-            console.log(jwtString)
             if (!jwtString) {
                 return res.status(401).json({ message: "Can't create a JWT." });
             } else {
