@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import "./home.css";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +20,7 @@ const Home = () => {
             return;
         }
     }, [jwt])
+
 
     return (
         <div className="form-wrapper">

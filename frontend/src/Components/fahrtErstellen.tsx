@@ -3,10 +3,42 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getJWT, setJWT, getLoginInfo } from './Logincontext';
+import { getUser } from '../Api/api';
+import { UserResource } from '../util/Resources';
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
+    const [user, setUser] = useState<UserResource | null>(null);
+
+    const jwt = getJWT()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt)
+        } else {
+            navigate("/")
+            return;
+        }
+    }, [jwt])
+
+    useEffect(() => {
+        // declare the data fetching function
+        const fetchData = async () => {
+            const id = getLoginInfo()
+            const data = await getUser(id!.userID);
+            setUser(data)
+            console.log(user)
+        }
+
+        // call the function
+        fetchData()
+            // make sure to catch any error
+            .catch(console.error);
+    }, [])
 
     const handleCheckboxChange = (checkboxId: string) => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -18,6 +50,13 @@ const FahrtErstellen = () => {
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
+    let name = ""
+    console.log(user)
+    if (user) {
+        name = user?.nachname + user?.name
+    }
+
+
     return (
         <div className="form-wrapper">
             <h2 className="form-header">Fahrt erstellen</h2>
@@ -26,7 +65,13 @@ const FahrtErstellen = () => {
                     <Row className="mb-1">
                         <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
                             <Form.Label className="form-label">Name</Form.Label>
-                            <Form.Control type="text" placeholder="Name" className="form-control" disabled={disableFields} />
+                            <Form.Control
+                                type="text"
+                                placeholder="Name"
+                                className="form-control"
+                                disabled={disableFields}
+                                value={name ? name : ''} // Hier wird der Wert des Namensfelds mit user?.nameuser?.vorname gefüllt, wenn verfügbar
+                            />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridDatum" className="form-group">

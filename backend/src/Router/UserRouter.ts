@@ -42,7 +42,7 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
             if (req.role !== "a") {
                 return res.sendStatus(403)
             }
-            const user = getUser(req.params.id)
+            const user = await getUser(req.params.id)
             return user
         } catch (error) {
             res.status(400);
