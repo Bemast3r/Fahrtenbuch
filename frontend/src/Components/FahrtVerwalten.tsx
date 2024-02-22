@@ -8,7 +8,7 @@ interface LogEntry {
 }
 
 const FahrtVerwalten: React.FC = () => {
-  const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]);
+  const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]); 
   const [arbeitszeit, setArbeitszeit] = useState<LogEntry[]>([]);
   const [pausen, setPausen] = useState<LogEntry[]>([]);
   const [isLenkzeitRunning, setLenkzeitRunning] = useState<boolean>(false);
