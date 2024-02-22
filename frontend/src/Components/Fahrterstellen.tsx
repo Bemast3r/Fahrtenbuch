@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
@@ -58,8 +58,9 @@ const FahrtErstellen = () => {
                 startpunkt: stratpunkt.toString()
             };
             await postFahrt(fahrtResource)
+            return;
         }
-        navigate("/verwalten");
+        return;
     }
 
     const currentDate = new Date();
@@ -133,10 +134,11 @@ const FahrtErstellen = () => {
                             <Form.Check type="checkbox" label="Ich habe frei" className="checkbox-label4" onChange={() => handleCheckboxChange("formGridCheckbox4")} />
                         </Form.Group>
                     </Row>
-
-                    <Button variant="primary" type="submit" className="submit-button" onClick={handleSubmit}>
-                        Fahrt beginnen
-                    </Button>
+                    <Link to={"/verwalten"}>
+                        <Button variant="primary" type="submit" className="submit-button" onClick={handleSubmit} >
+                            Fahrt beginnen
+                        </Button>
+                    </Link>
                 </Form>
             </div>
         </div>
