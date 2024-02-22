@@ -31,7 +31,7 @@ app.use("*", express.json({ limit: "5mb" }));
 app.use(bodyParser.json());
 
 app.use("/api/user", userRouter)
-app.use("/api/threadpage", fahrrouter)
+app.use("/api/fahrt", fahrrouter)
 app.use("/api/login", loginRouter);
 app.use(bodyParser.json())
 app.get("/", (_, res) => { res.send('SKM Server läuft') })
