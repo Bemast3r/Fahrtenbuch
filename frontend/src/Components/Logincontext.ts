@@ -26,9 +26,9 @@ export function getLoginInfo(): LoginInfo | null {
         return null;
     }
 
-    if (!userID || !role)
+    if (!userID || !role){
         return null;
-
+    }
     return { userID: userID, role: role };
 }
 

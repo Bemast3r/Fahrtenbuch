@@ -70,6 +70,7 @@ export async function getUsers(userID: string): Promise<UserResource> {
 
 export async function getUser(userID: string): Promise<UserResource> {
     try {
+        console.log(jwt)
         const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/${userID}`, {
             method: "GET",
             headers: {
