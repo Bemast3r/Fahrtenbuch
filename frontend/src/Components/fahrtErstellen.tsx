@@ -39,7 +39,7 @@ const FahrtErstellen = () => {
             if (checkbox.id !== checkboxId) {
                 (checkbox as HTMLInputElement).checked = false;
             }
-        });
+        }); 
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
