@@ -38,7 +38,8 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             kilometerende: fahrt.kilometerende,
             lenkzeit: fahrt.lenkzeit,
             arbeitszeit: fahrt.arbeitszeit,
-            pause: fahrt.pause
+            pause: fahrt.pause,
+            startpunkt: fahrt.startpunkt
         });
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
