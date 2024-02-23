@@ -4,7 +4,6 @@ const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 const jwt = getJWT()
 
-
 export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
     if (!loginData.username)
         throw new Error("email not defined");
@@ -70,11 +69,16 @@ export async function getUsers(userID: string): Promise<UserResource> {
 
 export async function getUser(userID: string): Promise<UserResource> {
     try {
-        console.log(jwt)
+        if (!userID) {
+            throw new Error("userID not defined");
+        }
+        const jwt2 = getJWT();
+        if (!jwt2)
+            throw new Error("no jwt found");
         const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/${userID}`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${jwt}`
+                "Authorization": `Bearer ${jwt2}`
             }
         });
         if (!response || !response.ok) {
@@ -98,7 +102,7 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
                 "Authorization": `Bearer ${jwt}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen , kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt })
+            body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen, kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt })
         });
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")

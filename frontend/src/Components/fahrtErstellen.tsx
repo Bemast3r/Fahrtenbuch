@@ -59,7 +59,7 @@ const FahrtErstellen = () => {
             };
             await postFahrt(fahrtResource)
         }
-        navigate("/verwalten", {});
+        navigate("/");
     }
 
     const currentDate = new Date();
