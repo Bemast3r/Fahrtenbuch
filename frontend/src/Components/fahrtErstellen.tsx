@@ -88,7 +88,7 @@ const FahrtErstellen = () => {
 
     return (
         <div className="form-wrapper">
-            <h2 className="form-header">Fahrt erstellen</h2>
+            <h2 className="form-header">Fahrt Erstellen</h2>
             <div className="form-container">
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <Row className="mb-1">

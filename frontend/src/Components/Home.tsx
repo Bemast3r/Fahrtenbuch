@@ -5,8 +5,6 @@ import { useEffect } from 'react';
 import { getJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const Home = () => {
 
     const jwt = getJWT()
@@ -23,15 +21,17 @@ const Home = () => {
 
 
     return (
-        <div className="form-wrapper">
-            <h2 className="align-top">Kontrollbuch</h2>
-            <h3 className="align-top">SKM</h3>
+        <div className="form-wrapper2">
+            <div className="header-wrapper">
+                <h2 className="header-home">Kontrollbuch</h2>
+                <h3 className="header-home">SKM</h3>
+            </div>
             <div className="form-container">
                 <Form>
                     <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/create") }}>
                         Fahrt erstellen
                     </Button>
-                    <Button variant="primary" type="submit" className="submit-button2"onClick={() => { navigate("/verwalten") }}>
+                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/verwalten") }}>
                         Fahrt verwalten
                     </Button>
                     <Button variant="danger" type="submit" className="submit-button3">
