@@ -8,10 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
+import { useFahrt } from './FahrtContext';
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
+    const {setKilometerstand, setKennzeichen, setisinFahrt, setStartpunkt } = useFahrt()
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -39,7 +41,7 @@ const FahrtErstellen = () => {
             if (checkbox.id !== checkboxId) {
                 (checkbox as HTMLInputElement).checked = false;
             }
-        }); 
+        });
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
@@ -85,6 +87,7 @@ const FahrtErstellen = () => {
                                 //disabled={disableFields}
                                 value={user ? user.name : ""}
                                 disabled={true}
+                                // onChange={}
                                 required
                             />
                         </Form.Group>
