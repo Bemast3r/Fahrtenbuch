@@ -8,14 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
-import { useFahrt } from './FahrtContext';
+import { useFahrtContext } from './FahrtContext_2';
 
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
-    const { setKilometerstand, setKennzeichen, setisinFahrt, setStartpunkt } = useFahrt()
     const [validated, setValidated] = useState(false);
+    const { fahrtInfo, setFahrtInformationen } = useFahrtContext();
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -47,12 +47,12 @@ const FahrtErstellen = () => {
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
-    async function handleSubmit(e:any) {
+    async function handleSubmit(e: any) {
         e.preventDefault();
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
         const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
-        const stratpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
-        if (!kennzeichen || !kilometerstand || !stratpunkt) {
+        const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
+        if (!kennzeichen || !kilometerstand || !startpunkt) {
             return;
         }
         if (user) {
@@ -60,7 +60,7 @@ const FahrtErstellen = () => {
                 fahrerid: user.id!,
                 kennzeichen: kennzeichen.toString(),
                 kilometerstand: kilometerstand,
-                startpunkt: stratpunkt.toString()
+                startpunkt: startpunkt.toString()
             };
             await postFahrt(fahrtResource)
         }
@@ -140,7 +140,7 @@ const FahrtErstellen = () => {
                         </Form.Group>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="submit-button" onClick={(e) => { handleSubmit (e) }}>
+                    <Button variant="primary" type="submit" className="submit-button" onClick={(e) => { handleSubmit(e) }}>
                         Fahrt beginnen
                     </Button>
                 </Form>
