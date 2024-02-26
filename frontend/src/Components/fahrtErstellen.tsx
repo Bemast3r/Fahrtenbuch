@@ -13,7 +13,7 @@ import { useFahrt } from './FahrtContext';
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
-    const {setKilometerstand, setKennzeichen, setisinFahrt, setStartpunkt } = useFahrt()
+    const { setKilometerstand, setKennzeichen, setisinFahrt, setStartpunkt } = useFahrt()
 
     const jwt = getJWT()
     const navigate = useNavigate()

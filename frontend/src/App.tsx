@@ -5,7 +5,7 @@ import { LoginContext, getLoginInfo } from './Components/Logincontext';
 import { UserContext } from './Components/UserContext';
 import { UserResource } from './util/Resources';
 import { useLocation } from 'react-router-dom';
-import { getUsers } from './Api/api';
+import { getUser } from './Api/api';
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
       if (!loginInfo)
         return;
       try {
-        setUserInfo(await getUsers(loginInfo.userID));
+        setUserInfo(await getUser(loginInfo.userID));
       } catch (error) { }
     }
     getUserData();

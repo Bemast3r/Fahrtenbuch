@@ -1,5 +1,10 @@
 import React, { Children, createContext, useContext, useState } from "react";
 
+import { LoginInfo, getLoginInfo } from "./Logincontext";
+
+const info = getLoginInfo()
+const id = info?.userID
+
 interface FahrtInterface {
     id: string;
     fahrerid: string;
@@ -54,7 +59,7 @@ export const FahrtProvider: React.FC = (props) => {
 
     const value: FahrtInterface = {
         id: fahrtid || "",
-        fahrerid: "",
+        fahrerid: id!,
         kennzeichen,
         kilometerstand,
         kilometerstandende,
