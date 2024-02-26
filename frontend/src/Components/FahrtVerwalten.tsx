@@ -1,6 +1,5 @@
-// FahrtVerwalten.tsx
 import React, { useEffect, useState } from 'react';
-import './fahrtVerwalten.css'; // Importiere die CSS-Datei
+import './fahrtVerwalten.css';
 import { getJWT, setJWT } from './Logincontext';
 
 interface LogEntry {
@@ -9,7 +8,7 @@ interface LogEntry {
 }
 
 const FahrtVerwalten: React.FC = () => {
-  const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]); 
+  const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]);
   const [arbeitszeit, setArbeitszeit] = useState<LogEntry[]>([]);
   const [pausen, setPausen] = useState<LogEntry[]>([]);
   const [isLenkzeitRunning, setLenkzeitRunning] = useState<boolean>(false);
@@ -22,13 +21,13 @@ const FahrtVerwalten: React.FC = () => {
 
   const jwt = getJWT()
 
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt)
-        } else {
-            return;
-        }
-    }, [jwt])
+  useEffect(() => {
+    if (jwt) {
+      setJWT(jwt)
+    } else {
+      return;
+    }
+  }, [jwt])
 
   const startStopTimer = (
     isRunning: boolean,

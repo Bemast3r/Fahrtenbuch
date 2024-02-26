@@ -33,8 +33,6 @@ export function getLoginInfo(): LoginInfo | null {
 }
 
 export function setJWT(jwt: string): void {
-    if (!jwt)
-        throw new Error("Invalid JWT");
     localStorage.setItem(JWT_NAME, jwt);
 }
 

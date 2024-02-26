@@ -6,13 +6,13 @@ let userUmut: IUser & { _id: Types.ObjectId; }
 
 beforeAll(async () => await TestDB.connect())
 beforeEach(async () => {
-  userUmut = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", fahrzeuge: [], abwesend: false });
+  userUmut = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", fahrzeuge: [], abwesend: "false" });
 })
 afterEach(async () => await TestDB.clear())
 afterAll(async () => await TestDB.close())
 
 test("Benutzer erstellen und speichern", async () => {
-  const newUser = await User.create({ name: "Max", nachname: "Mustermann", username: "maxm", password: "max123", fahrzeuge: [], abwesend: false });
+  const newUser = await User.create({ name: "Max", nachname: "Mustermann", username: "maxm", password: "max123", fahrzeuge: [], abwesend: "false" });
   const createdUser = await newUser.save();
 
   expect(createdUser._id).toBeDefined();
@@ -23,11 +23,11 @@ test("Benutzer erstellen und speichern", async () => {
   expect(createdUser.admin).toBeFalsy();
   expect(createdUser.createdAt).toBeDefined();
   expect(createdUser.fahrzeuge).toEqual([]);
-  expect(createdUser.abwesend).toBeFalsy();
+  expect(createdUser.abwesend).toBe("false");
 });
 
 test("Passwort verschlüsseln", async () => {
-  const newUser = await User.create({ name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [], abwesend: false });
+  const newUser = await User.create({ name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [], abwesend: "false" });
   const hashedPassword = await newUser.password;
   expect(hashedPassword).not.toBe("test123");
   expect(hashedPassword).toHaveLength(60);
@@ -64,7 +64,7 @@ test("Fahrzeuge", async () => {
     username: "testuser",
     password: "test123",
     fahrzeuge: expectedFahrzeuge,
-    abwesend: false
+    abwesend: "false"
   });
 
   // Access the fahrzeuge array from the user object
@@ -86,7 +86,7 @@ test("isPasswordCorrect test", async () => {
     name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [
       { datum: new Date(), kennzeichen: "ABC123" },
       { datum: new Date(), kennzeichen: "XYZ789" }
-    ], abwesend: false
+    ], abwesend: "false"
   });
   
   // Modify the user
@@ -101,7 +101,7 @@ test("isPasswordCorrect test", async () => {
     name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [
       { datum: new Date(), kennzeichen: "ABC123" },
       { datum: new Date(), kennzeichen: "XYZ789" }
-    ], abwesend: false
+    ], abwesend: "false"
   });
   
   // Modify the user

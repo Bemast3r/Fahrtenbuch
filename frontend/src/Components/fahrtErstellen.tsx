@@ -10,10 +10,12 @@ import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import { useFahrt } from './FahrtContext';
 
+
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
     const { setKilometerstand, setKennzeichen, setisinFahrt, setStartpunkt } = useFahrt()
+    const [validated, setValidated] = useState(false);
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -75,9 +77,9 @@ const FahrtErstellen = () => {
 
     return (
         <div className="form-wrapper">
-            <h2 className="form-header">Fahrt erstellen</h2>
+            <h2 className="form-header">Fahrt Erstellen</h2>
             <div className="form-container">
-                <Form>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <Row className="mb-1">
                         <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
                             <Form.Label className="form-label">Name</Form.Label>
