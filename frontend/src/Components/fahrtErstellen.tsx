@@ -45,7 +45,8 @@ const FahrtErstellen = () => {
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
-    async function handleSubmit() {
+    async function handleSubmit(e:any) {
+        e.preventDefault();
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
         const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const stratpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
@@ -61,7 +62,7 @@ const FahrtErstellen = () => {
             };
             await postFahrt(fahrtResource)
         }
-        navigate("/");
+        navigate("/verwalten");
     }
 
     const currentDate = new Date();
@@ -137,7 +138,7 @@ const FahrtErstellen = () => {
                         </Form.Group>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="submit-button" onClick={handleSubmit}>
+                    <Button variant="primary" type="submit" className="submit-button" onClick={(e) => { handleSubmit (e) }}>
                         Fahrt beginnen
                     </Button>
                 </Form>
