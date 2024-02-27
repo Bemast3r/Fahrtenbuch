@@ -42,12 +42,10 @@ function App() {
 
       <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
         <UserContext.Provider value={[userInfo, setUserInfo]}>
-          <FahrtProvider>
-          </FahrtProvider>
+          {/* <FahrtProvider>
+          </FahrtProvider> */}
         </UserContext.Provider>
       </LoginContext.Provider>
-
-
     </div >
   );
 }
