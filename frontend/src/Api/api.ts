@@ -117,3 +117,28 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
         throw new Error(`Es gab einen Fehler: ${error}`)
     }
 }
+
+
+export async function getFahrt(userID: string): Promise<FahrtResource[]> {
+    try {
+        const jwt2 = getJWT();
+        if (!jwt2)
+            throw new Error("no jwt found");
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/fahrt/user/${userID}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: FahrtResource[] = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}

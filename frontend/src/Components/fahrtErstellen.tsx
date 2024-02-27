@@ -3,17 +3,19 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
+import { FahrtContext } from './FahrtenContext/FahrtContext';
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
     const [validated, setValidated] = useState(false);
-
+    const {fahrten, addFahrt} = useContext(FahrtContext)    
+    
     const jwt = getJWT()
     const navigate = useNavigate()
 
@@ -59,7 +61,8 @@ const FahrtErstellen = () => {
                 kilometerstand: kilometerstand,
                 startpunkt: startpunkt.toString()
             };
-            await postFahrt(fahrtResource)
+            const fahrt = await postFahrt(fahrtResource)
+            addFahrt(fahrt)
         }
         navigate("/verwalten");
     }

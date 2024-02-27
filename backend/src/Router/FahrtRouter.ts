@@ -31,6 +31,8 @@ fahrrouter.get("/admin/alle/fahrten", requiresAuthentication,
 
 /**
  * Fahrten von einem User über seine Id 
+ * Auch normale können drauf zugreifen.
+ * 
  */
 fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
     param("id").isMongoId(),
@@ -40,9 +42,6 @@ fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if (req.role !== "a") {
-                return res.sendStatus(403)
-            }
             const user = await getUserFahrten(req.params.id);
             return res.send(user); // 200 by default
         } catch (err) {

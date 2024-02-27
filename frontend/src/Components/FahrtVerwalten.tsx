@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
-import { getJWT, setJWT } from './Logincontext';
+import { getJWT, getLoginInfo, setJWT } from './Logincontext';
+import { useFahrtContext } from './FahrtenContext/FahrtContext';
+import { getUser, getFahrt } from '../Api/api';
+import { FahrtResource } from '../util/Resources';
 
 interface LogEntry {
   action: string;
@@ -19,6 +22,8 @@ const FahrtVerwalten: React.FC = () => {
   const [showWorkStarted, setShowWorkStarted] = useState<boolean>(false);
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
   const jwt = getJWT()
+  const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null)
+  const context = useFahrtContext()
 
 
   useEffect(() => {
@@ -28,6 +33,18 @@ const FahrtVerwalten: React.FC = () => {
       return;
     }
   }, [jwt])
+
+  async function last() {
+    const id = getLoginInfo()
+    if (!id!.userID) {
+      throw new Error("Ups hier ist was falsch gelaufen.")
+    }
+    const x: FahrtResource[] = await getFahrt(id!.userID)
+    setLetzteFahrt(x[0])
+    console.log(x[x.length-1])
+  }
+
+  useEffect(() => { last() }, [])
 
   const startStopTimer = (
     isRunning: boolean,
@@ -95,6 +112,18 @@ const FahrtVerwalten: React.FC = () => {
 
   return (
     <div>
+      <h1>
+        <ul>
+          {context.fahrten.length > 0 && Object.entries(context.fahrten[0]).map(([key, value]) => (
+            <li key={key}>{`${key}: ${value}`}</li>
+          ))}
+        </ul>
+        <ul>
+          {letzteFahrt && (
+            <><p>{letzteFahrt.id}</p><p>{letzteFahrt.kennzeichen}</p><p>{letzteFahrt.startpunkt}</p><p>{letzteFahrt.kilometerstand}</p></>
+          )}
+        </ul>
+      </h1>
       <h1 className="header">Fahrt Verwalten</h1>
       <div className="container">
         <div className="section">
@@ -104,11 +133,17 @@ const FahrtVerwalten: React.FC = () => {
             </button>
           </div>
           <ul className="log-list">
-            {lenkzeit.map((entry, index) => (
-              <li key={index}>
-                {entry.action} - {entry.time.toLocaleString()}
-              </li>
-            ))}
+            {letzteFahrt ? (
+              // Wenn eine Fahrt vorhanden ist
+              <ul>
+                <li>ID: {letzteFahrt.id || "keer"}</li>
+                <li>Kennzeichen: {letzteFahrt.kennzeichen}</li>
+                {/* Weitere Eigenschaften anzeigen */}
+              </ul>
+            ) : (
+              // Wenn keine Fahrt vorhanden ist
+              <p>Keine Fahrt gefunden.</p>
+            )}
           </ul>
           <p>Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
         </div>
