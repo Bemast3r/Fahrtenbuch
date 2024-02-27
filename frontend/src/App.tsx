@@ -4,7 +4,7 @@ import './App.css';
 import { LoginContext, getLoginInfo } from './Components/Logincontext';
 import { UserContext } from './Components/UserContext';
 import { UserResource } from './util/Resources';
-import { useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { getUser } from './Api/api';
 
 function App() {
@@ -41,6 +41,9 @@ function App() {
 
       <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
         <UserContext.Provider value={[userInfo, setUserInfo]}>
+          <main id={(route.length > 0 ? getRouteName() : "home") + "-page-container"}>
+            <Outlet />
+          </main>
         </UserContext.Provider>
       </LoginContext.Provider>
     </div >
