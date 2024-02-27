@@ -36,18 +36,17 @@ function App() {
     return routeName.split("/")[0];
   }
 
-  return (
-    <div className="App">
-
-      <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
-        <UserContext.Provider value={[userInfo, setUserInfo]}>
-          <main id={(route.length > 0 ? getRouteName() : "home") + "-page-container"}>
-            <Outlet />
-          </main>
-        </UserContext.Provider>
-      </LoginContext.Provider>
-    </div >
-  );
+  // return (
+  //   <div className="App">
+  //     <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
+  //       <UserContext.Provider value={[userInfo, setUserInfo]}>
+  //         <main id={(route.length > 0 ? getRouteName() : "home") + "-page-container"}>
+  //           <Outlet />
+  //         </main>
+  //       </UserContext.Provider>
+  //     </LoginContext.Provider>
+  //   </div >
+  // );
 }
 
 export default App;
