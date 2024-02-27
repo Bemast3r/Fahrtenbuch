@@ -1,6 +1,7 @@
 /* ---------- FORM STYLING ---------- */
 .body {
   background-color: #FdF5E6;
+  font-family: Arial, sans-serif;
 }
 
 .form-wrapper {
@@ -50,19 +51,19 @@
 }
 
 .checkbox1 {
-  margin-bottom: 1rem; /* Ändere den Abstand nach deinen Vorlieben */
+  margin-bottom: 1rem;
 }
 
 .checkbox2 {
-  margin-bottom: 1rem; /* Ändere den Abstand nach deinen Vorlieben */
+  margin-bottom: 1rem;
 }
 
 .checkbox3 {
-  margin-bottom: 1rem; /* Ändere den Abstand nach deinen Vorlieben */
+  margin-bottom: 1rem;
 }
 
 .checkbox4 {
-  margin-bottom: -1rem; /* Ändere den Abstand nach deinen Vorlieben */
+  margin-bottom: -1rem;
 }
 
 .submit-button {
@@ -72,7 +73,7 @@
   color: #fff;
   background-color: #007bff;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.15s ease-in-out;
 }
@@ -83,7 +84,29 @@
 
 /* ---------- HEADER STYLING ---------- */
 .form-header {
-  font-size: 2rem;
-  margin-bottom: 4rem;
+  font-size: 32px;
+  margin-bottom: 2rem;
   color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation für das Ein- und Ausblenden */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.9); } /* Startzustand */
+  100% { opacity: 1; transform: scale(1); } /* Endzustand */
+}
+
+.form-header {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
+}
+
+.form-header:hover {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
+}
+
+/* Medienabfragen für größere Bildschirme */
+@media screen and (min-width: 768px) {
+  .form-container {
+    width: 60%; /* Verringere die Breite des Containers für größere Bildschirme */
+  }
 }

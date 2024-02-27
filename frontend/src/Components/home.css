@@ -1,93 +1,115 @@
 /* ---------- FORM STYLING ---------- */
-.form-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    background-color: #FdF5E6;
-  }
-  
-  .form-container {
-    width: 68rem;
-    max-width: 90%;
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-container form {
-    width: 100%;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
+.form-wrapper2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #FdF5E6;
+  margin-top: -4rem;
+}
 
-  
-  .form-control {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 2px solid #ced4da;
-    border-radius: 4px;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-  
-  .form-control:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  }
-  
-  .checkbox-label {
-    margin-left: 0.5rem;
-  }
-  
-  .submit-button {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1.7rem;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    height: 104,8;
-  }
+.form-container {
+  width: 68rem;
+  max-width: 90%;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .submit-button2 {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1.7rem;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    padding: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .submit-button3 {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1.7rem;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-    padding: 2rem;
-  }
-  
+.form-container form {
+  width: 100%;
+}
 
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #ced4da;
+  border-radius: 4px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.7rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.submit-button2 {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.7rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.submit-button3 {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.7rem;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  padding: 2rem;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.header-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header-home {
+  font-size: 32px;
+  margin-bottom: 1rem;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation für das Ein- und Ausblenden */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.9); } /* Startzustand */
+  100% { opacity: 1; transform: scale(1); } /* Endzustand */
+}
+
+.header-home {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
+}
+
+.header-home:hover {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
+}
