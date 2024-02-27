@@ -8,14 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
-import { useFahrtContext } from './FahrtContext_2';
-
 
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
     const [validated, setValidated] = useState(false);
-    const { fahrtInfo, setFahrtInformationen } = useFahrtContext();
 
     const jwt = getJWT()
     const navigate = useNavigate()
