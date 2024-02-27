@@ -47,3 +47,6 @@ const MONGOURL = process.env.MONGO_URL
 mongoose.Promise = Promise;
 mongoose.connect(MONGOURL)
 mongoose.connection.on("error", (error: Error) => console.log(error));
+mongoose.connection.once("open", () => {
+    console.log("Erfolgreich mit der Datenbank verbunden!");
+});

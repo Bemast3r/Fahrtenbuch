@@ -18,8 +18,8 @@ const FahrtVerwalten: React.FC = () => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [showWorkStarted, setShowWorkStarted] = useState<boolean>(false);
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
-
   const jwt = getJWT()
+
 
   useEffect(() => {
     if (jwt) {
