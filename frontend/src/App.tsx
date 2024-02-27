@@ -6,7 +6,6 @@ import { UserContext } from './Components/UserContext';
 import { UserResource } from './util/Resources';
 import { useLocation } from 'react-router-dom';
 import { getUser } from './Api/api';
-import { FahrtProvider } from './Components/FahrtContext_2';
 
 function App() {
 
@@ -42,8 +41,6 @@ function App() {
 
       <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
         <UserContext.Provider value={[userInfo, setUserInfo]}>
-          {/* <FahrtProvider>
-          </FahrtProvider> */}
         </UserContext.Provider>
       </LoginContext.Provider>
     </div >
