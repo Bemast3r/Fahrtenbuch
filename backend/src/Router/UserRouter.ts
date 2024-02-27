@@ -88,7 +88,7 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
     body("username").isString(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),
-    body("abwesend").isBoolean(),
+    body("abwesend").isString(),
     body("admin").isBoolean(),
     // Das Datum sollte automatisch gesetzt werden.
     // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 

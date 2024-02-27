@@ -15,12 +15,12 @@ let userid: string
 beforeAll(async () => { await TestDB.connect(); });
 beforeEach(async () => {
     User.syncIndexes();
-    user = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21!", admin: true, fahrzeuge: [], abwesend: "false" });
-    userid = user._id.toString()
+    user = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "Umut21!21Umut!", admin: true, fahrzeuge: [], abwesend: "false" });
+    //userid = user._id.toString()
 
     // Login um Token zu erhalten
     const request = supertest(app);
-    const loginData = { username: "umutaydin", password: "umut21!" };
+    const loginData = { username: "umutaydin", password: "Umut21!21Umut!" };
     const response = await request.post(`/api/login`).send(loginData);
     const loginResource = response.body as LoginResource;
     token = loginResource.access_token;
