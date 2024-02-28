@@ -11,14 +11,15 @@ import FahrtVerwalten from './Components/FahrtVerwalten';
 import Contexte from './Components/Contexte';
 import { getUser } from './Api/api';
 import { LoginContext, getLoginInfo } from './Components/Logincontext';
-import { UserResource } from './util/Resources';
+import { FahrtResource, UserResource } from './util/Resources';
 import { UserContext } from './Components/UserContext';
-import { FahrtContextProvider, useFahrtContext } from './Components/FahrtenContext/FahrtContext';
+import { FahrtContext } from './Components/FahrtenContext/FahrtContext';
 
 const App = () => {
   const [loginInfo, setLoginInfo] = useState(getLoginInfo());
   const [userInfo, setUserInfo] = useState<UserResource | null>(null);
-  const { fahrten, addFahrt } = useFahrtContext(); // Zugriff auf fahrten und addFahrt über useFahrtContext
+  const [fahrten, setFahrten] = useState<FahrtResource[]>([])
+
 
   useEffect(() => {
     async function getUserData() {
@@ -33,8 +34,8 @@ const App = () => {
   return (
     <UserContext.Provider value={[userInfo, setUserInfo]}>
       <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
+      <FahrtContext.Provider value={{ fahrten, setFahrten }}>
         <React.StrictMode>
-          <FahrtContextProvider> {/* FahrtContextProvider umgibt die App-Komponente */}
             <Router>
               <Routes>
                 <Route path="/" element={<Login />} />
@@ -44,8 +45,8 @@ const App = () => {
                 <Route path="test" element={<Contexte />} />
               </Routes>
             </Router>
-          </FahrtContextProvider>
         </React.StrictMode>
+        </FahrtContext.Provider>
       </LoginContext.Provider>
     </UserContext.Provider>
   );

@@ -3,7 +3,7 @@ import { getUser } from "../Api/api";
 import { getLoginInfo } from "./Logincontext";
 import { UserContext, UserInfo } from "./UserContext";
 import { UserResource } from "../util/Resources";
-import { FahrtContext, FahrtContextProvider, useFahrtContext } from "./FahrtenContext/FahrtContext";
+import { FahrtContext } from "./FahrtenContext/FahrtContext";
 
 
 const Contexte = () => {
@@ -11,17 +11,18 @@ const Contexte = () => {
 
     // Zugriff auf den UserContext
     const contexte = useContext(UserContext);
-    const context = useFahrtContext()
 
-    async function load() {
-        const id = getLoginInfo();
-        const userData = await getUser(id!.userID);
-        setUser(userData);
-    }
+    const fahrten = useContext(FahrtContext);
 
-    useEffect(() => {
-        load();
-    }, []);
+    // async function load() {
+    //     const id = getLoginInfo();
+    //     const userData = await getUser(id!.userID);
+    //     setUser(userData);
+    // }
+
+    // useEffect(() => {
+    //     load();
+    // }, [fahrten.fahrten]);
 
     const renderData = (data: any) => {
         if (Array.isArray(data) && data.length > 0) {
@@ -62,7 +63,7 @@ const Contexte = () => {
 
     useEffect(() => {
         console.log("User aus dem Context:", contexte);
-        console.log("Fahrten : ")
+        console.log("Fahrten : ", fahrten.fahrten)
     }, [contexte]);
 
     return (
@@ -77,7 +78,7 @@ const Contexte = () => {
             </div>
             <div>
                 <h1>Daten in FahrtContext</h1>
-                {renderData(context)}
+                {renderData(fahrten.fahrten)}
             </div>
         </div>
     );

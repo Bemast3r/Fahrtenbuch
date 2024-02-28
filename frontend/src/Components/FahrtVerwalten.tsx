@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
-import { useFahrtContext } from './FahrtenContext/FahrtContext';
 import { getUser, getFahrt } from '../Api/api';
 import { FahrtResource } from '../util/Resources';
 
@@ -23,7 +22,6 @@ const FahrtVerwalten: React.FC = () => {
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
   const jwt = getJWT()
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null)
-  // const context = useFahrtContext()
 
 
   useEffect(() => {
@@ -40,8 +38,7 @@ const FahrtVerwalten: React.FC = () => {
       throw new Error("Ups hier ist was falsch gelaufen.")
     }
     const x: FahrtResource[] = await getFahrt(id!.userID)
-    setLetzteFahrt(x[0])
-    console.log(x[x.length - 1])
+    setLetzteFahrt(x[x.length - 1])
   }
 
   useEffect(() => { last() }, [])
@@ -121,17 +118,18 @@ const FahrtVerwalten: React.FC = () => {
             </button>
           </div>
           <ul className="log-list">
-            {letzteFahrt ? (
-              // Wenn eine Fahrt vorhanden ist
-              <ul>
-                <li>ID: {letzteFahrt.id || "keer"}</li>
-                <li>Kennzeichen: {letzteFahrt.kennzeichen}</li>
-                {/* Weitere Eigenschaften anzeigen */}
-              </ul>
-            ) : (
-              // Wenn keine Fahrt vorhanden ist
-              <p>Keine Fahrt gefunden.</p>
-            )}
+            <ul>
+              {letzteFahrt ? (
+                Object.entries(letzteFahrt).map(([key, value]) => (
+                  <li key={key}>
+                    {key}: {Array.isArray(value) ? value.join(', ') : value instanceof Date ? value.toLocaleString() : value || 'keer'}
+                  </li>
+                ))
+              ) : (
+                <p>Keine Fahrt gefunden.</p>
+              )}
+            </ul>
+
           </ul>
           <p>Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
         </div>
