@@ -23,7 +23,7 @@ const FahrtVerwalten: React.FC = () => {
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
   const jwt = getJWT()
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null)
-  const context = useFahrtContext()
+  // const context = useFahrtContext()
 
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const FahrtVerwalten: React.FC = () => {
     }
     const x: FahrtResource[] = await getFahrt(id!.userID)
     setLetzteFahrt(x[0])
-    console.log(x[x.length-1])
+    console.log(x[x.length - 1])
   }
 
   useEffect(() => { last() }, [])
@@ -112,18 +112,6 @@ const FahrtVerwalten: React.FC = () => {
 
   return (
     <div>
-      <h1>
-        <ul>
-          {context.fahrten.length > 0 && Object.entries(context.fahrten[0]).map(([key, value]) => (
-            <li key={key}>{`${key}: ${value}`}</li>
-          ))}
-        </ul>
-        <ul>
-          {letzteFahrt && (
-            <><p>{letzteFahrt.id}</p><p>{letzteFahrt.kennzeichen}</p><p>{letzteFahrt.startpunkt}</p><p>{letzteFahrt.kilometerstand}</p></>
-          )}
-        </ul>
-      </h1>
       <h1 className="header">Fahrt Verwalten</h1>
       <div className="container">
         <div className="section">
