@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import "./home.css";
 import { useEffect } from 'react';
-import { getJWT, setJWT } from './Logincontext';
+import { getJWT, removeJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -36,6 +36,9 @@ const Home = () => {
                     </Button>
                     <Button variant="danger" type="submit" className="submit-button3">
                         Fahrt beenden
+                    </Button>
+                    <Button variant="danger" type="submit" className="submit-button4" onClick={() => { removeJWT() }}>
+                        Abmelden
                     </Button>
                 </Form>
             </div>
