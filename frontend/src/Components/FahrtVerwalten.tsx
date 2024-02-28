@@ -120,8 +120,11 @@ const FahrtVerwalten: React.FC = () => {
         <Loading></Loading>
       ) : (
         <div className="container">
-          <h3>Hallo {contexte && contexte ? contexte[0].name : "Kein User"}</h3>
-          <p>Sie haben eine Fahrt am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') + "." : "Keine Fahrt"}</p>
+          <h3>Hallo {contexte && contexte ? contexte[0].name : "Kein User"}.</h3>
+          <p>Ihre momentane Fahrt startete am  {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
+            mit dem Kennzeichen {letzteFahrt ? letzteFahrt.kennzeichen : "Kein Kennzeichen"}.
+          </p>
+          <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}. </p>
           <div className="section">
             <div className="button-group">
               <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
@@ -133,7 +136,7 @@ const FahrtVerwalten: React.FC = () => {
                 {letzteFahrt ? (
                   Object.entries(letzteFahrt).map(([key, value]) => (
                     <li key={key}>
-                      {key}: {Array.isArray(value) ? value.join(', ') : value instanceof Date ? value.toLocaleString() : value || 'keer'}
+                      {key}: {Array.isArray(value) ? value.join(', ') : value instanceof Date ? value.toLocaleString() : value || 'leer'}
                     </li>
                   ))
                 ) : (
