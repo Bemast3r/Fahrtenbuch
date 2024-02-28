@@ -35,6 +35,20 @@ const FahrtVerwalten: React.FC = () => {
     }
   }, [jwt]);
 
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = ''; 
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   async function last() {
     const id = getLoginInfo();
     if (!id!.userID) {
@@ -42,7 +56,7 @@ const FahrtVerwalten: React.FC = () => {
     }
     const x: FahrtResource[] = await getFahrt(id!.userID);
     setLetzteFahrt(x[x.length - 1]);
-    setLoading(false); // Setzen Sie den Ladezustand auf "false", wenn die Daten geladen wurden
+    setLoading(false); 
   }
 
   useEffect(() => { last() }, [letzteFahrt]);
@@ -178,20 +192,17 @@ const FahrtVerwalten: React.FC = () => {
             </ul>
             <p>Pausenzeit: {calculateFormattedTime(pausen)}</p>
           </div>
-
-          {showTripEnded && (
-            <div className="section">
-              <div className="button-group">
-                <button onClick={endFahrt}>Fahrt beenden</button>
-              </div>
-              <p className="results">Gesamte Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-              <p className="results">Gesamte Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-              <p className="results">Gesamte Pausenzeit: {calculateFormattedTime(pausen)}</p>
-              {endTime && <p className="results">Fahrt beendet um: {endTime.toLocaleString()}</p>}
-              {showWorkStarted && <p className="results">Arbeit gestartet um: {startTime?.toLocaleString()}</p>}
-              <p className="results">Gesamte Arbeitszeit: {calculateTotalTime()}</p>
+          <div className="section">
+            <div className="button-group">
+              <button onClick={endFahrt}>Fahrt beenden</button>
             </div>
-          )}
+            <p className="results">Gesamte Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
+            <p className="results">Gesamte Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
+            <p className="results">Gesamte Pausenzeit: {calculateFormattedTime(pausen)}</p>
+            {endTime && <p className="results">Fahrt beendet um: {endTime.toLocaleString()}</p>}
+            {showWorkStarted && <p className="results">Arbeit gestartet um: {startTime?.toLocaleString()}</p>}
+            <p className="results">Gesamte Arbeitszeit: {calculateTotalTime()}</p>
+          </div>
         </div>
       )}
     </div>
