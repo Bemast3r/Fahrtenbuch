@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './Components/Login';
 import Home from './Components/Home';
 import Loading from './Components/LoadingIndicator';
-import FahrtErstellen from './Components/FahrtErstellen';
 import FahrtVerwalten from './Components/FahrtVerwalten';
-
+import FahrtErstellen from './Components/FahrtErstellen';
+import PasswortVergessen from './Components/PasswortVergessen';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,6 +19,7 @@ ReactDOM.render(
         <Route path="test" element={<Loading />} />
         <Route path="create" element={<FahrtErstellen />} />
         <Route path="verwalten" element={<FahrtVerwalten />} />
+        <Route path="passwort-vergessen" element={<PasswortVergessen />} />
       </Routes>
     </Router>
   </React.StrictMode>,

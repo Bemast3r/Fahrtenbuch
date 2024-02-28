@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getUser, getUsersFromDB, sendPasswordResetEmail, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -58,6 +58,7 @@ userRouter.post("/admin/user/erstellen", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
+    body('email').isEmail(),
     body("password").isString(),
 
     async (req, res, next) => {
@@ -80,12 +81,43 @@ userRouter.post("/admin/user/erstellen", requiresAuthentication,
 );
 
 /**
+ * Wenn Nutzer Passwort vergisst bekommt er eine E-Mail
+ */
+userRouter.post("/admin/user/passwort-vergessen", requiresAuthentication,
+    body("name").isString(),
+    body("nachname").isString(),
+    body("username").isString(),
+    body('email').isEmail(),
+    body("password").isString(),
+
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const { email } = req.body;
+            if (!email) {
+                return res.status(400).send('E-Mail-Adresse ist erforderlich.');
+            }
+
+            await sendPasswordResetEmail(email);
+            res.status(200).send('Passwort-Zurücksetzungs-E-Mail gesendet.');
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+/**
  * Ändere einen User.
  */
 userRouter.put("/admin/user/aendern", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
+    body('email').isEmail(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),
     body("abwesend").isString(),

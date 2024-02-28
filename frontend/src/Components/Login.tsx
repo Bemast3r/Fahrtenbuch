@@ -6,7 +6,7 @@ import { Form, Button, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
 import { getJWT, setJWT } from "./Logincontext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [inputUsername, setInputUsername] = useState("");
@@ -71,7 +71,7 @@ const Login = () => {
                 </div>
 
                 <div className="login-remember-password">
-                    <a href="#" onClick={handlePassword}>Passwort vergessen?</a>
+                    <Link to="passwort-vergessen">Passwort vergessen?</Link>
                 </div>
 
                 <Button className="login-btn" variant="primary" type="submit">
