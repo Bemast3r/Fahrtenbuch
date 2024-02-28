@@ -3,6 +3,7 @@ import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt } from '../Api/api';
 import { FahrtResource } from '../util/Resources';
+import Loading from './LoadingIndicator';
 
 interface LogEntry {
   action: string;
@@ -10,6 +11,7 @@ interface LogEntry {
 }
 
 const FahrtVerwalten: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true); // Zustand für den Ladezustand
   const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]);
   const [arbeitszeit, setArbeitszeit] = useState<LogEntry[]>([]);
   const [pausen, setPausen] = useState<LogEntry[]>([]);
@@ -20,28 +22,29 @@ const FahrtVerwalten: React.FC = () => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [showWorkStarted, setShowWorkStarted] = useState<boolean>(false);
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
-  const jwt = getJWT()
-  const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null)
-
+  const jwt = getJWT();
+  const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
+  let startzeit;
 
   useEffect(() => {
     if (jwt) {
-      setJWT(jwt)
+      setJWT(jwt);
     } else {
       return;
     }
-  }, [jwt])
+  }, [jwt]);
 
   async function last() {
-    const id = getLoginInfo()
+    const id = getLoginInfo();
     if (!id!.userID) {
-      throw new Error("Ups hier ist was falsch gelaufen.")
+      throw new Error("Ups hier ist was falsch gelaufen.");
     }
-    const x: FahrtResource[] = await getFahrt(id!.userID)
-    setLetzteFahrt(x[x.length - 1])
+    const x: FahrtResource[] = await getFahrt(id!.userID);
+    setLetzteFahrt(x[x.length - 1]);
+    setLoading(false); // Setzen Sie den Ladezustand auf "false", wenn die Daten geladen wurden
   }
 
-  useEffect(() => { last() }, [])
+  useEffect(() => { last() }, [letzteFahrt]);
 
   const startStopTimer = (
     isRunning: boolean,
@@ -107,81 +110,85 @@ const FahrtVerwalten: React.FC = () => {
     setShowWorkStarted(true);
   };
 
+
+
   return (
     <div>
       <h1 className="header">Fahrt Verwalten</h1>
-      <div className="container">
-        <div className="section">
-          <div className="button-group">
-            <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
-              {isLenkzeitRunning ? 'Lenkzeit stoppen' : 'Lenkzeit starten'}
-            </button>
-          </div>
-          <ul className="log-list">
-            <ul>
-              {letzteFahrt ? (
-                Object.entries(letzteFahrt).map(([key, value]) => (
-                  <li key={key}>
-                    {key}: {Array.isArray(value) ? value.join(', ') : value instanceof Date ? value.toLocaleString() : value || 'keer'}
-                  </li>
-                ))
-              ) : (
-                <p>Keine Fahrt gefunden.</p>
-              )}
-            </ul>
-
-          </ul>
-          <p>Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-        </div>
-
-        <div className="section">
-          <div className="button-group">
-            <button
-              onClick={() => startStopTimer(isArbeitszeitRunning, setArbeitszeitRunning, arbeitszeit, setArbeitszeit)}
-            >
-              {isArbeitszeitRunning ? 'Arbeitszeit stoppen' : 'Arbeitszeit starten'}
-            </button>
-          </div>
-          <ul className="log-list">
-            {arbeitszeit.map((entry, index) => (
-              <li key={index}>
-                {entry.action} - {entry.time.toLocaleString()}
-              </li>
-            ))}
-          </ul>
-          <p>Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-        </div>
-
-        <div className="section">
-          <div className="button-group">
-            <button onClick={() => startStopTimer(isPausenRunning, setPausenRunning, pausen, setPausen)}>
-              {isPausenRunning ? 'Pausen stoppen' : 'Pausen starten'}
-            </button>
-          </div>
-          <ul className="log-list">
-            {pausen.map((entry, index) => (
-              <li key={index}>
-                {entry.action} - {entry.time.toLocaleString()}
-              </li>
-            ))}
-          </ul>
-          <p>Pausenzeit: {calculateFormattedTime(pausen)}</p>
-        </div>
-
-        {showTripEnded && (
+      {loading ? (
+        <Loading></Loading>
+      ) : (
+        <div className="container">
+          <p>Sie haben die Fahrt um {letzteFahrt ? letzteFahrt.createdAt?.toString() : "Keine Fahrt"}</p>
           <div className="section">
             <div className="button-group">
-              <button onClick={endFahrt}>Fahrt beenden</button>
+              <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
+                {isLenkzeitRunning ? 'Lenkzeit stoppen' : 'Lenkzeit starten'}
+              </button>
             </div>
-            <p className="results">Gesamte Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-            <p className="results">Gesamte Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-            <p className="results">Gesamte Pausenzeit: {calculateFormattedTime(pausen)}</p>
-            {endTime && <p className="results">Fahrt beendet um: {endTime.toLocaleString()}</p>}
-            {showWorkStarted && <p className="results">Arbeit gestartet um: {startTime?.toLocaleString()}</p>}
-            <p className="results">Gesamte Arbeitszeit: {calculateTotalTime()}</p>
+            <ul className="log-list">
+              <ul>
+                {letzteFahrt ? (
+                  Object.entries(letzteFahrt).map(([key, value]) => (
+                    <li key={key}>
+                      {key}: {Array.isArray(value) ? value.join(', ') : value instanceof Date ? value.toLocaleString() : value || 'keer'}
+                    </li>
+                  ))
+                ) : (
+                  <p>Keine Fahrt gefunden.</p>
+                )}
+              </ul>
+            </ul>
+            <p>Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
           </div>
-        )}
-      </div>
+
+          <div className="section">
+            <div className="button-group">
+              <button onClick={() => startStopTimer(isArbeitszeitRunning, setArbeitszeitRunning, arbeitszeit, setArbeitszeit)}>
+                {isArbeitszeitRunning ? 'Arbeitszeit stoppen' : 'Arbeitszeit starten'}
+              </button>
+            </div>
+            <ul className="log-list">
+              {arbeitszeit.map((entry, index) => (
+                <li key={index}>
+                  {entry.action} - {entry.time.toLocaleString()}
+                </li>
+              ))}
+            </ul>
+            <p>Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
+          </div>
+
+          <div className="section">
+            <div className="button-group">
+              <button onClick={() => startStopTimer(isPausenRunning, setPausenRunning, pausen, setPausen)}>
+                {isPausenRunning ? 'Pausen stoppen' : 'Pausen starten'}
+              </button>
+            </div>
+            <ul className="log-list">
+              {pausen.map((entry, index) => (
+                <li key={index}>
+                  {entry.action} - {entry.time.toLocaleString()}
+                </li>
+              ))}
+            </ul>
+            <p>Pausenzeit: {calculateFormattedTime(pausen)}</p>
+          </div>
+
+          {showTripEnded && (
+            <div className="section">
+              <div className="button-group">
+                <button onClick={endFahrt}>Fahrt beenden</button>
+              </div>
+              <p className="results">Gesamte Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
+              <p className="results">Gesamte Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
+              <p className="results">Gesamte Pausenzeit: {calculateFormattedTime(pausen)}</p>
+              {endTime && <p className="results">Fahrt beendet um: {endTime.toLocaleString()}</p>}
+              {showWorkStarted && <p className="results">Arbeit gestartet um: {startTime?.toLocaleString()}</p>}
+              <p className="results">Gesamte Arbeitszeit: {calculateTotalTime()}</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
