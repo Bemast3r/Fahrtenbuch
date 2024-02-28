@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt } from '../Api/api';
 import { FahrtResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
+import { UserContext } from './UserContext';
 
 interface LogEntry {
   action: string;
@@ -24,7 +25,7 @@ const FahrtVerwalten: React.FC = () => {
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
-  let startzeit;
+  const contexte = useContext(UserContext);
 
   useEffect(() => {
     if (jwt) {
@@ -119,7 +120,8 @@ const FahrtVerwalten: React.FC = () => {
         <Loading></Loading>
       ) : (
         <div className="container">
-          <p>Sie haben die Fahrt um {letzteFahrt ? letzteFahrt.createdAt?.toString() : "Keine Fahrt"}</p>
+          <h3>Hallo {contexte && contexte ? contexte[0].name : "Kein User"}</h3>
+          <p>Sie haben eine Fahrt am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') + "." : "Keine Fahrt"}</p>
           <div className="section">
             <div className="button-group">
               <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
