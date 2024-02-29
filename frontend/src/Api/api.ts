@@ -117,3 +117,25 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
         throw new Error(`Es gab einen Fehler: ${error}`)
     }
 }
+
+export async function passwortVergessen(email: string) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/user/passwort-vergessen`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email }) // Hier email direkt in einem Objekt
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result = response;
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}

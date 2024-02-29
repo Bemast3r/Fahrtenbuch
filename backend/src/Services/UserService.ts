@@ -8,8 +8,7 @@ import { Types } from "mongoose"
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 
-// const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_SECRET = 'skmsecret2222';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promise<UserResource> {
     const userResource: UserResource = {
@@ -104,7 +103,7 @@ export async function changeUser(userId: string, updatedUserFields: Partial<User
     }
 }
 
-export async function sendPasswordResetEmail(email: string): Promise<void> {
+export async function sendEmail(email: string): Promise<void> {
     try {
         const user = await User.findOne({ email }).exec();
         if (!user) {
