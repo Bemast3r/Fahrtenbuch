@@ -139,3 +139,26 @@ export async function passwortVergessen(email: string) {
         throw new Error(`Es gab einen Fehler: ${error}`)
     }
 }
+
+export async function passwortZuruecksetzen(token: string, password: string) {
+    try {
+        // const decodedToken = decodeURIComponent(token); 
+        const response = await fetch(`http://localhost:5000/api/user/passwort-zuruecksetzen/${token}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ password })
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result = response;
+        if (!result) {
+            throw new Error("Result ist nicht ok.");
+        }
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}

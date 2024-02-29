@@ -4,6 +4,7 @@ dotenv.config();
 import { UserResource } from "../db/Resources";
 import { IUser, User } from "../db/UserModel";
 import { Types } from "mongoose"
+import { hash } from "bcryptjs";
 
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
@@ -123,11 +124,24 @@ export async function sendEmail(email: string): Promise<void> {
         await transporter.sendMail({
             from: process.env.USER,
             to: email,
-            subject: 'Passwort zurücksetzen',
-            text: `Um Ihr Passwort zurückzusetzen, klicken Sie auf diesen Link: http://localhost:3000/passwort-vergessen/${token}`
+            subject: 'SKM Account - Passwort Zurücksetzen',
+            text: `Um Ihr Passwort für Ihren SKM-Account zurückzusetzen, klicken Sie bitte auf diesen Link: \n \n http://localhost:3000/passwort-zuruecksetzen/${token}`
         });
     } catch (error: any) {
         throw new Error(`Fehler beim Senden der E-Mail: ${(error as Error).message}`);
+    }
+}
+
+export async function sendPasswortZurücksetzen(token: string, newPassword: string): Promise<void> {
+    try {
+        // Überprüfe, ob das Token gültig ist
+        const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET);
+        const { email } = decodedToken;
+
+        const hashedPassword = await hash(newPassword, 10);
+        await User.findOneAndUpdate({ email }, { password: hashedPassword });
+    } catch (error) {
+        throw new Error(`Fehler beim Zurücksetzen des Passworts: ${error.message}`);
     }
 }
 

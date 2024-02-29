@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUser, deleteUser, getUser, getUsersFromDB, sendEmail, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -98,6 +98,30 @@ userRouter.post("/passwort-vergessen",
 
             await sendEmail(email);
             res.status(200).send('Passwort-Zurücksetzungs-E-Mail gesendet.');
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+/**
+ * Für das Ändern des Passwortes
+ */
+userRouter.post("/passwort-zuruecksetzen/:token",
+    body("password").isString(),
+
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const { token } = req.params;
+            const { password } = req.body;
+
+            await sendPasswortZurücksetzen(token, password);
+            res.status(200).send('Passwort erfolgreich zurückgesetzt.');
         } catch (err) {
             res.status(400);
             next(err);

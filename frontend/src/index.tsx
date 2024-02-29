@@ -9,6 +9,7 @@ import Loading from './Components/LoadingIndicator';
 import FahrtVerwalten from './Components/FahrtVerwalten';
 import FahrtErstellen from './Components/FahrtErstellen';
 import PasswortVergessen from './Components/PasswortVergessen';
+import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,6 +21,7 @@ ReactDOM.render(
         <Route path="create" element={<FahrtErstellen />} />
         <Route path="verwalten" element={<FahrtVerwalten />} />
         <Route path="passwort-vergessen" element={<PasswortVergessen />} />
+        <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
       </Routes>
     </Router>
   </React.StrictMode>,
