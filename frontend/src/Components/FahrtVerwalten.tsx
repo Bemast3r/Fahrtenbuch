@@ -82,8 +82,8 @@ const FahrtVerwalten: React.FC = () => {
   ) => {
     const action = isRunning ? 'stop' : 'start';
     const time = new Date();
-
-    if (action === 'start' && log.length === 0) {
+  
+    if (action === 'start') {
       // Setze den Startzeitpunkt nur beim ersten Start
       setStartTime(time);
     }
@@ -93,10 +93,13 @@ const FahrtVerwalten: React.FC = () => {
 
     if (action === 'stop') {
       // Setze den Endzeitpunkt nur beim Stop
-      setEndTime(time);
+      setEndTime(time); // Hier wird endTime aktualisiert
       setShowTripEnded(true);
       setShowWorkStarted(false);
-      handlePost()
+  
+      if (endTime !== null) { // Überprüfe, ob endTime nicht null ist
+        handlePost(); // Rufe handlePost auf
+      }
     }
   };
 
@@ -141,15 +144,15 @@ const FahrtVerwalten: React.FC = () => {
 
 
   async function handlePost() {
-    if (usercontexte[0]._id && letzteFahrt) {
+    if (usercontexte[0].id && letzteFahrt) {
       const fahrtResource: FahrtResource = {
-        fahrerid: usercontexte[0]._id!,
+        fahrerid: usercontexte[0].id!,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: [{ start: startTime!, stop: endTime! }],
+        lenkzeit: [{ start: endTime!, stop: startTime! }],
         // arbeitszeit: letzteFahrt.arbeitszeit!.concat(arbeitszeit),
         // pause: letzteFahrt.pause!.concat(pausen),
         beendet: false, // Fahrt als beendet markieren
@@ -163,7 +166,7 @@ const FahrtVerwalten: React.FC = () => {
 
 
   function handleEnde() {
-    throw new Error('Function not implemented.');
+    console.log("")
   }
 
   return (

@@ -50,12 +50,26 @@ export async function createUserFahrt(fahrt: FahrtResource) {
 
 // Admin kann im nachträglich sachen bearbeiten
 export async function updateUserfahrt(fahrtResource: FahrtResource) {
+    const { id, lenkzeit, pause, arbeitszeit, ...update } = fahrtResource;
+    
+    const newFahrt = await Fahrt.findByIdAndUpdate(id, update, { new: true });
 
-    const newFahrt = await Fahrt.findByIdAndUpdate(fahrtResource.id, fahrtResource, { new: true });
-    // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
     if (!newFahrt) {
         throw new Error('Fahrt nicht gefunden');
     }
+
+    // Aktualisiere die Arrays
+    if (lenkzeit) {
+        await Fahrt.updateOne({ _id: id }, { $push: { lenkzeit: { $each: lenkzeit } } });
+    }
+    if (pause) {
+        await Fahrt.updateOne({ _id: id }, { $push: { pause: { $each: pause } } });
+    }
+    if (arbeitszeit) {
+        await Fahrt.updateOne({ _id: id }, { $push: { arbeitszeit: { $each: arbeitszeit } } });
+    }
+
+    return newFahrt;
 }
 
 // Admin kann Fahrten löschen 

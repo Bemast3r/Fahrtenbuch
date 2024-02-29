@@ -146,7 +146,7 @@ export async function getFahrt(userID: string): Promise<FahrtResource[]> {
 
 export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
     try {
-        console.log("HEllo")
+
         const jwt2 = getJWT();
         const response = await fetch(`http://localhost:5000/api/fahrt/user/fahrt/bearbeiten/${fahrt._id}`, {
             method: "PUT",
@@ -156,15 +156,13 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
             },
             body: JSON.stringify(fahrt)
         });
-        console.log(response)
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }
-        const result: FahrtResource = await response.json();
+        const result = await response.json();
         if (!result) {
             throw new Error("Result ist nicht ok.")
         }
-     
         return result
     } catch (error) {
         throw new Error(`Es gab einen Fehler: ${error}`)

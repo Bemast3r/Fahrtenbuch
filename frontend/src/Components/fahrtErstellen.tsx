@@ -16,7 +16,7 @@ const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
     const [validated, setValidated] = useState(false);
-    const { fahrten, setFahrten } = useContext(FahrtContext)
+    // const { fahrten, setFahrten } = useContext(FahrtContext)
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -37,12 +37,12 @@ const FahrtErstellen = () => {
         setLoading(false)
     }
 
-    const addFahrt = (fahrt: FahrtResource) => {
-        setFahrten((prevFahrten: FahrtResource[]) => {
-            const updatedFahrten = [...prevFahrten, fahrt];
-            return updatedFahrten;
-        });
-    };
+    // const addFahrt = (fahrt: FahrtResource) => {
+    //     setFahrten((prevFahrten: FahrtResource[]) => {
+    //         const updatedFahrten = [...prevFahrten, fahrt];
+    //         return updatedFahrten;
+    //     });
+    // };
 
     useEffect(() => { load() }, [])
 
@@ -72,7 +72,7 @@ const FahrtErstellen = () => {
                 startpunkt: startpunkt.toString()
             };
             const fahrt = await postFahrt(fahrtResource)
-            setFahrten(addFahrt(fahrt))
+            // setFahrten(addFahrt(fahrt))
         }
         navigate("/verwalten");
     }

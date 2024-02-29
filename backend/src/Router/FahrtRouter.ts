@@ -90,7 +90,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
     body("pause").optional().isArray(),
     body("beendet").optional().isBoolean(),
     async (req, res, next) => {
-        console.log("????")
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             console.log(req.body)
