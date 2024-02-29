@@ -15,20 +15,16 @@ interface LogEntry {
 
 const FahrtVerwalten: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Zustand für den Ladezustand
-  const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]);
-  const [arbeitszeit, setArbeitszeit] = useState<LogEntry[]>([]);
   const [pausen, setPausen] = useState<LogEntry[]>([]);
   const [isLenkzeitRunning, setLenkzeitRunning] = useState<boolean>(false);
   const [isArbeitszeitRunning, setArbeitszeitRunning] = useState<boolean>(false);
   const [isPausenRunning, setPausenRunning] = useState<boolean>(false);
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [endTime, setEndTime] = useState<Date | null>(null);
-  const [showWorkStarted, setShowWorkStarted] = useState<boolean>(false);
-  const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
+
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const usercontexte = useContext(UserContext);
 
+  let ende: Date;
   useEffect(() => {
     if (jwt) {
       setJWT(jwt);
@@ -74,73 +70,6 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => { last() }, [letzteFahrt]);
 
-  const startStopTimer = (
-    isRunning: boolean,
-    setRunning: React.Dispatch<React.SetStateAction<boolean>>,
-    log: LogEntry[],
-    setLog: React.Dispatch<React.SetStateAction<LogEntry[]>>
-  ) => {
-    const action = isRunning ? 'stop' : 'start';
-    const time = new Date();
-  
-    if (action === 'start') {
-      // Setze den Startzeitpunkt nur beim ersten Start
-      setStartTime(time);
-    }
-
-    setLog([...log, { action, time }]);
-    setRunning(!isRunning);
-
-    if (action === 'stop') {
-      // Setze den Endzeitpunkt nur beim Stop
-      setEndTime(time); // Hier wird endTime aktualisiert
-      setShowTripEnded(true);
-      setShowWorkStarted(false);
-  
-      if (endTime !== null) { // Überprüfe, ob endTime nicht null ist
-        handlePost(); // Rufe handlePost auf
-      }
-    }
-  };
-
-  const calculateTimeDifference = (log: LogEntry[]) => {
-    let totalTime = 0;
-    for (let i = 0; i < log.length; i += 2) {
-      const start = log[i].time;
-      const end = i + 1 < log.length ? log[i + 1].time : new Date();
-      totalTime += (end.getTime() - start.getTime()) as number;
-    }
-    return totalTime;
-  };
-
-  const calculateFormattedTime = (log: LogEntry[]) => {
-    const totalMilliseconds = calculateTimeDifference(log);
-    const totalSeconds = Math.floor(totalMilliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  };
-
-  const calculateTotalTime = () => {
-    const totalLenkzeit = calculateTimeDifference(lenkzeit);
-    const totalArbeitszeit = calculateTimeDifference(arbeitszeit);
-    const totalPausenzeit = calculateTimeDifference(pausen);
-
-    const totalMilliseconds = totalLenkzeit + totalArbeitszeit + totalPausenzeit;
-    const totalSeconds = Math.floor(totalMilliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  };
-
-  const endFahrt = () => {
-    setLenkzeitRunning(false);
-    setArbeitszeitRunning(false);
-    setPausenRunning(false);
-    setEndTime(new Date());
-    setShowWorkStarted(true);
-  };
 
 
   async function handlePost() {
@@ -152,7 +81,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: [{ start: endTime!, stop: startTime! }],
+        // lenkzeit: [{ start: ende!, stop: endTime! }],
         // arbeitszeit: letzteFahrt.arbeitszeit!.concat(arbeitszeit),
         // pause: letzteFahrt.pause!.concat(pausen),
         beendet: false, // Fahrt als beendet markieren
@@ -184,47 +113,11 @@ const FahrtVerwalten: React.FC = () => {
               </p>
               <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
               <p>Ihr momentaner Status lautet: {isPausenRunning ? "Pause" : isArbeitszeitRunning ? "Arbeitszeit" : isLenkzeitRunning ? "Lenkzeit" : "Noch nichts gestartet"}</p>
-              <div className="section">
-                <div className="button-group">
-                  <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
-                    {isLenkzeitRunning ? 'Lenkzeit stoppen' : 'Lenkzeit starten'}
-                  </button>
-                </div>
-                <ul className="log-list">
-                  <ul>
-                    {letzteFahrt ? (
-                      Object.entries(letzteFahrt).map(([key, value]) => (
-                        <li key={key}>
-                          {key}: {Array.isArray(value) ? value.join(', ') : value instanceof Date ? value.toLocaleString() : (typeof value === 'boolean' ? value.toString() : value || 'leer')}
-                        </li>
-                      ))
-                    ) : (
-                      <p>Keine Fahrt gefunden.</p>
-                    )}
-                  </ul>
-                </ul>
-                <p>Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-              </div>
+
 
               <div className="section">
                 <div className="button-group">
-                  <button onClick={() => startStopTimer(isArbeitszeitRunning, setArbeitszeitRunning, arbeitszeit, setArbeitszeit)}>
-                    {isArbeitszeitRunning ? 'Arbeitszeit stoppen' : 'Arbeitszeit starten'}
-                  </button>
-                </div>
-                <ul className="log-list">
-                  {arbeitszeit.map((entry, index) => (
-                    <li key={index}>
-                      {entry.action} - {entry.time.toLocaleString()}
-                    </li>
-                  ))}
-                </ul>
-                <p>Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-              </div>
-
-              <div className="section">
-                <div className="button-group">
-                  <button onClick={() => startStopTimer(isPausenRunning, setPausenRunning, pausen, setPausen)}>
+                  <button>
                     {isPausenRunning ? 'Pausen stoppen' : 'Pausen starten'}
                   </button>
                 </div>
@@ -235,18 +128,11 @@ const FahrtVerwalten: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <p>Pausenzeit: {calculateFormattedTime(pausen)}</p>
               </div>
               <div className="section">
                 <div className="button-group">
-                  <button onClick={endFahrt}>Fahrt beenden</button>
+                  <button >Fahrt beenden</button>
                 </div>
-                <p className="results">Gesamte Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-                <p className="results">Gesamte Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-                <p className="results">Gesamte Pausenzeit: {calculateFormattedTime(pausen)}</p>
-                {endTime && <p className="results">Fahrt beendet um: {endTime.toLocaleString()}</p>}
-                {showWorkStarted && <p className="results">Arbeit gestartet um: {startTime?.toLocaleString()}</p>}
-                <p className="results">Gesamte Arbeitszeit: {calculateTotalTime()}</p>
               </div>
             </>
           ) : (
