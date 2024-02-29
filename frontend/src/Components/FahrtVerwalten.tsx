@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
-import { getUser, getFahrt } from '../Api/api';
+import { getUser, getFahrt, updateFahrt } from '../Api/api';
 import { FahrtResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
 import { UserContext } from './UserContext';
@@ -27,7 +27,7 @@ const FahrtVerwalten: React.FC = () => {
   const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
-  const contexte = useContext(UserContext);
+  const usercontexte = useContext(UserContext);
 
   useEffect(() => {
     if (jwt) {
@@ -37,8 +37,12 @@ const FahrtVerwalten: React.FC = () => {
     }
   }, [jwt]);
 
-
   useEffect(() => {
+    // Überprüfe, ob der UserContext gültige Daten enthält
+    if (usercontexte && usercontexte.length > 0 && usercontexte[0]) {
+      setLoading(false); // Setze loading auf false, wenn der UserContext gültige Daten enthält
+    }
+
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = '';
@@ -49,7 +53,14 @@ const FahrtVerwalten: React.FC = () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [usercontexte]); // Hier usercontexte als Abhängigkeit hinzufügen
+
+  useEffect(() => {
+    // Diese useEffect-Hook wird nur einmal ausgeführt, wenn loading auf false gesetzt wird
+    if (!loading) {
+      // Hier kannst du Logik einfügen, die nur ausgeführt werden soll, wenn loading auf false gesetzt wird
+    }
+  }, [loading]);
 
   async function last() {
     const id = getLoginInfo();
@@ -85,6 +96,7 @@ const FahrtVerwalten: React.FC = () => {
       setEndTime(time);
       setShowTripEnded(true);
       setShowWorkStarted(false);
+      handlePost()
     }
   };
 
@@ -128,6 +140,31 @@ const FahrtVerwalten: React.FC = () => {
   };
 
 
+  async function handlePost() {
+    if (usercontexte[0]._id && letzteFahrt) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte[0]._id!,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        lenkzeit: [{ start: startTime!, stop: endTime! }],
+        // arbeitszeit: letzteFahrt.arbeitszeit!.concat(arbeitszeit),
+        // pause: letzteFahrt.pause!.concat(pausen),
+        beendet: false, // Fahrt als beendet markieren
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt)
+      console.log(fahrt)
+    }
+  }
+
+
+
+  function handleEnde() {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div>
@@ -136,13 +173,14 @@ const FahrtVerwalten: React.FC = () => {
         <Loading />
       ) : (
         <div className="container">
-          <h3>Hallo {contexte && contexte ? contexte[0].name : "Kein User"}.</h3>
+          <h3>Hallo {usercontexte && usercontexte[0]?.name ? usercontexte[0].name : "Kein User"}.</h3>
           {letzteFahrt && !letzteFahrt.beendet ? (
             <>
               <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
                 mit dem Kennzeichen {letzteFahrt ? letzteFahrt.kennzeichen : "Kein Kennzeichen"}.
               </p>
               <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
+              <p>Ihr momentaner Status lautet: {isPausenRunning ? "Pause" : isArbeitszeitRunning ? "Arbeitszeit" : isLenkzeitRunning ? "Lenkzeit" : "Noch nichts gestartet"}</p>
               <div className="section">
                 <div className="button-group">
                   <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
@@ -212,7 +250,7 @@ const FahrtVerwalten: React.FC = () => {
             <>
               <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
               <Link to="/create">
-                <Button>Fahrt Erstellen</Button>
+                <Button onClick={() => { handleEnde() }}>Fahrt Erstellen</Button>
               </Link>
             </>
           )}

@@ -40,7 +40,6 @@ const FahrtErstellen = () => {
     const addFahrt = (fahrt: FahrtResource) => {
         setFahrten((prevFahrten: FahrtResource[]) => {
             const updatedFahrten = [...prevFahrten, fahrt];
-            console.log("Updated Fahrten:", updatedFahrten);
             return updatedFahrten;
         });
     };

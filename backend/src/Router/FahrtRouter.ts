@@ -77,25 +77,28 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     }
 );
 
-fahrrouter.post("/user/fahrt/bearbeiten",
+fahrrouter.put("/user/fahrt/bearbeiten/:id",
     requiresAuthentication,
+    param("id").isMongoId(),
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
     body("kennzeichen").isString(),
-    body("kilometerstand").isString(),
-    body("kilometerende").isString(),
-    body("lenkzeit").optional().isString(),
-    body("arbeitszeit").optional().isString(),
-    body("pause").optional().isString(),
+    body("kilometerstand").isNumeric(),
+    body("kilometerende").optional().isNumeric(),
+    body("lenkzeit").optional().isArray(),
+    body("arbeitszeit").optional().isArray(),
+    body("pause").optional().isArray(),
+    body("beendet").optional().isBoolean(),
     async (req, res, next) => {
+        console.log("????")
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(req.body)
+            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
+        console.log("jkl")
         try {
-            if (req.role !== "a") {
-                return res.sendStatus(403);
-            }
             const resource = matchedData(req) as FahrtResource
             const fahrt = await updateUserfahrt(resource);
             return res.send(fahrt); // 200 by default
