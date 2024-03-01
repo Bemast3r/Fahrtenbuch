@@ -29,13 +29,19 @@ const FahrtVerwalten: React.FC = () => {
   const [lenkzeitRecord, setLenkzeitRecord] = useState<TimeRecord | null>(null);
   const [arbeitszeitRecord, setArbeitszeitRecord] = useState<TimeRecord | null>(null);
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
+  const [totalLenkzeit, setTotalLenkzeit] = useState<number>(0);
+  const [totalArbeitszeit, setTotalArbeitszeit] = useState<number>(0);
+  const [totalPause, setTotalPause] = useState<number>(0);
   const navigate = useNavigate();
 
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const usercontexte = useContext(UserContext);
 
-  let ende: Date;
+  function calculateTotalTime(): number {
+    return elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause;
+  }
+
   useEffect(() => {
     if (jwt) {
       setJWT(jwt);
@@ -44,6 +50,7 @@ const FahrtVerwalten: React.FC = () => {
       return;
     }
   }, [jwt, navigate]);
+
 
   useEffect(() => {
     if (usercontexte && usercontexte.length > 0 && usercontexte[0]) {
@@ -111,6 +118,8 @@ const FahrtVerwalten: React.FC = () => {
       setIsRecordingPause(false);
     }
   }
+
+
 
   async function handlePostArbeitszeit() {
     if (usercontexte[0].id && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
@@ -246,7 +255,13 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function handleEnde() {
-    console.log("")
+    const confirmEnde = window.confirm("Wollen Sie wirklich die Fahrt beenden?");
+    if (confirmEnde) {
+      stopRunningTimer()
+      navigate("/home")
+    } else {
+      return;
+    }
   }
 
   return (
@@ -270,13 +285,12 @@ const FahrtVerwalten: React.FC = () => {
                 <div className="elapsed-time">
                   Verbrachte Lenkzeit: {formatTime(elapsedTimeLenkzeit)}
                 </div>
+                {lenkzeitRecord && (
+                  <div>
+                    {lenkzeitRecord.start.toLocaleString()} - {lenkzeitRecord.stop ? lenkzeitRecord.stop.toLocaleString() : "Recording..."}
+                  </div>
+                )}
               </div>
-              {lenkzeitRecord && (
-                <div>
-                  {lenkzeitRecord.start.toLocaleString()} - {lenkzeitRecord.stop ? lenkzeitRecord.stop.toLocaleString() : "Recording..."}
-                </div>
-              )}
-
               <div className="section">
                 <div className="button-group">
                   <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={toggleRecordingArbeit} >{arbeitText}</Button>
@@ -303,12 +317,25 @@ const FahrtVerwalten: React.FC = () => {
                   </div>
                 )}
               </div>
+              <div className="section">
+                <div className="button-group">
+                  <Button variant="danger" onClick={handleEnde} >Fahrt beenden</Button>
+                </div>
+                <div>
+                  {/* Anzeige der Gesamtzeiten */}
+                  Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
+                  Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
+                  Gesamt Pause: {formatTime(elapsedTimePause)} <br />
+                  Insgesamte Zeit ist: {formatTime(calculateTotalTime())}
+                </div>
+
+              </div>
             </>
           ) : (
             <>
               <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
               <Link to="/create">
-                <Button onClick={() => { handleEnde() }}>Fahrt Erstellen</Button>
+                <Button>Fahrt Erstellen</Button>
               </Link>
             </>
           )}
