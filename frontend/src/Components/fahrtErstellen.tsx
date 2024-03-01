@@ -3,12 +3,11 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getFahrt, getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
-import { FahrtContext } from './FahrtenContext/FahrtContext';
 import Loading from './LoadingIndicator';
 import { Alert } from 'react-bootstrap';
 
@@ -18,14 +17,10 @@ const FahrtErstellen = () => {
     const [user, setUser] = useState<UserResource | null>(null)
     const [validated, setValidated] = useState(false);
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
-    const [showAlert, setShowAlert] = useState<boolean>(false); // Zustand für den Alert
-
-    // const { fahrten, setFahrten } = useContext(FahrtContext)
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const jwt = getJWT()
     const navigate = useNavigate()
-
-
 
     useEffect(() => {
         if (jwt) {

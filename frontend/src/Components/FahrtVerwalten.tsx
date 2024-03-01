@@ -17,7 +17,10 @@ const FahrtVerwalten: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Zustand für den Ladezustand
   const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [buttonText, setButtonText] = useState<string>('Start');
+  const [buttonText, setButtonText] = useState<string>('Lenkzeit START');
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+
 
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
@@ -84,7 +87,6 @@ const FahrtVerwalten: React.FC = () => {
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt)
-      console.log(fahrt)
     }
   }
 
@@ -92,19 +94,31 @@ const FahrtVerwalten: React.FC = () => {
     const currentTime = new Date();
     if (!isRecording) {
       setTimeRecords([...timeRecords, { start: currentTime, stop: null }]);
-      setButtonText('Stop');
+      setButtonText('Lenkzeit STOP');
+      const timerId = setInterval(() => {
+        setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
+      }, 1000);
+      setIsRecording(true);
+      setTimerId(timerId);
     } else {
       const lastRecord = timeRecords[timeRecords.length - 1];
       if (lastRecord.stop === null) {
         lastRecord.stop = currentTime;
         setTimeRecords([...timeRecords]);
-        setButtonText('Start');
+        setButtonText('Lenkzeit START');
+        clearInterval(timerId!);
         handlePost()
       }
     }
     setIsRecording(!isRecording);
   }
 
+  function formatTime(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+  }
 
 
   function handleEnde() {
@@ -127,7 +141,10 @@ const FahrtVerwalten: React.FC = () => {
               <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
               <div className="section">
                 <div className="button-group">
-                  <button onClick={toggleRecording} >{buttonText}</button>
+                  <Button variant={isRecording ? "danger" : "primary"} onClick={toggleRecording} >{buttonText}</Button>
+                </div>
+                <div className="elapsed-time">
+                  Verbrachte Lenkzeit: {formatTime(elapsedTime)}
                 </div>
               </div>
               {timeRecords.map((record, index) => (

@@ -53,7 +53,7 @@ body {
   margin-bottom: 10px;
 }
 
-.button-group button {
+/* .button-group button {
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -62,15 +62,15 @@ body {
   border-radius: 5px;
   transition: background-color 0.3s;
   margin-bottom: 10px; /* Füge einen Abstand zwischen den Schaltflächen hinzu */
-}
+/* }  */
 
 .button-group button:last-child {
   margin-bottom: 0; /* Entferne den Abstand unterhalb der letzten Schaltfläche */
 }
 
-.button-group button:hover {
+/* .button-group button:hover {
   background-color: #0056b3;
-}
+} */
 
 .log-list {
   list-style-type: none;
