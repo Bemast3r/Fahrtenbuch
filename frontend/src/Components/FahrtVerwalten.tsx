@@ -6,7 +6,7 @@ import { FahrtResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
 import { UserContext } from './UserContext';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface TimeRecord {
   start: Date;
@@ -14,13 +14,17 @@ interface TimeRecord {
 }
 
 const FahrtVerwalten: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true); // Zustand für den Ladezustand
+  const [loading, setLoading] = useState<boolean>(true); // Zustand fÃ¼r den Ladezustand
   const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
-  const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [buttonText, setButtonText] = useState<string>('Lenkzeit START');
+  const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false);
+  const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false);
+  const [isRecordingPause, setIsRecordingPause] = useState<boolean>(false);
+  const [lenktext, setLenkText] = useState<string>('Lenkzeit START');
+  const [arbeitText, setArbeitText] = useState<string>('Arbeitszeit START');
+  const [pauseText, setPauseText] = useState<string>('Pause START');
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
-
+  const navigate = useNavigate()
 
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
@@ -31,6 +35,7 @@ const FahrtVerwalten: React.FC = () => {
     if (jwt) {
       setJWT(jwt);
     } else {
+      navigate("/")
       return;
     }
   }, [jwt]);
@@ -51,11 +56,6 @@ const FahrtVerwalten: React.FC = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [usercontexte]);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //   }
-  // }, [loading]);
 
   async function last() {
     const id = getLoginInfo();
@@ -90,28 +90,80 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-  function toggleRecording() {
+  function toggleRecordingLenkzeit() {
     const currentTime = new Date();
-    if (!isRecording) {
+    if (!isRecordingLenkzeit) {
       setTimeRecords([...timeRecords, { start: currentTime, stop: null }]);
-      setButtonText('Lenkzeit STOP');
+      setLenkText('Lenkzeit STOP');
       const timerId = setInterval(() => {
         setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
       }, 1000);
-      setIsRecording(true);
+      setIsRecordingLenkzeit(true);
       setTimerId(timerId);
     } else {
       const lastRecord = timeRecords[timeRecords.length - 1];
       if (lastRecord.stop === null) {
         lastRecord.stop = currentTime;
         setTimeRecords([...timeRecords]);
-        setButtonText('Lenkzeit START');
+        setLenkText('Lenkzeit START');
         clearInterval(timerId!);
         handlePost()
       }
     }
-    setIsRecording(!isRecording);
+    setIsRecordingLenkzeit(!isRecordingLenkzeit);
   }
+
+
+  function toggleRecordingArbeit() {
+    const currentTime = new Date();
+    if (!isRecordingArbeitszeit) {
+      setTimeRecords([...timeRecords, { start: currentTime, stop: null }]);
+      setArbeitText('Arbeitszeit STOP');
+      const timerId = setInterval(() => {
+        setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
+      }, 1000);
+      setIsRecordingArbeitszeit(true);
+      setTimerId(timerId);
+    } else {
+      const lastRecord = timeRecords[timeRecords.length - 1];
+      if (lastRecord.stop === null) {
+        lastRecord.stop = currentTime;
+        setTimeRecords([...timeRecords]);
+        setArbeitText('Arbeitszeit START');
+        clearInterval(timerId!);
+        handlePost()
+      }
+    }
+    setIsRecordingArbeitszeit(!isRecordingArbeitszeit);
+  }
+
+
+
+  function toggleRecordingPause() {
+    const currentTime = new Date();
+    if (!isRecordingPause) {
+      setTimeRecords([...timeRecords, { start: currentTime, stop: null }]);
+      setPauseText('Pause STOP');
+      const timerId = setInterval(() => {
+        setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
+      }, 1000);
+      setIsRecordingPause(true);
+      setTimerId(timerId);
+    } else {
+      const lastRecord = timeRecords[timeRecords.length - 1];
+      if (lastRecord.stop === null) {
+        lastRecord.stop = currentTime;
+        setTimeRecords([...timeRecords]);
+        setPauseText('Pause START');
+        clearInterval(timerId!);
+        handlePost()
+      }
+    }
+    setIsRecordingPause(!isRecordingPause);
+  }
+
+
+
 
   function formatTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
@@ -141,7 +193,7 @@ const FahrtVerwalten: React.FC = () => {
               <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
               <div className="section">
                 <div className="button-group">
-                  <Button variant={isRecording ? "danger" : "primary"} onClick={toggleRecording} >{buttonText}</Button>
+                  <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={toggleRecordingLenkzeit} >{lenktext}</Button>
                 </div>
                 <div className="elapsed-time">
                   Verbrachte Lenkzeit: {formatTime(elapsedTime)}
@@ -152,6 +204,22 @@ const FahrtVerwalten: React.FC = () => {
                   {record.start.toLocaleString()} - {record.stop ? record.stop.toLocaleString() : "Recording..."}
                 </div>
               ))}
+              <div className="section">
+                <div className="button-group">
+                  <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={toggleRecordingArbeit} >{arbeitText}</Button>
+                </div>
+                <div className="elapsed-time">
+                  Verbrachte Arbeitszeit: {formatTime(elapsedTime)}
+                </div>
+              </div>
+              <div className="section">
+                <div className="button-group">
+                  <Button variant={isRecordingPause ? "danger" : "primary"} onClick={toggleRecordingPause} >{pauseText}</Button>
+                </div>
+                <div className="elapsed-time">
+                  Verbrachte Pause: {formatTime(elapsedTime)}
+                </div>
+              </div>
             </>
           ) : (
             <>
