@@ -72,6 +72,16 @@ body {
   background-color: #0056b3;
 } */
 
+.dates {
+  margin-top: 20px;
+}
+
+.dates p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
 .log-list {
   list-style-type: none;
   padding: 0;

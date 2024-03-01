@@ -264,6 +264,13 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
+  function formatDate(date: Date): string {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
   return (
     <div>
       <h1 className="header">Fahrt Verwalten</h1>
@@ -290,6 +297,14 @@ const FahrtVerwalten: React.FC = () => {
                     {lenkzeitRecord.start.toLocaleString()} - {lenkzeitRecord.stop ? lenkzeitRecord.stop.toLocaleString() : "Recording..."}
                   </div>
                 )}
+
+                {letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0 && (
+                  <div className="dates">
+                    {letzteFahrt.lenkzeit.map((Zeiten) => {
+                      return <p>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                    })}
+                  </div>
+                )}
               </div>
               <div className="section">
                 <div className="button-group">
@@ -298,9 +313,11 @@ const FahrtVerwalten: React.FC = () => {
                 <div className="elapsed-time">
                   Verbrachte Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)}
                 </div>
-                {arbeitszeitRecord && (
-                  <div>
-                    {arbeitszeitRecord.start.toLocaleString()} - {arbeitszeitRecord.stop ? arbeitszeitRecord.stop.toLocaleString() : "Recording..."}
+                {letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0 && (
+                  <div className="dates">
+                    {letzteFahrt.arbeitszeit.map((Zeiten) => {
+                      return <p>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                    })}
                   </div>
                 )}
               </div>
@@ -311,9 +328,11 @@ const FahrtVerwalten: React.FC = () => {
                 <div className="elapsed-time">
                   Verbrachte Pause: {formatTime(elapsedTimePause)}
                 </div>
-                {pauseRecord && (
-                  <div>
-                    {pauseRecord.start.toLocaleString()} - {pauseRecord.stop ? pauseRecord.stop.toLocaleString() : "Recording..."}
+                {letzteFahrt.pause && letzteFahrt.pause.length > 0 && (
+                  <div className="dates">
+                    {letzteFahrt.pause.map((Zeiten) => {
+                      return <p>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                    })}
                   </div>
                 )}
               </div>
