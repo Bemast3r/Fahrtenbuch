@@ -104,73 +104,76 @@ const FahrtErstellen = () => {
                 <Loading></Loading>
             ) : (
                 <><Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
-                        Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrtverwalten.
-                    </Alert><div className="form-container">
-                            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                                <Row className="mb-1">
-                                    <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
-                                        <Form.Label className="form-label">Name</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="Name"
-                                            className="form-control"
-                                            //disabled={disableFields}
-                                            value={user ? user.name : ""}
-                                            disabled={true}
-                                            // onChange={}
-                                            required />
-                                    </Form.Group>
+                    Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrtverwalten.
+                    <br></br>
+                    <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten") }}>Fahrt Verwalten</Button>
+                </Alert>
+                    <div className="form-container">
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                            <Row className="mb-1">
+                                <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
+                                    <Form.Label className="form-label">Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Name"
+                                        className="form-control"
+                                        //disabled={disableFields}
+                                        value={user ? user.name : ""}
+                                        disabled={true}
+                                        // onChange={}
+                                        required />
+                                </Form.Group>
 
-                                    <Form.Group as={Col} controlId="formGridDatum" className="form-group">
-                                        <Form.Label className="form-label">Datum</Form.Label>
-                                        <Form.Control type="text" placeholder="Datum" className="form-control" value={americanDateFormat} disabled={true} required />
-                                    </Form.Group>
-                                </Row>
+                                <Form.Group as={Col} controlId="formGridDatum" className="form-group">
+                                    <Form.Label className="form-label">Datum</Form.Label>
+                                    <Form.Control type="text" placeholder="Datum" className="form-control" value={americanDateFormat} disabled={true} required />
+                                </Form.Group>
+                            </Row>
 
-                                <Row className="mb-2">
-                                    <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group">
-                                        <Form.Label className="form-label">Kennzeichen</Form.Label>
-                                        <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} required />
-                                    </Form.Group>
-                                </Row>
+                            <Row className="mb-2">
+                                <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group">
+                                    <Form.Label className="form-label">Kennzeichen</Form.Label>
+                                    <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} required />
+                                </Form.Group>
+                            </Row>
 
-                                <Row className="mb-3">
-                                    <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group">
-                                        <Form.Label className="form-label">Kilometerstand (Beginn)</Form.Label>
-                                        <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} required />
-                                    </Form.Group>
-                                </Row>
+                            <Row className="mb-3">
+                                <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group">
+                                    <Form.Label className="form-label">Kilometerstand (Beginn)</Form.Label>
+                                    <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} required />
+                                </Form.Group>
+                            </Row>
 
-                                <Row className="mb-4">
-                                    <Form.Group as={Col} controlId="formGridOrt" className="form-group">
-                                        <Form.Label className="form-label">Ort der Fahrtaufnahme</Form.Label>
-                                        <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} required />
-                                    </Form.Group>
-                                </Row>
+                            <Row className="mb-4">
+                                <Form.Group as={Col} controlId="formGridOrt" className="form-group">
+                                    <Form.Label className="form-label">Ort der Fahrtaufnahme</Form.Label>
+                                    <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} required />
+                                </Form.Group>
+                            </Row>
 
-                                <Row className="mb-5">
-                                    <Form.Group className="checkbox1" controlId="formGridCheckbox1">
-                                        <Form.Check type="checkbox" label="Kein Fahrzeug geführt" className="checkbox-label1" onChange={() => handleCheckboxChange("formGridCheckbox1")} />
-                                    </Form.Group>
+                            <Row className="mb-5">
+                                <Form.Group className="checkbox1" controlId="formGridCheckbox1">
+                                    <Form.Check type="checkbox" label="Kein Fahrzeug geführt" className="checkbox-label1" onChange={() => handleCheckboxChange("formGridCheckbox1")} />
+                                </Form.Group>
 
-                                    <Form.Group className="checkbox2" controlId="formGridCheckbox2">
-                                        <Form.Check type="checkbox" label="Ich bin krank" className="checkbox-label2" onChange={() => handleCheckboxChange("formGridCheckbox2")} />
-                                    </Form.Group>
+                                <Form.Group className="checkbox2" controlId="formGridCheckbox2">
+                                    <Form.Check type="checkbox" label="Ich bin krank" className="checkbox-label2" onChange={() => handleCheckboxChange("formGridCheckbox2")} />
+                                </Form.Group>
 
-                                    <Form.Group className="checkbox3" controlId="formGridCheckbox3">
-                                        <Form.Check type="checkbox" label="Ich habe Urlaub" className="checkbox-label3" onChange={() => handleCheckboxChange("formGridCheckbox3")} />
-                                    </Form.Group>
+                                <Form.Group className="checkbox3" controlId="formGridCheckbox3">
+                                    <Form.Check type="checkbox" label="Ich habe Urlaub" className="checkbox-label3" onChange={() => handleCheckboxChange("formGridCheckbox3")} />
+                                </Form.Group>
 
-                                    <Form.Group className="checkbox4" controlId="formGridCheckbox4">
-                                        <Form.Check type="checkbox" label="Ich habe frei" className="checkbox-label4" onChange={() => handleCheckboxChange("formGridCheckbox4")} />
-                                    </Form.Group>
-                                </Row>
+                                <Form.Group className="checkbox4" controlId="formGridCheckbox4">
+                                    <Form.Check type="checkbox" label="Ich habe frei" className="checkbox-label4" onChange={() => handleCheckboxChange("formGridCheckbox4")} />
+                                </Form.Group>
+                            </Row>
 
-                                <Button variant="primary" type="submit" className="submit-button" onClick={(e) => { handleSubmit(e); } }>
-                                    Fahrt beginnen
-                                </Button>
-                            </Form>
-                        </div></>
+                            <Button variant="primary" type="submit" className="submit-button" onClick={(e) => { handleSubmit(e); }}>
+                                Fahrt beginnen
+                            </Button>
+                        </Form>
+                    </div></>
             )}
         </div>
     );
