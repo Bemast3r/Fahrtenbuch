@@ -97,7 +97,6 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
             console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
-        console.log("jkl")
         try {
             const resource = matchedData(req) as FahrtResource
             const fahrt = await updateUserfahrt(resource);

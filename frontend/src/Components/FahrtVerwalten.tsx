@@ -8,17 +8,16 @@ import { UserContext } from './UserContext';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-interface LogEntry {
-  action: string;
-  time: Date;
+interface TimeRecord {
+  start: Date;
+  stop: Date | null;
 }
 
 const FahrtVerwalten: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Zustand für den Ladezustand
-  const [pausen, setPausen] = useState<LogEntry[]>([]);
-  const [isLenkzeitRunning, setLenkzeitRunning] = useState<boolean>(false);
-  const [isArbeitszeitRunning, setArbeitszeitRunning] = useState<boolean>(false);
-  const [isPausenRunning, setPausenRunning] = useState<boolean>(false);
+  const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [buttonText, setButtonText] = useState<string>('Start');
 
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
@@ -34,9 +33,8 @@ const FahrtVerwalten: React.FC = () => {
   }, [jwt]);
 
   useEffect(() => {
-    // Überprüfe, ob der UserContext gültige Daten enthält
     if (usercontexte && usercontexte.length > 0 && usercontexte[0]) {
-      setLoading(false); // Setze loading auf false, wenn der UserContext gültige Daten enthält
+      setLoading(false);
     }
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -49,14 +47,12 @@ const FahrtVerwalten: React.FC = () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [usercontexte]); // Hier usercontexte als Abhängigkeit hinzufügen
+  }, [usercontexte]);
 
-  useEffect(() => {
-    // Diese useEffect-Hook wird nur einmal ausgeführt, wenn loading auf false gesetzt wird
-    if (!loading) {
-      // Hier kannst du Logik einfügen, die nur ausgeführt werden soll, wenn loading auf false gesetzt wird
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (!loading) {
+  //   }
+  // }, [loading]);
 
   async function last() {
     const id = getLoginInfo();
@@ -73,7 +69,7 @@ const FahrtVerwalten: React.FC = () => {
 
 
   async function handlePost() {
-    if (usercontexte[0].id && letzteFahrt) {
+    if (usercontexte[0].id && letzteFahrt && timeRecords[timeRecords.length - 1].stop !== null) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte[0].id!,
         id: letzteFahrt._id!.toString(),
@@ -81,7 +77,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        // lenkzeit: [{ start: ende!, stop: endTime! }],
+        lenkzeit: [{ start: timeRecords[timeRecords.length - 1].start, stop: timeRecords[timeRecords.length - 1].stop! }],
         // arbeitszeit: letzteFahrt.arbeitszeit!.concat(arbeitszeit),
         // pause: letzteFahrt.pause!.concat(pausen),
         beendet: false, // Fahrt als beendet markieren
@@ -90,6 +86,23 @@ const FahrtVerwalten: React.FC = () => {
       setLetzteFahrt(fahrt)
       console.log(fahrt)
     }
+  }
+
+  function toggleRecording() {
+    const currentTime = new Date();
+    if (!isRecording) {
+      setTimeRecords([...timeRecords, { start: currentTime, stop: null }]);
+      setButtonText('Stop');
+    } else {
+      const lastRecord = timeRecords[timeRecords.length - 1];
+      if (lastRecord.stop === null) {
+        lastRecord.stop = currentTime;
+        setTimeRecords([...timeRecords]);
+        setButtonText('Start');
+        handlePost()
+      }
+    }
+    setIsRecording(!isRecording);
   }
 
 
@@ -112,28 +125,16 @@ const FahrtVerwalten: React.FC = () => {
                 mit dem Kennzeichen {letzteFahrt ? letzteFahrt.kennzeichen : "Kein Kennzeichen"}.
               </p>
               <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
-              <p>Ihr momentaner Status lautet: {isPausenRunning ? "Pause" : isArbeitszeitRunning ? "Arbeitszeit" : isLenkzeitRunning ? "Lenkzeit" : "Noch nichts gestartet"}</p>
-
-
               <div className="section">
                 <div className="button-group">
-                  <button>
-                    {isPausenRunning ? 'Pausen stoppen' : 'Pausen starten'}
-                  </button>
-                </div>
-                <ul className="log-list">
-                  {pausen.map((entry, index) => (
-                    <li key={index}>
-                      {entry.action} - {entry.time.toLocaleString()}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="section">
-                <div className="button-group">
-                  <button >Fahrt beenden</button>
+                  <button onClick={toggleRecording} >{buttonText}</button>
                 </div>
               </div>
+              {timeRecords.map((record, index) => (
+                <div key={index}>
+                  {record.start.toLocaleString()} - {record.stop ? record.stop.toLocaleString() : "Recording..."}
+                </div>
+              ))}
             </>
           ) : (
             <>
