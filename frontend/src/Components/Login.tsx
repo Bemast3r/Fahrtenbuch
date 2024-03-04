@@ -57,6 +57,7 @@ const Login = () => {
     };
 
     return (
+        <div className="login-page">
         <div className="login-container">
             <Form className="login-form" onSubmit={handleSubmit}>
                 <h1 className="login-title">Login</h1>
@@ -98,6 +99,7 @@ const Login = () => {
             <div className="login-footer">
                 SKM | &copy;2024
             </div>
+        </div>
         </div>
     );
 };
