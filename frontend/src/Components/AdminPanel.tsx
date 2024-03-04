@@ -1,8 +1,12 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { createUser } from '../Api/api';
+import { useNavigate } from 'react-router-dom';
+
 
 const AdminFormular = () => {
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
         name: '',
         nachname: '',
@@ -26,7 +30,7 @@ const AdminFormular = () => {
         e.preventDefault();
         try {
             await createUser(formData);
-            alert('Benutzer wurde erfolgreich erstellt!');
+            navigate("/home");
         } catch (error) {
             console.error('Fehler beim Erstellen des Benutzers:', error);
         }
@@ -48,7 +52,7 @@ const AdminFormular = () => {
                             <Form.Control type="text" placeholder="Nachname" name="nachname" value={formData.nachname} onChange={handleChange} required />
                         </Form.Group>
 
-                        <Form.Group as={Col} controlId="formGridUsername">
+                        <Form.Group as={Col} className="c" controlId="formGridUsername">
                             <Form.Label>Benutzername</Form.Label>
                             <Form.Control type="text" placeholder="Benutzername" name="username" value={formData.username} onChange={handleChange} required />
                         </Form.Group>
