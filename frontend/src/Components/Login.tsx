@@ -38,7 +38,7 @@ const Login = () => {
             navigate("/home");
         } catch (error: any) {
             setShow(true);
-            setError(error.toString());
+            setError("Ihre Anmeldeinformationen sind falsch. Bitte versuchen Sie es erneut.");
         }
         setLoading(false);
     };
