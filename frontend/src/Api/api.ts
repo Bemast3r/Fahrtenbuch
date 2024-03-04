@@ -96,16 +96,11 @@ export async function getUser(userID: string): Promise<UserResource> {
 
 export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
     try {
-        if (!fahrt) {
-            throw new Error("userID not defined");
-        }
         const jwt2 = getJWT();
-        if (!jwt2)
-            throw new Error("no jwt found");
         const response = await fetch(`http://localhost:5000/api/fahrt/user/fahrt/erstellen`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${jwt}`,
+                "Authorization": `Bearer ${jwt2}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen, kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt })

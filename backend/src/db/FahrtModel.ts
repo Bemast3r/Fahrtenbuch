@@ -42,7 +42,7 @@ const fahrtSchema = new Schema<IFahrt>({
         stop: { type: Date }
     }], // weiß nicht ob das Sinnvoll ist aber mal sehen.
     createdAt: { type: Date },
-    startpunkt: { type: String }
+    startpunkt: { type: String, required: true }
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);

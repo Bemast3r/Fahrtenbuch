@@ -9,9 +9,11 @@ import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 
+
 const FahrtErstellen = () => {
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
+    const [validated, setValidated] = useState(false);
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -39,28 +41,42 @@ const FahrtErstellen = () => {
             if (checkbox.id !== checkboxId) {
                 (checkbox as HTMLInputElement).checked = false;
             }
-        }); 
+        });
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
     };
 
-    async function handleSubmit() {
-        const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
-        const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
-        const stratpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
-        if (!kennzeichen || !kilometerstand || !stratpunkt) {
-            return;
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault(); // Stoppt das Standardverhalten des Formulars
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        } else {
+            try {
+                // Hier kannst du die Daten verarbeiten
+                const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
+                const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
+                const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
+                // Poste die Fahrt
+                if (user) {
+                    await postFahrt({
+                        fahrerid: user.id!,
+                        kennzeichen: kennzeichen,
+                        kilometerstand: kilometerstand,
+                        startpunkt: startpunkt
+                    });
+                }
+
+                // Weiterleitung nach erfolgreicher Verarbeitung
+                navigate("/");
+
+            } catch (error) {
+                console.error("Fehler beim Posten der Fahrt:", error);
+                // Behandlung von Fehlern, z.B. Anzeige einer Fehlermeldung
+            }
         }
-        if (user) {
-            let fahrtResource: FahrtResource = {
-                fahrerid: user.id!,
-                kennzeichen: kennzeichen.toString(),
-                kilometerstand: kilometerstand,
-                startpunkt: stratpunkt.toString()
-            };
-            await postFahrt(fahrtResource)
-        }
-        navigate("/verwalten");
-    }
+        setValidated(true);
+    };
+
 
     const currentDate = new Date();
 
@@ -74,7 +90,7 @@ const FahrtErstellen = () => {
         <div className="form-wrapper">
             <h2 className="form-header">Fahrt erstellen</h2>
             <div className="form-container">
-                <Form>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <Row className="mb-1">
                         <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
                             <Form.Label className="form-label">Name</Form.Label>
@@ -134,7 +150,7 @@ const FahrtErstellen = () => {
                         </Form.Group>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="submit-button" onClick={handleSubmit}>
+                    <Button variant="primary" type="submit" className="submit-button">
                         Fahrt beginnen
                     </Button>
                 </Form>
