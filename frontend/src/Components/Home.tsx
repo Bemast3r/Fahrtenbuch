@@ -38,14 +38,11 @@ const Home = () => {
                     <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/verwalten")}>
                         Fahrt verwalten
                     </Button>
-                    <Button variant="danger" type="button" className="submit-button3" onClick={handleAbmelden}>
-                        Abmelden
-                    </Button>
                     <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/user-erstellen") }}>
                         Benutzer erstellen
                     </Button>
-                    <Button variant="danger" type="submit" className="submit-button3">
-                        Fahrt beenden
+                    <Button variant="danger" type="button" className="submit-button3" onClick={handleAbmelden}>
+                        Abmelden
                     </Button>
                 </Form>
             </div>
