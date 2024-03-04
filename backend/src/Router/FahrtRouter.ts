@@ -31,6 +31,8 @@ fahrrouter.get("/admin/alle/fahrten", requiresAuthentication,
 
 /**
  * Fahrten von einem User über seine Id 
+ * Auch normale können drauf zugreifen.
+ * 
  */
 fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
     param("id").isMongoId(),
@@ -40,9 +42,6 @@ fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if (req.role !== "a") {
-                return res.sendStatus(403)
-            }
             const user = await getUserFahrten(req.params.id);
             return res.send(user); // 200 by default
         } catch (err) {
@@ -78,25 +77,27 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     }
 );
 
-fahrrouter.post("/user/fahrt/bearbeiten",
+fahrrouter.put("/user/fahrt/bearbeiten/:id",
     requiresAuthentication,
+    param("id").isMongoId(),
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
     body("kennzeichen").isString(),
-    body("kilometerstand").isString(),
-    body("kilometerende").isString(),
-    body("lenkzeit").optional().isString(),
-    body("arbeitszeit").optional().isString(),
-    body("pause").optional().isString(),
+    body("kilometerstand").isNumeric(),
+    body("kilometerende").optional().isNumeric(),
+    body("lenkzeit").optional().isArray(),
+    body("arbeitszeit").optional().isArray(),
+    body("pause").optional().isArray(),
+    body("beendet").optional().isBoolean(),
     async (req, res, next) => {
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(req.body)
+            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            if (req.role !== "a") {
-                return res.sendStatus(403);
-            }
             const resource = matchedData(req) as FahrtResource
             const fahrt = await updateUserfahrt(resource);
             return res.send(fahrt); // 200 by default

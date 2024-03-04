@@ -191,3 +191,28 @@ export async function createUser(user: UserResource): Promise<UserResource> {
         throw new Error(`Es gab einen Fehler: ${error}`)
     }
 }
+
+export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
+    try {
+
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/fahrt/user/fahrt/bearbeiten/${fahrt.id}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fahrt)
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}

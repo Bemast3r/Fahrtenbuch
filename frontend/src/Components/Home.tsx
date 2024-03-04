@@ -1,24 +1,28 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import React, { useEffect } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import "./home.css";
-import { useEffect } from 'react';
-import { getJWT, setJWT } from './Logincontext';
+import { getJWT, removeJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-
-    const jwt = getJWT()
-    const navigate = useNavigate()
+    const jwt = getJWT();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (jwt) {
-            setJWT(jwt)
+        if (!jwt) {
+            navigate("/");
         } else {
-            navigate("/")
-            return;
+            setJWT(jwt);
         }
-    }, [jwt])
+    }, [jwt, navigate]);
 
+    const handleAbmelden = () => {
+        const confirmAbmeldung = window.confirm("Möchten Sie sich wirklich abmelden?");
+        if (confirmAbmeldung) {
+            removeJWT();
+            navigate("/");
+        }
+    };
 
     return (
         <div className="form-wrapper2">
@@ -28,10 +32,10 @@ const Home = () => {
             </div>
             <div className="form-container">
                 <Form>
-                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/create") }}>
+                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/create")}>
                         Fahrt erstellen
                     </Button>
-                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/verwalten") }}>
+                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/verwalten")}>
                         Fahrt verwalten
                     </Button>
                     <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/user-erstellen") }}>
