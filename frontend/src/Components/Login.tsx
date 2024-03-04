@@ -4,6 +4,7 @@ import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
 import { getJWT, setJWT } from "./Logincontext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
     const [inputUsername, setInputUsername] = useState("");

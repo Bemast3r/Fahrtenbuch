@@ -162,3 +162,32 @@ export async function passwortZuruecksetzen(token: string, password: string) {
         throw new Error(`Es gab einen Fehler: ${error}`);
     }
 }
+
+export async function createUser(user: UserResource): Promise<UserResource> {
+    try {
+        if (!user) {
+            throw new Error("user not defined");
+        }
+        const jwt2 = getJWT();
+        if (!jwt2) {
+            throw new Error("no jwt found");
+        }
+        const response = await fetch(`http://localhost:5000/api/user/admin/user-erstellen`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: UserResource = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}

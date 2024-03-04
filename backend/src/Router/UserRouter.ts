@@ -54,7 +54,7 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
 /**
  * Erstellt einen Benutzer 
  */
-userRouter.post("/admin/user/erstellen", requiresAuthentication,
+userRouter.post("/admin/user-erstellen", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
