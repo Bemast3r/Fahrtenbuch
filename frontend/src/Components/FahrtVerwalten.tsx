@@ -15,7 +15,6 @@ interface TimeRecord {
 
 const FahrtVerwalten: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
   const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false);
   const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false);
   const [isRecordingPause, setIsRecordingPause] = useState<boolean>(false);
@@ -29,14 +28,31 @@ const FahrtVerwalten: React.FC = () => {
   const [lenkzeitRecord, setLenkzeitRecord] = useState<TimeRecord | null>(null);
   const [arbeitszeitRecord, setArbeitszeitRecord] = useState<TimeRecord | null>(null);
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
-  const [totalLenkzeit, setTotalLenkzeit] = useState<number>(0);
-  const [totalArbeitszeit, setTotalArbeitszeit] = useState<number>(0);
-  const [totalPause, setTotalPause] = useState<number>(0);
+  const [showMoreLenkzeit, setShowMoreLenkzeit] = useState<boolean>(false);
+  const [showMoreArbeitszeit, setShowMoreArbeitszeit] = useState<boolean>(false);
+  const [showMorePause, setShowMorePause] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(true);
+
   const navigate = useNavigate();
 
   const jwt = getJWT();
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const usercontexte = useContext(UserContext);
+
+
+  let currentLenkzeit = (calculateTotalLenkzeitDifference(letzteFahrt?.lenkzeit))
+  let currentArbeitszeit = (calculateTotalLenkzeitDifference(letzteFahrt?.arbeitszeit))
+  let currentPause = (calculateTotalLenkzeitDifference(letzteFahrt?.pause))
+
+  useEffect(() => {
+    if (letzteFahrt && show) {
+      setElapsedTimeLenkzeit(calculateTotalLenkzeitDifference(letzteFahrt.lenkzeit));
+      setElapsedTimeArbeitszeit(calculateTotalLenkzeitDifference(letzteFahrt.arbeitszeit));
+      setElapsedTimePause(calculateTotalLenkzeitDifference(letzteFahrt.pause));
+      setShow(false)
+    }
+  }, [letzteFahrt]);
+
 
   function calculateTotalTime(): number {
     return elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause;
@@ -53,19 +69,19 @@ const FahrtVerwalten: React.FC = () => {
 
 
   useEffect(() => {
-    if (localStorage.getItem("lenkzeit") == "Keine Daten" && lenkzeitRecord?.start && lenkzeitRecord.stop === null ) {
+    if (localStorage.getItem("lenkzeit") == "Keine Daten" && lenkzeitRecord?.start && lenkzeitRecord.stop === null) {
       localStorage.setItem("lenkzeit", lenkzeitRecord.start.toString())
-    }else{
+    } else {
       localStorage.setItem("lenkzeit", "Keine Daten")
     }
     if (localStorage.getItem("arbeitszeit") == "Keine Daten" && arbeitszeitRecord?.start && arbeitszeitRecord.stop === null) {
       localStorage.setItem("arbeitszeit", arbeitszeitRecord.start.toString())
-    }else{
+    } else {
       localStorage.setItem("arbeitszeit", "Keine Daten")
     }
     if (localStorage.getItem("pause") == "Keine Daten" && pauseRecord?.start && pauseRecord.stop === null) {
       localStorage.setItem("pause", pauseRecord?.start.toString() || "Keine Daten")
-    }else{
+    } else {
       localStorage.setItem("pause", "Keine Daten")
 
     }
@@ -120,7 +136,7 @@ const FahrtVerwalten: React.FC = () => {
       }
       setIsRecordingLenkzeit(false);
     }
-    if (isRecordingArbeitszeit) {
+    else if (isRecordingArbeitszeit) {
       const lastRecord = arbeitszeitRecord;
       if (lastRecord && lastRecord.stop === null) {
         lastRecord.stop = new Date();
@@ -131,7 +147,7 @@ const FahrtVerwalten: React.FC = () => {
       }
       setIsRecordingArbeitszeit(false);
     }
-    if (isRecordingPause) {
+    else if (isRecordingPause) {
       const lastRecord = pauseRecord;
       if (lastRecord && lastRecord.stop === null) {
         lastRecord.stop = new Date();
@@ -142,10 +158,8 @@ const FahrtVerwalten: React.FC = () => {
       }
       setIsRecordingPause(false);
     }
+
   }
-
-
-
 
 
   async function handlePostArbeitszeit() {
@@ -165,6 +179,7 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
+  
   async function handlePostPause() {
     if (usercontexte[0].id && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
@@ -271,9 +286,26 @@ const FahrtVerwalten: React.FC = () => {
     setIsRecordingPause(!isRecordingPause);
   }
 
+  function calculateTotalLenkzeitDifference(lenkzeitRecords: TimeRecord[] | undefined): number {
+    if (!lenkzeitRecords) return 0;
+
+    let totalDifference = 0;
+
+    lenkzeitRecords.forEach((record) => {
+      if (record.stop) {
+        const differenceInSeconds = Math.floor(Math.abs(new Date(record.stop).getTime() - new Date(record.start).getTime()) / 1000);
+        totalDifference += differenceInSeconds;
+      }
+    });
+
+    return totalDifference;
+  }
+
+
 
   function formatTime(seconds: number): string {
-    const hours = Math.floor(seconds / 3600);
+    let hours = Math.floor(seconds / 3600);
+    hours = Math.floor(hours/ 1000)
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
     return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
@@ -317,15 +349,10 @@ const FahrtVerwalten: React.FC = () => {
                 <div className="elapsed-time">
                   Verbrachte Lenkzeit: {formatTime(elapsedTimeLenkzeit)}
                 </div>
-                {lenkzeitRecord && (
-                  <div >
-                    {lenkzeitRecord.start.toLocaleString()} - {lenkzeitRecord.stop ? lenkzeitRecord.stop.toLocaleString() : "Recording..."}
-                  </div>
-                )}
 
                 {letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0 && (
                   <div className="dates">
-                    {letzteFahrt.lenkzeit.map((Zeiten, index) => {
+                    {letzteFahrt.lenkzeit.slice().reverse().map((Zeiten, index) => {
                       return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
                     })}
                   </div>
@@ -340,7 +367,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 {letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0 && (
                   <div className="dates">
-                    {letzteFahrt.arbeitszeit.map((Zeiten, index) => {
+                    {letzteFahrt.arbeitszeit.slice().reverse().map((Zeiten, index) => {
                       return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
                     })}
                   </div>
@@ -355,7 +382,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 {letzteFahrt.pause && letzteFahrt.pause.length > 0 && (
                   <div className="dates">
-                    {letzteFahrt.pause.map((Zeiten, index) => {
+                    {letzteFahrt.pause.slice().reverse().map((Zeiten, index) => {
                       return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
                     })}
                   </div>
@@ -366,11 +393,11 @@ const FahrtVerwalten: React.FC = () => {
                   <Button variant="danger" onClick={handleEnde} >Fahrt beenden</Button>
                 </div>
                 <div>
-                  {/* Anzeige der Gesamtzeiten */}
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
                   Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
                   Gesamt Pause: {formatTime(elapsedTimePause)} <br />
-                  Insgesamte Zeit ist: {formatTime(calculateTotalTime())}
+                  Ruhezeit:{formatTime(86400000 - calculateTotalTime())} <br />
+                  Insgesamte Zeit ist: {formatTime((elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause))}
                 </div>
 
               </div>
