@@ -15,7 +15,8 @@ export type UserResource = {
 }
 
 export type FahrtResource = {
-    id?: string
+    _id?:string
+    id?:string
     fahrerid: string; // ID des Fahrers
     kennzeichen: string; // Kennzeichen des Fahrzeugs
     kilometerstand: number;

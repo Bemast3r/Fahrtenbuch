@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../Api/api';
-import { FahrtResource } from '../util/Resources';
+import { FahrtResource, UserResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
 import { UserContext } from './UserContext';
 import { Button } from 'react-bootstrap';
@@ -32,17 +32,14 @@ const FahrtVerwalten: React.FC = () => {
   const [showMoreArbeitszeit, setShowMoreArbeitszeit] = useState<boolean>(false);
   const [showMorePause, setShowMorePause] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(true);
-
-  const navigate = useNavigate();
-
-  const jwt = getJWT();
+  const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
-  const usercontexte = useContext(UserContext);
+  const navigate = useNavigate();
+  const jwt = getJWT();
 
-
-  let currentLenkzeit = (calculateTotalLenkzeitDifference(letzteFahrt?.lenkzeit))
-  let currentArbeitszeit = (calculateTotalLenkzeitDifference(letzteFahrt?.arbeitszeit))
-  let currentPause = (calculateTotalLenkzeitDifference(letzteFahrt?.pause))
+  // let currentLenkzeit = (calculateTotalLenkzeitDifference(letzteFahrt?.lenkzeit))
+  // let currentArbeitszeit = (calculateTotalLenkzeitDifference(letzteFahrt?.arbeitszeit))
+  // let currentPause = (calculateTotalLenkzeitDifference(letzteFahrt?.pause))
 
   useEffect(() => {
     if (letzteFahrt && show) {
@@ -51,7 +48,7 @@ const FahrtVerwalten: React.FC = () => {
       setElapsedTimePause(calculateTotalLenkzeitDifference(letzteFahrt.pause));
       setShow(false)
     }
-  }, [letzteFahrt]);
+  }, [letzteFahrt, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause]);
 
 
   function calculateTotalTime(): number {
@@ -89,7 +86,7 @@ const FahrtVerwalten: React.FC = () => {
   }, [arbeitszeitRecord, lenkzeitRecord, pauseRecord])
 
   useEffect(() => {
-    if (usercontexte && usercontexte.length > 0 && usercontexte[0]) {
+    if (usercontexte) {
       setLoading(false);
     }
 
@@ -108,13 +105,12 @@ const FahrtVerwalten: React.FC = () => {
   }, [usercontexte]);
 
   async function last() {
-    const id = getLoginInfo();
-    if (!id!.userID) {
-      throw new Error("Ups hier ist was falsch gelaufen.");
-    }
-    const x: FahrtResource[] = await getFahrt(id!.userID);
-    setLetzteFahrt(x[x.length - 1]);
-    setLoading(false);
+      const id = getLoginInfo()
+      const user = await getUser(id!.userID)
+      setUser(user)
+      setLoading(false)
+      const x: FahrtResource[] = await getFahrt(id!.userID);
+      setLetzteFahrt(x[x.length - 1]);
   }
 
   useEffect(() => { last() }, []);
@@ -163,9 +159,9 @@ const FahrtVerwalten: React.FC = () => {
 
 
   async function handlePostArbeitszeit() {
-    if (usercontexte[0].id && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
+    if (usercontexte && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
-        fahrerid: usercontexte[0].id!,
+        fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
@@ -181,9 +177,9 @@ const FahrtVerwalten: React.FC = () => {
 
 
   async function handlePostPause() {
-    if (usercontexte[0].id && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
+    if (usercontexte && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
-        fahrerid: usercontexte[0].id!,
+        fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
@@ -198,9 +194,9 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handlePostLenkzeit() {
-    if (usercontexte[0].id && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
+    if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
-        fahrerid: usercontexte[0].id!,
+        fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
@@ -215,9 +211,9 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handleEndePost() {
-    if (usercontexte[0].id && letzteFahrt) {
+    if (usercontexte && letzteFahrt) {
       const fahrtResource: FahrtResource = {
-        fahrerid: usercontexte[0].id!,
+        fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
@@ -357,7 +353,7 @@ const FahrtVerwalten: React.FC = () => {
         <Loading />
       ) : (
         <div className="container">
-          <h3>Hallo {usercontexte && usercontexte[0]?.name ? usercontexte[0].name : <Loading></Loading>}.</h3>
+          <h3>Hallo {usercontexte && usercontexte.name ? usercontexte.name : <Loading></Loading>}.</h3>
           {letzteFahrt && !letzteFahrt.beendet ? (
             <>
               <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
