@@ -117,7 +117,7 @@ const FahrtVerwalten: React.FC = () => {
     setLoading(false);
   }
 
-  useEffect(() => { last() }, [letzteFahrt]);
+  useEffect(() => { last() }, []);
 
 
   function stopRunningTimer() {
@@ -179,7 +179,7 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-  
+
   async function handlePostPause() {
     if (usercontexte[0].id && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
@@ -213,6 +213,28 @@ const FahrtVerwalten: React.FC = () => {
       setLetzteFahrt(fahrt);
     }
   }
+
+  async function handleEndePost() {
+    if (usercontexte[0].id && letzteFahrt) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte[0].id!,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        lenkzeit: lenkzeitRecord ? [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }] : [],
+        pause: pauseRecord ? [{ start: pauseRecord.start, stop: pauseRecord.stop! }] : [],
+        arbeitszeit: arbeitszeitRecord ? [{ start: arbeitszeitRecord.start, stop: arbeitszeitRecord.stop! }] : [],
+        beendet: true,
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      console.log("DRIN")
+      setLetzteFahrt(fahrt);
+    }
+  }
+
+
 
   function toggleRecordingLenkzeit() {
     stopRunningTimer();
@@ -305,17 +327,17 @@ const FahrtVerwalten: React.FC = () => {
 
   function formatTime(seconds: number): string {
     let hours = Math.floor(seconds / 3600);
-    hours = Math.floor(hours/ 1000)
+    hours = Math.floor(hours / 1000)
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
     return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
   }
 
-  function handleEnde() {
+  async function handleEnde() {
     const confirmEnde = window.confirm("Wollen Sie wirklich die Fahrt beenden?");
     if (confirmEnde) {
       stopRunningTimer()
-      navigate("/home")
+      await handleEndePost()
     } else {
       return;
     }
@@ -390,7 +412,7 @@ const FahrtVerwalten: React.FC = () => {
               </div>
               <div className="section">
                 <div className="button-group">
-                  <Button variant="danger" onClick={handleEnde} >Fahrt beenden</Button>
+                  <Button variant="danger" onClick={() => { handleEnde() }} >Fahrt beenden</Button>
                 </div>
                 <div>
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
