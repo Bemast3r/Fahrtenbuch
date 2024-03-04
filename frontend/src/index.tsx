@@ -6,53 +6,26 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './Components/Login';
 import Home from './Components/Home';
 import Loading from './Components/LoadingIndicator';
-import FahrtErstellen from './Components/FahrtErstellen';
 import FahrtVerwalten from './Components/FahrtVerwalten';
-import Contexte from './Components/Contexte';
-import { getUser } from './Api/api';
-import { LoginContext, getLoginInfo } from './Components/Logincontext';
-import { FahrtResource, UserResource } from './util/Resources';
-import { UserContext } from './Components/UserContext';
-import { FahrtContext } from './Components/FahrtenContext/FahrtContext';
-
-const App = () => {
-  const [loginInfo, setLoginInfo] = useState(getLoginInfo());
-  const [userInfo, setUserInfo] = useState<UserResource | null>(null);
-  const [fahrten, setFahrten] = useState<FahrtResource[]>([])
-
-
-  useEffect(() => {
-    async function getUserData() {
-      if (!loginInfo) return;
-      try {
-        setUserInfo(await getUser(loginInfo.userID));
-      } catch (error) { }
-    }
-    getUserData();
-  }, [loginInfo]);
-
-  return (
-    <UserContext.Provider value={[userInfo, setUserInfo]}>
-      <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
-      <FahrtContext.Provider value={{ fahrten, setFahrten }}>
-        <React.StrictMode>
-            <Router>
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="home" element={<Home />} />
-                <Route path="create" element={<FahrtErstellen />} />
-                <Route path="verwalten" element={<FahrtVerwalten />} />
-                <Route path="test" element={<Contexte />} />
-              </Routes>
-            </Router>
-        </React.StrictMode>
-        </FahrtContext.Provider>
-      </LoginContext.Provider>
-    </UserContext.Provider>
-  );
-}
+import FahrtErstellen from './Components/FahrtErstellen';
+import PasswortVergessen from './Components/PasswortVergessen';
+import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
+import AdminFormular from './Components/AdminPanel';
 
 ReactDOM.render(
-  <App />,
+  <React.StrictMode>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="home" element={<Home />} />
+        <Route path="test" element={<Loading />} />
+        <Route path="create" element={<FahrtErstellen />} />
+        <Route path="verwalten" element={<FahrtVerwalten />} />
+        <Route path="passwort-vergessen" element={<PasswortVergessen />} />
+        <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
+        <Route path="user-erstellen" element={<AdminFormular />} />
+      </Routes>
+    </Router>
+  </React.StrictMode>,
   document.getElementById("root")
 );
