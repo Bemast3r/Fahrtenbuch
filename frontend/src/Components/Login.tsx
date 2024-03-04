@@ -1,12 +1,9 @@
-import "./login.css";
-import 'boxicons/css/boxicons.min.css';
-
 import { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
 import { getJWT, setJWT } from "./Logincontext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Login = () => {
     const [inputUsername, setInputUsername] = useState("");
@@ -14,9 +11,10 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordIcon, setShowPasswordIcon] = useState(false);
     const [error, setError] = useState("");
-    const [show, setShow] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const jwt = getJWT();
 
@@ -29,6 +27,16 @@ const Login = () => {
         }
     }, [jwt, navigate]);
 
+    useEffect(() => {
+        if (location.state && location.state.confirmationMessage) {
+            setShowConfirmation(true);
+        }
+    }, [location.state]);
+
+    const handleCloseConfirmation = () => {
+        setShowConfirmation(false);
+    };
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
@@ -37,24 +45,30 @@ const Login = () => {
             setJWT(jwt.access_token);
             navigate("/home");
         } catch (error: any) {
-            setShow(true);
             setError("Ihre Anmeldeinformationen sind falsch. Bitte versuchen Sie es erneut.");
         }
         setLoading(false);
     };
 
-    const handlePassword = () => { };
-
     const handlePasswordInputChange = (e: any) => {
         setInputPassword(e.target.value);
-        setShowPasswordIcon(e.target.value.length > 0); // Setze showPasswordIcon auf true, wenn das Passwortfeld nicht leer ist
+        setShowPasswordIcon(e.target.value.length > 0);
     };
 
     return (
         <div className="login-container">
             <Form className="login-form" onSubmit={handleSubmit}>
                 <h1 className="login-title">Login</h1>
-
+                {showConfirmation && (
+                    <Alert className="login-confirmation-message" variant="success" onClose={handleCloseConfirmation} dismissible>
+                        {location.state.confirmationMessage}
+                    </Alert>
+                )}
+                {error && (
+                    <Alert className="login-error-message" variant="danger">
+                        {error}
+                    </Alert>
+                )}
                 <div className="login-input-box">
                     <i className='bx bxs-user'></i>
                     <input type="text" value={inputUsername} placeholder="Nutzername" onChange={(e) => setInputUsername(e.target.value)} required />
@@ -77,17 +91,6 @@ const Login = () => {
                 <Button className="login-btn" variant="primary" type="submit">
                     {loading ? <Loading /> : "Anmelden"}
                 </Button>
-
-                {show && (
-                    <Alert
-                        className="login-error-message"
-                        variant="danger"
-                        onClose={() => setShow(false)}
-                        dismissible
-                    >
-                        {error}
-                    </Alert>
-                )}
             </Form>
 
             {/* Footer */}

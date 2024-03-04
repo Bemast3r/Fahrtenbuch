@@ -1,39 +1,22 @@
-import "./login.css";
-import 'boxicons/css/boxicons.min.css';
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
-import { getJWT, setJWT } from "./Logincontext";
-import { useNavigate } from "react-router-dom";
 import { passwortVergessen } from "../Api/api";
+import { useNavigate } from "react-router-dom";
 
 const PasswortVergessen = () => {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [show, setShow] = useState(false);
     const navigate = useNavigate();
-
-    const jwt = getJWT();
-
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt);
-            navigate("/home");
-        } else {
-            return;
-        }
-    }, [jwt, navigate]);
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
         try {
             await passwortVergessen(email);
-            navigate("/");
+            navigate("/", { state: { confirmationMessage: "Eine E-Mail-Adresse für das Zurücksetzen des Passwortes wurde erfolgreich versendet." } });
         } catch (error: any) {
-            setShow(true);
             setError("Die eingegebene E-Mail-Adresse ist mit keinem Konto verknüpft.");
         }
         setLoading(false);
@@ -53,13 +36,8 @@ const PasswortVergessen = () => {
                     {loading ? <Loading /> : "Senden"}
                 </Button>
 
-                {show && (
-                    <Alert
-                        className="login-error-message"
-                        variant="danger"
-                        onClose={() => setShow(false)}
-                        dismissible
-                    >
+                {error && (
+                    <Alert className="login-error-message" variant="danger">
                         {error}
                     </Alert>
                 )}

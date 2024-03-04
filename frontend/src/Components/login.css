@@ -153,9 +153,19 @@ body {
     text-align: center;
 }
 
-/* Box bei falschen Anmeldedaten */
+/* Box bei falschen oder richtigen Anmeldedaten */
 
 .login-error-message {
+    position: absolute;
+    bottom: calc(100% + 20px); /* 20px Abstand von der unteren Kante des vorherigen Elements */
+    left: 0;
+    width: 100%;
+    color: #333;
+    font-size: 16px;
+    text-align: center;
+}
+
+.login-success-message {
     position: absolute;
     bottom: calc(100% + 20px); /* 20px Abstand von der unteren Kante des vorherigen Elements */
     left: 0;
