@@ -34,7 +34,7 @@ export type FahrtResource = {
     }[]; // Arbeiten ohne Fahren
     createdAt?: Date; // Datum der Fahrt
     startpunkt: string
-    beendet?: Boolean
+    beendet?: boolean
 }
 
 
