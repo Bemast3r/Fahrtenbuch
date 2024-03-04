@@ -1,167 +1,365 @@
-// FahrtVerwalten.tsx
-import React, { useEffect, useState } from 'react';
-import './fahrtVerwalten.css'; // Importiere die CSS-Datei
-import { getJWT, setJWT } from './Logincontext';
+import React, { useContext, useEffect, useState } from 'react';
+import './fahrtVerwalten.css';
+import { getJWT, getLoginInfo, setJWT } from './Logincontext';
+import { getUser, getFahrt, updateFahrt } from '../Api/api';
+import { FahrtResource } from '../util/Resources';
+import Loading from './LoadingIndicator';
+import { UserContext } from './UserContext';
+import { Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface LogEntry {
-  action: string;
-  time: Date;
+interface TimeRecord {
+  start: Date;
+  stop: Date | null;
 }
 
 const FahrtVerwalten: React.FC = () => {
-  const [lenkzeit, setLenkzeit] = useState<LogEntry[]>([]); 
-  const [arbeitszeit, setArbeitszeit] = useState<LogEntry[]>([]);
-  const [pausen, setPausen] = useState<LogEntry[]>([]);
-  const [isLenkzeitRunning, setLenkzeitRunning] = useState<boolean>(false);
-  const [isArbeitszeitRunning, setArbeitszeitRunning] = useState<boolean>(false);
-  const [isPausenRunning, setPausenRunning] = useState<boolean>(false);
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [endTime, setEndTime] = useState<Date | null>(null);
-  const [showWorkStarted, setShowWorkStarted] = useState<boolean>(false);
-  const [showTripEnded, setShowTripEnded] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [timeRecords, setTimeRecords] = useState<TimeRecord[]>([]);
+  const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false);
+  const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false);
+  const [isRecordingPause, setIsRecordingPause] = useState<boolean>(false);
+  const [lenktext, setLenkText] = useState<string>('Lenkzeit START');
+  const [arbeitText, setArbeitText] = useState<string>('Arbeitszeit START');
+  const [pauseText, setPauseText] = useState<string>('Pause START');
+  const [elapsedTimeLenkzeit, setElapsedTimeLenkzeit] = useState<number>(0);
+  const [elapsedTimeArbeitszeit, setElapsedTimeArbeitszeit] = useState<number>(0);
+  const [elapsedTimePause, setElapsedTimePause] = useState<number>(0);
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const [lenkzeitRecord, setLenkzeitRecord] = useState<TimeRecord | null>(null);
+  const [arbeitszeitRecord, setArbeitszeitRecord] = useState<TimeRecord | null>(null);
+  const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
+  const [totalLenkzeit, setTotalLenkzeit] = useState<number>(0);
+  const [totalArbeitszeit, setTotalArbeitszeit] = useState<number>(0);
+  const [totalPause, setTotalPause] = useState<number>(0);
+  const navigate = useNavigate();
 
-  const jwt = getJWT()
+  const jwt = getJWT();
+  const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
+  const usercontexte = useContext(UserContext);
 
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt)
-        } else {
-            return;
-        }
-    }, [jwt])
+  function calculateTotalTime(): number {
+    return elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause;
+  }
 
-  const startStopTimer = (
-    isRunning: boolean,
-    setRunning: React.Dispatch<React.SetStateAction<boolean>>,
-    log: LogEntry[],
-    setLog: React.Dispatch<React.SetStateAction<LogEntry[]>>
-  ) => {
-    const action = isRunning ? 'stop' : 'start';
-    const time = new Date();
+  useEffect(() => {
+    if (jwt) {
+      setJWT(jwt);
+    } else {
+      navigate("/")
+      return;
+    }
+  }, [jwt, navigate]);
 
-    if (action === 'start' && log.length === 0) {
-      // Setze den Startzeitpunkt nur beim ersten Start
-      setStartTime(time);
+
+  useEffect(() => {
+    if (usercontexte && usercontexte.length > 0 && usercontexte[0]) {
+      setLoading(false);
     }
 
-    setLog([...log, { action, time }]);
-    setRunning(!isRunning);
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
 
-    if (action === 'stop') {
-      // Setze den Endzeitpunkt nur beim Stop
-      setEndTime(time);
-      setShowTripEnded(true);
-      setShowWorkStarted(false);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [usercontexte]);
+
+  async function last() {
+    const id = getLoginInfo();
+    if (!id!.userID) {
+      throw new Error("Ups hier ist was falsch gelaufen.");
     }
-  };
+    const x: FahrtResource[] = await getFahrt(id!.userID);
+    setLetzteFahrt(x[x.length - 1]);
+    setLoading(false);
+  }
 
-  const calculateTimeDifference = (log: LogEntry[]) => {
-    let totalTime = 0;
-    for (let i = 0; i < log.length; i += 2) {
-      const start = log[i].time;
-      const end = i + 1 < log.length ? log[i + 1].time : new Date();
-      totalTime += (end.getTime() - start.getTime()) as number;
+  useEffect(() => { last() }, [letzteFahrt]);
+
+
+  function stopRunningTimer() {
+    if (timerId) {
+      clearInterval(timerId);
+      setTimerId(null);
     }
-    return totalTime;
-  };
+    if (isRecordingLenkzeit) {
+      const lastRecord = lenkzeitRecord;
+      if (lastRecord && lastRecord.stop === null) {
+        lastRecord.stop = new Date();
+        setLenkzeitRecord(lastRecord);
+        setLenkText('Lenkzeit START');
+        handlePostLenkzeit();
+      }
+      setIsRecordingLenkzeit(false);
+    }
+    if (isRecordingArbeitszeit) {
+      const lastRecord = arbeitszeitRecord;
+      if (lastRecord && lastRecord.stop === null) {
+        lastRecord.stop = new Date();
+        setArbeitszeitRecord(lastRecord);
+        setArbeitText('Arbeitszeit START');
+        handlePostArbeitszeit();
+      }
+      setIsRecordingArbeitszeit(false);
+    }
+    if (isRecordingPause) {
+      const lastRecord = pauseRecord;
+      if (lastRecord && lastRecord.stop === null) {
+        lastRecord.stop = new Date();
+        setPauseRecord(lastRecord);
+        setPauseText('Pause START');
+        handlePostPause();
+      }
+      setIsRecordingPause(false);
+    }
+  }
 
-  const calculateFormattedTime = (log: LogEntry[]) => {
-    const totalMilliseconds = calculateTimeDifference(log);
-    const totalSeconds = Math.floor(totalMilliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  };
 
-  const calculateTotalTime = () => {
-    const totalLenkzeit = calculateTimeDifference(lenkzeit);
-    const totalArbeitszeit = calculateTimeDifference(arbeitszeit);
-    const totalPausenzeit = calculateTimeDifference(pausen);
 
-    const totalMilliseconds = totalLenkzeit + totalArbeitszeit + totalPausenzeit;
-    const totalSeconds = Math.floor(totalMilliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
+  async function handlePostArbeitszeit() {
+    if (usercontexte[0].id && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte[0].id!,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        arbeitszeit: [{ start: arbeitszeitRecord.start, stop: arbeitszeitRecord.stop! }],
+        beendet: false,
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+    }
+  }
 
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  };
+  async function handlePostPause() {
+    if (usercontexte[0].id && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte[0].id!,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        pause: [{ start: pauseRecord.start, stop: pauseRecord.stop! }],
+        beendet: false, // Fahrt als beendet markieren
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+    }
+  }
 
-  const endFahrt = () => {
-    setLenkzeitRunning(false);
-    setArbeitszeitRunning(false);
-    setPausenRunning(false);
-    setEndTime(new Date());
-    setShowWorkStarted(true);
-  };
+  async function handlePostLenkzeit() {
+    if (usercontexte[0].id && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte[0].id!,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        lenkzeit: [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }],
+        // arbeitszeit: letzteFahrt.arbeitszeit!.concat(arbeitszeit),
+        // pause: letzteFahrt.pause!.concat(pausen),
+        beendet: false, // Fahrt als beendet markieren
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+    }
+  }
+
+  function toggleRecordingLenkzeit() {
+    stopRunningTimer();
+    const currentTime = new Date();
+    if (!isRecordingLenkzeit) {
+      setLenkzeitRecord({ start: currentTime, stop: null });
+      setLenkText('Lenkzeit STOP');
+      const timerId = setInterval(() => {
+        setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + 1);
+      }, 1000);
+      setIsRecordingLenkzeit(true);
+      setTimerId(timerId);
+    } else {
+      const lastRecord = lenkzeitRecord;
+      if (lastRecord && lastRecord.stop === null) {
+        lastRecord.stop = currentTime;
+        setLenkzeitRecord(lastRecord);
+        setLenkText('Lenkzeit START');
+        clearInterval(timerId!);
+        handlePostLenkzeit()
+      }
+    }
+    setIsRecordingLenkzeit(!isRecordingLenkzeit);
+  }
+
+  function toggleRecordingArbeit() {
+    stopRunningTimer();
+    const currentTime = new Date();
+    if (!isRecordingArbeitszeit) {
+      setArbeitszeitRecord({ start: currentTime, stop: null });
+      setArbeitText('Arbeitszeit STOP');
+      const timerId = setInterval(() => {
+        setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + 1);
+      }, 1000);
+      setIsRecordingArbeitszeit(true);
+      setTimerId(timerId);
+    } else {
+      const lastRecord = arbeitszeitRecord;
+      if (lastRecord && lastRecord.stop === null) {
+        lastRecord.stop = currentTime;
+        setArbeitszeitRecord(lastRecord);
+        setArbeitText('Arbeitszeit START');
+        clearInterval(timerId!);
+        handlePostLenkzeit()
+      }
+    }
+    setIsRecordingArbeitszeit(!isRecordingArbeitszeit);
+  }
+
+  function toggleRecordingPause() {
+    stopRunningTimer();
+    const currentTime = new Date();
+    if (!isRecordingPause) {
+      setPauseRecord({ start: currentTime, stop: null });
+      setPauseText('Pause STOP');
+      const timerId = setInterval(() => {
+        setElapsedTimePause(prevElapsedTime => prevElapsedTime + 1);
+      }, 1000);
+      setIsRecordingPause(true);
+      setTimerId(timerId);
+    } else {
+      const lastRecord = pauseRecord;
+      if (lastRecord && lastRecord.stop === null) {
+        lastRecord.stop = currentTime;
+        setPauseRecord(lastRecord);
+        setPauseText('Pause START');
+        clearInterval(timerId!);
+        handlePostLenkzeit()
+      }
+    }
+    setIsRecordingPause(!isRecordingPause);
+  }
+
+
+  function formatTime(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+  }
+
+  function handleEnde() {
+    const confirmEnde = window.confirm("Wollen Sie wirklich die Fahrt beenden?");
+    if (confirmEnde) {
+      stopRunningTimer()
+      navigate("/home")
+    } else {
+      return;
+    }
+  }
+
+  function formatDate(date: Date): string {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  }
 
   return (
     <div>
       <h1 className="header">Fahrt Verwalten</h1>
-      <div className="container">
-        <div className="section">
-          <div className="button-group">
-            <button onClick={() => startStopTimer(isLenkzeitRunning, setLenkzeitRunning, lenkzeit, setLenkzeit)}>
-              {isLenkzeitRunning ? 'Lenkzeit stoppen' : 'Lenkzeit starten'}
-            </button>
-          </div>
-          <ul className="log-list">
-            {lenkzeit.map((entry, index) => (
-              <li key={index}>
-                {entry.action} - {entry.time.toLocaleString()}
-              </li>
-            ))}
-          </ul>
-          <p>Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-        </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="container">
+          <h3>Hallo {usercontexte && usercontexte[0]?.name ? usercontexte[0].name : "Kein User"}.</h3>
+          {letzteFahrt && !letzteFahrt.beendet ? (
+            <>
+              <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
+                mit dem Kennzeichen {letzteFahrt ? letzteFahrt.kennzeichen : "Kein Kennzeichen"}.
+              </p>
+              <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
+              <div className="section">
+                <div className="button-group">
+                  <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={toggleRecordingLenkzeit} >{lenktext}</Button>
+                </div>
+                <div className="elapsed-time">
+                  Verbrachte Lenkzeit: {formatTime(elapsedTimeLenkzeit)}
+                </div>
+                {lenkzeitRecord && (
+                  <div>
+                    {lenkzeitRecord.start.toLocaleString()} - {lenkzeitRecord.stop ? lenkzeitRecord.stop.toLocaleString() : "Recording..."}
+                  </div>
+                )}
 
-        <div className="section">
-          <div className="button-group">
-            <button
-              onClick={() => startStopTimer(isArbeitszeitRunning, setArbeitszeitRunning, arbeitszeit, setArbeitszeit)}
-            >
-              {isArbeitszeitRunning ? 'Arbeitszeit stoppen' : 'Arbeitszeit starten'}
-            </button>
-          </div>
-          <ul className="log-list">
-            {arbeitszeit.map((entry, index) => (
-              <li key={index}>
-                {entry.action} - {entry.time.toLocaleString()}
-              </li>
-            ))}
-          </ul>
-          <p>Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-        </div>
+                {letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0 && (
+                  <div className="dates">
+                    {letzteFahrt.lenkzeit.map((Zeiten) => {
+                      return <p>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="section">
+                <div className="button-group">
+                  <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={toggleRecordingArbeit} >{arbeitText}</Button>
+                </div>
+                <div className="elapsed-time">
+                  Verbrachte Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)}
+                </div>
+                {letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0 && (
+                  <div className="dates">
+                    {letzteFahrt.arbeitszeit.map((Zeiten) => {
+                      return <p>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="section">
+                <div className="button-group">
+                  <Button variant={isRecordingPause ? "danger" : "primary"} onClick={toggleRecordingPause} >{pauseText}</Button>
+                </div>
+                <div className="elapsed-time">
+                  Verbrachte Pause: {formatTime(elapsedTimePause)}
+                </div>
+                {letzteFahrt.pause && letzteFahrt.pause.length > 0 && (
+                  <div className="dates">
+                    {letzteFahrt.pause.map((Zeiten) => {
+                      return <p>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="section">
+                <div className="button-group">
+                  <Button variant="danger" onClick={handleEnde} >Fahrt beenden</Button>
+                </div>
+                <div>
+                  {/* Anzeige der Gesamtzeiten */}
+                  Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
+                  Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
+                  Gesamt Pause: {formatTime(elapsedTimePause)} <br />
+                  Insgesamte Zeit ist: {formatTime(calculateTotalTime())}
+                </div>
 
-        <div className="section">
-          <div className="button-group">
-            <button onClick={() => startStopTimer(isPausenRunning, setPausenRunning, pausen, setPausen)}>
-              {isPausenRunning ? 'Pausen stoppen' : 'Pausen starten'}
-            </button>
-          </div>
-          <ul className="log-list">
-            {pausen.map((entry, index) => (
-              <li key={index}>
-                {entry.action} - {entry.time.toLocaleString()}
-              </li>
-            ))}
-          </ul>
-          <p>Pausenzeit: {calculateFormattedTime(pausen)}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
+              <Link to="/create">
+                <Button>Fahrt Erstellen</Button>
+              </Link>
+            </>
+          )}
         </div>
-
-        {showTripEnded && (
-          <div className="section">
-            <div className="button-group">
-              <button onClick={endFahrt}>Fahrt beenden</button>
-            </div>
-            <p className="results">Gesamte Lenkzeit: {calculateFormattedTime(lenkzeit)}</p>
-            <p className="results">Gesamte Arbeitszeit: {calculateFormattedTime(arbeitszeit)}</p>
-            <p className="results">Gesamte Pausenzeit: {calculateFormattedTime(pausen)}</p>
-            {endTime && <p className="results">Fahrt beendet um: {endTime.toLocaleString()}</p>}
-            {showWorkStarted && <p className="results">Arbeit gestartet um: {startTime?.toLocaleString()}</p>}
-            <p className="results">Gesamte Arbeitszeit: {calculateTotalTime()}</p>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

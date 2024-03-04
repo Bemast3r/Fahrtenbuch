@@ -15,6 +15,7 @@ export type UserResource = {
 }
 
 export type FahrtResource = {
+    _id?:string
     id?:string
     fahrerid: string; // ID des Fahrers
     kennzeichen: string; // Kennzeichen des Fahrzeugs
@@ -34,6 +35,7 @@ export type FahrtResource = {
     }[]; // Arbeiten ohne Fahren
     createdAt?: Date; // Datum der Fahrt
     startpunkt: string
+    beendet?: boolean
 }
 
 

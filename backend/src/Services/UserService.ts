@@ -20,7 +20,7 @@ export async function getUser(userid:string) {
     const user = await User.findById(userid).exec();
     // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
     
-    const mapped = await mapUserToResource(user)
+    const mapped = await mapUserToResource(user);
     return mapped
 }
 
@@ -56,7 +56,7 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
     if (userResource.username) user.username = userResource.username;
     if (userResource.password) user.password = userResource.password;
-    if (typeof userResource.abwesend === 'boolean') user.abwesend = userResource.abwesend;
+    if (userResource.abwesend) user.abwesend = userResource.abwesend;
 
     const savedUser = await user.save();
     const mapped = await mapUserToResource(savedUser)
@@ -83,31 +83,6 @@ export async function changeUser(userId: string, updatedUserFields: Partial<User
         return mapped
     } catch (error) {
         throw new Error(`Fehler beim Ändern des Benutzers: ${error.message}`);
-    }
-}
-
-/**
- * Fügt ein weiteres Auto hinzu
- * @param user 
- * @param newCar 
- * @returns 
- */
-export async function changeCar(user: UserResource, newCar: { kennzeichen: string }): Promise<UserResource> {
-    try {
-        const userdb = await User.findById(user.id).exec();
-        if (!userdb) {
-            throw new Error('Benutzer nicht gefunden');
-        }
-        if (!userdb.fahrzeuge) {
-            userdb.fahrzeuge = [];
-        }
-        // Setze das aktuelle Datum und die aktuelle Uhrzeit für das neue Fahrzeug
-        userdb.fahrzeuge.push({ datum: new Date().toLocaleString(), kennzeichen: newCar.kennzeichen });
-        const x = await userdb.save();
-        const mapped = await mapUserToResource(x)
-        return mapped ;
-    } catch (error) {
-        throw new Error(`Fehler beim Ändern des Autos: ${error.message}`);
     }
 }
 

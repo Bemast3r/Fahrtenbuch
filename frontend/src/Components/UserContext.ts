@@ -1,5 +1,4 @@
 import React from "react";
-// import { UserResource } from "../../types/Resources";
 
 export interface UserInfo {
     id: string,
