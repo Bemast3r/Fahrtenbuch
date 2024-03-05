@@ -14,8 +14,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promise<UserResource> {
     const userResource: UserResource = {
         id: user._id.toString(),
+        vorname: user.vorname,
         name: user.name,
-        nachname: user.nachname,
         username: user.username,
         email: user.email,
         admin: user.admin,
@@ -46,12 +46,14 @@ export async function getUsersFromDB(): Promise<UserResource[]> {
 
 export async function createUser(userResource: UserResource): Promise<UserResource> {
     const user = await User.create({
+        vorname: userResource.vorname,
         name: userResource.name,
-        nachname: userResource.nachname,
         username: userResource.username,
         email: userResource.email,
         password: userResource.password,
-        admin: userResource.admin
+        admin: userResource.admin,
+        abwesend: userResource.abwesend,
+        fahrzeuge: userResource.fahrzeuge
     });
 
     if (!user) {
@@ -69,8 +71,8 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (!user) {
         throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
     }
+    if (userResource.vorname) user.vorname = userResource.vorname;
     if (userResource.name) user.name = userResource.name;
-    if (userResource.nachname) user.nachname = userResource.nachname;
     if (userResource.username) user.username = userResource.username;
     if (userResource.email) user.email = userResource.email;
     if (userResource.password) user.password = userResource.password;

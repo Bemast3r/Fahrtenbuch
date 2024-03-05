@@ -215,7 +215,7 @@ export async function passwortZuruecksetzen(token: string, password: string) {
     }
 }
 
-export async function createUser(user: UserResource): Promise<UserResource> {
+export async function createUserWithAdmin(user: UserResource): Promise<UserResource> {
     try {
         if (!user) {
             throw new Error("user not defined");
@@ -227,19 +227,17 @@ export async function createUser(user: UserResource): Promise<UserResource> {
         const response = await fetch("http://localhost:5000/api/user/admin/user-erstellen", {
             method: "POST",
             headers: {
-                "Authorization": "Bearer ${jwt2}",
+                "Authorization": `Bearer ${jwt2}`,
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify(user) // Send user data in request body
         });
-        if (!response || !response.ok) {
-            throw new Error("Netzwerkfehler, versuche es erneut.")
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
         }
         const result: UserResource = await response.json();
-        if (!result) {
-            throw new Error("Result ist nicht ok.")
-        }
-        return result
+        return result;
     } catch (error) {
-        throw new Error("Es gab einen Fehler: ${error}")
+        throw new Error(`Es gab einen Fehler: ${error}`);
     }
 }

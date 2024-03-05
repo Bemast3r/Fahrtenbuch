@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config()
+
 import { JwtPayload , sign, verify } from "jsonwebtoken";
-
 import { login } from "./AuthenticationService";
-
 
 const mongoUrl = process.env.MONGO_URL;
 const jwtSecret = process.env.JWT_SECRET;
