@@ -76,11 +76,8 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (userResource.username) user.username = userResource.username;
     if (userResource.email) user.email = userResource.email;
     if (userResource.password) user.password = userResource.password;
-<<<<<<< HEAD
     if (userResource.fahrzeuge) user.fahrzeuge = userResource.fahrzeuge;
-=======
     if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
->>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
     if (userResource.abwesend) user.abwesend = userResource.abwesend;
 
     const savedUser = await user.save();
@@ -110,8 +107,6 @@ export async function changeUser(userId: string, updatedUserFields: Partial<User
     }
 }
 
-<<<<<<< HEAD
-=======
 export async function sendEmail(email: string): Promise<void> {
     try {
         const user = await User.findOne({ email }).exec();
@@ -153,7 +148,6 @@ export async function sendPasswortZurücksetzen(token: string, newPassword: stri
     }
 }
 
->>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
 export async function deleteUser(userId: string): Promise<void> {
     try {
         await User.findByIdAndDelete(userId);

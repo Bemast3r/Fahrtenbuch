@@ -1,9 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-<<<<<<< HEAD
-import { createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "../Services/UserService";
-=======
 import { createUser, deleteUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
->>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
 import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -88,8 +84,6 @@ userRouter.post("/admin/user-erstellen", requiresAuthentication,
 );
 
 /**
-<<<<<<< HEAD
-=======
  * Wenn Nutzer Passwort vergisst bekommt er eine E-Mail
  */
 userRouter.post("/passwort-vergessen",
@@ -140,7 +134,6 @@ userRouter.post("/passwort-zuruecksetzen/:token",
 );
 
 /**
->>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
  * Ändere einen User.
  */
 userRouter.put("/admin/user/aendern", requiresAuthentication,
