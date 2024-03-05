@@ -64,7 +64,7 @@ test("Fahrzeuge", async () => {
     username: "testuser",
     password: "test123",
     fahrzeuge: expectedFahrzeuge,
-    abwesend: false
+    abwesend: "false"
   });
 
   // Access the fahrzeuge array from the user object
@@ -86,7 +86,7 @@ test("isPasswordCorrect test", async () => {
     name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [
       { datum: new Date(), kennzeichen: "ABC123" },
       { datum: new Date(), kennzeichen: "XYZ789" }
-    ], abwesend: false
+    ], abwesend: "false"
   });
   
   // Modify the user
@@ -101,7 +101,7 @@ test("isPasswordCorrect test", async () => {
     name: "Test", nachname: "User", username: "testuser", password: "test123", fahrzeuge: [
       { datum: new Date(), kennzeichen: "ABC123" },
       { datum: new Date(), kennzeichen: "XYZ789" }
-    ], abwesend: false
+    ], abwesend: "false"
   });
   
   // Modify the user

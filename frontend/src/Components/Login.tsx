@@ -1,122 +1,105 @@
 import { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import "./login.css";
 import Loading from "./LoadingIndicator";
 import { login } from "../Api/api";
 import { getJWT, setJWT } from "./Logincontext";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
     const [inputUsername, setInputUsername] = useState("");
     const [inputPassword, setInputPassword] = useState("");
-    const [error, setError] = useState("")
-    const [show, setShow] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordIcon, setShowPasswordIcon] = useState(false);
+    const [error, setError] = useState("");
+    const [showConfirmation, setShowConfirmation] = useState(false);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
 
-
-    const jwt = getJWT()
+    const jwt = getJWT();
 
     useEffect(() => {
         if (jwt) {
-            setJWT(jwt)
-            navigate("/home")
+            setJWT(jwt);
+            navigate("/home");
         } else {
             return;
         }
-    }, [jwt])
+    }, [jwt, navigate]);
+
+    useEffect(() => {
+        if (location.state && location.state.confirmationMessage) {
+            setShowConfirmation(true);
+        }
+    }, [location.state]);
+
+    const handleCloseConfirmation = () => {
+        setShowConfirmation(false);
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
         try {
-            const jwt = await login({ username: inputUsername, password: inputPassword })
-            setJWT(jwt.access_token)
-            navigate("/home") // User wird redirected nachdem Login
+            const jwt = await login({ username: inputUsername, password: inputPassword });
+            setJWT(jwt.access_token);
+            navigate("/home");
         } catch (error: any) {
-            setShow(true)
-            setError(error.toString())
+            setError("Ihre Anmeldeinformationen sind falsch. Bitte versuchen Sie es erneut.");
         }
         setLoading(false);
     };
 
-    const handlePassword = () => { };
+    const handlePasswordInputChange = (e: any) => {
+        setInputPassword(e.target.value);
+        setShowPasswordIcon(e.target.value.length > 0);
+    };
 
     return (
-        <div
-            className="sign-in__wrapper"
-            style={{}}
-        >
-            {/* Overlay */}
-            <div className="sign-in__backdrop"></div>
-            {/* Form */}
-            <Form className="shadow p-4 bg-white rounded" onSubmit={handleSubmit}>
-                {/* Header */}
-                {/* <img
-                    className="img-thumbnail mx-auto d-block mb-2"
-                    src={Logo}
-                    alt="logo"
-                /> */}
-                <div className="h4 mb-2 text-center">SKM - Fahrtenbuch</div>
-                <div className="h4 mb-2 text-center">Anmelden</div>
-                {/* ALert */}
-                {show ? (
-                    <Alert
-                        className="mb-2"
-                        variant="danger"
-                        onClose={() => setShow(false)}
-                        dismissible
-                    >
+        <div className="login-page">
+        <div className="login-container">
+            <Form className="login-form" onSubmit={handleSubmit}>
+                <h1 className="login-title">Login</h1>
+                {showConfirmation && (
+                    <Alert className="login-confirmation-message" variant="success" onClose={handleCloseConfirmation} dismissible>
+                        {location.state.confirmationMessage}
+                    </Alert>
+                )}
+                {error && (
+                    <Alert className="login-error-message" variant="danger">
                         {error}
                     </Alert>
-                ) : (
-                    <div />
                 )}
-                <Form.Group className="mb-2" controlId="username">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={inputUsername}
-                        placeholder="Username"
-                        onChange={(e) => setInputUsername(e.target.value)}
-                        required
-                    />
-                </Form.Group>
-                <Form.Group className="mb-2" controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={inputPassword}
-                        placeholder="Password"
-                        onChange={(e) => setInputPassword(e.target.value)}
-                        required
-                    />
-                </Form.Group>
-                {/* <Form.Group className="mb-2" controlId="checkbox">
-                    <Form.Check type="checkbox" label="Remember me" />
-                </Form.Group> */}
-                {!loading ? (
-                    <Button className="w-100" variant="primary" type="submit">
-                        Log In
-                    </Button>
-                ) : (
-                    <Loading />
-                )}
-                <div className="d-grid justify-content-end">
-                    <Button
-                        className="text-muted px-0"
-                        variant="link"
-                        onClick={handlePassword}
-                    >
-                        Forgot password?
-                    </Button>
+                <div className="login-input-box">
+                    <i className='bx bxs-user'></i>
+                    <input type="text" value={inputUsername} placeholder="Nutzername" onChange={(e) => setInputUsername(e.target.value)} required />
                 </div>
+
+                <div className="login-input-box password">
+                    <i className='bx bxs-lock-alt'></i>
+                    <input type={showPassword ? "text" : "password"} value={inputPassword} placeholder="Passwort" onChange={handlePasswordInputChange} required />
+                    {showPasswordIcon && (
+                        <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <i className='bx bx-hide'></i> : <i className='bx bx-show'></i>}
+                        </button>
+                    )}
+                </div>
+
+                <div className="login-remember-password">
+                    <Link to="passwort-vergessen">Passwort vergessen?</Link>
+                </div>
+
+                <Button className="login-btn" variant="primary" type="submit">
+                    {loading ? <Loading /> : "Anmelden"}
+                </Button>
             </Form>
+
             {/* Footer */}
-            <div className="w-100 mb-2 position-absolute bottom-0 start-50 translate-middle-x text-white text-center">
-                ESKM | &copy;2024
+            <div className="login-footer">
+                SKM | &copy;2024
             </div>
+        </div>
         </div>
     );
 };

@@ -55,7 +55,8 @@ describe("createUserFahrt Tests", () => {
             kilometerende: 300,
             lenkzeit: 7,
             arbeitszeit: 9,
-            pause: 1
+            pause: 1,
+            startpunkt: "Berlin"
         };
         const savedFahrt = await createUserFahrt(fahrtResource);
         expect(savedFahrt).toBeDefined();

@@ -26,15 +26,13 @@ export function getLoginInfo(): LoginInfo | null {
         return null;
     }
 
-    if (!userID || !role)
+    if (!userID || !role){
         return null;
-
+    }
     return { userID: userID, role: role };
 }
 
 export function setJWT(jwt: string): void {
-    if (!jwt)
-        throw new Error("Invalid JWT");
     localStorage.setItem(JWT_NAME, jwt);
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,6 +7,9 @@ import Login from './Components/Login';
 import Home from './Components/Home';
 import Loading from './Components/LoadingIndicator';
 import FahrtVerwalten from './Components/FahrtVerwalten';
+import PasswortVergessen from './Components/PasswortVergessen';
+import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
+import AdminFormular from './Components/AdminPanel';
 import FahrtErstellen from './Components/Fahrterstellen';
 
 
@@ -19,6 +22,9 @@ ReactDOM.render(
         <Route path="test" element={<Loading />} />
         <Route path="create" element={<FahrtErstellen />} />
         <Route path="verwalten" element={<FahrtVerwalten />} />
+        <Route path="passwort-vergessen" element={<PasswortVergessen />} />
+        <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
+        <Route path="user-erstellen" element={<AdminFormular />} />
       </Routes>
     </Router>
   </React.StrictMode>,

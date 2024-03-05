@@ -1,3 +1,4 @@
+process.env.TZ = 'Europe/Berlin';
 import express from "express";
 import http from "http";
 import bodyParser from "body-parser";
@@ -7,6 +8,7 @@ import dotenv from "dotenv";
 import userRouter from "./Router/UserRouter";
 import fahrrouter from "./Router/FahrtRouter";
 import loginRouter from "./Login/LoginRouter";
+import moment from "moment-timezone";
 dotenv.config();
 
 const PORT: number = 5000
@@ -47,3 +49,7 @@ const MONGOURL = process.env.MONGO_URL
 mongoose.Promise = Promise;
 mongoose.connect(MONGOURL)
 mongoose.connection.on("error", (error: Error) => console.log(error));
+mongoose.connection.once("open", () => {
+    console.log("Erfolgreich mit der Datenbank verbunden!");
+});
+moment.tz.setDefault("Europe/Berlin");

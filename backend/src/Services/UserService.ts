@@ -1,13 +1,23 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { UserResource } from "../db/Resources";
 import { IUser, User } from "../db/UserModel";
 import { Types } from "mongoose"
+import { hash } from "bcryptjs";
+
+import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promise<UserResource> {
     const userResource: UserResource = {
         id: user._id.toString(),
+        vorname: user.vorname,
         name: user.name,
-        nachname: user.nachname,
         username: user.username,
+        email: user.email,
         admin: user.admin,
         createdAt: user.createdAt,
         fahrzeuge: user.fahrzeuge,
@@ -18,27 +28,37 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
 
 export async function getUser(userid: string) {
     const user = await User.findById(userid).exec();
-    // Überprüfe, ob der Benutzer gefunden und aktualisiert wurde
-    
-    const mapped = await mapUserToResource(user)
+    if (!user) {
+        throw new Error(`Kein User mit ID ${userid} gefunden.`);
+    }
+    const mapped = await mapUserToResource(user);
     return mapped
 }
 
 export async function getUsersFromDB(): Promise<UserResource[]> {
     const users = await User.find().sort({ nachname: 1 });
+    if (!users) {
+        throw new Error(`Keine User gefunden.`);
+    }
     const userResources = await Promise.all(users.map(user => mapUserToResource(user)));
     return userResources;
 }
 
 export async function createUser(userResource: UserResource): Promise<UserResource> {
     const user = await User.create({
+        vorname: userResource.vorname,
         name: userResource.name,
-        nachname: userResource.nachname,
         username: userResource.username,
+        email: userResource.email,
+        password: userResource.password,
         admin: userResource.admin,
-        password: userResource.password
+        abwesend: userResource.abwesend,
+        fahrzeuge: userResource.fahrzeuge
     });
 
+    if (!user) {
+        throw new Error(`Keine User erstellen können.`);
+    }
     const mapped = await mapUserToResource(user)
     return mapped
 }
@@ -51,19 +71,22 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (!user) {
         throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
     }
+    if (userResource.vorname) user.vorname = userResource.vorname;
     if (userResource.name) user.name = userResource.name;
-    if (userResource.nachname) user.nachname = userResource.nachname;
-    if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
     if (userResource.username) user.username = userResource.username;
+    if (userResource.email) user.email = userResource.email;
     if (userResource.password) user.password = userResource.password;
+<<<<<<< HEAD
     if (userResource.fahrzeuge) user.fahrzeuge = userResource.fahrzeuge;
+=======
+    if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
     if (userResource.abwesend) user.abwesend = userResource.abwesend;
 
     const savedUser = await user.save();
     const mapped = await mapUserToResource(savedUser)
     return mapped
 }
-
 
 export async function changeUser(userId: string, updatedUserFields: Partial<UserResource>): Promise<UserResource> {
     try {
@@ -82,15 +105,59 @@ export async function changeUser(userId: string, updatedUserFields: Partial<User
         // Geben Sie die aktualisierten Benutzerdetails zurück
         const mapped = await mapUserToResource(x)
         return mapped
-    } catch (error) {
-        throw new Error(`Fehler beim Ändern des Benutzers: ${error.message}`);
+    } catch (error: any) {
+        throw new Error(`Fehler beim Ändern des Benutzers: ${(error as Error).message}`);
     }
 }
 
+<<<<<<< HEAD
+=======
+export async function sendEmail(email: string): Promise<void> {
+    try {
+        const user = await User.findOne({ email }).exec();
+        if (!user) {
+            throw new Error('Benutzer mit dieser E-Mail-Adresse existiert nicht.');
+        }
+
+        const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
+
+        const transporter = nodemailer.createTransport({
+            service: process.env.SERVICE,
+            auth: {
+                user: process.env.USER,
+                pass: process.env.PASS
+            }
+        });
+
+        await transporter.sendMail({
+            from: process.env.USER,
+            to: email,
+            subject: 'SKM Account - Passwort Zurücksetzen',
+            text: `Um Ihr Passwort für Ihren SKM-Account zurückzusetzen, klicken Sie bitte auf diesen Link: \n \n http://localhost:3000/passwort-zuruecksetzen/${token}`
+        });
+    } catch (error: any) {
+        throw new Error(`Fehler beim Senden der E-Mail: ${(error as Error).message}`);
+    }
+}
+
+export async function sendPasswortZurücksetzen(token: string, newPassword: string): Promise<void> {
+    try {
+        // Überprüfe, ob das Token gültig ist
+        const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET);
+        const { email } = decodedToken;
+
+        const hashedPassword = await hash(newPassword, 10);
+        await User.findOneAndUpdate({ email }, { password: hashedPassword });
+    } catch (error) {
+        throw new Error(`Fehler beim Zurücksetzen des Passworts: ${error.message}`);
+    }
+}
+
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
 export async function deleteUser(userId: string): Promise<void> {
     try {
         await User.findByIdAndDelete(userId);
-    } catch (error) {
-        throw new Error(`Fehler beim Löschen des Benutzers: ${error.message}`);
+    } catch (error: any) {
+        throw new Error(`Fehler beim Löschen des Benutzers: ${(error as Error).message}`);
     }
 }

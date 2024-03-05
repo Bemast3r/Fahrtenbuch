@@ -10,6 +10,10 @@
     "update": "npm install && cd frontend && npm install && cd ../backend && npm install && echo Updated dependencies for all 3 directories"
   },
   "dependencies": {
+<<<<<<< HEAD
     "jsonwebtoken": "^9.0.2"
+=======
+    "boxicons": "^2.1.4"
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
   }
 }

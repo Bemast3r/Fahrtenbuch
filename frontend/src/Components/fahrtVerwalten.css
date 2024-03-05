@@ -1,60 +1,116 @@
-/* fahrtVerwalten.css */
-
 body {
-    background-color: #FdF5E6;
-    margin: 0;
-  }
-  
-  .container {
-    margin: 20px auto;
-    padding: 20px;
-    text-align: center;
-    background-color: transparent;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 90%;
-    max-width: 95%;
-  }
-  
-  .header {
-    margin-bottom: 20px;
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .section {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    overflow-y: auto;
-    max-height: 200px;
-    min-width: 90%;
-    max-width: 95%;
-  }
-  
+  background-color: #FdF5E6;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  margin-bottom: 2rem;
+  margin-top: 3rem;
+  font-size: 32px;
+  color: #333;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation für das Ein- und Ausblenden */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.9); } /* Startzustand */
+  100% { opacity: 1; transform: scale(1); } /* Endzustand */
+}
+
+.header {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
+}
+
+.header:hover {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
+}
+
+.container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+}
+
+.section {
+  height: auto;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  overflow-y: auto;
+  max-height: 200px;
+  text-align: center;
+}
+
+.button-group {
+  flex-direction: column; /* Ändere die Ausrichtung in eine Spalte für kleinere Bildschirme */
+  align-items: center; /* Zentriere die Schaltflächen horizontal */
+  margin-bottom: 10px;
+}
+
+/* .button-group button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin-bottom: 10px; /* Füge einen Abstand zwischen den Schaltflächen hinzu */
+/* }  */
+
+.button-group button:last-child {
+  margin-bottom: 0; /* Entferne den Abstand unterhalb der letzten Schaltfläche */
+}
+
+/* .button-group button:hover {
+  background-color: #0056b3;
+} */
+
+.dates {
+  margin-top: 20px;
+}
+
+.dates p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.log-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.log-list li {
+  margin-bottom: 5px;
+}
+
+.results {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Medienabfragen für größere Bildschirme */
+@media screen and (min-width: 768px) {
   .button-group {
-    display: flex;
-    gap: 10px;
+    flex-direction: row; /* Ändere die Ausrichtung in eine Zeile für größere Bildschirme */
   }
-  
+
   .button-group button {
-    background-color: #007bff;
-    color: #fff;
-    border: 1px solid #007bff;
-    padding: 10px 20px;
-    cursor: pointer;
+    margin-right: 10px; /* Füge einen horizontalen Abstand zwischen den Schaltflächen hinzu */
+    margin-bottom: 0; /* Entferne den vertikalen Abstand zwischen den Schaltflächen */
   }
-  
-  .log-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+
+  .button-group button:last-child {
+    margin-right: 0; /* Entferne den horizontalen Abstand rechts von der letzten Schaltfläche */
   }
-  
-  .results {
-    margin-top: 20px;
-  }
-  
+}
