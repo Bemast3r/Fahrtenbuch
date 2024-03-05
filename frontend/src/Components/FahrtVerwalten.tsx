@@ -37,9 +37,7 @@ const FahrtVerwalten: React.FC = () => {
   const navigate = useNavigate();
   const jwt = getJWT();
 
-  // let currentLenkzeit = (calculateTotalLenkzeitDifference(letzteFahrt?.lenkzeit))
-  // let currentArbeitszeit = (calculateTotalLenkzeitDifference(letzteFahrt?.arbeitszeit))
-  // let currentPause = (calculateTotalLenkzeitDifference(letzteFahrt?.pause))
+
 
   useEffect(() => {
     if (letzteFahrt && show) {
@@ -48,7 +46,13 @@ const FahrtVerwalten: React.FC = () => {
       setElapsedTimePause(calculateTotalLenkzeitDifference(letzteFahrt.pause));
       setShow(false)
     }
-  }, [letzteFahrt, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause]);
+  }, [letzteFahrt])
+  
+  useEffect(()=>{
+    let currentLenkzeit = (calculateTotalLenkzeitDifference(letzteFahrt?.lenkzeit))
+    let currentArbeitszeit = (calculateTotalLenkzeitDifference(letzteFahrt?.arbeitszeit))
+    let currentPause = (calculateTotalLenkzeitDifference(letzteFahrt?.pause))
+  }, [lenktext, pauseText, arbeitText])
 
 
   function calculateTotalTime(): number {
@@ -175,7 +179,6 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-
   async function handlePostPause() {
     if (usercontexte && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
@@ -186,7 +189,7 @@ const FahrtVerwalten: React.FC = () => {
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
         pause: [{ start: pauseRecord.start, stop: pauseRecord.stop! }],
-        beendet: false, // Fahrt als beendet markieren
+        beendet: false, 
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
@@ -225,12 +228,9 @@ const FahrtVerwalten: React.FC = () => {
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);
-      console.log("DRIN")
       setLetzteFahrt(fahrt);
     }
   }
-
-
 
   function toggleRecordingLenkzeit() {
     stopRunningTimer();
