@@ -117,7 +117,9 @@ const FahrtVerwalten: React.FC = () => {
       setLetzteFahrt(x[x.length - 1]);
   }
 
-  useEffect(() => { last() }, [letzteFahrt]);
+  useEffect(() => { last() }, []);
+  useEffect(() => {}, []);
+
 
   function stopRunningTimer() {
     if (timerId) {
@@ -273,7 +275,7 @@ const FahrtVerwalten: React.FC = () => {
         setArbeitszeitRecord(lastRecord);
         setArbeitText('Arbeitszeit START');
         clearInterval(timerId!);
-        handlePostLenkzeit()
+        handlePostArbeitszeit()
       }
     }
     setIsRecordingArbeitszeit(!isRecordingArbeitszeit);
@@ -297,7 +299,7 @@ const FahrtVerwalten: React.FC = () => {
         setPauseRecord(lastRecord);
         setPauseText('Pause START');
         clearInterval(timerId!);
-        handlePostLenkzeit()
+        handlePostPause()
       }
     }
     setIsRecordingPause(!isRecordingPause);
