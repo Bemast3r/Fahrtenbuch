@@ -1,15 +1,16 @@
 import dotenv from "dotenv";
 dotenv.config()
+
 import { JwtPayload , sign, verify } from "jsonwebtoken";
-
 import { login } from "./AuthenticationService";
-
 
 const mongoUrl = process.env.MONGO_URL;
 const jwtSecret = process.env.JWT_SECRET;
 const jwtTTL = process.env.JWT_TTL;
 
-export async function verifyPasswordAndCreateJWT(email: string, password: string): Promise<string | undefined> {
+export async function verifyPasswordAndCreateJWT(username: string, password: string): Promise<string | undefined> {
+
+    
     const secret = jwtSecret
     if (!secret) {
         throw Error("JWT_SECRET not set.");
@@ -20,11 +21,10 @@ export async function verifyPasswordAndCreateJWT(email: string, password: string
         throw new Error("JWT_TTL not set.");
     }
 
-    const loginResult = await login(email, password);
+    const loginResult = await login(username, password);
     if ((loginResult).success === false) {
         return undefined;
     }
-
     const timeInSec = Math.floor(Date.now() / 1000);
     const payload: JwtPayload = {
         sub: loginResult.id,

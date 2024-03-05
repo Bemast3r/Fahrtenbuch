@@ -55,10 +55,14 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
  * Erstellt einen Benutzer 
  */
 userRouter.post("/admin/user-erstellen", requiresAuthentication,
+    body("vorname").isString(),
     body("name").isString(),
-    body("nachname").isString(),
     body("username").isString(),
+    body("email").isString(),
     body("password").isString(),
+    body("admin").isBoolean(),
+    body("fahrzeuge").isArray().withMessage('fahrzeuge muss ein Array sein'),
+    body("abwesend").isString(),
 
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -133,8 +137,8 @@ userRouter.post("/passwort-zuruecksetzen/:token",
  * Ändere einen User.
  */
 userRouter.put("/admin/user/aendern", requiresAuthentication,
+    body("vorname").isString(),
     body("name").isString(),
-    body("nachname").isString(),
     body("username").isString(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),

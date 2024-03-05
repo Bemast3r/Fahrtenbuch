@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getFahrt, getUser, postFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
@@ -80,7 +80,7 @@ const FahrtErstellen = () => {
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Monate sind nullbasiert
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const day = currentDate.getDate().toString().padStart(2, '0');
 
     const americanDateFormat = `${year}-${month}-${day}`;

@@ -1,19 +1,19 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
-import { createUser } from '../Api/api';
+import { createUserWithAdmin } from '../Api/api';
 import { useNavigate } from 'react-router-dom';
-
+import { UserResource } from '../util/Resources';
 
 const AdminFormular = () => {
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<UserResource>({
+        vorname: '',
         name: '',
-        nachname: '',
         username: '',
         email: '',
         password: '',
-        admin: false,
+        admin: true,
         fahrzeuge: [],
         abwesend: ''
     });
@@ -29,7 +29,7 @@ const AdminFormular = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            await createUser(formData);
+            await createUserWithAdmin(formData);
             navigate("/home");
         } catch (error) {
             console.error('Fehler beim Erstellen des Benutzers:', error);
@@ -44,12 +44,12 @@ const AdminFormular = () => {
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="formGridName">
                             <Form.Label>Vorname</Form.Label>
-                            <Form.Control type="text" placeholder="Vorname" name="name" value={formData.name} onChange={handleChange} required />
+                            <Form.Control type="text" placeholder="Vorname" name="vorname" value={formData.vorname} onChange={handleChange} required />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridNachname">
                             <Form.Label>Nachname</Form.Label>
-                            <Form.Control type="text" placeholder="Nachname" name="nachname" value={formData.nachname} onChange={handleChange} required />
+                            <Form.Control type="text" placeholder="Nachname" name="name" value={formData.name} onChange={handleChange} required />
                         </Form.Group>
 
                         <Form.Group as={Col} className="c" controlId="formGridUsername">

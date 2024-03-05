@@ -15,16 +15,30 @@ let userid: string
 beforeAll(async () => { await TestDB.connect(); });
 beforeEach(async () => {
     User.syncIndexes();
+<<<<<<< HEAD
+    user = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "umut21", admin: true, fahrzeuge: [], abwesend: "false" });
+    userid = user._id.toString()
+
+    // Login um Token zu erhalten
+    const request = supertest(app);
+    const loginData = { username: "umutaydin", password: "umut21" };
+=======
     user = await User.create({ name: "Umut", nachname: "Aydin", username: "umutaydin", password: "Umut21!21Umut!", admin: true, fahrzeuge: [], abwesend: "false" });
     //userid = user._id.toString()
 
     // Login um Token zu erhalten
     const request = supertest(app);
     const loginData = { username: "umutaydin", password: "Umut21!21Umut!" };
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
     const response = await request.post(`/api/login`).send(loginData);
     const loginResource = response.body as LoginResource;
     token = loginResource.access_token;
     expect(token).toBeDefined();
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
 });
 afterEach(async () => { await TestDB.clear(); });
 afterAll(async () => { await TestDB.close(); });
@@ -36,7 +50,11 @@ test('GET /api/admin/users - should return all users for admin', async () => {
     const res = await request.get('/api/user/admin/users').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
+<<<<<<< HEAD
+});
+=======
 }); 
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
 
 test('GET /api/admin/finde/user/:id - should return a specific user for admin', async () => {
     const request = supertest(app);
@@ -62,7 +80,11 @@ test('POST /api/admin/user/erstellen - should create a new user for admin', asyn
 
 test('PUT /api/admin/user/aendern - should update a specific user for admin', async () => {
     const request = supertest(app);
+<<<<<<< HEAD
+    const updatedUserData = { id: userid, name: "Satorou", nachname: "Gojo", username: "GojoDerDünne", password: "abcABC123!!!!", fahrzeuge: [{  datum: Date.now(), kennzeichen: "Merces Benzer AMG"} ], abwesend: "true", admin: true };
+=======
     const updatedUserData = { id: userid, name: "Satorou", nachname: "Gojo", username: "GojoDerDünne", password: "abcABC123!!!!", fahrzeuge: [{ datum: Date.now(), kennzeichen: "Merces Benzer AMG" }], abwesend: "true", admin: true };
+>>>>>>> 7d0482de5a8aa1bd58243445b139cd748181c8ba
     const res = await request.put(`/api/user/admin/user/aendern`).send(updatedUserData).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);

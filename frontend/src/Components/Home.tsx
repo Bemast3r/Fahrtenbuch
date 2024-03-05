@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import "./home.css";
-import { getJWT, removeJWT, setJWT } from './Logincontext';
+import { getJWT, getLoginInfo, removeJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
     const jwt = getJWT();
     const navigate = useNavigate();
+    const [userRole, setUserRole] = useState('');
 
     useEffect(() => {
         if (!jwt) {
             navigate("/");
         } else {
             setJWT(jwt);
+            const x = getLoginInfo();   
+            setUserRole(x!.role)
         }
     }, [jwt, navigate]);
 
@@ -38,9 +42,11 @@ const Home = () => {
                     <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/verwalten")}>
                         Fahrt verwalten
                     </Button>
-                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => { navigate("/user-erstellen") }}>
-                        Benutzer erstellen
-                    </Button>
+                    {userRole === 'a' && (
+                        <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/user-erstellen")}>
+                            Benutzer erstellen
+                        </Button>
+                    )}
                     <Button variant="danger" type="button" className="submit-button3" onClick={handleAbmelden}>
                         Abmelden
                     </Button>

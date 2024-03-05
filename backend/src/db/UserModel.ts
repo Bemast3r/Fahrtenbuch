@@ -5,8 +5,8 @@ import { hash, compare } from "bcryptjs";
  * Interface with the appointed properties
  */
 export interface IUser {
+    vorname: string
     name: string
-    nachname: string
     username: string
     email: string
     password: string
@@ -26,8 +26,8 @@ export interface IUserMethods {
 type UserModel = Model<IUser, {}, IUserMethods>;
 
 const userSchema = new Schema<IUser, IUserMethods>({
+    vorname: { type: String, required: true },
     name: { type: String, required: true },
-    nachname: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
