@@ -21,6 +21,10 @@ export interface IFahrt {
     createdAt: Date; // Wann es gestartet worden ist
     startpunkt: string
     beendet: Boolean
+    ruhezeit: {
+        start: Date;
+        stop: Date;
+    }[];
 }
 
 type FahrtModel = Model<IFahrt>;
@@ -44,7 +48,11 @@ const fahrtSchema = new Schema<IFahrt>({
     }], // weiß nicht ob das Sinnvoll ist aber mal sehen.
     createdAt: { type: Date },
     startpunkt: { type: String, required: true },
-    beendet: { type: Boolean, default: false }
+    beendet: { type: Boolean, default: false },
+    ruhezeit: [{
+        start: { type: Date },
+        stop: { type: Date }
+    }],
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);

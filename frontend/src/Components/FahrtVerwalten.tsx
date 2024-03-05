@@ -7,6 +7,7 @@ import Loading from './LoadingIndicator';
 import { UserContext } from './UserContext';
 import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 interface TimeRecord {
   start: Date;
@@ -28,9 +29,6 @@ const FahrtVerwalten: React.FC = () => {
   const [lenkzeitRecord, setLenkzeitRecord] = useState<TimeRecord | null>(null);
   const [arbeitszeitRecord, setArbeitszeitRecord] = useState<TimeRecord | null>(null);
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
-  const [showMoreLenkzeit, setShowMoreLenkzeit] = useState<boolean>(false);
-  const [showMoreArbeitszeit, setShowMoreArbeitszeit] = useState<boolean>(false);
-  const [showMorePause, setShowMorePause] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(true);
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
@@ -50,17 +48,6 @@ const FahrtVerwalten: React.FC = () => {
   }, [letzteFahrt])
 
   useEffect(() => {
-    let currentLenkzeit = (calculateTotalLenkzeitDifference(letzteFahrt?.lenkzeit))
-    let currentArbeitszeit = (calculateTotalLenkzeitDifference(letzteFahrt?.arbeitszeit))
-    let currentPause = (calculateTotalLenkzeitDifference(letzteFahrt?.pause))
-  }, [lenktext, pauseText, arbeitText])
-
-
-  function calculateTotalTime(): number {
-    return elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause;
-  }
-
-  useEffect(() => {
     if (jwt) {
       setJWT(jwt);
     } else {
@@ -69,26 +56,6 @@ const FahrtVerwalten: React.FC = () => {
     }
   }, [jwt, navigate]);
 
-
-  useEffect(() => {
-    if (localStorage.getItem("lenkzeit") == "Keine Daten" && lenkzeitRecord?.start && lenkzeitRecord.stop === null) {
-      localStorage.setItem("lenkzeit", lenkzeitRecord.start.toString())
-    } else {
-      localStorage.setItem("lenkzeit", "Keine Daten")
-    }
-    if (localStorage.getItem("arbeitszeit") == "Keine Daten" && arbeitszeitRecord?.start && arbeitszeitRecord.stop === null) {
-      localStorage.setItem("arbeitszeit", arbeitszeitRecord.start.toString())
-    } else {
-      localStorage.setItem("arbeitszeit", "Keine Daten")
-    }
-    if (localStorage.getItem("pause") == "Keine Daten" && pauseRecord?.start && pauseRecord.stop === null) {
-      localStorage.setItem("pause", pauseRecord?.start.toString() || "Keine Daten")
-    } else {
-      localStorage.setItem("pause", "Keine Daten")
-
-    }
-
-  }, [arbeitszeitRecord, lenkzeitRecord, pauseRecord])
 
   useEffect(() => {
     if (usercontexte) {
@@ -108,6 +75,8 @@ const FahrtVerwalten: React.FC = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [usercontexte]);
+
+  // useEffect(() => { intial() }, [])
 
   async function last() {
     const id = getLoginInfo()
@@ -129,7 +98,7 @@ const FahrtVerwalten: React.FC = () => {
     if (isRecordingLenkzeit) {
       const lastRecord = lenkzeitRecord;
       if (lastRecord && lastRecord.stop === null) {
-        lastRecord.stop = new Date();
+        lastRecord.stop = moment().toDate();
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
         localStorage.setItem("lenkzeit", "Keine Daten")
@@ -140,7 +109,7 @@ const FahrtVerwalten: React.FC = () => {
     else if (isRecordingArbeitszeit) {
       const lastRecord = arbeitszeitRecord;
       if (lastRecord && lastRecord.stop === null) {
-        lastRecord.stop = new Date();
+        lastRecord.stop = moment().toDate();
         setArbeitszeitRecord(lastRecord);
         localStorage.setItem("arbeitszeit", "Keine Daten")
         setArbeitText('Arbeitszeit START');
@@ -151,7 +120,7 @@ const FahrtVerwalten: React.FC = () => {
     else if (isRecordingPause) {
       const lastRecord = pauseRecord;
       if (lastRecord && lastRecord.stop === null) {
-        lastRecord.stop = new Date();
+        lastRecord.stop = moment().toDate();
         setPauseRecord(lastRecord);
         localStorage.setItem("pause", "Keine Daten")
         setPauseText('Pause START');
@@ -199,6 +168,8 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handlePostLenkzeit() {
+    console.log(lenkzeitRecord)
+    console.log("start:", new Date(lenkzeitRecord!.start))
     if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -207,7 +178,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }],
+        lenkzeit: lenkzeitRecord ? [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }] : [],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -225,7 +196,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: lenkzeitRecord ? [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }] : [],
+        lenkzeit: lenkzeitRecord ? [{ start: new Date(lenkzeitRecord.start.getTime() + 3600), stop: new Date(lenkzeitRecord.stop!.getTime() + 3600) }] : [],
         pause: pauseRecord ? [{ start: pauseRecord.start, stop: pauseRecord.stop! }] : [],
         arbeitszeit: arbeitszeitRecord ? [{ start: arbeitszeitRecord.start, stop: arbeitszeitRecord.stop! }] : [],
         beendet: true,
@@ -239,7 +210,7 @@ const FahrtVerwalten: React.FC = () => {
 
   function toggleRecordingLenkzeit() {
     stopRunningTimer();
-    const currentTime = new Date();
+    const currentTime = moment().toDate();
     if (!isRecordingLenkzeit) {
       setLenkzeitRecord({ start: currentTime, stop: null });
       setLenkText('Lenkzeit STOP');
@@ -263,7 +234,7 @@ const FahrtVerwalten: React.FC = () => {
 
   function toggleRecordingArbeit() {
     stopRunningTimer();
-    const currentTime = new Date();
+    const currentTime = moment().toDate();
     if (!isRecordingArbeitszeit) {
       setArbeitszeitRecord({ start: currentTime, stop: null });
       setArbeitText('Arbeitszeit STOP');
@@ -287,7 +258,7 @@ const FahrtVerwalten: React.FC = () => {
 
   function toggleRecordingPause() {
     stopRunningTimer();
-    const currentTime = new Date();
+    const currentTime = moment().toDate();
     if (!isRecordingPause) {
       setPauseRecord({ start: currentTime, stop: null });
       setPauseText('Pause STOP');
@@ -324,6 +295,25 @@ const FahrtVerwalten: React.FC = () => {
     return totalDifference;
   }
 
+
+  // Ruhezeit
+  // async function intial() {
+  //   if (usercontexte && letzteFahrt?.createdAt) {
+  //     const fahrtResource: FahrtResource = {
+  //       fahrerid: usercontexte.id!,
+  //       id: letzteFahrt._id!.toString(),
+  //       _id: letzteFahrt._id!.toString(),
+  //       kennzeichen: letzteFahrt.kennzeichen.toString(),
+  //       kilometerstand: letzteFahrt.kilometerstand,
+  //       startpunkt: letzteFahrt.startpunkt.toString(),
+  //       // ruhezeit: [{ start: new Date(berlinTime), stop: letzteFahrt.createdAt }],
+  //       beendet: false,
+  //     };
+  //     const fahrt = await updateFahrt(fahrtResource);
+  //     setLetzteFahrt(fahrt);
+  //     setCounter(count => count + 1);
+  //   }
+  // }
 
 
   function formatTime(seconds: number): string {
@@ -369,6 +359,7 @@ const FahrtVerwalten: React.FC = () => {
                 <div className="button-group">
                   <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={toggleRecordingLenkzeit} >{lenktext}</Button>
                 </div>
+
                 <div className="elapsed-time">
                   Verbrachte Lenkzeit: {formatTime(elapsedTimeLenkzeit)}
                 </div>
@@ -419,7 +410,7 @@ const FahrtVerwalten: React.FC = () => {
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
                   Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
                   Gesamt Pause: {formatTime(elapsedTimePause)} <br />
-                  Ruhezeit:{formatTime(86400000 - calculateTotalTime())} <br />
+                  {/* Ruhezeit: Stop - {formattedStartTime}<br /> */}
                   Insgesamte Zeit ist: {formatTime((elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause))}
                 </div>
 

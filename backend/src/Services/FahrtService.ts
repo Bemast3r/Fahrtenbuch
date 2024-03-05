@@ -39,7 +39,8 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             lenkzeit: fahrt.lenkzeit,
             arbeitszeit: fahrt.arbeitszeit,
             pause: fahrt.pause,
-            startpunkt: fahrt.startpunkt
+            startpunkt: fahrt.startpunkt,
+            ruhezeit: fahrt.ruhezeit
         });
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
@@ -50,8 +51,8 @@ export async function createUserFahrt(fahrt: FahrtResource) {
 
 // Admin kann im nachträglich sachen bearbeiten
 export async function updateUserfahrt(fahrtResource: FahrtResource) {
-    const { id, lenkzeit, pause, arbeitszeit, ...update } = fahrtResource;
-    
+    const { id, lenkzeit, pause, arbeitszeit, ruhezeit, ...update } = fahrtResource;
+
     const newFahrt = await Fahrt.findByIdAndUpdate(id, update, { new: true });
 
     if (!newFahrt) {
@@ -67,6 +68,9 @@ export async function updateUserfahrt(fahrtResource: FahrtResource) {
     }
     if (arbeitszeit) {
         await Fahrt.updateOne({ _id: id }, { $push: { arbeitszeit: { $each: arbeitszeit } } });
+    }
+    if (ruhezeit) {
+        await Fahrt.updateOne({ _id: id }, { $push: { ruhezeit: { $each: ruhezeit } } });
     }
 
     return newFahrt;
