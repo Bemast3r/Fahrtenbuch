@@ -8,6 +8,7 @@ export interface IUser {
     name: string
     nachname: string
     username: string
+    email: string
     password: string
     admin?: boolean
     createdAt?: Date
@@ -26,8 +27,9 @@ type UserModel = Model<IUser, {}, IUserMethods>;
 
 const userSchema = new Schema<IUser, IUserMethods>({
     name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
     nachname: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     admin: { type: Boolean, default: false },
     createdAt: { type: Date },

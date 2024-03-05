@@ -40,13 +40,6 @@ const FahrtErstellen = () => {
         setLetzteFahrt(x[x.length - 1]);
     }
 
-    // const addFahrt = (fahrt: FahrtResource) => {
-    //     setFahrten((prevFahrten: FahrtResource[]) => {
-    //         const updatedFahrten = [...prevFahrten, fahrt];
-    //         return updatedFahrten;
-    //     });
-    // };
-
     useEffect(() => { load() }, [])
 
     const handleCheckboxChange = (checkboxId: string) => {

@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUser, deleteUser, getUser, getUsersFromDB, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -54,7 +54,7 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
 /**
  * Erstellt einen Benutzer 
  */
-userRouter.post("/admin/user/erstellen", requiresAuthentication,
+userRouter.post("/admin/user-erstellen", requiresAuthentication,
     body("name").isString(),
     body("nachname").isString(),
     body("username").isString(),
@@ -80,6 +80,56 @@ userRouter.post("/admin/user/erstellen", requiresAuthentication,
 );
 
 /**
+ * Wenn Nutzer Passwort vergisst bekommt er eine E-Mail
+ */
+userRouter.post("/passwort-vergessen",
+    body('email').isString(),
+
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const { email } = req.body;
+            if (!email) {
+                return res.status(400).send('E-Mail-Adresse ist erforderlich.');
+            }
+
+            await sendEmail(email);
+            res.status(200).send('Passwort-Zurücksetzungs-E-Mail gesendet.');
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+/**
+ * Für das Ändern des Passwortes
+ */
+userRouter.post("/passwort-zuruecksetzen/:token",
+    body("password").isString(),
+
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const { token } = req.params;
+            const { password } = req.body;
+
+            await sendPasswortZurücksetzen(token, password);
+            res.status(200).send('Passwort erfolgreich zurückgesetzt.');
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+/**
  * Ändere einen User.
  */
 userRouter.put("/admin/user/aendern", requiresAuthentication,
@@ -88,7 +138,7 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
     body("username").isString(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),
-    body("abwesend").isBoolean(),
+    body("abwesend").isString(),
     body("admin").isBoolean(),
     // Das Datum sollte automatisch gesetzt werden.
     // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 

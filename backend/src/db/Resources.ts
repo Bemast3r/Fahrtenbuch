@@ -1,11 +1,11 @@
-
 export type UserResource = {
     id?: string;
     name: string;
     nachname: string;
     username: string;
-    admin?: boolean;
+    email: string;
     password?: string;
+    admin?: boolean;
     createdAt?: Date;
     fahrzeuge?: {
         datum: string,
@@ -34,11 +34,8 @@ export type FahrtResource = {
     }[]; // Arbeiten ohne Fahren
     createdAt?: Date; // Datum der Fahrt
     startpunkt: string
-    beendet?: Boolean
+    beendet?: boolean
 }
-
-
-
 
 export type LoginResource = {
     /** The JWT */

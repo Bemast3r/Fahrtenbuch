@@ -144,6 +144,7 @@ export async function getFahrt(userID: string): Promise<FahrtResource[]> {
 }
 
 
+
 export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
     try {
 
@@ -166,5 +167,79 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
         return result
     } catch (error) {
         throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+export async function passwortVergessen(email: string) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/user/passwort-vergessen`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email }) // Hier email direkt in einem Objekt
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result = response;
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+export async function passwortZuruecksetzen(token: string, password: string) {
+    try {
+        // const decodedToken = decodeURIComponent(token); 
+        const response = await fetch(`http://localhost:5000/api/user/passwort-zuruecksetzen/${token}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ password })
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result = response;
+        if (!result) {
+            throw new Error("Result ist nicht ok.");
+        }
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+
+export async function createUser(user: UserResource): Promise<UserResource> {
+    try {
+        if (!user) {
+            throw new Error("user not defined");
+        }
+        const jwt2 = getJWT();
+        if (!jwt2) {
+            throw new Error("no jwt found");
+        }
+        const response = await fetch("http://localhost:5000/api/user/admin/user-erstellen", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer ${jwt2}",
+                "Content-Type": "application/json"
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: UserResource = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error("Es gab einen Fehler: ${error}")
     }
 }
