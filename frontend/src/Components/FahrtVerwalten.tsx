@@ -117,8 +117,7 @@ const FahrtVerwalten: React.FC = () => {
       setLetzteFahrt(x[x.length - 1]);
   }
 
-  useEffect(() => { last() }, []);
-
+  useEffect(() => { last() }, [letzteFahrt]);
 
   function stopRunningTimer() {
     if (timerId) {
