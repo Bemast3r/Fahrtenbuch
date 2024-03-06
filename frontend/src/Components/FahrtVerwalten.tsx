@@ -95,7 +95,6 @@ const FahrtVerwalten: React.FC = () => {
       let currentfahrt = x[x.length - 1]
       const today = new Date()
       today.setHours(0, 0, 0, 0)
-      console.log(currentfahrt)
 
       const fahrtResource: FahrtResource = {
         fahrerid: user.id!,
@@ -107,7 +106,6 @@ const FahrtVerwalten: React.FC = () => {
         ruhezeit: [{ start: today, stop: currentfahrt.createdAt! }],
         beendet: false,
       };
-      console.log(fahrtResource)
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
       setLoading(false)
@@ -121,8 +119,6 @@ const FahrtVerwalten: React.FC = () => {
   useEffect(() => {
     toggleRecordingLenkzeit()
   }, [])
-
-
 
   function stopRunningTimer() {
     if (timerId) {
@@ -221,6 +217,8 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handleEndePost() {
     if (usercontexte && letzteFahrt) {
+      const today = new Date()
+      today.setHours(23, 59, 59, 0)
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
@@ -228,6 +226,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
+        ruhezeit: [{ start: new Date(Date.now()), stop: today }],
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);
