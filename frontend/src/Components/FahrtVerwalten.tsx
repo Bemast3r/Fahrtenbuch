@@ -37,6 +37,10 @@ const FahrtVerwalten: React.FC = () => {
   const jwt = getJWT();
 
 
+  useEffect(()=>{
+    toggleRecordingLenkzeit()
+  },[])
+
 
   useEffect(() => {
     if (letzteFahrt && show) {
@@ -64,7 +68,6 @@ const FahrtVerwalten: React.FC = () => {
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      stopRunningTimer()
       e.returnValue = '';
     };
 
@@ -196,9 +199,6 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: lenkzeitRecord ? [{ start: new Date(lenkzeitRecord.start.getTime() + 3600), stop: new Date(lenkzeitRecord.stop!.getTime() + 3600) }] : [],
-        pause: pauseRecord ? [{ start: pauseRecord.start, stop: pauseRecord.stop! }] : [],
-        arbeitszeit: arbeitszeitRecord ? [{ start: arbeitszeitRecord.start, stop: arbeitszeitRecord.stop! }] : [],
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -209,6 +209,10 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function toggleRecordingLenkzeit() {
+
+    if(isRecordingLenkzeit){
+      return;
+    }
     stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingLenkzeit) {
@@ -233,6 +237,10 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function toggleRecordingArbeit() {
+
+    if(isRecordingArbeitszeit){
+      return;
+    }
     stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingArbeitszeit) {
@@ -257,6 +265,9 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function toggleRecordingPause() {
+    if(isRecordingPause){
+      return;
+    }
     stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingPause) {
