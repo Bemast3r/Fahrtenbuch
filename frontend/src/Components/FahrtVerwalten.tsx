@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../Api/api';
@@ -6,7 +6,7 @@ import { FahrtResource, UserResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
 import { UserContext } from './UserContext';
 import { Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 interface TimeRecord {
@@ -35,8 +35,35 @@ const FahrtVerwalten: React.FC = () => {
   const navigate = useNavigate();
   const [count, setCounter] = useState(0)
   const jwt = getJWT();
+  const prevLocationRef = useRef<string>(window.location.pathname);
+  const location = useLocation();
+  const [startTime, setStartTime] = useState<number | null>(null); // Timer-Startzeit
+  const timerIdRef = useRef<NodeJS.Timeout | null>(null); // Ref für Timer-ID
 
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Speichern der verstrichenen Zeit im Local Storage
+      if (startTime) {
+        const elapsedTime = Date.now() - startTime;
+        localStorage.setItem('elapsedTimeLenkzeit', JSON.stringify(elapsedTime));
+      }
+    };
 
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [startTime]);
+
+  useEffect(() => {
+    // Beim Laden der Komponente prüfen, ob eine verstrichene Zeit im Local Storage vorhanden ist
+    const storedElapsedTime = localStorage.getItem('elapsedTimeLenkzeit');
+    if (storedElapsedTime) {
+      const elapsedTime = JSON.parse(storedElapsedTime);
+      setStartTime(Date.now() - elapsedTime);
+    }
+  }, []);
 
   useEffect(() => {
     if (letzteFahrt && show) {
@@ -57,41 +84,53 @@ const FahrtVerwalten: React.FC = () => {
   }, [jwt, navigate]);
 
 
-  useEffect(() => {
-    if (usercontexte) {
-      setLoading(false);
-    }
 
+  useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = '';
+      e.returnValue = 'Ihre Daten werden nicht gespeichert, wenn Sie die Seite verlassen.';
     };
 
+    const handlePopstate = (e: PopStateEvent) => {
+      const confirmed = window.confirm('Wollen Sie die Seite wirklich verlassen? Ihre Änderungen gehen möglicherweise verloren.');
+      if (!confirmed) {
+        e.preventDefault(); // Vorgang abbrechen
+      }
+    };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopstate);
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopstate);
     };
-  }, [usercontexte]);
+  });
+
+  useEffect(() => {
+    prevLocationRef.current = window.location.pathname;
+  });
+
 
   async function last() {
     if (usercontexte && usercontexte.id) {
       const x: FahrtResource[] = await getFahrt(usercontexte.id);
+      if (x.length === 0 || x[x.length - 1].beendet) {
+        setLoading(false)
+        return;
+      }
       setLetzteFahrt(x[x.length - 1]);
     } else {
       const id = getLoginInfo()
       const user = await getUser(id!.userID)
       setUser(user)
-      console.log(user)
       const x: FahrtResource[] = await getFahrt(id!.userID);
-      setLetzteFahrt(x[x.length - 1]);
-
-      if (x.length === 0) {
+      if (x.length === 0 || x[x.length - 1].beendet) {
+        setLoading(false)
         return;
       }
+
       //
-      console.log(x)
       let currentfahrt = x[x.length - 1]
       const today = new Date()
       today.setHours(0, 0, 0, 0)
