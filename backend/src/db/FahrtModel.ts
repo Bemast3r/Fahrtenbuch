@@ -24,7 +24,7 @@ export interface IFahrt {
     ruhezeit: {
         start: Date;
         stop: Date;
-    }[]
+    }[];
 }
 
 type FahrtModel = Model<IFahrt>;
