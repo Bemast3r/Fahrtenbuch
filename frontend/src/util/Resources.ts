@@ -36,6 +36,10 @@ export type FahrtResource = {
     createdAt?: Date; // Datum der Fahrt
     startpunkt: string
     beendet?: boolean
+    ruhezeit?: {
+        start: Date;
+        stop: Date;
+    }[];
 }
 
 export type LoginResource = {

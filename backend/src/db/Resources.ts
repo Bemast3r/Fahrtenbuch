@@ -11,7 +11,6 @@ export type UserResource = {
         datum: string,
         kennzeichen: string;
     }[];
-    abwesend?: string
 }
 
 export type FahrtResource = {
@@ -35,6 +34,10 @@ export type FahrtResource = {
     createdAt?: Date; // Datum der Fahrt
     startpunkt: string
     beendet?: boolean
+    ruhezeit?: {
+        start: Date;
+        stop: Date;
+    }[];
 }
 
 export type LoginResource = {
