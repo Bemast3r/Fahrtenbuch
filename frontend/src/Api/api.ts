@@ -279,3 +279,42 @@ export async function getOngoingTrips(): Promise<FahrtResource[]> {
         throw new Error(`Es gab einen Fehler: ${error}`);
     }
 }
+
+export async function getAlleAdmin(): Promise<UserResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/alle/admin`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: UserResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+
+export async function getAlleUser(): Promise<UserResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/alle/user`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: UserResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+

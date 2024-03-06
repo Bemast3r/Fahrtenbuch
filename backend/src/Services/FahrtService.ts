@@ -99,3 +99,5 @@ export async function deleteFahrt(fahrtid: string) {
         throw new Error(`Fehler beim Löschen der Fahrt: ${error.message}`);
     }
 }
+
+

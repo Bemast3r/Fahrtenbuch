@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
+import { getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { UserResource } from '../util/Resources';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
     const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
+    const [totalUsers, setTotalUsers] = useState<number>(0);
+    const [adminUsers, setAdminUsers] = useState<number>(0);
 
     const jwt = getJWT();
     const navigate = useNavigate();
@@ -22,6 +24,11 @@ const Statistik = () => {
 
     useEffect(() => {
         loadInitialData();
+        const intervalId = setInterval(() => {
+            loadUser();
+        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
+
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -38,6 +45,7 @@ const Statistik = () => {
             const user = await getUser(id!.userID);
             setUser(user);
             await loadTrips();
+            await loadUser();
         } catch (error) {
             console.error("Fehler beim Laden der Daten:", error);
         }
@@ -53,9 +61,18 @@ const Statistik = () => {
         }
     }
 
-    // Dummy-Daten für Benutzer
-    const totalUsers = 50;
-    const adminUsers = 5;
+    async function loadUser() {
+        try {
+            const alleUser = await getAlleUser();
+            const alleAdmins = await getAlleAdmin();
+            const totalUsers = alleUser.length;
+            const adminUsers = alleAdmins.length;
+            setTotalUsers(totalUsers);
+            setAdminUsers(adminUsers);
+        } catch (error) {
+            console.error("Fehler beim Laden der User:", error);
+        }
+    }
 
     return (
         <div className="form-wrapper">
