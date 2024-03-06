@@ -38,23 +38,7 @@ const FahrtVerwalten: React.FC = () => {
   const prevLocationRef = useRef<string>(window.location.pathname);
   const location = useLocation();
   const [startTime, setStartTime] = useState<number | null>(null); // Timer-Startzeit
-  const timerIdRef = useRef<NodeJS.Timeout | null>(null); // Ref für Timer-ID
 
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      // Speichern der verstrichenen Zeit im Local Storage
-      if (startTime) {
-        const elapsedTime = Date.now() - startTime;
-        localStorage.setItem('elapsedTimeLenkzeit', JSON.stringify(elapsedTime));
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [startTime]);
 
   useEffect(() => {
     // Beim Laden der Komponente prüfen, ob eine verstrichene Zeit im Local Storage vorhanden ist
@@ -66,11 +50,11 @@ const FahrtVerwalten: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (letzteFahrt && show) {
+    if (letzteFahrt) {
       setElapsedTimeLenkzeit(calculateTotalLenkzeitDifference(letzteFahrt.lenkzeit));
       setElapsedTimeArbeitszeit(calculateTotalLenkzeitDifference(letzteFahrt.arbeitszeit));
       setElapsedTimePause(calculateTotalLenkzeitDifference(letzteFahrt.pause));
-      setShow(false)
+      // setShow(false)
     }
   }, [letzteFahrt])
 
@@ -83,34 +67,11 @@ const FahrtVerwalten: React.FC = () => {
     }
   }, [jwt, navigate]);
 
-
-
   useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = 'Ihre Daten werden nicht gespeichert, wenn Sie die Seite verlassen.';
-    };
-
-    const handlePopstate = (e: PopStateEvent) => {
-      const confirmed = window.confirm('Wollen Sie die Seite wirklich verlassen? Ihre Änderungen gehen möglicherweise verloren.');
-      if (!confirmed) {
-        e.preventDefault(); // Vorgang abbrechen
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('popstate', handlePopstate);
-
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopstate);
+      stopRunningTimer(); 
     };
-  });
-
-  useEffect(() => {
-    prevLocationRef.current = window.location.pathname;
-  });
-
+  }, []);
 
   async function last() {
     if (usercontexte && usercontexte.id) {
