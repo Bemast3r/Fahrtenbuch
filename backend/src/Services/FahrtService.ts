@@ -70,7 +70,16 @@ export async function updateUserfahrt(fahrtResource: FahrtResource) {
         await Fahrt.updateOne({ _id: id }, { $push: { arbeitszeit: { $each: arbeitszeit } } });
     }
     if (ruhezeit) {
-        await Fahrt.updateOne({ _id: id }, { $push: { ruhezeit: { $each: ruhezeit } } });
+        const existingRuhezeiten = await Fahrt.findOne({ _id: id }, { ruhezeit: 1 });
+        const uniqueRuhezeiten = ruhezeit.filter(newRuhezeit => {
+            return !existingRuhezeiten?.ruhezeit.some(existingRuhezeit =>
+                existingRuhezeit.start.getTime() === newRuhezeit.start.getTime() &&
+                existingRuhezeit.stop.getTime() === newRuhezeit.stop.getTime()
+            );
+        });
+        if (uniqueRuhezeiten.length > 0) {
+            await Fahrt.updateOne({ _id: id }, { $push: { ruhezeit: { $each: uniqueRuhezeiten } } });
+        }
     }
 
     return newFahrt;
