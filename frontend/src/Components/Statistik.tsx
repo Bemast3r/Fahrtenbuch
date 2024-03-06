@@ -1,72 +1,75 @@
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getFahrt, getUser } from '../Api/api';
-import { FahrtResource, UserResource } from '../util/Resources';
+import { getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
+import { UserResource } from '../util/Resources';
 
 const Statistik = () => {
-    const [user, setUser] = useState<UserResource | null>(null)
+    const [user, setUser] = useState<UserResource | null>(null);
+    const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
 
-    const jwt = getJWT()
-    const navigate = useNavigate()
+    const jwt = getJWT();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (jwt) {
-            setJWT(jwt)
+            setJWT(jwt);
         } else {
-            navigate("/")
+            navigate("/");
             return;
         }
-    }, [jwt])
+    }, [jwt]);
 
-    async function load() {
-        const id = getLoginInfo()
-        const user = await getUser(id!.userID)
-        setUser(user)
+    useEffect(() => {
+        loadInitialData();
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            loadTrips();
+        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Daten
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    async function loadInitialData() {
+        try {
+            const id = getLoginInfo();
+            const user = await getUser(id!.userID);
+            setUser(user);
+            await loadTrips();
+        } catch (error) {
+            console.error("Fehler beim Laden der Daten:", error);
+        }
     }
 
-    // async function handlePostLenkzeit() {
-    //     const fahrtResource: FahrtResource = {
-    //         fahrerid: usercontexte.id!,
-    //         id: letzteFahrt._id!.toString(),
-    //         _id: letzteFahrt._id!.toString(),
-    //         kennzeichen: letzteFahrt.kennzeichen.toString(),
-    //         kilometerstand: letzteFahrt.kilometerstand,
-    //         startpunkt: letzteFahrt.startpunkt.toString(),
-    //         lenkzeit: [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }],
-    //         beendet: false,
-    //       };
-          
-    //     const fahrt = await getFahrt(fahrtResource);
-    // }
-
-    const totalTrips = 1000;
-    const ongoingTrips = 300;
-    const completedTrips = 700;
+    async function loadTrips() {
+        try {
+            const completed = await getCompletedTrips();
+            const ongoing = await getOngoingTrips();
+            setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
+        } catch (error) {
+            console.error("Fehler beim Laden der Fahrten:", error);
+        }
+    }
 
     // Dummy-Daten für Benutzer
     const totalUsers = 50;
     const adminUsers = 5;
-    const regularUsers = totalUsers - adminUsers;
-
-    useEffect(() => { load() }, [])
 
     return (
         <div className="form-wrapper">
             <h2 className="form-header">Statistiken</h2>
             <div>
                 <h2>Fahrten</h2>
-                <p>Gesamtzahl der Fahrten: {totalTrips}</p>
-                <p>Aktuelle Fahrten: {ongoingTrips}</p>
-                <p>Abgeschlossene Fahrten: {completedTrips}</p>
+                <p>Gesamtzahl der Fahrten: {tripData.completedTrips + tripData.ongoingTrips}</p>
+                <p>Aktuelle Fahrten: {tripData.ongoingTrips}</p>
+                <p>Abgeschlossene Fahrten: {tripData.completedTrips}</p>
             </div>
             <div>
                 <h2>Benutzer</h2>
                 <p>Gesamtzahl der Benutzer: {totalUsers}</p>
                 <p>Admin-Benutzer: {adminUsers}</p>
-                <p>Reguläre Benutzer: {regularUsers}</p>
             </div>
         </div>
     );
