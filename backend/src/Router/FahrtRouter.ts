@@ -89,6 +89,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
     body("arbeitszeit").optional().isArray(),
     body("pause").optional().isArray(),
     body("beendet").optional().isBoolean(),
+    body("ruhezeit").optional().isArray(),
     async (req, res, next) => {
 
         const errors = validationResult(req);

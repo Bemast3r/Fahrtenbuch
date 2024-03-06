@@ -37,10 +37,6 @@ const FahrtVerwalten: React.FC = () => {
   const jwt = getJWT();
 
 
-  useEffect(()=>{
-    toggleRecordingLenkzeit()
-  },[])
-
 
   useEffect(() => {
     if (letzteFahrt && show) {
@@ -79,19 +75,54 @@ const FahrtVerwalten: React.FC = () => {
     };
   }, [usercontexte]);
 
-  // useEffect(() => { intial() }, [])
-
   async function last() {
-    const id = getLoginInfo()
-    const user = await getUser(id!.userID)
-    setUser(user)
-    setLoading(false)
-    const x: FahrtResource[] = await getFahrt(id!.userID);
-    setLetzteFahrt(x[x.length - 1]);
+    if (usercontexte && usercontexte.id) {
+      const x: FahrtResource[] = await getFahrt(usercontexte.id);
+      setLetzteFahrt(x[x.length - 1]);
+    } else {
+      const id = getLoginInfo()
+      const user = await getUser(id!.userID)
+      setUser(user)
+      console.log(user)
+      const x: FahrtResource[] = await getFahrt(id!.userID);
+      setLetzteFahrt(x[x.length - 1]);
+
+      if (x.length === 0) {
+        return;
+      }
+      //
+      console.log(x)
+      let currentfahrt = x[x.length - 1]
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      console.log(currentfahrt)
+
+      const fahrtResource: FahrtResource = {
+        fahrerid: user.id!,
+        id: currentfahrt._id!.toString(),
+        _id: currentfahrt._id!.toString(),
+        kennzeichen: currentfahrt.kennzeichen.toString(),
+        kilometerstand: currentfahrt.kilometerstand,
+        startpunkt: currentfahrt.startpunkt.toString(),
+        ruhezeit: [{ start: today, stop: currentfahrt.createdAt! }],
+        beendet: false,
+      };
+      console.log(fahrtResource)
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+      setLoading(false)
+      setCounter(count => count + 1);
+
+    }
   }
 
   useEffect(() => { last() }, [count]);
-  useEffect(() => { }, []);
+
+  useEffect(() => {
+    toggleRecordingLenkzeit()
+  }, [])
+
+
 
   function stopRunningTimer() {
     if (timerId) {
@@ -171,8 +202,6 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handlePostLenkzeit() {
-    console.log(lenkzeitRecord)
-    console.log("start:", new Date(lenkzeitRecord!.start))
     if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -210,7 +239,7 @@ const FahrtVerwalten: React.FC = () => {
 
   function toggleRecordingLenkzeit() {
 
-    if(isRecordingLenkzeit){
+    if (isRecordingLenkzeit) {
       return;
     }
     stopRunningTimer();
@@ -238,7 +267,7 @@ const FahrtVerwalten: React.FC = () => {
 
   function toggleRecordingArbeit() {
 
-    if(isRecordingArbeitszeit){
+    if (isRecordingArbeitszeit) {
       return;
     }
     stopRunningTimer();
@@ -265,7 +294,7 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function toggleRecordingPause() {
-    if(isRecordingPause){
+    if (isRecordingPause) {
       return;
     }
     stopRunningTimer();
@@ -306,27 +335,6 @@ const FahrtVerwalten: React.FC = () => {
     return totalDifference;
   }
 
-
-  // Ruhezeit
-  // async function intial() {
-  //   if (usercontexte && letzteFahrt?.createdAt) {
-  //     const fahrtResource: FahrtResource = {
-  //       fahrerid: usercontexte.id!,
-  //       id: letzteFahrt._id!.toString(),
-  //       _id: letzteFahrt._id!.toString(),
-  //       kennzeichen: letzteFahrt.kennzeichen.toString(),
-  //       kilometerstand: letzteFahrt.kilometerstand,
-  //       startpunkt: letzteFahrt.startpunkt.toString(),
-  //       // ruhezeit: [{ start: new Date(berlinTime), stop: letzteFahrt.createdAt }],
-  //       beendet: false,
-  //     };
-  //     const fahrt = await updateFahrt(fahrtResource);
-  //     setLetzteFahrt(fahrt);
-  //     setCounter(count => count + 1);
-  //   }
-  // }
-
-
   function formatTime(seconds: number): string {
     let hours = Math.floor(seconds / 3600);
     hours = Math.floor(hours / 1000)
@@ -359,7 +367,7 @@ const FahrtVerwalten: React.FC = () => {
         <Loading />
       ) : (
         <div className="container">
-          <h3>Hallo {usercontexte && usercontexte.name ? usercontexte.name : <Loading></Loading>}.</h3>
+          <h3>Hallo, {usercontexte && usercontexte.vorname ? usercontexte.vorname + " " + usercontexte.name : <Loading></Loading>}.</h3>
           {letzteFahrt && !letzteFahrt.beendet ? (
             <>
               <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
