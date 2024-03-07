@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
 import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../Api/api';
@@ -16,7 +16,7 @@ interface TimeRecord {
 
 const FahrtVerwalten: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false);
+  const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(true);
   const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false);
   const [isRecordingPause, setIsRecordingPause] = useState<boolean>(false);
   const [lenktext, setLenkText] = useState<string>('Lenkzeit START');
@@ -29,34 +29,94 @@ const FahrtVerwalten: React.FC = () => {
   const [lenkzeitRecord, setLenkzeitRecord] = useState<TimeRecord | null>(null);
   const [arbeitszeitRecord, setArbeitszeitRecord] = useState<TimeRecord | null>(null);
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
-  const [show, setShow] = useState<boolean>(true);
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const navigate = useNavigate();
   const [count, setCounter] = useState(0)
   const jwt = getJWT();
-  const prevLocationRef = useRef<string>(window.location.pathname);
-  const location = useLocation();
-  const [startTime, setStartTime] = useState<number | null>(null); // Timer-Startzeit
+
+
+
+  const isLastFahrtBeendet = () => {
+    return letzteFahrt && letzteFahrt.beendet === true;
+  };
+
+  // Initialisierung für das Erstellen des Local Storage, falls nicht vorhanden
+  // useEffect(() => {
+  //   if (letzteFahrt) {
+  //     const storageKeys = ["elapsedTimeLenkzeit", "elapsedTimeArbeitszeit", "elapsedTimePause", "isLenkzeit", "isArbeitszeit", "isPause"];
+  //     const storageExists = storageKeys.every(key => localStorage.getItem(key));
+  //     // Wenn die Storages noch nicht erstellt wurden, erstelle sie
+  //     if (!storageExists) {
+  //       console.log("dsss")
+  //       const storageItems = [
+  //         { key: "elapsedTimeLenkzeit", value: elapsedTimeLenkzeit },
+  //         { key: "elapsedTimeArbeitszeit", value: elapsedTimeArbeitszeit },
+  //         { key: "elapsedTimePause", value: elapsedTimePause },
+  //         { key: "isLenkzeit", value: true },
+  //         { key: "isArbeitszeit", value: false },
+  //         { key: "isPause", value: false }
+  //       ];
+
+  //       storageItems.forEach(item => {
+  //         console.log("key, " + item.key + "value," + item.value)
+  //         localStorage.setItem(item.key, JSON.stringify(item.value));
+  //       });
+  //     }
+  //   }
+  // }, []);
+
+  // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
+  useEffect(() => {
+    if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
+      const storedElapsedTimeLenkzeit = localStorage.getItem("elapsedTimeLenkzeit");
+      const storedElapsedArbeitszeit = localStorage.getItem("elapsedTimeArbeitszeit");
+      const storedElapsedPause = localStorage.getItem("elapsedTimePause");
+      const storedisTimeLenkzeit = localStorage.getItem("isLenkzeit");
+      const storedisArbeitszeit = localStorage.getItem("isArbeitszeit");
+      const storedisPause = localStorage.getItem("isPause");
+      if (storedElapsedTimeLenkzeit) {
+        setElapsedTimeLenkzeit(Number(storedElapsedTimeLenkzeit));
+        setElapsedTimePause(Number(storedElapsedPause))
+        setElapsedTimeArbeitszeit(Number(storedElapsedArbeitszeit));
+        console.log(storedisTimeLenkzeit)
+        if (storedisTimeLenkzeit === "true") {
+          setIsRecordingLenkzeit(true)
+        } else {
+          setIsRecordingLenkzeit(false)
+        }
+
+        if (storedisArbeitszeit === "true") {
+          setIsRecordingArbeitszeit(true)
+        } else {
+          setIsRecordingArbeitszeit(false)
+        }
+
+        if (storedisPause === "true") {
+          setIsRecordingPause(true)
+        } else {
+          setIsRecordingPause(false)
+        }
+      }
+    }
+  }, [elapsedTimeLenkzeit]); // Nur wenn elapsedTimeLenkzeit sich ändert
 
 
   useEffect(() => {
-    // Beim Laden der Komponente prüfen, ob eine verstrichene Zeit im Local Storage vorhanden ist
-    const storedElapsedTime = localStorage.getItem('elapsedTimeLenkzeit');
-    if (storedElapsedTime) {
-      const elapsedTime = JSON.parse(storedElapsedTime);
-      setStartTime(Date.now() - elapsedTime);
-    }
-  }, []);
+    const storageItems = [
+      { key: "elapsedTimeLenkzeit", value: elapsedTimeLenkzeit },
+      { key: "elapsedTimeArbeitszeit", value: elapsedTimeArbeitszeit },
+      { key: "elapsedTimePause", value: elapsedTimePause },
+      { key: "isLenkzeit", value: isRecordingLenkzeit },
+      { key: "isArbeitszeit", value: isRecordingArbeitszeit },
+      { key: "isPause", value: isRecordingPause }
+    ];
 
-  useEffect(() => {
-    if (letzteFahrt) {
-      setElapsedTimeLenkzeit(calculateTotalLenkzeitDifference(letzteFahrt.lenkzeit));
-      setElapsedTimeArbeitszeit(calculateTotalLenkzeitDifference(letzteFahrt.arbeitszeit));
-      setElapsedTimePause(calculateTotalLenkzeitDifference(letzteFahrt.pause));
-      // setShow(false)
-    }
-  }, [letzteFahrt])
+    storageItems.forEach(item => {
+      localStorage.setItem(item.key, JSON.stringify(item.value));
+    });
+
+  }, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause])
 
   useEffect(() => {
     if (jwt) {
@@ -69,7 +129,7 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      stopRunningTimer(); 
+      stopRunningTimer();
     };
   }, []);
 
@@ -117,8 +177,11 @@ const FahrtVerwalten: React.FC = () => {
   useEffect(() => { last() }, [count]);
 
   useEffect(() => {
-    toggleRecordingLenkzeit()
-  }, [])
+
+    toggleRecordingLenkzeit();
+
+  }, []);
+
 
   function stopRunningTimer() {
     if (timerId) {
@@ -131,7 +194,6 @@ const FahrtVerwalten: React.FC = () => {
         lastRecord.stop = moment().toDate();
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
-        localStorage.setItem("lenkzeit", "Keine Daten")
         handlePostLenkzeit();
       }
       setIsRecordingLenkzeit(false);
@@ -141,7 +203,6 @@ const FahrtVerwalten: React.FC = () => {
       if (lastRecord && lastRecord.stop === null) {
         lastRecord.stop = moment().toDate();
         setArbeitszeitRecord(lastRecord);
-        localStorage.setItem("arbeitszeit", "Keine Daten")
         setArbeitText('Arbeitszeit START');
         handlePostArbeitszeit();
       }
@@ -152,7 +213,6 @@ const FahrtVerwalten: React.FC = () => {
       if (lastRecord && lastRecord.stop === null) {
         lastRecord.stop = moment().toDate();
         setPauseRecord(lastRecord);
-        localStorage.setItem("pause", "Keine Daten")
         setPauseText('Pause START');
         handlePostPause();
       }
@@ -217,8 +277,10 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handleEndePost() {
     if (usercontexte && letzteFahrt) {
-      const today = new Date()
-      today.setHours(23, 59, 59, 0)
+      const today = new Date();
+      today.setHours(23, 59, 59, 0);
+
+      // Aktualisiere die Fahrt
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
@@ -233,12 +295,20 @@ const FahrtVerwalten: React.FC = () => {
       setLetzteFahrt(fahrt);
       setCounter(count => count + 1);
 
+      // Entferne alle Einträge aus dem Local Storage außer dem JWT
+      Object.keys(localStorage).forEach(key => {
+        if (key !== 'jwt') {
+          localStorage.removeItem(key);
+        }
+      });
     }
   }
 
   function toggleRecordingLenkzeit() {
-
     if (isRecordingLenkzeit) {
+      return;
+    }
+    if (isLastFahrtBeendet()) {
       return;
     }
     stopRunningTimer();
@@ -366,7 +436,7 @@ const FahrtVerwalten: React.FC = () => {
         <Loading />
       ) : (
         <div className="container">
-          <h3>Hallo, {usercontexte && usercontexte.vorname ? usercontexte.vorname + " " + usercontexte.name : <Loading></Loading>}.</h3>
+          <h3>Hallo, {usercontexte ? usercontexte.name : ""}.</h3>
           {letzteFahrt && !letzteFahrt.beendet ? (
             <>
               <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
