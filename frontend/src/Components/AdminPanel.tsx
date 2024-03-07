@@ -38,7 +38,7 @@ const AdminFormular = () => {
 
     return (
         <div className="form-wrapper">
-            <h2 className="form-header">Benutzer erstellen</h2>
+            <h2 className="form-header">Benutzer Registrieren</h2>
             <div className="form-container">
                 <Form onSubmit={handleSubmit}>
                     <Row className="mb-3">
@@ -80,7 +80,7 @@ const AdminFormular = () => {
                     </Row>
 
                     <Button variant="primary" type="submit" className="submit-button">
-                        Benutzer erstellen
+                        Benutzer Registrieren
                     </Button>
                 </Form>
             </div>
