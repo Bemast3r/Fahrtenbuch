@@ -82,8 +82,12 @@ const FahrtVerwalten: React.FC = () => {
         console.log(storedisTimeLenkzeit)
         if (storedisTimeLenkzeit === "true") {
           setIsRecordingLenkzeit(true)
+          console.log("?")
+      
         } else {
           setIsRecordingLenkzeit(false)
+          console.log("?=")
+          toggleRecordingLenkzeit()
         }
 
         if (storedisArbeitszeit === "true") {
@@ -176,26 +180,22 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => { last() }, [count]);
 
-  useEffect(() => {
-
-    toggleRecordingLenkzeit();
-
-  }, []);
-
-
   function stopRunningTimer() {
     if (timerId) {
       clearInterval(timerId);
       setTimerId(null);
     }
     if (isRecordingLenkzeit) {
+      console.log(lenkzeitRecord)
       const lastRecord = lenkzeitRecord;
       if (lastRecord && lastRecord.stop === null) {
         lastRecord.stop = moment().toDate();
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
+        console.log(":o")
         handlePostLenkzeit();
       }
+      console.log(":D")
       setIsRecordingLenkzeit(false);
     }
     else if (isRecordingArbeitszeit) {
@@ -218,6 +218,7 @@ const FahrtVerwalten: React.FC = () => {
       }
       setIsRecordingPause(false);
     }
+    console.log(":D")
   }
 
 
@@ -305,15 +306,19 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function toggleRecordingLenkzeit() {
-    if (isRecordingLenkzeit) {
-      return;
-    }
+
+    // if (isRecordingLenkzeit) {
+    //   console.log("=?")
+    //   return;
+    // }
     if (isLastFahrtBeendet()) {
+      console.log("x?")
       return;
     }
     stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingLenkzeit) {
+      console.log(";p")
       setLenkzeitRecord({ start: currentTime, stop: null });
       setLenkText('Lenkzeit STOP');
       const timerId = setInterval(() => {
