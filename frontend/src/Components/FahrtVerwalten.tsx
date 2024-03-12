@@ -366,7 +366,7 @@ const FahrtVerwalten: React.FC = () => {
         <Loading />
       ) : (
         <div className="container">
-          <h3>Hallo, {usercontexte && usercontexte.vorname ? usercontexte.vorname + " " + usercontexte.name : <Loading></Loading>}.</h3>
+          <h3>Hallo, {usercontexte && usercontexte.vorname ? usercontexte.vorname + "" : " : usercontexte.name" }.</h3>
           {letzteFahrt && !letzteFahrt.beendet ? (
             <>
               <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
