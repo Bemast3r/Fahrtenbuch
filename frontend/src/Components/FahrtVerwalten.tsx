@@ -31,6 +31,7 @@ const FahrtVerwalten: React.FC = () => {
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
+  const [isCalc, setisCal] = useState<Boolean>(true);
   const navigate = useNavigate();
   const [count, setCounter] = useState(0)
   const jwt = getJWT();
@@ -43,10 +44,19 @@ const FahrtVerwalten: React.FC = () => {
 
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
-    if (letzteFahrt && count == 0) {
+    if (letzteFahrt && isCalc) {
+      setisCal(false)
       console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
       const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
-      console.log("MISSING:", x)
+      if(isRecordingLenkzeit){
+        setElapsedTimeLenkzeit(elapsedTimeLenkzeit + x)
+      }
+      if(isRecordingArbeitszeit){
+        setElapsedTimeLenkzeit(elapsedTimeArbeitszeit + x)
+      }
+      if(isRecordingPause){
+        setElapsedTimeLenkzeit(elapsedTimePause + x)
+      }
     }
     // Beim ersten betreten 
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
@@ -161,21 +171,19 @@ const FahrtVerwalten: React.FC = () => {
 
 
 
-  function addmissingTime(lenkzeit: number, pause: number, arbeitszeit: number, letzteFahrt: FahrtResource): String {
+  function addmissingTime(lenkzeit: number, pause: number, arbeitszeit: number, letzteFahrt: FahrtResource): number {
 
-    const elapsed = lenkzeit + pause + arbeitszeit; // Sekunden 
-    let leave = new Date(letzteFahrt.createdAt!); // Date
-    // leave.setHours(leave.getHours()); // Erhöhe den Zeitstempel um eine Stunde
-    console.log(leave.getTime() )
-    let newTime = ((leave.getTime() + (elapsed * 1000)) * -1);
-    console.log(newTime)
-    console.log("Date:", new Date().getTime())
-    let now = new Date()
-    // now.setHours(now.getHours())
-    let missing = now.getTime() + newTime;
-    return formatDate(new Date(missing)); // Rückgabe der fehlenden Zeit in Sekunden
-
+    const createdAt = letzteFahrt ? new Date(letzteFahrt.createdAt!).getTime() : 0; // Zeitstempel der letzten Fahrt
+    const gesamtzeit = createdAt + (lenkzeit + pause + arbeitszeit) * 1000; // Gesamtzeit in Millisekunden
+    const now = Date.now(); // Aktueller Zeitstempel in Millisekunden
+  
+    const diffInSeconds = Math.round((now - gesamtzeit) / 1000); // Differenz in Sekunden, gerundet
+    return diffInSeconds;
   }
+  
+  
+
+
 
 
 
