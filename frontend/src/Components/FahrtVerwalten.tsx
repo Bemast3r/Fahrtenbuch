@@ -43,6 +43,12 @@ const FahrtVerwalten: React.FC = () => {
 
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
+    if (letzteFahrt && count == 0) {
+      console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
+      const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
+      console.log("MISSING:", x)
+    }
+    // Beim ersten betreten 
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
       const storedElapsedTimeLenkzeit = localStorage.getItem("elapsedTimeLenkzeit");
       const storedElapsedArbeitszeit = localStorage.getItem("elapsedTimeArbeitszeit");
@@ -59,25 +65,25 @@ const FahrtVerwalten: React.FC = () => {
           setIsRecordingPause(false)
           setIsRecordingArbeitszeit(false)
           toggleRecordingLenkzeit()
-        } else if(storedisArbeitszeit === "true") {
+        } else if (storedisArbeitszeit === "true") {
           setIsRecordingArbeitszeit(true)
           setIsRecordingLenkzeit(false)
           setIsRecordingPause(false)
           toggleRecordingArbeit()
-        } else if(storedisPause === "true")  {
+        } else if (storedisPause === "true") {
           setIsRecordingPause(true)
           setIsRecordingArbeitszeit(false)
           setIsRecordingLenkzeit(false)
           toggleRecordingPause()
-        }else if(storedisPause === "false" && storedisArbeitszeit === "false" && storedisTimeLenkzeit === "false"){
-          setIsRecordingArbeitszeit(true)
-          setIsRecordingLenkzeit(false)
+        } else if (storedisPause === "false" && storedisArbeitszeit === "false" && storedisTimeLenkzeit === "false") {
+          setIsRecordingLenkzeit(true)
           setIsRecordingPause(false)
-          toggleRecordingArbeit()
+          setIsRecordingArbeitszeit(false)
+          toggleRecordingLenkzeit()
         }
       }
     }
-  }, [isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause]); 
+  }, [isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
 
   useEffect(() => {
     const storageItems = [
@@ -152,6 +158,27 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   useEffect(() => { last() }, [count]);
+
+
+
+  function addmissingTime(lenkzeit: number, pause: number, arbeitszeit: number, letzteFahrt: FahrtResource): String {
+
+    const elapsed = lenkzeit + pause + arbeitszeit; // Sekunden 
+    let leave = new Date(letzteFahrt.createdAt!); // Date
+    // leave.setHours(leave.getHours()); // Erhöhe den Zeitstempel um eine Stunde
+    console.log(leave.getTime() )
+    let newTime = ((leave.getTime() + (elapsed * 1000)) * -1);
+    console.log(newTime)
+    console.log("Date:", new Date().getTime())
+    let now = new Date()
+    // now.setHours(now.getHours())
+    let missing = now.getTime() + newTime;
+    return formatDate(new Date(missing)); // Rückgabe der fehlenden Zeit in Sekunden
+
+  }
+
+
+
 
   function stopRunningTimer() {
 
@@ -486,5 +513,6 @@ const FahrtVerwalten: React.FC = () => {
     </div>
   );
 };
+
 
 export default FahrtVerwalten;
