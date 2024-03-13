@@ -31,40 +31,36 @@ const FahrtVerwalten: React.FC = () => {
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
-  const [isCalc, setisCal] = useState<Boolean>(false);
-  const [missingtime, setMissingTime] = useState<number>(0);
   const navigate = useNavigate();
 
   const [count, setCounter] = useState(0)
+
   const jwt = getJWT();
 
-
-
-  const isLastFahrtBeendet = () => {
-    return letzteFahrt && letzteFahrt.beendet === true;
-  };
+  useEffect(() => { last() }, [count]);
 
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
-    if (letzteFahrt && count == 0) {
-      setisCal(false)
+    if (letzteFahrt) {
       console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
       const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
-      setMissingTime(x)
+      if (x === 0 || x < 0) {
+        return;
+      }
       console.log("Missing", x)
       console.log("isLenkzeit", isRecordingLenkzeit, elapsedTimeLenkzeit)
       console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
       console.log("Paus", isRecordingPause, elapsedTimePause)
 
-      if(isRecordingLenkzeit){
+      if (isRecordingLenkzeit) {
         setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
       }
-      if(isRecordingArbeitszeit){
+      if (isRecordingArbeitszeit) {
         console.log(x)
-        setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
+        setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x)
       }
-      if(isRecordingPause){
-        setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
+      if (isRecordingPause) {
+        setElapsedTimePause(prevElapsedTime => prevElapsedTime + x)
       }
       console.log("===================================================")
       console.log("isLenkzeit ", isRecordingLenkzeit, elapsedTimeLenkzeit)
@@ -184,7 +180,7 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-  useEffect(() => { last() }, [count]);
+
 
 
 
@@ -196,7 +192,7 @@ const FahrtVerwalten: React.FC = () => {
     const diffInSeconds = Math.round((now - gesamtzeit) / 1000); // Differenz in Sekunden, gerundet
     return diffInSeconds;
   }
-  
+
 
 
   function stopRunningTimer() {
