@@ -39,9 +39,15 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => { last() }, [count]);
 
+  
+
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
-    if (letzteFahrt) {
+    // Überprüfen, ob letzteFahrt vorhanden ist
+    if (!letzteFahrt) {
+      // Funktion aufrufen, um letzteFahrt zu aktualisieren
+      last();
+    } else {
       console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
       const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
       if (x === 0 || x < 0) {
@@ -51,7 +57,7 @@ const FahrtVerwalten: React.FC = () => {
       console.log("isLenkzeit", isRecordingLenkzeit, elapsedTimeLenkzeit)
       console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
       console.log("Paus", isRecordingPause, elapsedTimePause)
-
+  
       if (isRecordingLenkzeit) {
         setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
       }
@@ -68,8 +74,8 @@ const FahrtVerwalten: React.FC = () => {
       console.log("Paus", isRecordingPause, elapsedTimePause)
       console.log("===================================================")
     }
-
-    // Beim ersten betreten 
+  
+    // Beim ersten Betreten
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
       const storedElapsedTimeLenkzeit = localStorage.getItem("elapsedTimeLenkzeit");
       const storedElapsedArbeitszeit = localStorage.getItem("elapsedTimeArbeitszeit");
@@ -81,7 +87,7 @@ const FahrtVerwalten: React.FC = () => {
         setElapsedTimeLenkzeit(Number(storedElapsedTimeLenkzeit));
         setElapsedTimePause(Number(storedElapsedPause))
         setElapsedTimeArbeitszeit(Number(storedElapsedArbeitszeit));
-
+  
         if (storedisTimeLenkzeit === "true") {
           setIsRecordingLenkzeit(true)
           setIsRecordingPause(false)
@@ -106,6 +112,7 @@ const FahrtVerwalten: React.FC = () => {
       }
     }
   }, [isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
+  
 
   useEffect(() => {
     const storageItems = [
