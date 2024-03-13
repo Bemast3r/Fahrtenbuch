@@ -67,9 +67,8 @@ const FahrtVerwalten: React.FC = () => {
       console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
       console.log("Paus", isRecordingPause, elapsedTimePause)
       console.log("===================================================")
-
-
     }
+
     // Beim ersten betreten 
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
       const storedElapsedTimeLenkzeit = localStorage.getItem("elapsedTimeLenkzeit");
@@ -133,6 +132,7 @@ const FahrtVerwalten: React.FC = () => {
     }
   }, [jwt, navigate]);
 
+
   useEffect(() => {
     return () => {
       stopRunningTimer();
@@ -179,10 +179,6 @@ const FahrtVerwalten: React.FC = () => {
 
     }
   }
-
-
-
-
 
   function addmissingTime(lenkzeit: number, pause: number, arbeitszeit: number, letzteFahrt: FahrtResource): number {
 
@@ -400,12 +396,11 @@ const FahrtVerwalten: React.FC = () => {
     setIsRecordingPause(!isRecordingPause);
   }
 
-  function calculateTotalLenkzeitDifference(lenkzeitRecords: TimeRecord[] | undefined): number {
-    if (!lenkzeitRecords) return 0;
+  function calculateTotalTimeDifference(record: TimeRecord[]): number {
 
     let totalDifference = 0;
 
-    lenkzeitRecords.forEach((record) => {
+    record.forEach((record) => {
       if (record.stop) {
         const differenceInSeconds = Math.floor(Math.abs(new Date(record.stop).getTime() - new Date(record.start).getTime()) / 1000);
         totalDifference += differenceInSeconds;
@@ -508,8 +503,12 @@ const FahrtVerwalten: React.FC = () => {
                 <div>
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
                   Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
-                  Gesamt Pause: {formatTime(elapsedTimePause)} <br />
-                  {/* Ruhezeit: Stop - {formattedStartTime}<br /> */}
+                  Gesamt Pause: {formatTime(elapsedTimePause)}
+                  {letzteFahrt.ruhezeit && letzteFahrt.ruhezeit.length > 0 && (
+                    <div>
+                      Verbrachte Ruhezeit: {formatDate(new Date(letzteFahrt.ruhezeit[0].stop))}
+                    </div>
+                  )}
                   Insgesamte Zeit ist: {formatTime((elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause))}
                 </div>
 
