@@ -25,6 +25,25 @@ export async function getUserFahrten(userid: string) {
         throw new Error(`Fehler beim Abrufen der Fahrten: ${error.message}`)
     }
 }
+
+export async function getBeendeteFahrten() {
+    try {
+        const beendeteFahrten = await Fahrt.find({ beendet: true });
+        return beendeteFahrten.map(fahrt => fahrt.toObject());
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen der beendeten Fahrten: ${error.message}`);
+    }
+}
+
+export async function getLaufendeFahrten() {
+    try {
+        const beendeteFahrten = await Fahrt.find({ beendet: false });
+        return beendeteFahrten.map(fahrt => fahrt.toObject());
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen der beendeten Fahrten: ${error.message}`);
+    }
+}
+
 // Admin holt sich die Fahrten von einem User Sinnlos?
 // export async function getUserFahrten(user: UserResource) { }
 
@@ -95,3 +114,5 @@ export async function deleteFahrt(fahrtid: string) {
         throw new Error(`Fehler beim Löschen der Fahrt: ${error.message}`);
     }
 }
+
+

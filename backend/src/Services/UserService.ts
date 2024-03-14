@@ -151,3 +151,22 @@ export async function deleteUser(userId: string): Promise<void> {
         throw new Error(`Fehler beim Löschen des Benutzers: ${(error as Error).message}`);
     }
 }
+
+export async function getAlleUser(): Promise<UserResource[]> {
+    try {
+        const users = await getUsersFromDB();
+        return users;
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen aller Benutzer: ${error.message}`);
+    }
+}
+
+export async function getAlleAdmin(): Promise<UserResource[]> {
+    try {
+        const users = await getUsersFromDB();
+        const admins = users.filter(user => user.admin);
+        return admins;
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen aller Admin-Benutzer: ${error.message}`);
+    }
+}
