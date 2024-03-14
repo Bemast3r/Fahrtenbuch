@@ -40,7 +40,6 @@ const FahrtVerwalten: React.FC = () => {
   useEffect(() => { last() }, [count]);
 
   
-
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
     // Überprüfen, ob letzteFahrt vorhanden ist

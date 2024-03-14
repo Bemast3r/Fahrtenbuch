@@ -15,9 +15,9 @@ const FahrtErstellen = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
-    const [validated, setValidated] = useState(false);
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
     const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [validated, setValidated] = useState(false);
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -50,10 +50,28 @@ const FahrtErstellen = () => {
             }
         });
         setDisableFields((document.getElementById(checkboxId) as HTMLInputElement).checked);
+
+        // Leeren Sie die Werte der anderen Felder
+        const otherFieldsToClear = ['formGridKennzeichen', 'formGridKilometerstand', 'formGridOrt'];
+        otherFieldsToClear.forEach(fieldId => {
+            const field = document.getElementById(fieldId) as HTMLInputElement;
+            field.value = '';
+        });
     };
 
     async function handleSubmit(e: any) {
         e.preventDefault();
+
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        setValidated(true);
+
+
+
         if (letzteFahrt && !letzteFahrt.beendet) {
             setShowAlert(true);
             return;
@@ -72,7 +90,6 @@ const FahrtErstellen = () => {
                 startpunkt: startpunkt.toString()
             };
             const fahrt = await postFahrt(fahrtResource)
-            // setFahrten(addFahrt(fahrt))
         }
         navigate("/verwalten");
     }
@@ -97,7 +114,7 @@ const FahrtErstellen = () => {
                     <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten") }}>Fahrt Verwalten</Button>
                 </Alert>
                     <div className="form-container">
-                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form className="row g-3 needs-validation" noValidate >
                             <Row className="mb-1">
                                 <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
                                     <Form.Label className="form-label">Name</Form.Label>
@@ -111,31 +128,39 @@ const FahrtErstellen = () => {
                                         // onChange={}
                                         required />
                                 </Form.Group>
-
-                                <Form.Group as={Col} controlId="formGridDatum" className="form-group">
+                                <Form.Group as={Col} controlId="formGridDatum" className="form-group" >
                                     <Form.Label className="form-label">Datum</Form.Label>
                                     <Form.Control type="text" placeholder="Datum" className="form-control" value={americanDateFormat} disabled={true} required />
                                 </Form.Group>
                             </Row>
-
                             <Row className="mb-2">
-                                <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group">
+                                <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group" validated={validated} onSubmit={handleSubmit}>
                                     <Form.Label className="form-label">Kennzeichen</Form.Label>
-                                    <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} required />
+                                    <Form.Control type="text" placeholder="Kennzeichen" className="form-control" disabled={disableFields} required={!disableFields} isInvalid={!disableFields && validated} />
+                                    {/* Fehlermeldung für das Kennzeichenfeld */}
+                                    <Form.Control.Feedback type="invalid">
+                                        Bitte geben Sie das Kennzeichen ein.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
 
                             <Row className="mb-3">
-                                <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group">
-                                    <Form.Label className="form-label">Kilometerstand (Beginn)</Form.Label>
-                                    <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} required />
+                                <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group" validated={validated} onSubmit={handleSubmit}>
+                                    <Form.Label className="form-label">Kilometerstand</Form.Label>
+                                    <Form.Control type="number" placeholder="Kilometerstand" className="form-control" disabled={disableFields} required={!disableFields} isInvalid={!disableFields && validated} />
+                                    <Form.Control.Feedback type="invalid">
+                                        Bitte geben Sie den Kilometerstand an.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
 
                             <Row className="mb-4">
-                                <Form.Group as={Col} controlId="formGridOrt" className="form-group">
+                                <Form.Group as={Col} controlId="formGridOrt" className="form-group" validated={validated} onSubmit={handleSubmit}>
                                     <Form.Label className="form-label">Ort der Fahrtaufnahme</Form.Label>
-                                    <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} required />
+                                    <Form.Control type="text" placeholder="Ort" className="form-control" disabled={disableFields} required={!disableFields} isInvalid={!disableFields && validated} />
+                                    <Form.Control.Feedback type="invalid">
+                                        Bitte geben Sie den Ort der Fahrtaufnahme an.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
 
