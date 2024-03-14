@@ -4,9 +4,8 @@ import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
-import { UserContext } from './UserContext';
 import { Button } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 interface TimeRecord {
@@ -455,7 +454,7 @@ const FahrtVerwalten: React.FC = () => {
 
   function formatDate(date: Date): string {
     const hours = new Date(date).getHours().toString().padStart(2, '0');
-    const minutes = new Date (date).getMinutes().toString().padStart(2, '0');
+    const minutes = new Date(date).getMinutes().toString().padStart(2, '0');
     const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   }
@@ -543,13 +542,17 @@ const FahrtVerwalten: React.FC = () => {
             <>
               <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
               <Link to="/create">
-                <Button>Fahrt Erstellen</Button>
+                <Button className='erstellen'>Fahrt Erstellen</Button>
               </Link>
-            </>
-          )}
-        </div>
+              <Link to="/home">
+                <Button variant="danger" className='hauptmenu'>Hauptmenu</Button>
+            </Link>
+        </>
       )}
     </div>
+  )
+}
+    </div >
   );
 };
 
