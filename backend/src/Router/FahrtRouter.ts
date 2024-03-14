@@ -99,8 +99,8 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("kilometerstand").isNumeric(),
     body("startpunkt").isString(),
     body("ruhezeit").optional().isArray(),
-    body("abwesend").isString(),
-    body("beendet").isBoolean(),
+    body("abwesend").optional().isString(),
+    body("beendet").optional().isBoolean(),
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

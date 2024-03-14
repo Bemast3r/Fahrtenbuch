@@ -39,13 +39,14 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => { last() }, [count]);
 
-  
+
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
     // Überprüfen, ob letzteFahrt vorhanden ist
     if (!letzteFahrt) {
       // Funktion aufrufen, um letzteFahrt zu aktualisieren
       last();
+      // setCounter(prev => prev + 1)
     } else {
       // console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
       const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
@@ -56,7 +57,7 @@ const FahrtVerwalten: React.FC = () => {
       // console.log("isLenkzeit", isRecordingLenkzeit, elapsedTimeLenkzeit)
       // console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
       // console.log("Paus", isRecordingPause, elapsedTimePause)
-  
+
       if (isRecordingLenkzeit) {
         setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
       }
@@ -73,7 +74,7 @@ const FahrtVerwalten: React.FC = () => {
       // console.log("Paus", isRecordingPause, elapsedTimePause)
       // console.log("===================================================")
     }
-  
+
     // Beim ersten Betreten
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
       const storedElapsedTimeLenkzeit = localStorage.getItem("elapsedTimeLenkzeit");
@@ -82,36 +83,54 @@ const FahrtVerwalten: React.FC = () => {
       const storedisTimeLenkzeit = localStorage.getItem("isLenkzeit");
       const storedisArbeitszeit = localStorage.getItem("isArbeitszeit");
       const storedisPause = localStorage.getItem("isPause");
-      if (storedElapsedTimeLenkzeit) {
-        setElapsedTimeLenkzeit(Number(storedElapsedTimeLenkzeit));
-        setElapsedTimePause(Number(storedElapsedPause))
-        setElapsedTimeArbeitszeit(Number(storedElapsedArbeitszeit));
-  
-        if (storedisTimeLenkzeit === "true") {
-          setIsRecordingLenkzeit(true)
-          setIsRecordingPause(false)
-          setIsRecordingArbeitszeit(false)
-          toggleRecordingLenkzeit()
-        } else if (storedisArbeitszeit === "true") {
-          setIsRecordingArbeitszeit(true)
-          setIsRecordingLenkzeit(false)
-          setIsRecordingPause(false)
-          toggleRecordingArbeit()
-        } else if (storedisPause === "true") {
-          setIsRecordingPause(true)
-          setIsRecordingArbeitszeit(false)
-          setIsRecordingLenkzeit(false)
-          toggleRecordingPause()
-        } else if (storedisPause === "false" && storedisArbeitszeit === "false" && storedisTimeLenkzeit === "false") {
-          setIsRecordingLenkzeit(true)
-          setIsRecordingPause(false)
-          setIsRecordingArbeitszeit(false)
-          toggleRecordingLenkzeit()
-        }
+
+      setElapsedTimeLenkzeit(Number(storedElapsedTimeLenkzeit));
+      setElapsedTimePause(Number(storedElapsedPause))
+      setElapsedTimeArbeitszeit(Number(storedElapsedArbeitszeit));
+
+      if (storedisTimeLenkzeit === "true") {
+        console.log("1")
+        setIsRecordingLenkzeit(true)
+        setIsRecordingPause(false)
+        setIsRecordingArbeitszeit(false)
+        toggleRecordingLenkzeit()
+        return;
+
+      } else if (storedisArbeitszeit === "true") {
+        console.log("2")
+        setIsRecordingArbeitszeit(true)
+        setIsRecordingLenkzeit(false)
+        setIsRecordingPause(false)
+        toggleRecordingArbeit()
+        return;
+
+      } else if (storedisPause === "true") {
+        console.log("3")
+        setIsRecordingPause(true)
+        setIsRecordingArbeitszeit(false)
+        setIsRecordingLenkzeit(false)
+        toggleRecordingPause()
+        return;
+
+      } else if (storedisPause === "false" && storedisArbeitszeit === "false" && storedisTimeLenkzeit === "false") {
+        console.log("====")
+        setIsRecordingLenkzeit(true)
+        setIsRecordingPause(false)
+        setIsRecordingArbeitszeit(false)
+        toggleRecordingLenkzeit()
+        return;
+      } else {
+        setIsRecordingLenkzeit(true)
+        setIsRecordingPause(false)
+        setIsRecordingArbeitszeit(false)
+        toggleRecordingLenkzeit()
+        return;
+
       }
+
     }
   }, [isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
-  
+
 
   useEffect(() => {
     const storageItems = [
@@ -165,8 +184,7 @@ const FahrtVerwalten: React.FC = () => {
 
       //
       let currentfahrt = x[x.length - 1]
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
+
 
       const fahrtResource: FahrtResource = {
         fahrerid: user.id!,
@@ -175,14 +193,11 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: currentfahrt.kennzeichen.toString(),
         kilometerstand: currentfahrt.kilometerstand,
         startpunkt: currentfahrt.startpunkt.toString(),
-        ruhezeit: [{ start: today, stop: currentfahrt.createdAt! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
       setLoading(false)
-      setCounter(count => count + 1);
-
     }
   }
 
@@ -292,8 +307,10 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handleEndePost() {
     if (usercontexte && letzteFahrt) {
-      const today = new Date();
-      today.setHours(23, 59, 59, 0);
+      const end = new Date();
+      end.setHours(23, 59, 59, 0);
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
 
       // Aktualisiere die Fahrt
       const fahrtResource: FahrtResource = {
@@ -303,7 +320,9 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        ruhezeit: [{ start: new Date(Date.now()), stop: today }],
+        ruhezeit: [
+          { start: today, stop: letzteFahrt.createdAt! },
+          { start: new Date(Date.now()), stop: end }],
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -435,9 +454,9 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   function formatDate(date: Date): string {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const hours = new Date(date).getHours().toString().padStart(2, '0');
+    const minutes = new Date (date).getMinutes().toString().padStart(2, '0');
+    const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   }
 
@@ -510,9 +529,9 @@ const FahrtVerwalten: React.FC = () => {
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
                   Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
                   Gesamt Pause: {formatTime(elapsedTimePause)}
-                  {letzteFahrt.ruhezeit && letzteFahrt.ruhezeit.length > 0 && (
+                  {letzteFahrt.createdAt && (
                     <div>
-                      Verbrachte Ruhezeit: {formatDate(new Date(letzteFahrt.ruhezeit[0].stop))}
+                      Verbrachte Ruhezeit: {formatDate((letzteFahrt.createdAt))}
                     </div>
                   )}
                   Insgesamte Zeit ist: {formatTime((elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause))}
