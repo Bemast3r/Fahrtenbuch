@@ -40,7 +40,9 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             arbeitszeit: fahrt.arbeitszeit,
             pause: fahrt.pause,
             startpunkt: fahrt.startpunkt,
-            ruhezeit: fahrt.ruhezeit
+            ruhezeit: fahrt.ruhezeit,
+            abwesend: fahrt.abwesend,
+            beendet: fahrt.beendet
         });
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
