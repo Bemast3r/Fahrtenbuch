@@ -105,6 +105,7 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
             },
             body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen, kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt, abwesend: fahrt.abwesend, beendet: fahrt.beendet, ruhezeit: fahrt.ruhezeit })
         });
+        console.log(response)
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }
@@ -241,3 +242,80 @@ export async function createUserWithAdmin(user: UserResource): Promise<UserResou
         throw new Error(`Es gab einen Fehler: ${error}`);
     }
 }
+
+export async function getCompletedTrips(): Promise<FahrtResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/beendete/fahrten`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: FahrtResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+
+export async function getOngoingTrips(): Promise<FahrtResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/laufende/fahrten`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: FahrtResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+
+export async function getAlleAdmin(): Promise<UserResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/alle/admin`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: UserResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+
+export async function getAlleUser(): Promise<UserResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`http://localhost:5000/api/user/admin/finde/user/alle/user`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: UserResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+

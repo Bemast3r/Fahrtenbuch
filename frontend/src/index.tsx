@@ -11,11 +11,13 @@ import PasswortVergessen from './Components/PasswortVergessen';
 import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
 import AdminFormular from './Components/AdminPanel';
 import FahrtErstellen from './Components/Fahrterstellen';
-
+import Statistik from './Components/Statistik';
+import { Breadcrumbs } from './Components/Breadcrumbs';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
+      <Breadcrumbs />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="home" element={<Home />} />
@@ -25,6 +27,7 @@ ReactDOM.render(
         <Route path="passwort-vergessen" element={<PasswortVergessen />} />
         <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
         <Route path="user-erstellen" element={<AdminFormular />} />
+        <Route path="statistiken" element={<Statistik />} />
       </Routes>
     </Router>
   </React.StrictMode>,

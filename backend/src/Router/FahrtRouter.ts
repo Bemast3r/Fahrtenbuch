@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
+import { createUserFahrt, deleteFahrt, getBeendeteFahrten, getFahrten, getLaufendeFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
 import { FahrtResource } from "../db/Resources";
 import express from "express";
 import { body, validationResult, matchedData, param } from "express-validator";
@@ -51,6 +51,44 @@ fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
     }
 );
 
+fahrrouter.get("/admin/laufende/fahrten", requiresAuthentication,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const beendeteFahrten = await getLaufendeFahrten();
+            return res.send(beendeteFahrten);
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+fahrrouter.get("/admin/beendete/fahrten", requiresAuthentication,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const beendeteFahrten = await getBeendeteFahrten();
+            return res.send(beendeteFahrten);
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
 /**
  * Erstellt eine Fahrt 
  */
@@ -61,8 +99,8 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("kilometerstand").isNumeric(),
     body("startpunkt").isString(),
     body("ruhezeit").optional().isArray(),
-    body("abwesend").isString(),
-    body("beendet").isBoolean(),
+    body("abwesend").optional().isString(),
+    body("beendet").optional().isBoolean(),
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
