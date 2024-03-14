@@ -47,15 +47,15 @@ const FahrtVerwalten: React.FC = () => {
       // Funktion aufrufen, um letzteFahrt zu aktualisieren
       last();
     } else {
-      console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
+      // console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
       const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
       if (x === 0 || x < 0) {
         return;
       }
-      console.log("Missing", x)
-      console.log("isLenkzeit", isRecordingLenkzeit, elapsedTimeLenkzeit)
-      console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
-      console.log("Paus", isRecordingPause, elapsedTimePause)
+      // console.log("Missing", x)
+      // console.log("isLenkzeit", isRecordingLenkzeit, elapsedTimeLenkzeit)
+      // console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
+      // console.log("Paus", isRecordingPause, elapsedTimePause)
   
       if (isRecordingLenkzeit) {
         setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
@@ -67,11 +67,11 @@ const FahrtVerwalten: React.FC = () => {
       if (isRecordingPause) {
         setElapsedTimePause(prevElapsedTime => prevElapsedTime + x)
       }
-      console.log("===================================================")
-      console.log("isLenkzeit ", isRecordingLenkzeit, elapsedTimeLenkzeit)
-      console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
-      console.log("Paus", isRecordingPause, elapsedTimePause)
-      console.log("===================================================")
+      // console.log("===================================================")
+      // console.log("isLenkzeit ", isRecordingLenkzeit, elapsedTimeLenkzeit)
+      // console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
+      // console.log("Paus", isRecordingPause, elapsedTimePause)
+      // console.log("===================================================")
     }
   
     // Beim ersten Betreten

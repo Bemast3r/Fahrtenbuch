@@ -70,18 +70,95 @@ const FahrtErstellen = () => {
 
         setValidated(true);
 
-
-
         if (letzteFahrt && !letzteFahrt.beendet) {
             setShowAlert(true);
             return;
         }
+
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
         const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
+
+        // Überprüfen, ob die Checkboxen angekreuzt wurden
+        const checkbox1Checked = (document.getElementById("formGridCheckbox1") as HTMLInputElement)?.checked;
+        const checkbox2Checked = (document.getElementById("formGridCheckbox2") as HTMLInputElement)?.checked;
+        const checkbox3Checked = (document.getElementById("formGridCheckbox3") as HTMLInputElement)?.checked;
+        const checkbox4Checked = (document.getElementById("formGridCheckbox4") as HTMLInputElement)?.checked;
+
+        // Überprüfen, ob Kennzeichen, Kilometerstand und Startpunkt vorhanden sind
         if (!kennzeichen || !kilometerstand || !startpunkt) {
+            // Wenn eine Checkbox nicht angekreuzt ist, hier entsprechende Aktionen ausführen
+            if (checkbox1Checked) {
+                console.log("1")
+                if (user) {
+                    let fahrtResource: FahrtResource = {
+                        fahrerid: user.id!,
+                        kennzeichen: "-",
+                        kilometerstand: 0,
+                        startpunkt: "-",
+                        abwesend: "Kein Fahrzeug geführt.",
+                        beendet:true
+                    };
+                    const fahrt = await postFahrt(fahrtResource)
+                    console.log(fahrt)
+                    // navigate("/home");
+                    return;
+                }
+            }
+            if (checkbox2Checked) {
+                if (user) {
+                    let fahrtResource: FahrtResource = {
+                        fahrerid: user.id!,
+                        kennzeichen: "-",
+                        kilometerstand: 0,
+                        startpunkt: "-",
+                        abwesend: "Ich bin krank.",
+                        beendet:true
+                    };
+                    const fahrt = await postFahrt(fahrtResource)
+                    console.log(fahrt)
+                    // navigate("/home");
+                    return;
+
+                }
+            }
+            if (checkbox3Checked) {
+                if (user) {
+                    let fahrtResource: FahrtResource = {
+                        fahrerid: user.id!,
+                        kennzeichen: "-",
+                        kilometerstand: 0,
+                        startpunkt: "-",
+                        abwesend: "Ich habe Urlaub.",
+                        beendet:true
+                    };
+                    const fahrt = await postFahrt(fahrtResource)
+                    console.log(fahrt)
+                    // navigate("/home");
+                    return;
+
+                }
+            }
+            if (checkbox4Checked) {
+                if (user) {
+                    let fahrtResource: FahrtResource = {
+                        fahrerid: user.id!,
+                        kennzeichen: "-",
+                        kilometerstand: 0,
+                        startpunkt: "-",
+                        abwesend: "Ich habe frei.",
+                        beendet:true
+                    };
+                    const fahrt = await postFahrt(fahrtResource)
+                    console.log(fahrt)
+                    // navigate("/home");
+                    return;
+                }
+            }
+
             return;
         }
+       
         if (user) {
             let fahrtResource: FahrtResource = {
                 fahrerid: user.id!,
@@ -93,6 +170,7 @@ const FahrtErstellen = () => {
         }
         navigate("/verwalten");
     }
+
 
     const currentDate = new Date();
 

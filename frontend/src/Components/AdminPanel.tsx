@@ -15,7 +15,6 @@ const AdminFormular = () => {
         password: '',
         admin: true,
         fahrzeuge: [],
-        abwesend: ''
     });
 
     const handleChange = (e: any) => {

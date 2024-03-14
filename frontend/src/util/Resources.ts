@@ -10,8 +10,7 @@ export type UserResource = {
     fahrzeuge?: {
         datum: string,
         kennzeichen: string;
-    }[];
-    abwesend?: string
+    }[]; 
 }
 
 export type FahrtResource = {
@@ -40,6 +39,7 @@ export type FahrtResource = {
         start: Date;
         stop: Date;
     }[];
+    abwesend?: string
 }
 
 export type LoginResource = {
