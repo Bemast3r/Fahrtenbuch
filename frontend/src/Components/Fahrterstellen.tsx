@@ -17,6 +17,7 @@ const FahrtErstellen = () => {
     const [user, setUser] = useState<UserResource | null>(null)
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
     const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [success, setShowSuccess] = useState<boolean>(false);
     const [validated, setValidated] = useState(false);
 
     const jwt = getJWT()
@@ -87,78 +88,37 @@ const FahrtErstellen = () => {
 
         // Überprüfen, ob Kennzeichen, Kilometerstand und Startpunkt vorhanden sind
         if (!kennzeichen || !kilometerstand || !startpunkt) {
-            // Wenn eine Checkbox nicht angekreuzt ist, hier entsprechende Aktionen ausführen
-            if (checkbox1Checked) {
-                console.log("1")
-                if (user) {
-                    let fahrtResource: FahrtResource = {
-                        fahrerid: user.id!,
-                        kennzeichen: "-",
-                        kilometerstand: 0,
-                        startpunkt: "-",
-                        abwesend: "Kein Fahrzeug geführt.",
-                        beendet:true
-                    };
-                    const fahrt = await postFahrt(fahrtResource)
-                    console.log(fahrt)
-                    // navigate("/home");
-                    return;
-                }
-            }
-            if (checkbox2Checked) {
-                if (user) {
-                    let fahrtResource: FahrtResource = {
-                        fahrerid: user.id!,
-                        kennzeichen: "-",
-                        kilometerstand: 0,
-                        startpunkt: "-",
-                        abwesend: "Ich bin krank.",
-                        beendet:true
-                    };
-                    const fahrt = await postFahrt(fahrtResource)
-                    console.log(fahrt)
-                    // navigate("/home");
-                    return;
+            // Wenn eine Checkbox angekreuzt wurde, Fahrt mit entsprechender Abwesenheit erstellen
+            if (checkbox1Checked || checkbox2Checked || checkbox3Checked || checkbox4Checked) {
+                let abwesendText = '';
+                if (checkbox1Checked) abwesendText = "Kein Fahrzeug geführt.";
+                else if (checkbox2Checked) abwesendText = "Ich bin krank.";
+                else if (checkbox3Checked) abwesendText = "Ich habe Urlaub.";
+                else if (checkbox4Checked) abwesendText = "Ich habe frei.";
 
-                }
-            }
-            if (checkbox3Checked) {
                 if (user) {
-                    let fahrtResource: FahrtResource = {
+                    const today = new Date()
+                    today.setHours(0, 0, 0, 0)
+                    const end = new Date()
+                    end.setHours(23, 59, 59, 0)
+                    const fahrtResource: FahrtResource = {
                         fahrerid: user.id!,
                         kennzeichen: "-",
                         kilometerstand: 0,
                         startpunkt: "-",
-                        abwesend: "Ich habe Urlaub.",
-                        beendet:true
+                        abwesend: abwesendText,
+                        ruhezeit: [{ start: today, stop: end }],
+                        beendet: true
                     };
-                    const fahrt = await postFahrt(fahrtResource)
-                    console.log(fahrt)
-                    // navigate("/home");
-                    return;
-
-                }
-            }
-            if (checkbox4Checked) {
-                if (user) {
-                    let fahrtResource: FahrtResource = {
-                        fahrerid: user.id!,
-                        kennzeichen: "-",
-                        kilometerstand: 0,
-                        startpunkt: "-",
-                        abwesend: "Ich habe frei.",
-                        beendet:true
-                    };
-                    const fahrt = await postFahrt(fahrtResource)
-                    console.log(fahrt)
-                    // navigate("/home");
+                    const fahrt = await postFahrt(fahrtResource);
+                    setShowSuccess(true);
+                    setTimeout(() => { navigate("/home") }, 1000)
                     return;
                 }
             }
-
             return;
         }
-       
+
         if (user) {
             let fahrtResource: FahrtResource = {
                 fahrerid: user.id!,
@@ -191,6 +151,9 @@ const FahrtErstellen = () => {
                     <br></br>
                     <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten") }}>Fahrt Verwalten</Button>
                 </Alert>
+                    <Alert variant="success" show={success} onClose={() => setShowAlert(false)} dismissible>
+                        Fahrt erfolgreich erstellt!
+                    </Alert>
                     <div className="form-container">
                         <Form className="row g-3 needs-validation" noValidate >
                             <Row className="mb-1">

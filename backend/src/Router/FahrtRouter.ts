@@ -60,6 +60,7 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("kennzeichen").isString(),
     body("kilometerstand").isNumeric(),
     body("startpunkt").isString(),
+    body("ruhezeit").optional().isArray(),
     body("abwesend").isString(),
     body("beendet").isBoolean(),
     async (req, res, next) => {
