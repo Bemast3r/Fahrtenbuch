@@ -114,3 +114,34 @@ body {
     margin-right: 0; /* Entferne den horizontalen Abstand rechts von der letzten Schaltfläche */
   }
 }
+.erstellen{
+  margin-bottom: 10px;
+  margin-right: 10px;
+  background-color: #000000;
+  border-color: #000000;
+  /* color:yellow; */
+}
+
+
+.erstellen:hover{
+  margin-bottom: 10px;
+  margin-right: 10px;
+  background-color: rgb(0, 0, 0);
+  border-color: #000000;
+}
+
+.hauptmenu{
+  margin-bottom: 10px;
+  background-color: #FFC107;
+  color:rgb(0, 0, 0);
+  border-color: #FFC107;
+  font-weight: 150;
+}
+
+.hauptmenu:hover{
+  margin-bottom: 10px;
+  background-color: #FFC107;
+  color:rgb(0, 0, 0);
+  border-color: #FFC107;
+  font-weight: 150;
+}
