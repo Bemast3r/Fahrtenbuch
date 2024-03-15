@@ -60,7 +60,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </nav> */}
-            {/* <Navbar></Navbar> */}
+            <Navbar></Navbar>
             {/* Services */}
             <section className="services section-padding" id="services">
                 <div className="container2">

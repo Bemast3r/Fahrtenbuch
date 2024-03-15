@@ -7,6 +7,7 @@ import Loading from './LoadingIndicator';
 import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import Navbar from './Navbar';
 
 interface TimeRecord {
   start: Date;
@@ -41,21 +42,13 @@ const FahrtVerwalten: React.FC = () => {
 
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
-    // Überprüfen, ob letzteFahrt vorhanden ist
     if (!letzteFahrt) {
-      // Funktion aufrufen, um letzteFahrt zu aktualisieren
       last();
-      // setCounter(prev => prev + 1)
     } else {
-      // console.log("letztefahrt", count, elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause)
       const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
       if (x === 0 || x < 0) {
         return;
       }
-      // console.log("Missing", x)
-      // console.log("isLenkzeit", isRecordingLenkzeit, elapsedTimeLenkzeit)
-      // console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
-      // console.log("Paus", isRecordingPause, elapsedTimePause)
 
       if (isRecordingLenkzeit) {
         setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
@@ -67,11 +60,6 @@ const FahrtVerwalten: React.FC = () => {
       if (isRecordingPause) {
         setElapsedTimePause(prevElapsedTime => prevElapsedTime + x)
       }
-      // console.log("===================================================")
-      // console.log("isLenkzeit ", isRecordingLenkzeit, elapsedTimeLenkzeit)
-      // console.log("Arbe", isRecordingArbeitszeit, elapsedTimeArbeitszeit)
-      // console.log("Paus", isRecordingPause, elapsedTimePause)
-      // console.log("===================================================")
     }
 
     // Beim ersten Betreten
@@ -460,7 +448,9 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   return (
-    <div>
+    <><Navbar></Navbar><div>
+      <br></br>
+      <br></br>
       <h1 className="header">Fahrt Verwalten</h1>
       {loading ? (
         <Loading />
@@ -475,7 +465,7 @@ const FahrtVerwalten: React.FC = () => {
               <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
               <div className="section">
                 <div className="button-group">
-                  <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={toggleRecordingLenkzeit} >{lenktext}</Button>
+                  <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={toggleRecordingLenkzeit}>{lenktext}</Button>
                 </div>
 
                 <div className="elapsed-time">
@@ -485,14 +475,14 @@ const FahrtVerwalten: React.FC = () => {
                 {letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0 && (
                   <div className="dates">
                     {letzteFahrt.lenkzeit.slice().reverse().map((Zeiten, index) => {
-                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>;
                     })}
                   </div>
                 )}
               </div>
               <div className="section">
                 <div className="button-group">
-                  <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={toggleRecordingArbeit} >{arbeitText}</Button>
+                  <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={toggleRecordingArbeit}>{arbeitText}</Button>
                 </div>
                 <div className="elapsed-time">
                   Verbrachte Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)}
@@ -500,14 +490,14 @@ const FahrtVerwalten: React.FC = () => {
                 {letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0 && (
                   <div className="dates">
                     {letzteFahrt.arbeitszeit.slice().reverse().map((Zeiten, index) => {
-                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>;
                     })}
                   </div>
                 )}
               </div>
               <div className="section">
                 <div className="button-group">
-                  <Button variant={isRecordingPause ? "danger" : "primary"} onClick={toggleRecordingPause} >{pauseText}</Button>
+                  <Button variant={isRecordingPause ? "danger" : "primary"} onClick={toggleRecordingPause}>{pauseText}</Button>
                 </div>
                 <div className="elapsed-time">
                   Verbrachte Pause: {formatTime(elapsedTimePause)}
@@ -515,14 +505,14 @@ const FahrtVerwalten: React.FC = () => {
                 {letzteFahrt.pause && letzteFahrt.pause.length > 0 && (
                   <div className="dates">
                     {letzteFahrt.pause.slice().reverse().map((Zeiten, index) => {
-                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>
+                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>;
                     })}
                   </div>
                 )}
               </div>
               <div className="section">
                 <div className="button-group">
-                  <Button variant="danger" onClick={() => { handleEnde() }} >Fahrt beenden</Button>
+                  <Button variant="danger" onClick={() => { handleEnde(); } }>Fahrt beenden</Button>
                 </div>
                 <div>
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
@@ -546,13 +536,12 @@ const FahrtVerwalten: React.FC = () => {
               </Link>
               <Link to="/home">
                 <Button variant="danger" className='hauptmenu'>Hauptmenu</Button>
-            </Link>
-        </>
+              </Link>
+            </>
+          )}
+        </div>
       )}
-    </div>
-  )
-}
-    </div >
+    </div></>
   );
 };
 
