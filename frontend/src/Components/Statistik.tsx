@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { UserResource } from '../util/Resources';
+import Navbar from './Navbar';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -36,8 +37,8 @@ const Statistik = () => {
         try {
             if(!user){
                 const id = getLoginInfo();
-                const user = await getUser(id!.userID);
-                setUser(user);
+                const userserver = await getUser(id!.userID);
+                setUser(userserver);
             }
             await loadTrips();
             await loadUser();
@@ -71,6 +72,7 @@ const Statistik = () => {
 
     return (
         <div className="form-wrapper">
+            <Navbar></Navbar>
             <h2 className="form-header">Statistiken</h2>
             <div>
                 <h2>Fahrten</h2>
