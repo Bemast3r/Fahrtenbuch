@@ -2,6 +2,7 @@ import "./home2.css";
 import React, { useEffect, useState } from 'react';
 import { getJWT, getLoginInfo, removeJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar";
 
 const LandingPage = () => {
     const jwt = getJWT();
@@ -29,7 +30,7 @@ const LandingPage = () => {
     return (
         <div>
             {/* Navbar */}
-            <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
+            {/* <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
                 <div className="container">
                     <a className="navbar-brand" href=""><span className="text-warning">SKM</span>Service</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,8 +59,8 @@ const LandingPage = () => {
                         </ul>
                     </div>
                 </div>
-            </nav>
-
+            </nav> */}
+            {/* <Navbar></Navbar> */}
             {/* Services */}
             <section className="services section-padding" id="services">
                 <div className="container2">

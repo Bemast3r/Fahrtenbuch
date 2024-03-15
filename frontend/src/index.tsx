@@ -12,10 +12,12 @@ import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
 import AdminFormular from './Components/AdminPanel';
 import FahrtErstellen from './Components/Fahrterstellen';
 import Statistik from './Components/Statistik';
+import Navbar from './Components/Navbar';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
+      <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="home" element={<Home />} />

@@ -26,24 +26,19 @@ const Statistik = () => {
         loadInitialData();
         const intervalId = setInterval(() => {
             loadUser();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
-
-        return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
             loadTrips();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Daten
+        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
 
         return () => clearInterval(intervalId);
     }, []);
 
     async function loadInitialData() {
         try {
-            const id = getLoginInfo();
-            const user = await getUser(id!.userID);
-            setUser(user);
+            if(!user){
+                const id = getLoginInfo();
+                const user = await getUser(id!.userID);
+                setUser(user);
+            }
             await loadTrips();
             await loadUser();
         } catch (error) {
