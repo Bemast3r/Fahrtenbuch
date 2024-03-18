@@ -124,6 +124,7 @@
 .btn {
     padding: 12px 24px; /* Anpassen der Polsterung für die Höhe und Breite */
     font-size: 24px; /* Anpassen der Schriftgröße */
+    align-items: center;
 }
 
 .card-body p {
@@ -212,3 +213,9 @@
         margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }
+
+.rotating {
+    transform: rotate(180deg); /* Anpassen der Rotation je nach Bedarf */
+    transition: transform 0.3s ease; /* Hinzufügen einer Transition für eine sanfte Drehung */
+}
+

@@ -512,7 +512,7 @@ const FahrtVerwalten: React.FC = () => {
               </div>
               <div className="section">
                 <div className="button-group">
-                  <Button variant="danger" onClick={() => { handleEnde(); } }>Fahrt beenden</Button>
+                  <Button variant="danger" onClick={ handleEnde }>Fahrt beenden</Button>
                 </div>
                 <div>
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
