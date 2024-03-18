@@ -1,30 +1,24 @@
 import React from "react";
 import { FahrtResource } from "../util/Resources";
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     function formatDate(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
         const minutes = new Date(date).getMinutes().toString().padStart(2, '0');
         const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
         return `${hours}:${minutes}:${seconds}`;
-      }
+    }
 
     return (
         <div id="accordion">
             <div className="card">
-                <div className="card-header" id={`heading-${fahrt.id}`}>
+                <div className="card-title" id={`heading-${fahrt.id}`}>
                     <h5 className="mb-0">
-                        <button
-                            className="btn btn-link"
-                            data-toggle="collapse"
-                            data-target={`#collapse-${fahrt.id}`}
-                            aria-expanded="true"
-                            aria-controls={`collapse-${fahrt.id}`}
-                        >
-                            Fahrt von {fahrt.startpunkt} erstellt am {formatDate(new Date(fahrt.createdAt!))}
-                        </button>
+                        <p style={{ margin: "5px" }}>
+                            Fahrt am {fahrt.startpunkt} erstellt um {formatDate(new Date(fahrt.createdAt!))}
+                        </p>
                     </h5>
                 </div>
                 <div
@@ -34,11 +28,12 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     data-parent="#accordion"
                 >
                     <div className="card-body">
-                    <p>Starpunkt: {fahrt.startpunkt || 'Keine Angabe'}</p>
+                        <p>Starpunkt: {fahrt.startpunkt || 'Keine Angabe'}</p>
                         <p>Kennzeichen: {fahrt.kennzeichen || 'Keine Angabe'}</p>
                         <p>Gestartet mit km: {fahrt.kilometerstand || 'Keine Angabe'}</p>
                         <p>Beendet mit km: {fahrt.kilometerende || 'Keine Angabe'}</p>
-                        <p>Beendet um : {fahrt.beendet || 'Keine Angabe'}</p>
+                        <p>Beendet um : {fahrt.beendet ? formatDate(fahrt.ruhezeit![1].start)  : "Ihre Fahrt läuft noch."}</p>
+                        <p>Try : {true ? "true" : "false"}</p>
                         <p>Abwesend: {fahrt.abwesend || 'Nein.'}</p>
                         {/* Anzeige der Lenkzeit */}
                         {fahrt.lenkzeit && (
@@ -53,7 +48,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 </ul>
                             </div>
                         )}
-    
+
                         {/* Anzeige der Pausenzeit */}
                         {fahrt.pause && (
                             <div>
@@ -61,13 +56,13 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 <ul>
                                     {fahrt.pause.map((pause, index) => (
                                         <li key={index}>
-                                           Start: {pause.start ? formatDate(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause.stop ? formatDate(new Date(pause.stop)) : 'Keine Angabe'}
+                                            Start: {pause.start ? formatDate(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause.stop ? formatDate(new Date(pause.stop)) : 'Keine Angabe'}
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         )}
-    
+
                         {/* Anzeige der Arbeitszeit ohne Fahren */}
                         {fahrt.arbeitszeit && (
                             <div>
@@ -81,13 +76,14 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 </ul>
                             </div>
                         )}
-    
+
                     </div>
                 </div>
             </div>
         </div>
     );
-    
+
 };
 
 export default ExpandFahrt;
+
