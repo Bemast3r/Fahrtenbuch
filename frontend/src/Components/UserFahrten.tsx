@@ -5,6 +5,7 @@ import { getFahrt, getUser } from "../Api/api";
 import Loading from "./LoadingIndicator";
 import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
+import Navbar from "./Navbar";
 
 const UserFahrten: React.FC = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -38,6 +39,13 @@ const UserFahrten: React.FC = () => {
         <>
             {user ? (
                 <>
+                  <Navbar></Navbar>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
                     <div style={{padding:"10px"}}>
                         <h1>Hallo, {user.vorname ? user.vorname : "" + " "} {user.name ? user.name : ""}</h1>
                         <h3>Hier sind ihre Statistiken</h3>

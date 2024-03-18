@@ -1,0 +1,23 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.col-md {
+    flex: 0 0 auto;
+    width: 20%; /* Ändern Sie die Breite entsprechend Ihren Anforderungen */
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+}
+
+.card {
+    width: 100%;
+    margin-bottom: 15px; /* Platz zwischen den Karten */
+}
+
+.card-body {
+    text-align: center; /* Zentriert den Inhalt horizontal */
+}
