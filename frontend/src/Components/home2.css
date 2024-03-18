@@ -144,6 +144,17 @@
     height: 100%;
 }
 
+
+
+@media only screen and (min-width: 991px) {
+    .col-12col-md-12col-lg-4{
+        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
+        width:33%;
+        display: inline-grid;
+    }
+}
+
+
 @media only screen and (min-width: 768px) and (max-width: 991px) {
     .carousel-caption {
         bottom: 370px;
@@ -159,6 +170,9 @@
 
     .img-area img {
         width: 100%;
+    }
+    .col-12col-md-12col-lg-4{
+        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }
 
@@ -191,6 +205,10 @@
     }
 
     .card {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+        
+    }
+    .col-12col-md-12col-lg-4{
+        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }

@@ -43,7 +43,7 @@ const LandingPage = () => {
                     </div>
                     <div className="row">
                         {/* Service Cards */}
-                        <div className="col-12 col-md-12 col-lg-4">
+                        <div className="col-12col-md-12col-lg-4">
                             <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
                                     <i className='bx bx-plus-circle' ></i>
@@ -53,7 +53,7 @@ const LandingPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12 col-md-12 col-lg-4">
+                        <div className="col-12col-md-12col-lg-4">
                             <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
                                     <i className='bx bxs-car-mechanic' ></i>
@@ -64,7 +64,7 @@ const LandingPage = () => {
                             </div>
                         </div>
                         {userRole === "a" && (
-                            <div className="col-12 col-md-12 col-lg-4">
+                            <div className="col-12col-md-12col-lg-4">
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
                                         <i className='bx bx-stats' ></i>
