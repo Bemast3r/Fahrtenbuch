@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { UserResource } from '../util/Resources';
+import Navbar from './Navbar';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -26,24 +27,19 @@ const Statistik = () => {
         loadInitialData();
         const intervalId = setInterval(() => {
             loadUser();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
-
-        return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
             loadTrips();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Daten
+        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
 
         return () => clearInterval(intervalId);
     }, []);
 
     async function loadInitialData() {
         try {
-            const id = getLoginInfo();
-            const user = await getUser(id!.userID);
-            setUser(user);
+            if(!user){
+                const id = getLoginInfo();
+                const userserver = await getUser(id!.userID);
+                setUser(userserver);
+            }
             await loadTrips();
             await loadUser();
         } catch (error) {
@@ -76,6 +72,7 @@ const Statistik = () => {
 
     return (
         <div className="form-wrapper">
+            <Navbar></Navbar>
             <h2 className="form-header">Statistiken</h2>
             <div>
                 <h2>Fahrten</h2>
