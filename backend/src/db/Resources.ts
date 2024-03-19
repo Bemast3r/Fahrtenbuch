@@ -11,6 +11,7 @@ export type UserResource = {
         datum: string,
         kennzeichen: string;
     }[];
+    abwesend?: string
 }
 
 export type FahrtResource = {
