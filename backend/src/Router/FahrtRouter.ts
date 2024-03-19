@@ -98,7 +98,9 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("kennzeichen").isString(),
     body("kilometerstand").isNumeric(),
     body("startpunkt").isString(),
-
+    body("ruhezeit").optional().isArray(),
+    body("abwesend").optional().isString(),
+    body("beendet").optional().isBoolean(),
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -132,8 +134,6 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(req.body)
-            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
         try {

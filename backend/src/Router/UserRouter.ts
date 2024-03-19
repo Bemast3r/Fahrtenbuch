@@ -96,7 +96,6 @@ userRouter.post("/admin/user-erstellen", requiresAuthentication,
     body("password").isString(),
     body("admin").isBoolean(),
     body("fahrzeuge").isArray().withMessage('fahrzeuge muss ein Array sein'),
-    body("abwesend").isString(),
 
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -176,7 +175,6 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
     body("username").isString(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),
-    body("abwesend").isString(),
     body("admin").isBoolean(),
     // Das Datum sollte automatisch gesetzt werden.
     // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 

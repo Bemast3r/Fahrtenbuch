@@ -12,7 +12,6 @@ export interface UserInfo {
         datum: string;
         kennzeichen: string;
     }[];
-    abwesend: boolean
 }
 
 // const USERINFO_NAME = "userinfo";

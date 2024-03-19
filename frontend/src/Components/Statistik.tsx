@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import "./statistiken.css"
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { UserResource } from '../util/Resources';
+import Navbar from './Navbar';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -26,24 +28,19 @@ const Statistik = () => {
         loadInitialData();
         const intervalId = setInterval(() => {
             loadUser();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
-
-        return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
             loadTrips();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Daten
+        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
 
         return () => clearInterval(intervalId);
     }, []);
 
     async function loadInitialData() {
         try {
-            const id = getLoginInfo();
-            const user = await getUser(id!.userID);
-            setUser(user);
+            if (!user) {
+                const id = getLoginInfo();
+                const userserver = await getUser(id!.userID);
+                setUser(userserver);
+            }
             await loadTrips();
             await loadUser();
         } catch (error) {
@@ -75,20 +72,53 @@ const Statistik = () => {
     }
 
     return (
-        <div className="form-wrapper">
-            <h2 className="form-header">Statistiken</h2>
-            <div>
-                <h2>Fahrten</h2>
-                <p>Gesamtzahl der Fahrten: {tripData.completedTrips + tripData.ongoingTrips}</p>
-                <p>Aktuelle Fahrten: {tripData.ongoingTrips}</p>
-                <p>Abgeschlossene Fahrten: {tripData.completedTrips}</p>
+        <>
+            <div className="row">
+                <div className="col-md">
+                    <div className="card">
+                        <div className="card-body">
+                            <h5 className="card-title">Gesamtanzahl der Fahrten</h5>
+                            <p className="card-text">{tripData.completedTrips + tripData.ongoingTrips}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md">
+                    <div className="card">
+                        <div className="card-body">
+                            <h5 className="card-title">Abgeschlossene Fahrten</h5>
+                            <p className="card-text">{tripData.completedTrips}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="col-md">
+                    <div className="card">
+                        <div className="card-body">
+                            <h5 className="card-title">Aktuelle Fahrten</h5>
+                            <p className="card-text">{tripData.ongoingTrips}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md">
+                    <div className="card">
+                        <div className="card-body">
+                            <h5 className="card-title">Gesamtzahl der Benutzer</h5>
+                            <p className="card-text">{totalUsers}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md">
+                    <div className="card">
+                        <div className="card-body">
+                            <h5 className="card-title">Admin-Benutzer</h5>
+                            <p className="card-text">{adminUsers}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h2>Benutzer</h2>
-                <p>Gesamtzahl der Benutzer: {totalUsers}</p>
-                <p>Admin-Benutzer: {adminUsers}</p>
-            </div>
-        </div>
+        </>
     );
 }
 
