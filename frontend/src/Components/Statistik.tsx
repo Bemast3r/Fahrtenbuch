@@ -154,7 +154,7 @@ const Statistik = () => {
             <br></br>
 
             <h2 style={{textAlign: "center", paddingTop: "35px"}}>Alle Fahrten:</h2>
-            <div>
+            <div className="fahrten">
                 {fahrts && fahrts.length > 0 ? (
                     <>
                         {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten]) => (
