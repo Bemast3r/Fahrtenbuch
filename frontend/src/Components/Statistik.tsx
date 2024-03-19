@@ -153,20 +153,22 @@ const Statistik = () => {
             </div>
             <br></br>
 
-            <h2 style={{textAlign: "center", paddingTop: "35px"}}>Alle Fahrten:</h2>
+            <h2 style={{ textAlign: "center", paddingTop: "35px" }}>Alle Fahrten:</h2>
             <div className="fahrten">
                 {fahrts && fahrts.length > 0 ? (
                     <>
-                        {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten]) => (
-                            <div key={date}>
-                                <h2 style={{ marginTop: "20px" }}>{date}</h2>
-                                {fahrten.map((fahrt: FahrtResource) => (
-                                    <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
-                                        <ExpandFahrt fahrt={fahrt} />
-                                    </Accordion>
-                                ))}
-                            </div>
-                        ))}
+                        <section style={{ overflowY: "auto" }}>
+                            {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten]) => (
+                                <div key={date}>
+                                    <h2 style={{ marginTop: "20px" }}>{date}</h2>
+                                    {fahrten.map((fahrt: FahrtResource) => (
+                                        <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
+                                            <ExpandFahrt fahrt={fahrt} />
+                                        </Accordion>
+                                    ))}
+                                </div>
+                            ))}
+                        </section>
                     </>
                 ) : (
                     <p>Keine Fahrten gefunden</p>

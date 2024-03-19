@@ -5,52 +5,74 @@
     margin-right: 15px;
 }
 
+
+
 .card-text {
     font-size: large;
 }
-.accordion{
-    background-color: blueviolet;
-}
-.fahrten{
-    background-color: aqua;
-    height: auto;
-}
+
 .card {
     width: 100%;
     margin-bottom: 15px;
     /* Platz zwischen den Karten */
-    max-height: calc(100vh - 150px); /* Maximale Höhe der Karte festlegen */
-    overflow: auto; /* Scrollbalken hinzufügen, wenn der Inhalt zu groß ist */
-}
-
-
-
-.card-body.details {
-    text-align: left;
-    /* Zentriert den Inhalt horizontal */
-    background-color: #e10d0d; /* Hintergrundfarbe des Dropdown-Menüs */
-
-    height: min-content; /* Maximale Höhe der Karteninhalt, abzüglich des Summen der Höhen der Überschriften */
-    overflow-y: auto; /* Vertikalen Scrollbalken für den Karteninhalt hinzufügen */
-
+    overflow-y: auto;
+    height: fit-content;
 }
 
 .card-body {
     text-align: left;
+    height: fit-content;
+    overflow-y: auto;
     /* Zentriert den Inhalt horizontal */
-    max-height: calc(100% - 40px); /* Maximale Höhe der Karteninhalt, abzüglich des Summen der Höhen der Überschriften */
 }
 
 .col-md {
     flex: 0 0 auto;
     width: 20%;
     /* Ändern Sie die Breite entsprechend Ihren Anforderungen */
-    padding-left: 15px;
-    padding-right: 15px;
-    box-sizing: border-box;
+
+}
+
+@media only screen and (min-width: 991px) {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -15px; /* Ändern Sie den Wert entsprechend Ihrem Layout */
+        margin-right: -15px; /* Ändern Sie den Wert entsprechend Ihrem Layout */
+        padding: 1px;
+    }
+
+    .col-md {
+        width: 20%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .row {
+        display: grid;
+    }
+
+    .col-md {
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .row {
+        display: grid;
+    }
+
+    .col-md {
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
 
 /* Stil für Dropdown-Menüs */
-details {
+details.summary.ul {
+    background-color: black;
     margin-bottom: 10px; /* Abstand zwischen den Dropdown-Menüs */
 }
