@@ -2,15 +2,18 @@ import "./statistiken.css"
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
-import { UserResource } from '../util/Resources';
+import { getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
+import { FahrtResource, UserResource } from '../util/Resources';
 import Navbar from './Navbar';
+import { Accordion } from "./Accordion";
+import ExpandFahrt from "./ExpandFahrt";
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
     const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
     const [totalUsers, setTotalUsers] = useState<number>(0);
     const [adminUsers, setAdminUsers] = useState<number>(0);
+    const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
 
     const jwt = getJWT();
     const navigate = useNavigate();
@@ -29,6 +32,7 @@ const Statistik = () => {
         const intervalId = setInterval(() => {
             loadUser();
             loadTrips();
+            loadAllFahrts();
         }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
 
         return () => clearInterval(intervalId);
@@ -43,6 +47,7 @@ const Statistik = () => {
             }
             await loadTrips();
             await loadUser();
+            await loadAllFahrts();
         } catch (error) {
             console.error("Fehler beim Laden der Daten:", error);
         }
@@ -53,6 +58,15 @@ const Statistik = () => {
             const completed = await getCompletedTrips();
             const ongoing = await getOngoingTrips();
             setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
+        } catch (error) {
+            console.error("Fehler beim Laden der Fahrten:", error);
+        }
+    }
+
+    async function loadAllFahrts() {
+        try {
+            const fahrts = await getAllFahrts();
+            setFahrts(fahrts);
         } catch (error) {
             console.error("Fehler beim Laden der Fahrten:", error);
         }
@@ -71,8 +85,27 @@ const Statistik = () => {
         }
     }
 
+    function groupFahrtenByDate(fahrten: FahrtResource[]) {
+        return fahrten.slice().reverse().reduce((acc: { [date: string]: FahrtResource[] }, fahrt: FahrtResource) => {
+            const date = new Date(fahrt.createdAt!).toLocaleDateString();
+            if (!acc[date]) {
+                acc[date] = [];
+            }
+            acc[date].push(fahrt);
+            return acc;
+        }, {});
+    }
+
     return (
         <>
+            <Navbar></Navbar>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
             <div className="row">
                 <div className="col-md">
                     <div className="card">
@@ -86,12 +119,12 @@ const Statistik = () => {
                 <div className="col-md">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Abgeschlossene Fahrten</h5>
+                            <h5 className="card-title">Beendete Fahrten</h5>
                             <p className="card-text">{tripData.completedTrips}</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="col-md">
                     <div className="card">
                         <div className="card-body">
@@ -117,6 +150,27 @@ const Statistik = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <br></br>
+
+            <h2 style={{textAlign: "center", paddingTop: "35px"}}>Alle Fahrten:</h2>
+            <div>
+                {fahrts && fahrts.length > 0 ? (
+                    <>
+                        {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten]) => (
+                            <div key={date}>
+                                <h2 style={{ marginTop: "20px" }}>{date}</h2>
+                                {fahrten.map((fahrt: FahrtResource) => (
+                                    <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
+                                        <ExpandFahrt fahrt={fahrt} />
+                                    </Accordion>
+                                ))}
+                            </div>
+                        ))}
+                    </>
+                ) : (
+                    <p>Keine Fahrten gefunden</p>
+                )}
             </div>
         </>
     );

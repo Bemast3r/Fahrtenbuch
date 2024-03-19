@@ -319,3 +319,27 @@ export async function getAlleUser(): Promise<UserResource[]> {
     }
 }
 
+export async function getAllFahrts(): Promise<FahrtResource[]> {
+    try {
+        const jwt2 = getJWT();
+        if (!jwt2)
+            throw new Error("no jwt found");
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/alle/fahrten/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: FahrtResource[] = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+

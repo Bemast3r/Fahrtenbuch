@@ -42,15 +42,22 @@ const UserFahrten: React.FC = () => {
     return (
         <>
             {loading ? (
-                <Loading />
+                <><h1 className="header">Statistiken werden geladen</h1><Loading /></>
             ) : (
                 <>
                     {user && (
                         <>
                             <Navbar />
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
                             <div style={{ padding: "10px" }}>
                                 <h1>Hallo, {user.vorname ? user.vorname : ""} {user.name ? user.name : ""}</h1>
-                                <h3>Hier sind ihre Statistiken</h3>
+                                <h3>Hier sind Ihre Statistiken:</h3>
                                 {meineFahrten.length > 0 ? (
                                     <>
                                         {Object.entries(groupFahrtenByDate(meineFahrten)).map(([date, fahrten]) => (
