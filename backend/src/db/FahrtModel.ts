@@ -25,6 +25,7 @@ export interface IFahrt {
         start: Date;
         stop: Date;
     }[];
+    abwesend: String;
 }
 
 type FahrtModel = Model<IFahrt>;
@@ -53,6 +54,7 @@ const fahrtSchema = new Schema<IFahrt>({
         start: { type: Date },
         stop: { type: Date }
     }],
+    abwesend: { type: String }
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);

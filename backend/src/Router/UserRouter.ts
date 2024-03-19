@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUser, deleteUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getAlleAdmin, getAlleUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
 import { UserResource } from "../db/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -48,6 +48,43 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
     }
 );
 
+userRouter.get("/admin/finde/user/alle/admin", requiresAuthentication,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const user = await getAlleAdmin()
+            return res.send(user)
+        } catch (error) {
+            res.status(400);
+            next(error);
+        }
+    }
+);
+
+userRouter.get("/admin/finde/user/alle/user", requiresAuthentication,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const user = await getAlleUser()
+            return res.send(user)
+        } catch (error) {
+            res.status(400);
+            next(error);
+        }
+    }
+);
 /**
  * Erstellt einen Benutzer 
  */
@@ -59,7 +96,6 @@ userRouter.post("/admin/user-erstellen", requiresAuthentication,
     body("password").isString(),
     body("admin").isBoolean(),
     body("fahrzeuge").isArray().withMessage('fahrzeuge muss ein Array sein'),
-    body("abwesend").isString(),
 
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -139,7 +175,6 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
     body("username").isString(),
     body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),
-    body("abwesend").isString(),
     body("admin").isBoolean(),
     // Das Datum sollte automatisch gesetzt werden.
     // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 

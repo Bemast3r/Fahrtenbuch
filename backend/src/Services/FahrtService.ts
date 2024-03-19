@@ -25,6 +25,25 @@ export async function getUserFahrten(userid: string) {
         throw new Error(`Fehler beim Abrufen der Fahrten: ${error.message}`)
     }
 }
+
+export async function getBeendeteFahrten() {
+    try {
+        const beendeteFahrten = await Fahrt.find({ beendet: true });
+        return beendeteFahrten.map(fahrt => fahrt.toObject());
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen der beendeten Fahrten: ${error.message}`);
+    }
+}
+
+export async function getLaufendeFahrten() {
+    try {
+        const beendeteFahrten = await Fahrt.find({ beendet: false });
+        return beendeteFahrten.map(fahrt => fahrt.toObject());
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen der beendeten Fahrten: ${error.message}`);
+    }
+}
+
 // Admin holt sich die Fahrten von einem User Sinnlos?
 // export async function getUserFahrten(user: UserResource) { }
 
@@ -40,7 +59,9 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             arbeitszeit: fahrt.arbeitszeit,
             pause: fahrt.pause,
             startpunkt: fahrt.startpunkt,
-            ruhezeit: fahrt.ruhezeit
+            ruhezeit: fahrt.ruhezeit,
+            abwesend: fahrt.abwesend,
+            beendet: fahrt.beendet
         });
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
@@ -73,8 +94,8 @@ export async function updateUserfahrt(fahrtResource: FahrtResource) {
         const existingRuhezeiten = await Fahrt.findOne({ _id: id }, { ruhezeit: 1 });
         const uniqueRuhezeiten = ruhezeit.filter(newRuhezeit => {
             return !existingRuhezeiten?.ruhezeit.some(existingRuhezeit =>
-                existingRuhezeit.start.getTime() === newRuhezeit.start.getTime() &&
-                existingRuhezeit.stop.getTime() === newRuhezeit.stop.getTime()
+                new Date(existingRuhezeit.start).getTime() === new Date(newRuhezeit.start).getTime() &&
+                new Date(existingRuhezeit.stop).getTime() === new Date(newRuhezeit.stop).getTime()
             );
         });
         if (uniqueRuhezeiten.length > 0) {
@@ -93,3 +114,5 @@ export async function deleteFahrt(fahrtid: string) {
         throw new Error(`Fehler beim Löschen der Fahrt: ${error.message}`);
     }
 }
+
+

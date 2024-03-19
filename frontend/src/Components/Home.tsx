@@ -1,11 +1,10 @@
+import "./home2.css";
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import "./home.css";
 import { getJWT, getLoginInfo, removeJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar";
 
-
-const Home = () => {
+const LandingPage = () => {
     const jwt = getJWT();
     const navigate = useNavigate();
     const [userRole, setUserRole] = useState('');
@@ -15,7 +14,7 @@ const Home = () => {
             navigate("/");
         } else {
             setJWT(jwt);
-            const x = getLoginInfo();   
+            const x = getLoginInfo();
             setUserRole(x!.role)
         }
     }, [jwt, navigate]);
@@ -29,31 +28,75 @@ const Home = () => {
     };
 
     return (
-        <div className="form-wrapper2">
-            <div className="header-wrapper">
-                <h2 className="header-home">Kontrollbuch</h2>
-                <h3 className="header-home">SKM</h3>
-            </div>
-            <div className="form-container">
-                <Form>
-                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/create")}>
-                        Fahrt erstellen
-                    </Button>
-                    <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/verwalten")}>
-                        Fahrt verwalten
-                    </Button>
-                    {userRole === 'a' && (
-                        <Button variant="primary" type="submit" className="submit-button2" onClick={() => navigate("/user-erstellen")}>
-                            Benutzer erstellen
-                        </Button>
-                    )}
-                    <Button variant="danger" type="button" className="submit-button3" onClick={handleAbmelden}>
-                        Abmelden
-                    </Button>
-                </Form>
+        <div>
+            <Navbar></Navbar>
+            {/* Services */}
+            <section className="services section-padding" id="services">
+                <div className="container2">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="section-header text-center pb-5">
+                                <h2>SKM Fahrtenbuch</h2>
+                                <p>Notiere hier alle wichtigen Informationen über deine Fahrten -<br />führ dein Fahrtenbuch gewissenhaft und regelmäßig!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        {/* Service Cards */}
+                        <div className="col-12col-md-12col-lg-4">
+                            <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
+                                <div className="card-body">
+                                    <i className='bx bx-plus-circle' ></i>
+                                    <h3 className="card-title">Fahrt Erstellen</h3>
+                                    <p className="lead">Starte deine Fahrt mit dem Kennzeichen, dem Kilometerstand des Autos und dem Ort der Fahrtaufnahme.</p>
+                                    <button className="btn bg-warning text-dark" onClick={() => navigate("/create")}>Fahrt Erstellen</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-12col-md-12col-lg-4">
+                            <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
+                                <div className="card-body">
+                                    <i className='bx bxs-car-mechanic' ></i>
+                                    <h3 className="card-title">Fahrt Verwalten</h3>
+                                    <p className="lead">Verändere Informationen über deine Fahrt wie die Lenkzeit, Arbeitszeit, Pausen oder Beende deine Fahrt.</p>
+                                    <button className="btn bg-warning text-dark" onClick={() => navigate("/verwalten")} >Fahrt Verwalten</button>
+                                </div>
+                            </div>
+                        </div>
+                        {userRole === "a" && (
+                            <div className="col-12col-md-12col-lg-4">
+                                <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
+                                    <div className="card-body">
+                                        <i className='bx bx-stats' ></i>
+                                        <h3 className="card-title">Statistiken</h3>
+                                        <p className="lead">Siehe alle wichtigen Informationen über deine Fahrt wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
+                                        <button className="btn bg-warning text-dark" onClick={() => navigate("/statistiken")}>Erfahre Mehr</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {userRole !== "a" && (
+                            <div className="col-12 col-md-12 col-lg-4">
+                                <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
+                                    <div className="card-body">
+                                        <i className='bx bx-stats' ></i>
+                                        <h3 className="card-title">Meine Fahrten</h3>
+                                        <p className="lead">Siehe alle wichtigen Informationen über deine Fahrt wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
+                                        <button className="btn bg-warning text-dark" onClick={() => navigate("/fahrten")}>Erfahre Mehr</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            {/* Footer */}
+            <div className="login-footer">
+                SKM | &copy;2024
             </div>
         </div>
     );
 }
 
-export default Home;
+export default LandingPage;
