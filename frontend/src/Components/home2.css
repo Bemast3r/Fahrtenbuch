@@ -127,6 +127,7 @@
     align-items: center;
 }
 
+
 .card-body p {
     margin-bottom: 40px; /* Erhöhen Sie den Abstand zwischen dem Text und dem Button */
 }
@@ -167,6 +168,7 @@
 
     .card {
         margin-bottom: 30px;
+
     }
 
     .img-area img {
