@@ -128,7 +128,7 @@ const Statistik = () => {
                 <div className="col-md">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Aktuelle Fahrten</h5>
+                            <h5 className="card-title">Laufende Fahrten</h5>
                             <p className="card-text">{tripData.ongoingTrips}</p>
                         </div>
                     </div>
