@@ -10,6 +10,14 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         return `${hours}:${minutes}:${seconds}`;
     }
 
+    function formatTime(seconds: number): string {
+        let hours = Math.floor(seconds / 3600);
+        hours = Math.floor(hours / 1000)
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = seconds % 60;
+        return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+    }
+
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Fahrt am ${fahrt.startpunkt}`;
 
@@ -39,7 +47,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         {fahrt.lenkzeit && (
 
                             <details>
-                                <summary style={{ fontWeight: "bold" }}>Lenkzeiten</summary>
+                                <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>
                                 <ul>
                                     {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
                                         <li key={index}>
@@ -53,7 +61,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         {fahrt.pause && (
 
                             <details>
-                                <summary style={{ fontWeight: "bold" }}>Pausenzeiten</summary>
+                                <summary style={{ fontWeight: "bold" }}>Pausenzeiten: {fahrt.totalPause ? formatTime(fahrt.totalPause) : "----"}</summary>
                                 <ul>
                                     {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
                                         <li key={index}>
@@ -67,7 +75,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         {fahrt.arbeitszeit && (
 
                             <details>
-                                <summary style={{ fontWeight: "bold" }}>Arbeitszeiten</summary>
+                                <summary style={{ fontWeight: "bold" }}>Arbeitszeiten: {fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----"}</summary>
                                 <ul>
                                     {fahrt.arbeitszeit.length > 0 ? fahrt.arbeitszeit.map((zeit, index) => (
                                         <li key={index}>

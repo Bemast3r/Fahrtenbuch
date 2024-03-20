@@ -306,6 +306,9 @@ const FahrtVerwalten: React.FC = () => {
         ruhezeit: [
           { start: today, stop: letzteFahrt.createdAt! },
           { start: new Date(Date.now()), stop: end }],
+        totalLenkzeit: elapsedTimeLenkzeit,
+        totalArbeitszeit: elapsedTimeArbeitszeit,
+        totalPause: elapsedTimePause,
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -419,7 +422,6 @@ const FahrtVerwalten: React.FC = () => {
       stopRunningTimer()
       await handleEndePost()
     } else {
-      console.log("fehler")
       return;
     }
   }

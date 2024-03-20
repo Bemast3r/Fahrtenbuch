@@ -40,6 +40,9 @@ export type FahrtResource = {
         stop: Date;
     }[];
     abwesend?: string
+    totalArbeitszeit?: number
+    totalLenkzeit?: number
+    totalPause?: number
 }
 
 export type LoginResource = {
