@@ -104,8 +104,7 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen, kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt, abwesend: fahrt.abwesend, beendet: fahrt.beendet, ruhezeit: fahrt.ruhezeit })
-        });
-        console.log(response)
+        })
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }

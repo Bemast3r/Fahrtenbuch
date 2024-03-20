@@ -15,15 +15,26 @@
     width: 100%;
     margin-bottom: 15px;
     /* Platz zwischen den Karten */
-    overflow-y: auto;
     height: fit-content;
 }
 
 .card-body {
     text-align: left;
-    height: fit-content;
     overflow-y: auto;
     /* Zentriert den Inhalt horizontal */
+}
+.mb-0{
+    padding-left: 10px;
+}
+
+.items {
+    padding-left: 10px;
+    /* Zentriert den Inhalt horizontal */
+}
+
+.accordion-button {
+    text-align: left;
+    padding-left: 10px;
 }
 
 .col-md {

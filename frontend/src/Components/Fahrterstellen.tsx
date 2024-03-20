@@ -129,6 +129,11 @@ const FahrtErstellen = () => {
             };
             const fahrt = await postFahrt(fahrtResource)
         }
+        Object.keys(localStorage).forEach(key => {
+            if (key !== 'jwt') {
+                localStorage.removeItem(key);
+            }
+        });
         navigate("/verwalten");
     }
 
@@ -143,8 +148,8 @@ const FahrtErstellen = () => {
 
     return (
         <><Navbar></Navbar>
-        <br></br>
-        <br></br>
+            <br></br>
+            <br></br>
             <div className="form-wrapper">
                 <h2 className="form-header">Fahrt Erstellen</h2>
                 {loading ? (

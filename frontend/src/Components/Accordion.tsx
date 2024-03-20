@@ -1,8 +1,7 @@
-import "./home.css"
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { ReactComponent as ArrowIcon } from "./arrow.svg";
-
+import "./statistiken.css"
 export declare interface AccordionProps {
     title?: string;
     show?: boolean;
@@ -69,7 +68,6 @@ export function Accordion({
                         dispatch({ type: "collapse" });
                         dispatch({ type: "rotate" });
                     }}
-                // style={{backgroundColor: "red", borderColor: "red"}}
                 >
                     {title}
                     <ArrowIcon
@@ -88,12 +86,12 @@ export function Accordion({
                         ? {
                             height: accordionBodyRef.current?.clientHeight,
                             transition: "height 0.2s ease",
-                            overflow: "hidden"
+                            overflowY: "scroll"
                         }
                         : {
                             height: 0,
                             transition: "height 0.2s ease",
-                            overflow: "hidden"
+                            overflowY: "scroll"
                         }
                 }
             >

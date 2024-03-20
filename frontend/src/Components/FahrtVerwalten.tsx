@@ -76,7 +76,6 @@ const FahrtVerwalten: React.FC = () => {
       setElapsedTimeArbeitszeit(Number(storedElapsedArbeitszeit));
 
       if (storedisTimeLenkzeit === "true") {
-        console.log("1")
         setIsRecordingLenkzeit(true)
         setIsRecordingPause(false)
         setIsRecordingArbeitszeit(false)
@@ -84,7 +83,6 @@ const FahrtVerwalten: React.FC = () => {
         return;
 
       } else if (storedisArbeitszeit === "true") {
-        console.log("2")
         setIsRecordingArbeitszeit(true)
         setIsRecordingLenkzeit(false)
         setIsRecordingPause(false)
@@ -92,7 +90,6 @@ const FahrtVerwalten: React.FC = () => {
         return;
 
       } else if (storedisPause === "true") {
-        console.log("3")
         setIsRecordingPause(true)
         setIsRecordingArbeitszeit(false)
         setIsRecordingLenkzeit(false)
@@ -100,7 +97,6 @@ const FahrtVerwalten: React.FC = () => {
         return;
 
       } else if (storedisPause === "false" && storedisArbeitszeit === "false" && storedisTimeLenkzeit === "false") {
-        console.log("====")
         setIsRecordingLenkzeit(true)
         setIsRecordingPause(false)
         setIsRecordingArbeitszeit(false)
@@ -199,7 +195,7 @@ const FahrtVerwalten: React.FC = () => {
 
 
 
-  function stopRunningTimer() {
+  async function stopRunningTimer() {
 
     if (timerId) {
       clearInterval(timerId);
@@ -211,7 +207,7 @@ const FahrtVerwalten: React.FC = () => {
         lastRecord.stop = moment().toDate();
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
-        handlePostLenkzeit();
+        await handlePostLenkzeit();
       }
       setIsRecordingLenkzeit(false);
     }
@@ -221,7 +217,7 @@ const FahrtVerwalten: React.FC = () => {
         lastRecord.stop = moment().toDate();
         setArbeitszeitRecord(lastRecord);
         setArbeitText('Arbeitszeit START');
-        handlePostArbeitszeit();
+        await handlePostArbeitszeit();
       }
       setIsRecordingArbeitszeit(false);
     }
@@ -231,7 +227,7 @@ const FahrtVerwalten: React.FC = () => {
         lastRecord.stop = moment().toDate();
         setPauseRecord(lastRecord);
         setPauseText('Pause START');
-        handlePostPause();
+        await handlePostPause();
       }
       setIsRecordingPause(false);
     }
@@ -325,7 +321,7 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-  function toggleRecordingLenkzeit() {
+  async function toggleRecordingLenkzeit() {
 
     if (isRecordingLenkzeit) {
       return;
@@ -347,13 +343,13 @@ const FahrtVerwalten: React.FC = () => {
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
         clearInterval(timerId!);
-        handlePostLenkzeit()
+        await handlePostLenkzeit()
       }
     }
     setIsRecordingLenkzeit(!isRecordingLenkzeit);
   }
 
-  function toggleRecordingArbeit() {
+  async function toggleRecordingArbeit() {
 
     if (isRecordingArbeitszeit) {
       return;
@@ -375,13 +371,13 @@ const FahrtVerwalten: React.FC = () => {
         setArbeitszeitRecord(lastRecord);
         setArbeitText('Arbeitszeit START');
         clearInterval(timerId!);
-        handlePostArbeitszeit()
+        await handlePostArbeitszeit()
       }
     }
     setIsRecordingArbeitszeit(!isRecordingArbeitszeit);
   }
 
-  function toggleRecordingPause() {
+  async function toggleRecordingPause() {
     if (isRecordingPause) {
       return;
     }
@@ -402,25 +398,12 @@ const FahrtVerwalten: React.FC = () => {
         setPauseRecord(lastRecord);
         setPauseText('Pause START');
         clearInterval(timerId!);
-        handlePostPause()
+        await handlePostPause()
       }
     }
     setIsRecordingPause(!isRecordingPause);
   }
 
-  function calculateTotalTimeDifference(record: TimeRecord[]): number {
-
-    let totalDifference = 0;
-
-    record.forEach((record) => {
-      if (record.stop) {
-        const differenceInSeconds = Math.floor(Math.abs(new Date(record.stop).getTime() - new Date(record.start).getTime()) / 1000);
-        totalDifference += differenceInSeconds;
-      }
-    });
-
-    return totalDifference;
-  }
 
   function formatTime(seconds: number): string {
     let hours = Math.floor(seconds / 3600);
@@ -436,6 +419,7 @@ const FahrtVerwalten: React.FC = () => {
       stopRunningTimer()
       await handleEndePost()
     } else {
+      console.log("fehler")
       return;
     }
   }
@@ -512,7 +496,7 @@ const FahrtVerwalten: React.FC = () => {
               </div>
               <div className="section">
                 <div className="button-group">
-                  <Button variant="danger" onClick={ handleEnde }>Fahrt beenden</Button>
+                  <Button variant="danger" onClick={handleEnde}>Fahrt beenden</Button>
                 </div>
                 <div>
                   Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
