@@ -293,12 +293,7 @@ const FahrtVerwalten: React.FC = () => {
       today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
-      const letzteFahrtCreatedAt = new Date(letzteFahrt.createdAt!);
-
-      const jetzt = new Date(Date.now());
-      // const diffFromTodayToCreatedAt = letzteFahrtCreatedAt.getTime() - today.getTime();
       const dayinMillis = 24 * (3600 * 1000)
-      // const diffFromNowToEnd = end.getTime() - jetzt.getTime();
       const totalRuhezeit = dayinMillis - (elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit)
 
       const fahrtResource: FahrtResource = {

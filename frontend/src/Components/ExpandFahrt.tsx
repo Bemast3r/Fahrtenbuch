@@ -4,11 +4,19 @@ import { Button } from "react-bootstrap";
 import "./statistiken.css"
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
-    function formatDate(date: Date): string {
+
+    function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
         const minutes = new Date(date).getMinutes().toString().padStart(2, '0');
         const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
         return `${hours}:${minutes}:${seconds}`;
+    }
+
+    function formatDateString(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${day}.${month}.${year}`;
     }
 
     function formatTime(seconds: number): string {
@@ -20,15 +28,15 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     }
 
     // Titel basierend auf dem Wert von abwesend setzen
-    const title = fahrt.abwesend ? "Abwesend" : `Fahrt am ${fahrt.startpunkt}`;
+    const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
 
     return (
         <div id="accordion">
             <div style={{ height: "auto" }}>
                 <div className="card-title" id={`heading-${fahrt.id}`} >
                     <h5 className="mb-0">
-                        <p style={{ margin: "5px", fontWeight: "bold" }}>
-                            {title} erstellt um {formatDate(new Date(fahrt.createdAt!))}
+                        <p style={{ fontWeight: "bold" }}>
+                            {title} um {formatDateTime(new Date(fahrt.createdAt!))} gestartet.
                         </p>
                     </h5>
                 </div>
@@ -43,7 +51,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         <p><span style={{ fontWeight: "bold" }}>Kennzeichen:</span> {fahrt.kennzeichen || 'Keine Angabe'}</p>
                         <p><span style={{ fontWeight: "bold" }}>Gestartet mit km:</span> {fahrt.kilometerstand || 'Keine Angabe'}</p>
                         <p><span style={{ fontWeight: "bold" }}>Beendet mit km:</span> {fahrt.kilometerende || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDate(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
+                        <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
                         <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
                         {fahrt.lenkzeit && (
 
@@ -52,7 +60,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 <ul>
                                     {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
                                         <li key={index}>
-                                            Start: {zeit?.start ? formatDate(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDate(new Date(zeit.stop)) : 'Keine Angabe'}
+                                            Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
                                         </li>
                                     )) : "Keine Lenkzeit"}
                                 </ul>
@@ -66,7 +74,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 <ul>
                                     {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
                                         <li key={index}>
-                                            Start: {pause?.start ? formatDate(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause?.stop ? formatDate(new Date(pause.stop)) : 'Keine Angabe'}
+                                            Start: {pause?.start ? formatDateTime(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause?.stop ? formatDateTime(new Date(pause.stop)) : 'Keine Angabe'}
                                         </li>
                                     )) : "Keine Pausenzeit"}
                                 </ul>
@@ -80,7 +88,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 <ul>
                                     {fahrt.arbeitszeit.length > 0 ? fahrt.arbeitszeit.map((zeit, index) => (
                                         <li key={index}>
-                                            Start: {zeit?.start ? formatDate(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDate(new Date(zeit.stop)) : 'Keine Angabe'}
+                                            Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
                                         </li>
                                     )) : "Keine Arbeitszeit"}
                                 </ul>
@@ -94,7 +102,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 <ul>
                                     {fahrt.ruhezeit.length > 0 ? fahrt.ruhezeit.slice(0, 2).map((zeit, index) => (
                                         <li key={index}>
-                                            Start: {zeit?.start ? formatDate(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDate(new Date(zeit.stop)) : 'Keine Angabe'}
+                                            Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
                                         </li>
                                     )) : "Keine Ruhezeit"}
                                 </ul>
@@ -105,8 +113,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 </div>
             </div>
             {/* PDF Download. */}
-
-            <Button className="downloadButton">Lade die Fahrt herunter.</Button>
+            <Button className="downloadButton">HERUNTERLADEN</Button>
         </div>
     );
 };

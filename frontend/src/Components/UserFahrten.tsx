@@ -7,6 +7,7 @@ import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
 import Navbar from "./Navbar";
 
+
 const UserFahrten: React.FC = () => {
     const [user, setUser] = useState<UserResource | null>(null);
     const [meineFahrten, setMeineFahrten] = useState<FahrtResource[] | []>([]);
@@ -56,13 +57,12 @@ const UserFahrten: React.FC = () => {
                             <br></br>
                             <br></br>
                             <div style={{ padding: "10px" }}>
-                                <h1>Hallo, {user.vorname ? user.vorname : ""} {user.name ? user.name : ""}</h1>
-                                <h3>Hier sind Ihre Statistiken:</h3>
+                                <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Ihre letzten Fahrten</h3>
                                 {meineFahrten.length > 0 ? (
                                     <>
                                         {Object.entries(groupFahrtenByDate(meineFahrten)).map(([date, fahrten]) => (
                                             <div key={date}>
-                                                <h2 style={{ marginTop: "20px" }}>{date}</h2>
+                                                <h2 style={{ marginTop: "20px" , padding: "10px"}}>{date}</h2>
                                                 {fahrten.map((fahrt: FahrtResource) => (
                                                     <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
                                                         <ExpandFahrt fahrt={fahrt} />

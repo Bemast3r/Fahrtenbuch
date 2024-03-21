@@ -6,20 +6,39 @@
 }
 
 .downloadButton {
-    background-color: blueviolet;
-    border-color: blueviolet;
+    margin-bottom: 10px;
+    background-color: #FFC107;
+    color: rgb(0, 0, 0);
+    border-color: #FFC107;
+    font-weight: 150;
     size: 10px;
     padding: 10px 10px;
     margin: 20px;
-    font-size: small;
+    font-size: medium;
     align-self: flex-end;
     padding-bottom: 10px;
 }
 
 .downloadButton:hover {
-    background-color: blueviolet;
-    border-color: blueviolet;
+    margin-bottom: 10px;
+    background-color: #FFC107;
+    color: rgb(0, 0, 0);
+    border-color: #FFC107;
+    font-weight: 150;
+    size: 10px;
+    padding: 10px 10px;
+    margin: 20px;
+    font-size: medium;
+    align-self: flex-end;
+    padding-bottom: 10px;
 }
+
+.downloadButton:active {
+    background-color: #FFC107; /* Setze die Hintergrundfarbe auf Gelb */
+    color: rgb(0, 0, 0); /* Optional: Setze die Schriftfarbe auf Schwarz */
+    border-color: #FFC107; /* Optional: Setze die Rahmenfarbe auf Gelb */
+}
+
 
 .card-text {
     font-size: large;
@@ -37,7 +56,8 @@
     overflow-y: auto;
     /* Zentriert den Inhalt horizontal */
 }
-.mb-0{
+
+.mb-0 {
     padding-left: 10px;
 }
 
@@ -62,8 +82,10 @@
     .row {
         display: flex;
         flex-wrap: wrap;
-        margin-left: -15px; /* Ändern Sie den Wert entsprechend Ihrem Layout */
-        margin-right: -15px; /* Ändern Sie den Wert entsprechend Ihrem Layout */
+        margin-left: -15px;
+        /* Ändern Sie den Wert entsprechend Ihrem Layout */
+        margin-right: -15px;
+        /* Ändern Sie den Wert entsprechend Ihrem Layout */
         padding: 1px;
     }
 
@@ -99,5 +121,6 @@
 /* Stil für Dropdown-Menüs */
 details.summary.ul {
     background-color: black;
-    margin-bottom: 10px; /* Abstand zwischen den Dropdown-Menüs */
+    margin-bottom: 10px;
+    /* Abstand zwischen den Dropdown-Menüs */
 }
