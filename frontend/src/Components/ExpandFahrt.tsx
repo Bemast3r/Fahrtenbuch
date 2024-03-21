@@ -1,6 +1,7 @@
 import React from "react";
 import { FahrtResource } from "../util/Resources";
-// import "./statistiken.css"
+import { Button } from "react-bootstrap";
+import "./statistiken.css"
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     function formatDate(date: Date): string {
@@ -86,9 +87,26 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                             </details>
 
                         )}
+
+                        {fahrt.ruhezeit && (
+                            <details>
+                                <summary style={{ fontWeight: "bold" }}>Ruhezeiten: {fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "----"}</summary>
+                                <ul>
+                                    {fahrt.ruhezeit.length > 0 ? fahrt.ruhezeit.slice(0, 2).map((zeit, index) => (
+                                        <li key={index}>
+                                            Start: {zeit?.start ? formatDate(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDate(new Date(zeit.stop)) : 'Keine Angabe'}
+                                        </li>
+                                    )) : "Keine Ruhezeit"}
+                                </ul>
+                            </details>
+                        )}
+
                     </div>
                 </div>
             </div>
+            {/* PDF Download. */}
+
+            <Button className="downloadButton">Lade die Fahrt herunter.</Button>
         </div>
     );
 };

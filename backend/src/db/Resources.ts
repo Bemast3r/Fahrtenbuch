@@ -43,6 +43,7 @@ export type FahrtResource = {
     totalArbeitszeit?: number
     totalLenkzeit?: number
     totalPause?: number
+    totalRuhezeit?: number
 }
 
 export type LoginResource = {

@@ -136,6 +136,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
     body("totalArbeitszeit").optional().isNumeric(),
     body("totalPause").optional().isNumeric(),
     body("totalLenkzeit").optional().isNumeric(),
+    body("totalRuhezeit").optional().isNumeric(),
     async (req, res, next) => {
 
         const errors = validationResult(req);

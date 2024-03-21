@@ -28,6 +28,7 @@ export interface IFahrt {
     totalLenkzeit: number;
     totalArbeitszeit: number;
     totalPause: number;
+    totalRuhezeit: number;
     abwesend: String;
 }
 
@@ -60,7 +61,8 @@ const fahrtSchema = new Schema<IFahrt>({
     abwesend: { type: String },
     totalLenkzeit: { type: Number },
     totalArbeitszeit: { type: Number },
-    totalPause: { type: Number }
+    totalPause: { type: Number },
+    totalRuhezeit: { type: Number }
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);

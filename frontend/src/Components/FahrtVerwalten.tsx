@@ -233,7 +233,6 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-
   async function handlePostArbeitszeit() {
     if (usercontexte && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
@@ -290,12 +289,18 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handleEndePost() {
     if (usercontexte && letzteFahrt) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
+      const letzteFahrtCreatedAt = new Date(letzteFahrt.createdAt!);
 
-      // Aktualisiere die Fahrt
+      const jetzt = new Date(Date.now());
+      // const diffFromTodayToCreatedAt = letzteFahrtCreatedAt.getTime() - today.getTime();
+      const dayinMillis = 24 * (3600 * 1000)
+      // const diffFromNowToEnd = end.getTime() - jetzt.getTime();
+      const totalRuhezeit = dayinMillis - (elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit)
+
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
@@ -309,6 +314,7 @@ const FahrtVerwalten: React.FC = () => {
         totalLenkzeit: elapsedTimeLenkzeit,
         totalArbeitszeit: elapsedTimeArbeitszeit,
         totalPause: elapsedTimePause,
+        totalRuhezeit: totalRuhezeit,
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);

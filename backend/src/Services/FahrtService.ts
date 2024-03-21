@@ -64,7 +64,8 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             beendet: fahrt.beendet,
             totalLenkzeit: fahrt.totalLenkzeit,
             totalArbeitszeit: fahrt.totalArbeitszeit,
-            totalPause: fahrt.totalPause
+            totalPause: fahrt.totalPause,
+            totalRuhezeit: fahrt.totalRuhezeit
         });
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
