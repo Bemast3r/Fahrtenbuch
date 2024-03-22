@@ -1,7 +1,6 @@
 import React from "react";
-import { FahrtResource } from "../util/Resources";
 import { Button } from "react-bootstrap";
-import "./statistiken.css"
+import { FahrtResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
@@ -55,7 +54,6 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
                         <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
                         {fahrt.lenkzeit && (
-
                             <details>
                                 <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>
                                 <ul>
@@ -66,10 +64,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                     )) : "Keine Lenkzeit"}
                                 </ul>
                             </details>
-
                         )}
                         {fahrt.pause && (
-
                             <details>
                                 <summary style={{ fontWeight: "bold" }}>Pausenzeiten: {fahrt.totalPause ? formatTime(fahrt.totalPause) : "----"}</summary>
                                 <ul>
@@ -80,10 +76,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                     )) : "Keine Pausenzeit"}
                                 </ul>
                             </details>
-
                         )}
                         {fahrt.arbeitszeit && (
-
                             <details>
                                 <summary style={{ fontWeight: "bold" }}>Arbeitszeiten: {fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----"}</summary>
                                 <ul>
@@ -94,9 +88,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                     )) : "Keine Arbeitszeit"}
                                 </ul>
                             </details>
-
                         )}
-
                         {fahrt.ruhezeit && (
                             <details>
                                 <summary style={{ fontWeight: "bold" }}>Ruhezeiten: {fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "----"}</summary>
@@ -109,12 +101,11 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                                 </ul>
                             </details>
                         )}
-
                     </div>
                 </div>
             </div>
-            <div style={{ width: '1000px' }}>
-                <ChartComponent chartData={fahrt} />
+            <div className="diagramm" >
+                <ChartComponent fahrt={fahrt} />
             </div>
             {/* PDF Download. */}
             <Button className="downloadButton">HERUNTERLADEN</Button>
