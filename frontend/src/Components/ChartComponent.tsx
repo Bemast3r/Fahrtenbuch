@@ -14,6 +14,7 @@ import {
 import "chartjs-adapter-date-fns"
 import { Line } from 'react-chartjs-2';
 import { FahrtResource } from '../util/Resources';
+import Zoom from 'chartjs-plugin-zoom';
 
 
 
@@ -26,7 +27,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Zoom
 );
 
 
@@ -80,7 +82,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
             x: {
                 type: 'time',
                 time: {
-                    unit: 'day',
+                    unit: 'hour',
                 },
             },
             y: {
