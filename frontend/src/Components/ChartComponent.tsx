@@ -1,4 +1,3 @@
-//@ts-ignore
 import Chart from 'chart.js/auto';
 import {
     Chart as ChartJS,
@@ -30,51 +29,70 @@ ChartJS.register(
     Legend
 );
 
-interface MyChartComponentProps {
-    fahrt: FahrtResource;
-}
 
-const MyChartComponent: React.FC<MyChartComponentProps> = ({ fahrt }) => {
-    // Definiere Chart-Optionen
+const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
+    // Extrahiere die Zeiten aus der FahrtResource und konvertiere sie in Date-Objekte mit Kennungen
+    const zeitenData: { x: Date; y: string; }[] = [];
+    if (fahrt.lenkzeit) {
+        fahrt.lenkzeit.forEach(zeit => {
+            zeitenData.push({ x: new Date(zeit.start), y: 'Lenkzeit' }); // Lenkzeit
+            zeitenData.push({ x: new Date(zeit.stop), y: 'Lenkzeit' }); // Lenkzeit
+        });
+    }
+    if (fahrt.arbeitszeit) {
+        fahrt.arbeitszeit.forEach(zeit => {
+            zeitenData.push({ x: new Date(zeit.start), y: 'Arbeitszeit' }); // Arbeitszeit
+            zeitenData.push({ x: new Date(zeit.stop), y: 'Arbeitszeit' }); // Arbeitszeit
+        });
+    }
+    if (fahrt.pause) {
+        fahrt.pause.forEach(zeit => {
+            zeitenData.push({ x: new Date(zeit.start), y: 'Pausezeit' }); // Pausezeit
+            zeitenData.push({ x: new Date(zeit.stop), y: 'Pausezeit' }); // Pausezeit
+        });
+    }
+    if (fahrt.ruhezeit) {
+        fahrt.ruhezeit.forEach(zeit => {
+            zeitenData.push({ x: new Date(zeit.start), y: 'Ruhezeit' }); // Ruhezeit
+            zeitenData.push({ x: new Date(zeit.stop), y: 'Ruhezeit' }); // Ruhezeit
+        });
+    }
 
+    // Sortiere die Daten nach X-Werten (Zeit)
+    zeitenData.sort((a, b) => a.x.getTime() - b.x.getTime());
+
+    // Erstelle das Chart-Datenobjekt
     const data = {
-        labels: ['2024-11-01', '2024-11-02', '2024-11-03', '2024-11-04', '2024-11-05', '2024-11-06'],
-
         datasets: [
             {
-                label: 'lenkzeit',
-                data: [3, 6, 5, 10, 1],
+                label: 'Zeiten',
+                data: zeitenData,
                 borderColor: 'black',
                 backgroundColor: 'aqua',
-                tension: 0
-            }
-        ]
+                tension: 0,
+            },
+        ],
     };
 
+    // Definiere Chart-Optionen
     const options: any = {
         scales: {
             x: {
                 type: 'time',
                 time: {
-                    unit: 'hour'
+                    unit: 'day',
                 },
-                ticks: {
-                    source: 'auto'
-                }
             },
             y: {
-                beginAtZero: true
-            }
+                type: 'category',
+                labels: ['Lenkzeit', 'Arbeitszeit', 'Pausezeit', 'Ruhezeit'],
+            },
         },
         responsive: true,
-        // maintainAspectRatio: false // This makes the chart responsive
     };
-
     return (
         <div>
-            {/* Verwende das Line-Komponente von react-chartjs-2 */}
-
-            <Line options={options} data={data} />
+            <Line data={data} options={options} />
         </div>
     );
 };
