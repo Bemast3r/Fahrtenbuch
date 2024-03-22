@@ -2,6 +2,7 @@ import React from "react";
 import { FahrtResource } from "../util/Resources";
 import { Button } from "react-bootstrap";
 import "./statistiken.css"
+import ChartComponent from "./ChartComponent";
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
@@ -111,6 +112,9 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
                     </div>
                 </div>
+            </div>
+            <div style={{ width: '1000px' }}>
+                <ChartComponent chartData={fahrt} />
             </div>
             {/* PDF Download. */}
             <Button className="downloadButton">HERUNTERLADEN</Button>
