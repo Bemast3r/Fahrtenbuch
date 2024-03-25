@@ -39,28 +39,42 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => { last() }, [count]);
 
+  // Innerhalb der FahrtVerwalten-Komponente
 
-  // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
-  useEffect(() => {
+useEffect(() => {
+  const timerInterval = setInterval(() => {
     if (!letzteFahrt) {
       last();
     } else {
-      const x = addmissingTime(elapsedTimeLenkzeit, elapsedTimeArbeitszeit, elapsedTimePause, letzteFahrt)
+      const x = addmissingTime(
+        elapsedTimeLenkzeit,
+        elapsedTimeArbeitszeit,
+        elapsedTimePause,
+        letzteFahrt
+      );
       if (x === 0 || x < 0) {
         return;
       }
 
       if (isRecordingLenkzeit) {
-        setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x)
+        setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x);
       }
       if (isRecordingArbeitszeit) {
-        console.log(x)
-        setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x)
+        setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x);
       }
       if (isRecordingPause) {
-        setElapsedTimePause(prevElapsedTime => prevElapsedTime + x)
+        setElapsedTimePause(prevElapsedTime => prevElapsedTime + x);
       }
     }
+  }, 5000); // Timer alle 60 Sekunden ausführen
+
+  return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
+}, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
+
+
+
+  // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
+  useEffect(() => {
 
     // Beim ersten Betreten
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
@@ -293,7 +307,7 @@ const FahrtVerwalten: React.FC = () => {
       today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
-      const dayinMillis = 24 * (3600 * 1000)
+      const dayinMillis = 24 * (3600 * 1000) / 1000
       const totalRuhezeit = dayinMillis - (elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit)
 
       const fahrtResource: FahrtResource = {
