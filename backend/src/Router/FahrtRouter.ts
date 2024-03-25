@@ -96,6 +96,8 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
     body("kennzeichen").isString(),
+    body("vollname").isString(),
+    body("endpunkt").optional().isString(),
     body("kilometerstand").isNumeric(),
     body("totalArbeitszeit").optional().isNumeric(),
     body("totalPause").optional().isNumeric(),
@@ -125,6 +127,8 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
     param("id").isMongoId(),
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
+    body("vollname").isString(),
+    body("endpunkt").optional().isString(),
     body("kennzeichen").isString(),
     body("kilometerstand").isNumeric(),
     body("kilometerende").optional().isNumeric(),
@@ -141,6 +145,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
         try {

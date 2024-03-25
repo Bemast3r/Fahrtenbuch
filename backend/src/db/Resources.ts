@@ -34,6 +34,7 @@ export type FahrtResource = {
     }[]; // Arbeiten ohne Fahren
     createdAt?: Date; // Datum der Fahrt
     startpunkt: string
+    endpunkt?: string
     beendet?: boolean
     ruhezeit?: {
         start: Date;
@@ -44,6 +45,7 @@ export type FahrtResource = {
     totalLenkzeit?: number
     totalPause?: number
     totalRuhezeit?: number
+    vollname?: string;
 }
 
 export type LoginResource = {

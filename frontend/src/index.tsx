@@ -13,6 +13,7 @@ import AdminFormular from './Components/AdminPanel';
 import FahrtErstellen from './Components/Fahrterstellen';
 import Statistik from './Components/Statistik';
 import UserFahrten from './Components/UserFahrten';
+import Fahrtabschliessen from './Components/Fahrtabschliessen';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -28,6 +29,7 @@ ReactDOM.render(
         <Route path="user-erstellen" element={<AdminFormular />} />
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
+        <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
       </Routes>
     </Router>
   </React.StrictMode>,

@@ -72,7 +72,7 @@ const FahrtErstellen = () => {
 
         setValidated(true);
 
-        if (letzteFahrt && !letzteFahrt.beendet) {
+        if (letzteFahrt && !letzteFahrt.beendet && !letzteFahrt.kilometerende) {
             setShowAlert(true);
             return;
         }
@@ -109,7 +109,8 @@ const FahrtErstellen = () => {
                         startpunkt: "-",
                         abwesend: abwesendText,
                         ruhezeit: [{ start: today, stop: end }],
-                        beendet: true
+                        beendet: true,
+                        vollname: user.vorname + " " + user.name
                     };
                     const fahrt = await postFahrt(fahrtResource);
                     setShowSuccess(true);
@@ -125,7 +126,8 @@ const FahrtErstellen = () => {
                 fahrerid: user.id!,
                 kennzeichen: kennzeichen.toString(),
                 kilometerstand: kilometerstand,
-                startpunkt: startpunkt.toString()
+                startpunkt: startpunkt.toString(),
+                vollname: user.vorname + " " + user.name
             };
             const fahrt = await postFahrt(fahrtResource)
         }

@@ -30,12 +30,15 @@ export interface IFahrt {
     totalPause: number;
     totalRuhezeit: number;
     abwesend: String;
+    endpunkt: String;
+    vollname: String;
 }
 
 type FahrtModel = Model<IFahrt>;
 
 const fahrtSchema = new Schema<IFahrt>({
     fahrer: { type: Schema.Types.ObjectId, ref: User, required: true },
+    vollname: { type: String },
     kennzeichen: { type: String, required: true },
     kilometerstand: { type: Number, required: true },
     kilometerende: { type: Number },
@@ -50,9 +53,10 @@ const fahrtSchema = new Schema<IFahrt>({
     pause: [{
         start: { type: Date },
         stop: { type: Date }
-    }], // weiß nicht ob das Sinnvoll ist aber mal sehen.
+    }],
     createdAt: { type: Date },
     startpunkt: { type: String, required: true },
+    endpunkt: { type: String },
     beendet: { type: Boolean, default: false },
     ruhezeit: [{
         start: { type: Date },

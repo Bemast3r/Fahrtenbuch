@@ -8,6 +8,10 @@ import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Navbar from './Navbar';
+import Fahrtabschliessen from './Fahrtabschliessen';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
 
 interface TimeRecord {
   start: Date;
@@ -32,6 +36,7 @@ const FahrtVerwalten: React.FC = () => {
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const navigate = useNavigate();
+  const [validated, setValidated] = useState(false);
 
   const [count, setCounter] = useState(0)
 
@@ -39,37 +44,35 @@ const FahrtVerwalten: React.FC = () => {
 
   useEffect(() => { last() }, [count]);
 
-  // Innerhalb der FahrtVerwalten-Komponente
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      if (!letzteFahrt) {
+        last();
+      } else {
+        const x = addmissingTime(
+          elapsedTimeLenkzeit,
+          elapsedTimeArbeitszeit,
+          elapsedTimePause,
+          letzteFahrt
+        );
+        if (x === 0 || x < 0) {
+          return;
+        }
 
-useEffect(() => {
-  const timerInterval = setInterval(() => {
-    if (!letzteFahrt) {
-      last();
-    } else {
-      const x = addmissingTime(
-        elapsedTimeLenkzeit,
-        elapsedTimeArbeitszeit,
-        elapsedTimePause,
-        letzteFahrt
-      );
-      if (x === 0 || x < 0) {
-        return;
+        if (isRecordingLenkzeit) {
+          setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x);
+        }
+        if (isRecordingArbeitszeit) {
+          setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x);
+        }
+        if (isRecordingPause) {
+          setElapsedTimePause(prevElapsedTime => prevElapsedTime + x);
+        }
       }
+    }, 5000); // Timer alle 60 Sekunden ausführen
 
-      if (isRecordingLenkzeit) {
-        setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x);
-      }
-      if (isRecordingArbeitszeit) {
-        setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x);
-      }
-      if (isRecordingPause) {
-        setElapsedTimePause(prevElapsedTime => prevElapsedTime + x);
-      }
-    }
-  }, 5000); // Timer alle 60 Sekunden ausführen
-
-  return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
-}, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
+    return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
+  }, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
 
 
 
@@ -191,6 +194,7 @@ useEffect(() => {
         kilometerstand: currentfahrt.kilometerstand,
         startpunkt: currentfahrt.startpunkt.toString(),
         beendet: false,
+        vollname: user.vorname + " " + user.name
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
@@ -252,6 +256,7 @@ useEffect(() => {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
+        vollname: usercontexte.vorname + " " + usercontexte.name,
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
@@ -271,6 +276,7 @@ useEffect(() => {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
+        vollname: usercontexte.vorname + " " + usercontexte.name,
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
@@ -287,6 +293,7 @@ useEffect(() => {
     if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
+        vollname: usercontexte.vorname + " " + usercontexte.name,
         id: letzteFahrt._id!.toString(),
         _id: letzteFahrt._id!.toString(),
         kennzeichen: letzteFahrt.kennzeichen.toString(),
@@ -324,6 +331,7 @@ useEffect(() => {
         totalArbeitszeit: elapsedTimeArbeitszeit,
         totalPause: elapsedTimePause,
         totalRuhezeit: totalRuhezeit,
+        vollname: usercontexte.vorname + " " + usercontexte.name,
         beendet: true,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -436,6 +444,7 @@ useEffect(() => {
     if (confirmEnde) {
       stopRunningTimer()
       await handleEndePost()
+      navigate("/fahrten-abschluss")
     } else {
       return;
     }
@@ -458,7 +467,8 @@ useEffect(() => {
       ) : (
         <div className="container">
           <h3>Hallo, {usercontexte ? usercontexte.name : ""}.</h3>
-          {letzteFahrt && !letzteFahrt.beendet ? (
+          {letzteFahrt &&
+            !letzteFahrt.beendet ? (
             <>
               <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
                 mit dem Kennzeichen {letzteFahrt ? letzteFahrt.kennzeichen : "Kein Kennzeichen"}.
@@ -526,9 +536,9 @@ useEffect(() => {
                   )}
                   Insgesamte Zeit ist: {formatTime((elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause))}
                 </div>
-
               </div>
             </>
+
           ) : (
             <>
               <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>

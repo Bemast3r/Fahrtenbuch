@@ -47,12 +47,25 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     data-parent="#accordion"
                 >
                     <div className="items">
-                        <p><span style={{ fontWeight: "bold" }}>Starpunkt:</span> {fahrt.startpunkt || 'Keine Angabe'}</p>
+                        <p><span style={{ fontWeight: "bold" }}>Vollständiger Fahrername:</span> {fahrt.vollname || 'Keine Angabe'}</p>
+                        <p><span style={{ fontWeight: "bold" }}>Ort des Fahrtbeginns:</span> {fahrt.startpunkt || 'Keine Angabe'}</p>
+                        <p><span style={{ fontWeight: "bold" }}>Ort der Fahrtbeendigung:</span> {fahrt.endpunkt || 'Keine Angabe.'}</p>
                         <p><span style={{ fontWeight: "bold" }}>Kennzeichen:</span> {fahrt.kennzeichen || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Gestartet mit km:</span> {fahrt.kilometerstand || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Beendet mit km:</span> {fahrt.kilometerende || 'Keine Angabe'}</p>
+                        <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtbeginn:</span> {fahrt.kilometerstand || 'Keine Angabe'}</p>
+                        <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtende:</span> {fahrt.kilometerende || 'Keine Angabe'}</p>
+                        {fahrt.kilometerende ? (
+                            <p>
+                                <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> {fahrt.kilometerende - fahrt.kilometerstand} km
+                            </p>
+                        ) : (
+                            <p>
+                                <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> Keine Angabe.
+                            </p>
+                        )}
+
                         <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
                         <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
+
                         {fahrt.lenkzeit && (
                             <details>
                                 <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>

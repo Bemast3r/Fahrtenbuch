@@ -39,11 +39,13 @@ export type FahrtResource = {
         start: Date;
         stop: Date;
     }[];
+    endpunkt?: string
     abwesend?: string
     totalArbeitszeit?: number
     totalLenkzeit?: number
     totalPause?: number
     totalRuhezeit?: number
+    vollname?: string;
 }
 
 export type LoginResource = {
