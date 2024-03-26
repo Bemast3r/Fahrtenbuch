@@ -113,7 +113,7 @@ const Fahrtabschliessen = () => {
                         <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten"); }}>Fahrt Verwalten</Button>
                     </Alert>
                         <Alert variant="success" show={success} onClose={() => setShowAlert(false)} dismissible>
-                            Fahrt erfolgreich erstellt!
+                            Fahrt erfolgreich abgeschlossen!
                         </Alert>
                         <div className="form-container">
                             <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>

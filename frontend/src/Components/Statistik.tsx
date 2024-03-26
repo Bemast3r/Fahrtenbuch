@@ -7,6 +7,7 @@ import { FahrtResource, UserResource } from '../util/Resources';
 import Navbar from './Navbar';
 import { Accordion } from "./Accordion";
 import ExpandFahrt from "./ExpandFahrt";
+import Loading from "./LoadingIndicator";
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -153,14 +154,14 @@ const Statistik = () => {
             </div>
             <br></br>
 
-            <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration:"underline" }}>Alle Fahrten</h2>
+            <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Alle Fahrten</h2>
             <div className="fahrten">
                 {fahrts && fahrts.length > 0 ? (
                     <>
                         <section style={{ overflowY: "auto" }}>
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten]) => (
                                 <div key={date}>
-                                    <h2 style={{ paddingLeft: "10px",marginTop: "20px" }}>{date}</h2>
+                                    <h2 style={{ paddingLeft: "10px", marginTop: "20px" }}>{date}</h2>
                                     {fahrten.map((fahrt: FahrtResource) => (
                                         <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
                                             <ExpandFahrt fahrt={fahrt} />
@@ -171,7 +172,7 @@ const Statistik = () => {
                         </section>
                     </>
                 ) : (
-                    <p>Keine Fahrten gefunden</p>
+                    !fahrts ? <Loading /> : fahrts.length === 0 ? <h2> Es gibt keine Fahrten</h2> : <h2> Es gibt keine Fahrten</h2>
                 )}
             </div>
         </>

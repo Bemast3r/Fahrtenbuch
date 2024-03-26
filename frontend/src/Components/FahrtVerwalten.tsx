@@ -159,13 +159,6 @@ const FahrtVerwalten: React.FC = () => {
     }
   }, [jwt, navigate]);
 
-
-  useEffect(() => {
-    return () => {
-      stopRunningTimer();
-    };
-  }, []);
-
   async function last() {
     if (usercontexte && usercontexte.id) {
       const x: FahrtResource[] = await getFahrt(usercontexte.id);
@@ -347,7 +340,7 @@ const FahrtVerwalten: React.FC = () => {
     if (isRecordingLenkzeit) {
       return;
     }
-    stopRunningTimer();
+    await stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingLenkzeit) {
       setLenkzeitRecord({ start: currentTime, stop: null });
@@ -375,7 +368,7 @@ const FahrtVerwalten: React.FC = () => {
     if (isRecordingArbeitszeit) {
       return;
     }
-    stopRunningTimer();
+    await stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingArbeitszeit) {
       setArbeitszeitRecord({ start: currentTime, stop: null });
@@ -402,7 +395,7 @@ const FahrtVerwalten: React.FC = () => {
     if (isRecordingPause) {
       return;
     }
-    stopRunningTimer();
+    await stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingPause) {
       setPauseRecord({ start: currentTime, stop: null });
@@ -437,9 +430,9 @@ const FahrtVerwalten: React.FC = () => {
   async function handleEnde() {
     const confirmEnde = window.confirm("Wollen Sie wirklich die Fahrt beenden?");
     if (confirmEnde) {
-      stopRunningTimer()
+      await stopRunningTimer()
       await handleEndePost()
-      navigate("/fahrten-abschluss")
+        navigate("/fahrten-abschluss");
     } else {
       return;
     }

@@ -158,7 +158,6 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
             },
             body: JSON.stringify(fahrt)
         });
-        console.log(response)
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }
