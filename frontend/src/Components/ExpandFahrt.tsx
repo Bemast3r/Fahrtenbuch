@@ -19,13 +19,21 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         return `${day}.${month}.${year}`;
     }
 
-    function formatTime(seconds: number): string {
-        let hours = Math.floor(seconds / 3600);
-        hours = Math.floor(hours / 1000)
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const remainingSeconds = seconds % 60;
-        return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+    function formatTime(sekunden: number): string {
+        // Stunden, Minuten und Sekunden berechnen
+        const stunden: number = Math.floor(sekunden / 3600);
+        const minuten: number = Math.floor((sekunden % 3600) / 60);
+        const sekundenRest: number = sekunden % 60;
+    
+        // Zeit im Format HH:MM:SS zurückgeben
+        const formatierteStunden: string = stunden.toString().padStart(2, '0');
+        const formatierteMinuten: string = minuten.toString().padStart(2, '0');
+        const formatierteSekunden: string = sekundenRest.toString().padStart(2, '0');
+    
+        return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
+
+
 
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;

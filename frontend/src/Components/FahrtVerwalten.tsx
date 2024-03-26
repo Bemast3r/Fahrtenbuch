@@ -36,7 +36,6 @@ const FahrtVerwalten: React.FC = () => {
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
 
   const [count, setCounter] = useState(0)
 
@@ -61,12 +60,15 @@ const FahrtVerwalten: React.FC = () => {
 
         if (isRecordingLenkzeit) {
           setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x);
+          return;
         }
         if (isRecordingArbeitszeit) {
           setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x);
+          return;
         }
         if (isRecordingPause) {
           setElapsedTimePause(prevElapsedTime => prevElapsedTime + x);
+          return;
         }
       }
     }, 5000); // Timer alle 60 Sekunden ausführen
@@ -315,7 +317,7 @@ const FahrtVerwalten: React.FC = () => {
       const end = new Date();
       end.setHours(23, 59, 59, 0);
       const dayinMillis = 24 * (3600 * 1000) / 1000
-      const totalRuhezeit = dayinMillis - (elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit)
+      const totalRuhezeit = ((elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit) - dayinMillis) * -1
 
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -337,13 +339,6 @@ const FahrtVerwalten: React.FC = () => {
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
       setCounter(count => count + 1);
-
-      // Entferne alle Einträge aus dem Local Storage außer dem JWT
-      Object.keys(localStorage).forEach(key => {
-        if (key !== 'jwt') {
-          localStorage.removeItem(key);
-        }
-      });
     }
   }
 
@@ -456,105 +451,128 @@ const FahrtVerwalten: React.FC = () => {
     const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   }
-
   return (
-    <><Navbar></Navbar><div>
-      <br></br>
-      <br></br>
-      <h1 className="header">Fahrt Verwalten</h1>
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className="container">
-          <h3>Hallo, {usercontexte ? usercontexte.name : ""}.</h3>
-          {letzteFahrt &&
-            !letzteFahrt.beendet ? (
-            <>
-              <p>Ihre momentane Fahrt startete am {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : "Keine Fahrt"},
-                mit dem Kennzeichen {letzteFahrt ? letzteFahrt.kennzeichen : "Kein Kennzeichen"}.
-              </p>
-              <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : "Kein Startpunkt"}.</p>
-              <div className="section">
-                <div className="button-group">
-                  <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={toggleRecordingLenkzeit}>{lenktext}</Button>
-                </div>
-
-                <div className="elapsed-time">
-                  Verbrachte Lenkzeit: {formatTime(elapsedTimeLenkzeit)}
-                </div>
-
-                {letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0 && (
-                  <div className="dates">
-                    {letzteFahrt.lenkzeit.slice().reverse().map((Zeiten, index) => {
-                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>;
-                    })}
+    <>
+      <Navbar></Navbar>
+      <div>
+        <br></br>
+        <br></br>
+        <h1 className="header">Fahrt Verwalten</h1>
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="container">
+            <h3>Hallo, {usercontexte ? usercontexte.name : ""}.</h3>
+            {letzteFahrt && !letzteFahrt.beendet ? (
+              <>
+                <p>
+                  Ihre momentane Fahrt startete am{' '}
+                  {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : 'Keine Fahrt'}, mit dem Kennzeichen{' '}
+                  {letzteFahrt ? letzteFahrt.kennzeichen : 'Kein Kennzeichen'}.{' '}
+                </p>
+                <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
+                <div className="section">
+                  <div className="button-group">
+                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={toggleRecordingLenkzeit}>
+                      {lenktext}
+                    </Button>
                   </div>
-                )}
-              </div>
-              <div className="section">
-                <div className="button-group">
-                  <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={toggleRecordingArbeit}>{arbeitText}</Button>
-                </div>
-                <div className="elapsed-time">
-                  Verbrachte Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)}
-                </div>
-                {letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0 && (
-                  <div className="dates">
-                    {letzteFahrt.arbeitszeit.slice().reverse().map((Zeiten, index) => {
-                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>;
-                    })}
-                  </div>
-                )}
-              </div>
-              <div className="section">
-                <div className="button-group">
-                  <Button variant={isRecordingPause ? "danger" : "primary"} onClick={toggleRecordingPause}>{pauseText}</Button>
-                </div>
-                <div className="elapsed-time">
-                  Verbrachte Pause: {formatTime(elapsedTimePause)}
-                </div>
-                {letzteFahrt.pause && letzteFahrt.pause.length > 0 && (
-                  <div className="dates">
-                    {letzteFahrt.pause.slice().reverse().map((Zeiten, index) => {
-                      return <p key={index}>Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.</p>;
-                    })}
-                  </div>
-                )}
-              </div>
-              <div className="section">
-                <div className="button-group">
-                  <Button variant="danger" onClick={handleEnde}>Fahrt beenden</Button>
-                </div>
-                <div>
-                  Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
-                  Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
-                  Gesamt Pause: {formatTime(elapsedTimePause)}
-                  {letzteFahrt.createdAt && (
-                    <div>
-                      Verbrachte Ruhezeit: {formatDate((letzteFahrt.createdAt))}
+                  <div className="elapsed-time">Verbrachte Lenkzeit: {formatTime(elapsedTimeLenkzeit)}</div>
+                  {letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0 && (
+                    <div className="dates">
+                      {letzteFahrt.lenkzeit
+                        .slice()
+                        .reverse()
+                        .map((Zeiten, index) => {
+                          return (
+                            <p key={index}>
+                              Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.
+                            </p>
+                          );
+                        })}
                     </div>
                   )}
-                  Insgesamte Zeit ist: {formatTime((elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause))}
                 </div>
-              </div>
-            </>
-
-          ) : (
-            <>
-              <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
-              <Link to="/create">
-                <Button className='erstellen'>Fahrt Erstellen</Button>
-              </Link>
-              <Link to="/home">
-                <Button variant="danger" className='hauptmenu'>Hauptmenu</Button>
-              </Link>
-            </>
-          )}
-        </div>
-      )}
-    </div></>
+                <div className="section">
+                  <div className="button-group">
+                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={toggleRecordingArbeit}>
+                      {arbeitText}
+                    </Button>
+                  </div>
+                  <div className="elapsed-time">Verbrachte Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)}</div>
+                  {letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0 && (
+                    <div className="dates">
+                      {letzteFahrt.arbeitszeit
+                        .slice()
+                        .reverse()
+                        .map((Zeiten, index) => {
+                          return (
+                            <p key={index}>
+                              Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.
+                            </p>
+                          );
+                        })}
+                    </div>
+                  )}
+                </div>
+                <div className="section">
+                  <div className="button-group">
+                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={toggleRecordingPause}>
+                      {pauseText}
+                    </Button>
+                  </div>
+                  <div className="elapsed-time">Verbrachte Pause: {formatTime(elapsedTimePause)}</div>
+                  {letzteFahrt.pause && letzteFahrt.pause.length > 0 && (
+                    <div className="dates">
+                      {letzteFahrt.pause
+                        .slice()
+                        .reverse()
+                        .map((Zeiten, index) => {
+                          return (
+                            <p key={index}>
+                              Start: {formatDate(new Date(Zeiten.start))} Uhr , Stop: {formatDate(new Date(Zeiten.stop))} Uhr.
+                            </p>
+                          );
+                        })}
+                    </div>
+                  )}
+                </div>
+                <div className="section">
+                  <div className="button-group">
+                    <Button variant="danger" onClick={handleEnde}>
+                      Fahrt beenden
+                    </Button>
+                  </div>
+                  <div>
+                    Gesamt Lenkzeit: {formatTime(elapsedTimeLenkzeit)} <br />
+                    Gesamt Arbeitszeit: {formatTime(elapsedTimeArbeitszeit)} <br />
+                    Gesamt Pause: {formatTime(elapsedTimePause)}
+                    {letzteFahrt.createdAt && (
+                      <div>Verbrachte Ruhezeit: {formatDate(letzteFahrt.createdAt)}</div>
+                    )}
+                    Insgesamte Zeit ist: {formatTime(elapsedTimeLenkzeit + elapsedTimeArbeitszeit + elapsedTimePause)}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
+                <Link to="/create">
+                  <Button className="erstellen">Fahrt Erstellen</Button>
+                </Link>
+                <Link to="/home">
+                  <Button variant="danger" className="hauptmenu">
+                    Hauptmenu
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
-};
+}
 
 
 export default FahrtVerwalten;
