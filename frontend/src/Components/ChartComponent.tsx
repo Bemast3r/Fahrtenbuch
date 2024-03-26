@@ -1,22 +1,20 @@
-import Chart from 'chart.js/auto';
-import {
-    Chart as ChartJS,
-    LineElement,
-    LinearScale,
-    CategoryScale,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend,
-    TimeScale,
-} from 'chart.js';
+import Chart, { 
+    Chart as ChartJS, 
+    LineElement, 
+    LinearScale, 
+    CategoryScale, 
+    PointElement, 
+    Title, 
+    Tooltip, 
+    Legend, 
+    TimeScale 
+} from 'chart.js/auto';
 
-import "chartjs-adapter-date-fns"
+import "chartjs-adapter-date-fns";
 import { Line } from 'react-chartjs-2';
 import { FahrtResource } from '../util/Resources';
 import Zoom from 'chartjs-plugin-zoom';
-
-
+import zoomPlugin from 'chartjs-plugin-zoom';
 
 // Registriere erforderliche Chart.js-Komponenten
 ChartJS.register(
@@ -28,9 +26,9 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Zoom
+    Zoom,
+    zoomPlugin
 );
-
 
 const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     // Extrahiere die Zeiten aus der FahrtResource und konvertiere sie in Date-Objekte mit Kennungen
@@ -123,7 +121,22 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     // Definiere Chart-Optionen
     const options: any = {
-
+        plugins: {
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                    },
+                    pinch: {
+                        enabled: true
+                    },
+                    mode: 'x',
+                    drag:{
+                        enabled: true
+                    },
+                }
+            }
+        },
         scales: {
             x: {
                 type: 'time',
@@ -133,11 +146,20 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
             },
             y: {
                 type: 'category',
+                barThickness: 2 ,
                 labels: ['Lenkzeit', 'Arbeitszeit', 'Pausezeit', 'Ruhezeit'],
+                ticks: {
+                    // Hier kannst du die Größe der Y-Achse anpassen
+                    font: {
+                        size: 15 // Beispiel: setze die Schriftgröße auf 10
+                    }
+                }
             },
         },
         responsive: true,
     };
+    
+
     return (
         <div>
             <Line data={data} options={options} />

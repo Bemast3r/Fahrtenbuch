@@ -71,7 +71,7 @@ const FahrtVerwalten: React.FC = () => {
           return;
         }
       }
-    }, 5000); // Timer alle 60 Sekunden ausführen
+    }, 1000); // Timer alle 60 Sekunden ausführen
 
     return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
   }, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
