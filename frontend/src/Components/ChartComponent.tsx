@@ -1,13 +1,13 @@
-import Chart, { 
-    Chart as ChartJS, 
-    LineElement, 
-    LinearScale, 
-    CategoryScale, 
-    PointElement, 
-    Title, 
-    Tooltip, 
-    Legend, 
-    TimeScale 
+import Chart, {
+    Chart as ChartJS,
+    LineElement,
+    LinearScale,
+    CategoryScale,
+    PointElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale
 } from 'chart.js/auto';
 
 import "chartjs-adapter-date-fns";
@@ -77,6 +77,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     // Definiere Chart-Optionen
     const options: any = {
+        maintainAspectRatio: false,
         plugins: {
             zoom: {
                 zoom: {
@@ -87,7 +88,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         enabled: true
                     },
                     mode: 'x',
-                    drag:{
+                    drag: {
                         enabled: true
                     },
                 }
@@ -97,12 +98,12 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
             x: {
                 type: 'time',
                 time: {
-                    //unit: 'hour',
+                    // unit: 'hour',
                 },
             },
             y: {
                 type: 'category',
-                barThickness: 2 ,
+                barThickness: 2,
                 labels: ['Lenkzeit', 'Arbeitszeit', 'Pausezeit', 'Ruhezeit'],
                 ticks: {
                     // Hier kannst du die Größe der Y-Achse anpassen
@@ -114,7 +115,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         },
         responsive: true,
     };
-    
+
 
     return (
         <div>
