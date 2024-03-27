@@ -109,7 +109,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
             x: {
                 type: 'time',
                 time: {
-                    unit: 'hour',
+                    //unit: 'hour',
                 },
             },
             y: {
