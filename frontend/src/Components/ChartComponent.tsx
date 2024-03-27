@@ -16,6 +16,8 @@ import { Line } from 'react-chartjs-2';
 import { FahrtResource } from '../util/Resources';
 import Zoom from 'chartjs-plugin-zoom';
 import zoomPlugin from 'chartjs-plugin-zoom';
+import { Button } from "react-bootstrap";
+import { useCallback, useRef } from "react";
 
 // Registriere erforderliche Chart.js-Komponenten
 ChartJS.register(
@@ -60,6 +62,18 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         });
     }
 
+    const canvasRef = useRef<ChartJS<"line",typeof zeitenData, string>>(null);
+
+    const downloadImage = useCallback(() => {
+        if (canvasRef.current) {
+            const link = document.createElement("a")
+            link.download = "chart.png"
+            link.href = canvasRef.current!.toBase64Image()
+            link.click()
+        } else {
+            console.error("Es gabe ein Fehler beim Download.")
+        }
+    }, [])
     // Sortiere die Daten nach X-Werten (Zeit)
     zeitenData.sort((a, b) => a.x.getTime() - b.x.getTime());
 
@@ -117,10 +131,29 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         responsive: true,
     };
 
+    const plugin = {
+        id: 'customCanvasBackgroundColor',
+        beforeDraw: (chart: any, args: any, options: any) => {
+            const { ctx } = chart;
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = options.color || '#99ffff';
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+        }
+    };
+
+    const config = {
+        type: "line",
+        data: data,
+        options: options,
+        plugins: [plugin]
+    }
 
     return (
         <div className='line'>
-            <Line data={data} options={options} />
+            <Line ref={canvasRef} data={data} options={options} />
+            <Button onClick={downloadImage}>Download</Button>
         </div>
     );
 };

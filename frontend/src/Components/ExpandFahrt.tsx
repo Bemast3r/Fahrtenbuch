@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect} from "react";
 import { Button } from "react-bootstrap";
 import { FahrtResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
+import { jsPDF } from "jspdf";
+
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
@@ -24,12 +26,12 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         const stunden: number = Math.floor(sekunden / 3600);
         const minuten: number = Math.floor((sekunden % 3600) / 60);
         const sekundenRest: number = sekunden % 60;
-    
+
         // Zeit im Format HH:MM:SS zurückgeben
         const formatierteStunden: string = stunden.toString().padStart(2, '0');
         const formatierteMinuten: string = minuten.toString().padStart(2, '0');
         const formatierteSekunden: string = sekundenRest.toString().padStart(2, '0');
-    
+
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
 
@@ -37,6 +39,21 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
+
+    function handleDownload(event: any): void {
+        const pdfChart: HTMLCanvasElement | null = document.getElementById("MyChart") as HTMLCanvasElement;
+        if (pdfChart && pdfChart instanceof HTMLCanvasElement) {
+            const pdfChartImage: string = pdfChart.toDataURL('image/jpeg', 1.0);
+            let pdf = new jsPDF()
+            pdf.setFontSize(20)
+            pdf.addImage(pdfChartImage, 'JPEG', 15, 15, 280, 150)
+            pdf.save(`Fahrt von ${fahrt.vollname} am ${formatDateString(new Date(fahrt.createdAt!))}`)
+        } else {
+            console.error("Element mit der ID 'MyChart' wurde nicht gefunden oder ist kein Canvas-Element.");
+        }
+    }
+
+
 
     return (
         <div id="accordion">
@@ -125,13 +142,16 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     </div>
                 </div>
             </div>
-            <div className="diagramm" >
-                <ChartComponent fahrt={fahrt} />
+            <div>
+                <div className="diagramm" >
+                    <ChartComponent fahrt={fahrt} />
+                </div>
+                {/* PDF Download. */}
+                {/* <Button className="downloadButton" onClick={handleDownload}>HERUNTERLADEN</Button> */}
             </div>
-            {/* PDF Download. */}
-            <Button className="downloadButton">HERUNTERLADEN</Button>
         </div>
     );
 };
+
 
 export default ExpandFahrt;
