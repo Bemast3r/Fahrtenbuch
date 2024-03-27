@@ -1,3 +1,4 @@
+import "./chartcomponent.css"
 import Chart, { 
     Chart as ChartJS, 
     LineElement, 
@@ -77,6 +78,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     // Definiere Chart-Optionen
     const options: any = {
+        maintainAspectRatio: false,
         plugins: {
             zoom: {
                 zoom: {
@@ -117,7 +119,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     
 
     return (
-        <div>
+        <div className='line'>
             <Line data={data} options={options} />
         </div>
     );
