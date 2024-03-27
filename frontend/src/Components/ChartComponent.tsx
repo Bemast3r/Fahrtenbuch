@@ -84,38 +84,6 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 backgroundColor: 'aqua',
                 tension: 0,
             },
-            {
-                label: 'Lenkzeit',
-                data: lenkzeitData,
-                borderColor: 'pink',
-                backgroundColor: 'pink',
-                tension: 0,
-                fill: false
-            },
-            {
-                label: 'Arbeitszeit',
-                data: arbeitszeitData,
-                borderColor: 'brown',
-                backgroundColor: 'brown',
-                tension: 0,
-                fill: false
-            },
-            {
-                label: 'Ruhezeit',
-                data: ruhezeitData,
-                borderColor: 'black',
-                backgroundColor: 'white',
-                tension: 0,
-                fill: false
-            },
-            {
-                label: 'Pause',
-                data: pauseData,
-                borderColor: 'black',
-                backgroundColor: 'black',
-                tension: 0,
-                fill: false
-            },
         ],
     };
 
