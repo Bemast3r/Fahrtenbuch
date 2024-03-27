@@ -125,7 +125,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     </div>
                 </div>
             </div>
-            <div className="diagramm" style={{ height: "30%", width: "60%" }}>
+            <div className="diagramm" >
                 <ChartComponent fahrt={fahrt} />
             </div>
             {/* PDF Download. */}
