@@ -9,8 +9,6 @@ import html2tocanvas from 'html2canvas'
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
-    const [loader, setLoader] = useState(false)
-
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -40,43 +38,10 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
 
-
-
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
 
-    function handleDownload(event: any): void {
-        const pdfChart: HTMLCanvasElement | null = document.getElementById("MyChart") as HTMLCanvasElement;
-        if (pdfChart && pdfChart instanceof HTMLCanvasElement) {
-            const pdfChartImage: string = pdfChart.toDataURL('image/jpeg', 1.0);
-            let pdf = new jsPDF()
-            pdf.setFontSize(20)
-            pdf.addImage(pdfChartImage, 'JPEG', 15, 15, 280, 150)
-            pdf.save(`Fahrt von ${fahrt.vollname} am ${formatDateString(new Date(fahrt.createdAt!))}`)
-        } else {
-            console.error("Element mit der ID 'MyChart' wurde nicht gefunden oder ist kein Canvas-Element.");
-        }
-    }
 
-    const downloadPDF = () => {
-        console.log(fahrt.id)
-        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
-        setLoader(true);
-        if (capture) {
-            html2tocanvas(capture).then((canvas) => {
-                const imgdata = canvas.toDataURL('img/jpeg');
-                const doc = new jsPDF('p', 'mm', 'a4');
-                const componetwidth = doc.internal.pageSize.getWidth();
-                const componentheight = doc.internal.pageSize.getHeight();
-                doc.addImage(imgdata, 'JPEG', 0, 0, componetwidth, componentheight);
-                setLoader(false);
-                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
-            });
-        } else {
-            setLoader(false);
-            console.log("Nicht gefunden.");
-        }
-    };
 
 
 
@@ -175,7 +140,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     </div>
                 </div>
                 {/* PDF Download. */}
-                <Button className="downloadButton" disabled={loader} onClick={downloadPDF}>HERUNTERLADEN</Button>
+              
             </div>
         </div>
     );

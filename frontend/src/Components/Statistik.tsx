@@ -8,6 +8,9 @@ import Navbar from './Navbar';
 import { Accordion } from "./Accordion";
 import ExpandFahrt from "./ExpandFahrt";
 import Loading from "./LoadingIndicator";
+import { Button } from "react-bootstrap";
+import { jsPDF } from "jspdf";
+import html2tocanvas from 'html2canvas'
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -97,6 +100,30 @@ const Statistik = () => {
         }, {});
     }
 
+
+    function formatDateString(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${day}.${month}.${year}`;
+    }
+
+    const downloadPDF = (fahrt: FahrtResource) => {
+        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
+        if (capture) {
+            html2tocanvas(capture).then((canvas) => {
+                const imgdata = canvas.toDataURL('img/jpeg');
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const componetwidth = doc.internal.pageSize.getWidth()
+                const componentheight = doc.internal.pageSize.getHeight()
+                doc.addImage(imgdata, 'JPEG', 15, 0, componetwidth+50, componentheight);
+                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
+            });
+        } else {
+            console.log("Nicht gefunden.");
+        }
+    };
+
     return (
         <>
             <Navbar></Navbar>
@@ -167,6 +194,7 @@ const Statistik = () => {
                                             <div className={`infos-${fahrt._id}`}>
                                                 <ExpandFahrt fahrt={fahrt} />
                                             </div>
+                                            <Button className="downloadButton" onClick={() => { downloadPDF(fahrt) }}>HERUNTERLADEN</Button>
                                         </Accordion>
                                     ))}
                                 </div>
@@ -182,3 +210,5 @@ const Statistik = () => {
 }
 
 export default Statistik;
+
+
