@@ -1,11 +1,16 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { FahrtResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
 import { jsPDF } from "jspdf";
+import html2tocanvas from 'html2canvas'
+
 
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
+
+    const [loader, setLoader] = useState(false)
+
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -53,11 +58,31 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         }
     }
 
+    const downloadPDF = () => {
+        console.log(fahrt.id)
+        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
+        setLoader(true);
+        if (capture) {
+            html2tocanvas(capture).then((canvas) => {
+                const imgdata = canvas.toDataURL('img/jpeg');
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const componetwidth = doc.internal.pageSize.getWidth();
+                const componentheight = doc.internal.pageSize.getHeight();
+                doc.addImage(imgdata, 'JPEG', 0, 0, componetwidth, componentheight);
+                setLoader(false);
+                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
+            });
+        } else {
+            setLoader(false);
+            console.log("Nicht gefunden.");
+        }
+    };
+
 
 
     return (
         <div id="accordion">
-            <div style={{ height: "auto" }}>
+            <div style={{ height: "auto" }} className="infos">
                 <div className="card-title" id={`heading-${fahrt.id}`} >
                     <h5 className="mb-0">
                         <p style={{ fontWeight: "bold" }}>
@@ -65,89 +90,92 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         </p>
                     </h5>
                 </div>
-                <div
-                    id={`collapse-${fahrt.id}`}
-                    className="collapse-show"
-                    aria-labelledby={`heading-${fahrt.id}`}
-                    data-parent="#accordion"
-                >
-                    <div className="items">
-                        <p><span style={{ fontWeight: "bold" }}>Vollständiger Fahrername:</span> {fahrt.vollname || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Ort des Fahrtbeginns:</span> {fahrt.startpunkt || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Ort der Fahrtbeendigung:</span> {fahrt.endpunkt || 'Keine Angabe.'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Kennzeichen:</span> {fahrt.kennzeichen || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtbeginn:</span> {fahrt.kilometerstand || 'Keine Angabe'}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtende:</span> {fahrt.kilometerende || 'Keine Angabe'}</p>
-                        {fahrt.kilometerende ? (
-                            <p>
-                                <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> {fahrt.kilometerende - fahrt.kilometerstand} km
-                            </p>
-                        ) : (
-                            <p>
-                                <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> Keine Angabe.
-                            </p>
-                        )}
+                <div className="infoschart">
+                    <div
+                        id={`collapse-${fahrt.id}`}
+                        className="collapse-show"
+                        aria-labelledby={`heading-${fahrt.id}`}
+                        data-parent="#accordion"
+                    >
+                        <div className="items">
+                            <p><span style={{ fontWeight: "bold" }}>Vollständiger Fahrername:</span> {fahrt.vollname || 'Keine Angabe'}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Ort des Fahrtbeginns:</span> {fahrt.startpunkt || 'Keine Angabe'}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Ort der Fahrtbeendigung:</span> {fahrt.endpunkt || 'Keine Angabe.'}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Kennzeichen:</span> {fahrt.kennzeichen || 'Keine Angabe'}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtbeginn:</span> {fahrt.kilometerstand || 'Keine Angabe'}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtende:</span> {fahrt.kilometerende || 'Keine Angabe'}</p>
+                            {fahrt.kilometerende ? (
+                                <p>
+                                    <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> {fahrt.kilometerende - fahrt.kilometerstand} km
+                                </p>
+                            ) : (
+                                <p>
+                                    <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> Keine Angabe.
+                                </p>
+                            )}
 
-                        <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
-                        <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
 
-                        {fahrt.lenkzeit && (
-                            <details>
-                                <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>
-                                <ul>
-                                    {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
-                                        <li key={index}>
-                                            Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
-                                        </li>
-                                    )) : "Keine Lenkzeit"}
-                                </ul>
-                            </details>
-                        )}
-                        {fahrt.pause && (
-                            <details>
-                                <summary style={{ fontWeight: "bold" }}>Pausenzeiten: {fahrt.totalPause ? formatTime(fahrt.totalPause) : "----"}</summary>
-                                <ul>
-                                    {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
-                                        <li key={index}>
-                                            Start: {pause?.start ? formatDateTime(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause?.stop ? formatDateTime(new Date(pause.stop)) : 'Keine Angabe'}
-                                        </li>
-                                    )) : "Keine Pausenzeit"}
-                                </ul>
-                            </details>
-                        )}
-                        {fahrt.arbeitszeit && (
-                            <details>
-                                <summary style={{ fontWeight: "bold" }}>Arbeitszeiten: {fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----"}</summary>
-                                <ul>
-                                    {fahrt.arbeitszeit.length > 0 ? fahrt.arbeitszeit.map((zeit, index) => (
-                                        <li key={index}>
-                                            Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
-                                        </li>
-                                    )) : "Keine Arbeitszeit"}
-                                </ul>
-                            </details>
-                        )}
-                        {fahrt.ruhezeit && (
-                            <details>
-                                <summary style={{ fontWeight: "bold" }}>Ruhezeiten: {fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "----"}</summary>
-                                <ul>
-                                    {fahrt.ruhezeit.length > 0 ? fahrt.ruhezeit.slice(0, 2).map((zeit, index) => (
-                                        <li key={index}>
-                                            Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
-                                        </li>
-                                    )) : "Keine Ruhezeit"}
-                                </ul>
-                            </details>
-                        )}
+                            {fahrt.lenkzeit && (
+                                <details>
+                                    <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>
+                                    <ul>
+                                        {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
+                                            <li key={index}>
+                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                            </li>
+                                        )) : "Keine Lenkzeit"}
+                                    </ul>
+                                </details>
+                            )}
+                            {fahrt.pause && (
+                                <details>
+                                    <summary style={{ fontWeight: "bold" }}>Pausenzeiten: {fahrt.totalPause ? formatTime(fahrt.totalPause) : "----"}</summary>
+                                    <ul>
+                                        {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
+                                            <li key={index}>
+                                                Start: {pause?.start ? formatDateTime(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause?.stop ? formatDateTime(new Date(pause.stop)) : 'Keine Angabe'}
+                                            </li>
+                                        )) : "Keine Pausenzeit"}
+                                    </ul>
+                                </details>
+                            )}
+                            {fahrt.arbeitszeit && (
+                                <details>
+                                    <summary style={{ fontWeight: "bold" }}>Arbeitszeiten: {fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----"}</summary>
+                                    <ul>
+                                        {fahrt.arbeitszeit.length > 0 ? fahrt.arbeitszeit.map((zeit, index) => (
+                                            <li key={index}>
+                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                            </li>
+                                        )) : "Keine Arbeitszeit"}
+                                    </ul>
+                                </details>
+                            )}
+                            {fahrt.ruhezeit && (
+                                <details>
+                                    <summary style={{ fontWeight: "bold" }}>Ruhezeiten: {fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "----"}</summary>
+                                    <ul>
+                                        {fahrt.ruhezeit.length > 0 ? fahrt.ruhezeit.slice(0, 2).map((zeit, index) => (
+                                            <li key={index}>
+                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                            </li>
+                                        )) : "Keine Ruhezeit"}
+                                    </ul>
+                                </details>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="diagramm" >
+                            <ChartComponent fahrt={fahrt} />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <div className="diagramm" >
-                    <ChartComponent fahrt={fahrt} />
-                </div>
                 {/* PDF Download. */}
-                {/* <Button className="downloadButton" onClick={handleDownload}>HERUNTERLADEN</Button> */}
+                <Button className="downloadButton" disabled={loader} onClick={downloadPDF}>HERUNTERLADEN</Button>
             </div>
         </div>
     );
