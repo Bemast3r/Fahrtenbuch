@@ -72,7 +72,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     ['Gesamte Ruhezeit', `${ruhezeit || 'Keine Angabe'}`]
                 ];
                 const headers = [['Ihre Fahrt', 'Daten']];
-
+                
                 autoTable(doc, {
                     head: headers,
                     body: tableData,
