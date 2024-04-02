@@ -18,7 +18,7 @@ export type FahrtResource = {
     id?:string
     fahrerid: string; // ID des Fahrers
     kennzeichen: string; // Kennzeichen des Fahrzeugs
-    kilometerstand: number;
+    kilometerstand?: number;
     kilometerende?: number;
     lenkzeit?: {
         start: Date;

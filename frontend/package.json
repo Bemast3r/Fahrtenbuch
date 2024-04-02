@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "fetch": "^1.1.0",
     "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-chartjs-2": "^5.2.0",
