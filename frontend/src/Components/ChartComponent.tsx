@@ -66,22 +66,6 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     const canvasRef = useRef<any>(null);
 
 
-    // const downloadImage = useCallback(() => {
-    //     if (canvasRef.current) {
-    //         const link = document.createElement("a")
-    //         link.download = "chart.png"
-    //         link.href = canvasRef.current!.toBase64Image()
-    //         link.click()
-    //     } else {
-    //         console.error("Es gabe ein Fehler beim Download.")
-    //     }
-    // }, [])
-
-
-
-
-
-
     // Sortiere die Daten nach X-Werten (Zeit)
     zeitenData.sort((a, b) => a.x.getTime() - b.x.getTime());
 

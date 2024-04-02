@@ -66,17 +66,59 @@ const FahrtErstellen = () => {
             return;
         }
 
+
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
         const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
 
-        if (!kennzeichen || !kilometerstand || !startpunkt) {
-            if (!disableFields) {
-                return;
+        // Überprüfen, ob die Checkboxen angekreuzt wurden
+        const checkbox1Checked = (document.getElementById("formGridCheckbox1") as HTMLInputElement)?.checked;
+        const checkbox2Checked = (document.getElementById("formGridCheckbox2") as HTMLInputElement)?.checked;
+        const checkbox3Checked = (document.getElementById("formGridCheckbox3") as HTMLInputElement)?.checked;
+        const checkbox4Checked = (document.getElementById("formGridCheckbox4") as HTMLInputElement)?.checked;
+
+
+
+        // Wenn eine Checkbox angekreuzt wurde, Fahrt mit entsprechender Abwesenheit erstellen
+        if (checkbox1Checked || checkbox2Checked || checkbox3Checked || checkbox4Checked) {
+            if (!kennzeichen || !kilometerstand || !startpunkt) {
+                if (!disableFields) {
+                    return;
+                }
+                let abwesendText = '';
+                if (checkbox1Checked) abwesendText = "Kein Fahrzeug geführt.";
+                else if (checkbox2Checked) abwesendText = "Ich bin krank.";
+                else if (checkbox3Checked) abwesendText = "Ich habe Urlaub.";
+                else if (checkbox4Checked) abwesendText = "Ich habe frei.";
+
+                if (user) {
+                    const today = new Date()
+                    today.setHours(0, 0, 0, 0)
+                    const end = new Date()
+                    end.setHours(23, 59, 59, 0)
+                    const dayinMillis = 24 * (3600 * 1000) / 1000
+                    const fahrtResource: FahrtResource = {
+                        fahrerid: user.id!,
+                        vollname: user.vorname + " " + user.name,
+                        kennzeichen: "-",
+                        kilometerstand: 0,
+                        startpunkt: "-",
+                        abwesend: abwesendText,
+                        ruhezeit: [{ start: today, stop: end }],
+                        beendet: true,
+                        totalRuhezeit: dayinMillis
+                    };
+                    const fahrt = await postFahrt(fahrtResource);
+                    setShowSuccess(true);
+                    setTimeout(() => { navigate("/home") }, 1000)
+                    return;
+                }
             }
+            return;
         }
 
         if (user) {
+
             let fahrtResource: FahrtResource = {
                 fahrerid: user.id!,
                 kennzeichen: kennzeichen.toString(),

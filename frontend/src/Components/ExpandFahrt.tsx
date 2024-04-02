@@ -4,6 +4,7 @@ import { FahrtResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
 import { jsPDF } from "jspdf";
 import html2tocanvas from 'html2canvas'
+import autoTable from 'jspdf-autotable'
 
 
 
@@ -41,6 +42,51 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
 
+    const downloadPDF = (fahrt: FahrtResource) => {
+        const capture = document.querySelector(`.diagramm`) as HTMLElement;
+        if (capture) {
+            html2tocanvas(capture).then((canvas) => {
+                const imgdata = canvas.toDataURL('img/jpeg');
+                const doc = new jsPDF();
+                const componetwidth = doc.internal.pageSize.getWidth()
+                const componentheight = doc.internal.pageSize.getHeight();
+                const ruhezeit = fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "----";
+                const lenkzeit = fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----";
+                const arbeitszeit = fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----";
+                const pause = fahrt.totalPause ? formatTime(fahrt.totalPause) : "----";
+                
+                // Hinzufügen der Tabelle zum PDF
+                const tableData = [
+                    ['Name', `${fahrt.vollname}`],
+                    ['Wurde gefahren?', `${fahrt.abwesend || 'Die Fahrt hat stattgefunden.'}`],
+                    ['Ort des Fahrtbeginns', `${fahrt.startpunkt || 'Keine Angabe'}`],
+                    ['Ort der Fahrtbeendigung', `${fahrt.endpunkt || '-'}`],
+                    ['Kennzeichen', `${fahrt.kennzeichen || 'Keine Angabe'}`],
+                    ['Kilometerstand Fahrtbeginn', `${ fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : 'Keine Angabe'}`],
+                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : 'Keine Angabe'}`],                    
+                    ['Gesamtfahrtstrecke', `${fahrt.kilometerende ? fahrt.kilometerende - (fahrt.kilometerstand || 0) : 0} km`],
+                    ['Zeitpunkt Fahrtende', `${fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}`],
+                    ['Gesamte Lenkzeit', `${lenkzeit|| 'Keine Angabe'}`],
+                    ['Gesamte Arbeitszeit', `${arbeitszeit || 'Keine Angabe'}`],
+                    ['Gesamte Pausenzeit', `${pause || 'Keine Angabe'}`],
+                    ['Gesamte Ruhezeit', `${ruhezeit || 'Keine Angabe'}`]
+                ];
+                const headers = [['Ihre Fahrt', 'Daten']];
+
+                autoTable(doc, {
+                    head: headers,
+                    body: tableData,
+                    startY: 20
+                });
+
+                // Hinzufügen des Diagramms als Bild zum PDF
+                doc.addImage(imgdata, 'JPEG', 0, (componentheight * 4 / 5) - 50, componetwidth * 6 / 5, componentheight / 5);
+                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
+            });
+        } else {
+            console.log("Nicht gefunden.");
+        }
+    };
 
 
 
@@ -69,7 +115,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                             <p><span style={{ fontWeight: "bold" }}>Kennzeichen:</span> {fahrt.kennzeichen || 'Keine Angabe'}</p>
                             <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtbeginn:</span> {fahrt.kilometerstand || 'Keine Angabe'}</p>
                             <p><span style={{ fontWeight: "bold" }}>Kilometerstand Fahrtende:</span> {fahrt.kilometerende || 'Keine Angabe'}</p>
-                            {fahrt.kilometerende ? (
+                            {fahrt.kilometerende && fahrt.kilometerstand ? (
                                 <p>
                                     <span style={{ fontWeight: "bold" }}>Gesamtfahrtstrecke in km:</span> {fahrt.kilometerende - fahrt.kilometerstand} km
                                 </p>
@@ -140,7 +186,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     </div>
                 </div>
                 {/* PDF Download. */}
-              
+                <Button className="downloadButton" onClick={() => { downloadPDF(fahrt) }}>HERUNTERLADEN</Button>
             </div>
         </div>
     );
