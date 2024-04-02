@@ -194,7 +194,6 @@ const Statistik = () => {
                                             <div className={`infos-${fahrt._id}`}>
                                                 <ExpandFahrt fahrt={fahrt} />
                                             </div>
-                                            <Button className="downloadButton" onClick={() => { downloadPDF(fahrt) }}>HERUNTERLADEN</Button>
                                         </Accordion>
                                     ))}
                                 </div>
