@@ -66,7 +66,7 @@ const FahrtErstellen = () => {
             return;
         }
 
-        const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
+        const  kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
         const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
 
