@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { FahrtResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
-import { jsPDF } from "jspdf";
 import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
-import { fontWeight } from "html2canvas/dist/types/css/property-descriptors/font-weight";
+import { jsPDF } from "jspdf";
 
 
 
@@ -57,7 +56,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 const pause = fahrt.totalPause ? formatTime(fahrt.totalPause) : "----";
                 doc.setFont("helvetica", "normal", "bold")
                 doc.setFontSize(20)
-                doc.text("SKM Service - Fahrtenbuch", (componetwidth / 2) / 2 + 5 , 20);
+                doc.text("SKM Service - Fahrtenbuch", (componetwidth / 2) / 2 + 5, 20);
                 // Hinzufügen der Tabelle zum PDF
                 const tableData = [
                     ['Name', `${fahrt.vollname}`],
@@ -77,13 +76,21 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 const headers = [['Ihre Fahrt', 'Daten']];
 
                 autoTable(doc, {
+                    columnStyles: { 0: { fontStyle:"bold"  } },
                     head: headers,
                     body: tableData,
                     startY: 50
                 });
 
                 // Hinzufügen des Diagramms als Bild zum PDF
-                doc.addImage(imgdata, 'JPEG', 0, (componentheight * 4 / 5) - 50, componetwidth * 6 / 5, componentheight / 5);
+                doc.addImage(imgdata, 'JPEG', 10, (componentheight * 4 / 5) - 50, componetwidth + 20, componentheight / 5);
+                doc.line(20, componentheight - 10, 80, componentheight - 10);
+
+                doc.setFont("helvetica", "normal", "bold")
+                doc.setFontSize(8)
+                doc.text("Datum, Unterschrift", 20, componentheight - 5);
+
+
                 doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
             });
         } else {
