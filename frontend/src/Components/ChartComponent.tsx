@@ -105,6 +105,12 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
             x: {
                 type: 'time',
                 time: {
+                    displayFormats: {
+                        millisecond: 'HH:mm:ss.SSS',
+                        second: 'HH:mm:ss',
+                        minute: 'HH:mm',
+                        hour: 'HH'
+                    }
                     // unit: 'hour',
                 },
             },

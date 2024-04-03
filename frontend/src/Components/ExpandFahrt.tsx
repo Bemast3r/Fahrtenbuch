@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { FahrtResource } from "../util/Resources";
+import { FahrtResource, UserResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
 import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
 import { jsPDF } from "jspdf";
+import { deleteFahrt } from "../Api/api";
 
 
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
-
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {    
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -76,7 +76,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 const headers = [['Ihre Fahrt', 'Daten']];
 
                 autoTable(doc, {
-                    columnStyles: { 0: { fontStyle:"bold"  } },
+                    columnStyles: { 0: { fontStyle: "bold" } },
                     head: headers,
                     body: tableData,
                     startY: 50
@@ -99,7 +99,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     };
 
 
-
+    
+    
 
     return (
         <div id="accordion">

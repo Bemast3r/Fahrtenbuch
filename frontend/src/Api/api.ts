@@ -343,3 +343,35 @@ export async function getAllFahrts(): Promise<FahrtResource[]> {
     }
 }
 
+export async function deleteFahrt(fahrt: FahrtResource): Promise<void> {
+    try {
+        if (!fahrt)
+            throw new Error("userID not defined");
+
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("no jwt found");
+
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/loesch/fahrt/${fahrt._id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${jwt}`
+            }
+        });
+        console.log(response)
+
+        if (!response || !response.ok)
+            throw new Error("network response was not OK");
+
+        const result: any = await response.json();
+        if (!result)
+            throw new Error("invalid result from server");
+        if (!result.id || !result.email || !result.name)
+            throw new Error("result from server is missing fields");
+        return;
+
+    } catch (error) {
+        throw new Error("Error occurred during get: " + error);
+    }
+}
+

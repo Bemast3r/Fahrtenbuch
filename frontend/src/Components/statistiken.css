@@ -19,6 +19,20 @@
     padding-bottom: 10px;
 }
 
+#deleteButton {
+    margin-bottom: 10px;
+    background-color: #ff0707;
+    color: rgb(255, 255, 255);
+    border-color: #ff0707;
+    font-weight: 150;
+    size: 10px;
+    padding: 10px 10px;
+    margin: 20px;
+    font-size: medium;
+    align-self: flex-end;
+    padding-bottom: 10px;
+}
+
 .downloadButton:hover {
     margin-bottom: 10px;
     background-color: #FFC107;

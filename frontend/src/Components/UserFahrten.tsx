@@ -91,7 +91,7 @@ const UserFahrten: React.FC = () => {
                                                 {fahrten.map((fahrt: FahrtResource) => (
                                                     <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
                                                         <div className={`infos-${fahrt._id}`}>
-                                                            <ExpandFahrt fahrt={fahrt} />
+                                                            <ExpandFahrt fahrt={fahrt} user={user}/>
                                                         </div>
                                                        
                                                     </Accordion>

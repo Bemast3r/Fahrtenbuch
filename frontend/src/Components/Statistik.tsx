@@ -2,7 +2,7 @@ import "./statistiken.css"
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
+import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import Navbar from './Navbar';
 import { Accordion } from "./Accordion";
@@ -100,29 +100,13 @@ const Statistik = () => {
         }, {});
     }
 
-
-    function formatDateString(date: Date): string {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${day}.${month}.${year}`;
-    }
-
-    const downloadPDF = (fahrt: FahrtResource) => {
-        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
-        if (capture) {
-            html2tocanvas(capture).then((canvas) => {
-                const imgdata = canvas.toDataURL('img/jpeg');
-                const doc = new jsPDF('p', 'mm', 'a4');
-                const componetwidth = doc.internal.pageSize.getWidth()
-                const componentheight = doc.internal.pageSize.getHeight()
-                doc.addImage(imgdata, 'JPEG', 15, 0, componetwidth+50, componentheight);
-                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
-            });
-        } else {
-            console.log("Nicht gefunden.");
+    async function handleDelete(fahrt: FahrtResource): Promise<void> {
+        try {
+            await deleteFahrt(fahrt);
+        } catch (error) {
+            console.error('Fehler beim Löschen der Fahrt:', error);
         }
-    };
+    }
 
     return (
         <>
@@ -183,7 +167,7 @@ const Statistik = () => {
 
             <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Alle Fahrten</h2>
             <div className="fahrten">
-                {fahrts && fahrts.length > 0 ? (
+                {fahrts && fahrts.length > 0 && user ? (
                     <>
                         {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                             <section key={index} style={{ overflowY: "auto" }}>
@@ -192,7 +176,9 @@ const Statistik = () => {
                                     {fahrten.map((fahrt: FahrtResource) => (
                                         <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
                                             <div className={`infos-${fahrt._id}`}>
-                                                <ExpandFahrt fahrt={fahrt} />
+                                                <ExpandFahrt fahrt={fahrt} user={user!} />
+                                                <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
+
                                             </div>
                                         </Accordion>
                                     ))}
@@ -203,11 +189,15 @@ const Statistik = () => {
                 ) : (
                     !fahrts ? <Loading /> : fahrts.length === 0 ? <h2> Es gibt keine Fahrten</h2> : <h2> Es gibt keine Fahrten</h2>
                 )}
+
+
             </div>
         </>
     );
 }
 
 export default Statistik;
+
+
 
 
