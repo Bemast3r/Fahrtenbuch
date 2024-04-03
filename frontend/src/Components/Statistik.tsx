@@ -1,5 +1,5 @@
 import "./statistiken.css"
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
@@ -9,8 +9,6 @@ import { Accordion } from "./Accordion";
 import ExpandFahrt from "./ExpandFahrt";
 import Loading from "./LoadingIndicator";
 import { Button } from "react-bootstrap";
-import { jsPDF } from "jspdf";
-import html2tocanvas from 'html2canvas'
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -18,7 +16,7 @@ const Statistik = () => {
     const [totalUsers, setTotalUsers] = useState<number>(0);
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
-
+    const [counter, setCounter] = useState<number>(0)
     const jwt = getJWT();
     const navigate = useNavigate();
 
@@ -41,6 +39,11 @@ const Statistik = () => {
 
         return () => clearInterval(intervalId);
     }, []);
+
+    useEffect(() => {
+        loadAllFahrts();
+        console.log(counter)
+    }, [counter])
 
     async function loadInitialData() {
         try {
@@ -103,6 +106,7 @@ const Statistik = () => {
     async function handleDelete(fahrt: FahrtResource): Promise<void> {
         try {
             await deleteFahrt(fahrt);
+            setCounter(prev => prev + 1);
         } catch (error) {
             console.error('Fehler beim Löschen der Fahrt:', error);
         }
