@@ -174,7 +174,7 @@ const Statistik = () => {
                                 <div>
                                     <h2 style={{ paddingLeft: "10px", marginTop: "20px" }}>{date}</h2>
                                     {fahrten.map((fahrt: FahrtResource) => (
-                                        <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
+                                        <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                             <div className={`infos-${fahrt._id}`}>
                                                 <ExpandFahrt fahrt={fahrt} user={user!} />
                                                 <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
