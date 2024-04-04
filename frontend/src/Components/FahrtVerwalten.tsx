@@ -35,6 +35,7 @@ const FahrtVerwalten: React.FC = () => {
   const navigate = useNavigate();
   const [start, setStart] = useState<number>(0)
   const [count, setCounter] = useState(0)
+  const [missedTime, setMissedtime] = useState<number>(0)
 
   const jwt = getJWT();
 
@@ -52,6 +53,7 @@ const FahrtVerwalten: React.FC = () => {
           elapsedTimePause,
           letzteFahrt
         );
+        setMissedtime(x)
 
         if (x === 0 || x < 0) {
           setDisable(false)
@@ -229,6 +231,7 @@ const FahrtVerwalten: React.FC = () => {
     if (isRecordingLenkzeit) {
       const lastRecord = lenkzeitRecord;
       if (lastRecord && lastRecord.stop === null) {
+        lastRecord.start = new Date(Date.now() - missedTime)
         lastRecord.stop = moment().toDate();
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
@@ -297,23 +300,6 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handlePostLenkzeit() {
-    if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop === null) {
-      console.log("drin")
-      const fahrtResource: FahrtResource = {
-        fahrerid: usercontexte.id!,
-        vollname: usercontexte.vorname + " " + usercontexte.name,
-        id: letzteFahrt._id!.toString(),
-        _id: letzteFahrt._id!.toString(),
-        kennzeichen: letzteFahrt.kennzeichen.toString(),
-        kilometerstand: letzteFahrt.kilometerstand,
-        startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: lenkzeitRecord ? [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.start! }] : [],
-        beendet: false,
-      };
-      const fahrt = await updateFahrt(fahrtResource);
-      setLetzteFahrt(fahrt);
-      setCounter(count => count + 1);
-    }
 
     if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
       const fahrtResource: FahrtResource = {
