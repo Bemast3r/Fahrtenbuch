@@ -343,3 +343,30 @@ export async function getAllFahrts(): Promise<FahrtResource[]> {
     }
 }
 
+export async function deleteFahrt(fahrt: FahrtResource): Promise<void> {
+    try {
+        if (!fahrt)
+            throw new Error("Fahrt nicht definiert");
+
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("Kein JWT gefunden");
+
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/loesch/fahrt/${fahrt._id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${jwt}`
+            }
+        });
+
+        if (!response.ok)
+            throw new Error("Netzwerkantwort war nicht OK");
+
+        return;
+
+    } catch (error) {
+        throw new Error("Fehler beim Löschen der Fahrt: " + error);
+    }
+}
+
+
