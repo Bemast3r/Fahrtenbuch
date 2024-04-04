@@ -40,7 +40,7 @@ const fahrtSchema = new Schema<IFahrt>({
     fahrer: { type: Schema.Types.ObjectId, ref: User, required: true },
     vollname: { type: String },
     kennzeichen: { type: String, required: true },
-    kilometerstand: { type: Number, required: true },
+    kilometerstand: { type: Number },
     kilometerende: { type: Number },
     lenkzeit: [{
         start: { type: Date },

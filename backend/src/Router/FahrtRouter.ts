@@ -98,10 +98,11 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("kennzeichen").isString(),
     body("vollname").isString(),
     body("endpunkt").optional().isString(),
-    body("kilometerstand").isNumeric(),
+    body("kilometerstand").optional().isNumeric(),
     body("totalArbeitszeit").optional().isNumeric(),
     body("totalPause").optional().isNumeric(),
     body("totalLenkzeit").optional().isNumeric(),
+    body("totalRuhezeit").optional().isNumeric(),
     body("startpunkt").isString(),
     body("ruhezeit").optional().isArray(),
     body("abwesend").optional().isString(),
@@ -109,6 +110,8 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(errors)
+            console.log(req.body)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
@@ -130,7 +133,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
     body("vollname").isString(),
     body("endpunkt").optional().isString(),
     body("kennzeichen").isString(),
-    body("kilometerstand").isNumeric(),
+    body("kilometerstand").optional().isNumeric(),
     body("kilometerende").optional().isNumeric(),
     body("lenkzeit").optional().isArray(),
     body("arbeitszeit").optional().isArray(),
@@ -145,7 +148,6 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
