@@ -162,7 +162,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
 /**
  * Löscht fahrt
  */
-fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
+fahrrouter.delete("/admin/loesch/fahrt/:id", requiresAuthentication,
     param("id").isMongoId(),
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -173,8 +173,8 @@ fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
             if (req.role !== "a") {
                 return res.sendStatus(403)
             }
-            const user = await deleteFahrt(req.params.id);
-            return res.send(user); // 200 by default
+            const res2 = await deleteFahrt(req.params.id);
+            return res.send(res2); // 200 by default
         } catch (err) {
             res.status(400);
             next(err);

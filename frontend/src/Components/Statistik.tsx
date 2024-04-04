@@ -1,16 +1,14 @@
 import "./statistiken.css"
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
+import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import Navbar from './Navbar';
 import { Accordion } from "./Accordion";
 import ExpandFahrt from "./ExpandFahrt";
 import Loading from "./LoadingIndicator";
 import { Button } from "react-bootstrap";
-import { jsPDF } from "jspdf";
-import html2tocanvas from 'html2canvas'
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -18,7 +16,7 @@ const Statistik = () => {
     const [totalUsers, setTotalUsers] = useState<number>(0);
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
-
+    const [counter, setCounter] = useState<number>(0)
     const jwt = getJWT();
     const navigate = useNavigate();
 
@@ -41,6 +39,11 @@ const Statistik = () => {
 
         return () => clearInterval(intervalId);
     }, []);
+
+    useEffect(() => {
+        loadAllFahrts();
+        console.log(counter)
+    }, [counter])
 
     async function loadInitialData() {
         try {
@@ -100,29 +103,14 @@ const Statistik = () => {
         }, {});
     }
 
-
-    function formatDateString(date: Date): string {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${day}.${month}.${year}`;
-    }
-
-    const downloadPDF = (fahrt: FahrtResource) => {
-        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
-        if (capture) {
-            html2tocanvas(capture).then((canvas) => {
-                const imgdata = canvas.toDataURL('img/jpeg');
-                const doc = new jsPDF('p', 'mm', 'a4');
-                const componetwidth = doc.internal.pageSize.getWidth()
-                const componentheight = doc.internal.pageSize.getHeight()
-                doc.addImage(imgdata, 'JPEG', 15, 0, componetwidth+50, componentheight);
-                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
-            });
-        } else {
-            console.log("Nicht gefunden.");
+    async function handleDelete(fahrt: FahrtResource): Promise<void> {
+        try {
+            await deleteFahrt(fahrt);
+            setCounter(prev => prev + 1);
+        } catch (error) {
+            console.error('Fehler beim Löschen der Fahrt:', error);
         }
-    };
+    }
 
     return (
         <>
@@ -183,16 +171,18 @@ const Statistik = () => {
 
             <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Alle Fahrten</h2>
             <div className="fahrten">
-                {fahrts && fahrts.length > 0 ? (
+                {fahrts && fahrts.length > 0 && user ? (
                     <>
                         {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                             <section key={index} style={{ overflowY: "auto" }}>
                                 <div>
                                     <h2 style={{ paddingLeft: "10px", marginTop: "20px" }}>{date}</h2>
                                     {fahrten.map((fahrt: FahrtResource) => (
-                                        <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
+                                        <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                             <div className={`infos-${fahrt._id}`}>
-                                                <ExpandFahrt fahrt={fahrt} />
+                                                <ExpandFahrt fahrt={fahrt} user={user!} />
+                                                <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
+
                                             </div>
                                         </Accordion>
                                     ))}
@@ -203,11 +193,15 @@ const Statistik = () => {
                 ) : (
                     !fahrts ? <Loading /> : fahrts.length === 0 ? <h2> Es gibt keine Fahrten</h2> : <h2> Es gibt keine Fahrten</h2>
                 )}
+
+
             </div>
         </>
     );
 }
 
 export default Statistik;
+
+
 
 

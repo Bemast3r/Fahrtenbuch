@@ -8,10 +8,6 @@ import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Navbar from './Navbar';
-import Fahrtabschliessen from './Fahrtabschliessen';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 
 interface TimeRecord {
   start: Date;
@@ -35,6 +31,7 @@ const FahrtVerwalten: React.FC = () => {
   const [pauseRecord, setPauseRecord] = useState<TimeRecord | null>(null);
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
+  const [disable, setDisable] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const [count, setCounter] = useState(0)
@@ -48,6 +45,7 @@ const FahrtVerwalten: React.FC = () => {
       if (!letzteFahrt) {
         last();
       } else {
+        setDisable(true)
         const x = addmissingTime(
           elapsedTimeLenkzeit,
           elapsedTimeArbeitszeit,
@@ -55,24 +53,28 @@ const FahrtVerwalten: React.FC = () => {
           letzteFahrt
         );
         if (x === 0 || x < 0) {
+          setDisable(false)
           return;
         }
 
         if (isRecordingLenkzeit) {
           setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + x);
+          setDisable(false)
           return;
         }
         if (isRecordingArbeitszeit) {
           setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + x);
+          setDisable(false)
           return;
         }
         if (isRecordingPause) {
           setElapsedTimePause(prevElapsedTime => prevElapsedTime + x);
+          setDisable(false)
           return;
         }
       }
     }, 1000); // Timer alle 60 Sekunden ausführen
-
+   
     return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
   }, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
 
@@ -80,7 +82,7 @@ const FahrtVerwalten: React.FC = () => {
 
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
-
+    setDisable(true)
     // Beim ersten Betreten
     if (elapsedTimeLenkzeit === 0 && !letzteFahrt?.beendet) {
       const storedElapsedTimeLenkzeit = localStorage.getItem("elapsedTimeLenkzeit");
@@ -99,6 +101,7 @@ const FahrtVerwalten: React.FC = () => {
         setIsRecordingPause(false)
         setIsRecordingArbeitszeit(false)
         toggleRecordingLenkzeit()
+        setDisable(false)
         return;
 
       } else if (storedisArbeitszeit === "true") {
@@ -106,6 +109,7 @@ const FahrtVerwalten: React.FC = () => {
         setIsRecordingLenkzeit(false)
         setIsRecordingPause(false)
         toggleRecordingArbeit()
+        setDisable(false)
         return;
 
       } else if (storedisPause === "true") {
@@ -113,6 +117,7 @@ const FahrtVerwalten: React.FC = () => {
         setIsRecordingArbeitszeit(false)
         setIsRecordingLenkzeit(false)
         toggleRecordingPause()
+        setDisable(false)
         return;
 
       } else if (storedisPause === "false" && storedisArbeitszeit === "false" && storedisTimeLenkzeit === "false") {
@@ -120,12 +125,14 @@ const FahrtVerwalten: React.FC = () => {
         setIsRecordingPause(false)
         setIsRecordingArbeitszeit(false)
         toggleRecordingLenkzeit()
+        setDisable(false)
         return;
       } else {
         setIsRecordingLenkzeit(true)
         setIsRecordingPause(false)
         setIsRecordingArbeitszeit(false)
         toggleRecordingLenkzeit()
+        setDisable(false)
         return;
 
       }
@@ -466,7 +473,7 @@ const FahrtVerwalten: React.FC = () => {
                 <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={toggleRecordingLenkzeit}>
+                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} disabled={disable} onClick={toggleRecordingLenkzeit}>
                       {lenktext}
                     </Button>
                   </div>
@@ -488,7 +495,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={toggleRecordingArbeit}>
+                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} disabled={disable} onClick={toggleRecordingArbeit}>
                       {arbeitText}
                     </Button>
                   </div>
@@ -510,7 +517,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={toggleRecordingPause}>
+                    <Button variant={isRecordingPause ? 'danger' : 'primary'} disabled={disable} onClick={toggleRecordingPause}>
                       {pauseText}
                     </Button>
                   </div>
@@ -532,7 +539,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant="danger" onClick={handleEnde}>
+                    <Button variant="danger"  disabled={disable} onClick={handleEnde}>
                       Fahrt beenden
                     </Button>
                   </div>

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { FahrtResource } from "../util/Resources";
+import { FahrtResource, UserResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
-import { jsPDF } from "jspdf";
 import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
+import { jsPDF } from "jspdf";
+import { deleteFahrt } from "../Api/api";
 
 
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
-
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {    
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -43,7 +43,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
 
     const downloadPDF = (fahrt: FahrtResource) => {
-        const capture = document.querySelector(`.diagramm`) as HTMLElement;
+        const capture = document.querySelector(`.diagramm-${fahrt._id}`) as HTMLElement;
         if (capture) {
             html2tocanvas(capture).then((canvas) => {
                 const imgdata = canvas.toDataURL('img/jpeg');
@@ -54,7 +54,9 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 const lenkzeit = fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----";
                 const arbeitszeit = fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----";
                 const pause = fahrt.totalPause ? formatTime(fahrt.totalPause) : "----";
-                
+                doc.setFont("helvetica", "normal", "bold")
+                doc.setFontSize(20)
+                doc.text("SKM Service - Fahrtenbuch", (componetwidth / 2) / 2 + 5, 20);
                 // Hinzufügen der Tabelle zum PDF
                 const tableData = [
                     ['Name', `${fahrt.vollname}`],
@@ -62,25 +64,33 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     ['Ort des Fahrtbeginns', `${fahrt.startpunkt || 'Keine Angabe'}`],
                     ['Ort der Fahrtbeendigung', `${fahrt.endpunkt || '-'}`],
                     ['Kennzeichen', `${fahrt.kennzeichen || 'Keine Angabe'}`],
-                    ['Kilometerstand Fahrtbeginn', `${ fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : 'Keine Angabe'}`],
-                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : 'Keine Angabe'}`],                    
+                    ['Kilometerstand Fahrtbeginn', `${fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : 'Keine Angabe'}`],
+                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : 'Keine Angabe'}`],
                     ['Gesamtfahrtstrecke', `${fahrt.kilometerende ? fahrt.kilometerende - (fahrt.kilometerstand || 0) : 0} km`],
                     ['Zeitpunkt Fahrtende', `${fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}`],
-                    ['Gesamte Lenkzeit', `${lenkzeit|| 'Keine Angabe'}`],
+                    ['Gesamte Lenkzeit', `${lenkzeit || 'Keine Angabe'}`],
                     ['Gesamte Arbeitszeit', `${arbeitszeit || 'Keine Angabe'}`],
                     ['Gesamte Pausenzeit', `${pause || 'Keine Angabe'}`],
                     ['Gesamte Ruhezeit', `${ruhezeit || 'Keine Angabe'}`]
                 ];
                 const headers = [['Ihre Fahrt', 'Daten']];
-                
+
                 autoTable(doc, {
+                    columnStyles: { 0: { fontStyle: "bold" } },
                     head: headers,
                     body: tableData,
-                    startY: 20
+                    startY: 50
                 });
 
                 // Hinzufügen des Diagramms als Bild zum PDF
-                doc.addImage(imgdata, 'JPEG', 0, (componentheight * 4 / 5) - 50, componetwidth * 6 / 5, componentheight / 5);
+                doc.addImage(imgdata, 'JPEG', 10, (componentheight * 4 / 5) - 50, componetwidth + 20, componentheight / 5);
+                doc.line(20, componentheight - 10, 80, componentheight - 10);
+
+                doc.setFont("helvetica", "normal", "bold")
+                doc.setFontSize(8)
+                doc.text("Datum, Unterschrift", 20, componentheight - 5);
+
+
                 doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
             });
         } else {
@@ -89,7 +99,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     };
 
 
-
+    
+    
 
     return (
         <div id="accordion">
@@ -180,7 +191,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                     </div>
 
                     <div>
-                        <div className="diagramm" >
+                        <div className={`diagramm-${fahrt._id}`} >
                             <ChartComponent fahrt={fahrt} />
                         </div>
                     </div>
