@@ -42,7 +42,7 @@ const Navbar = () => {
                     {user && user.admin && (
                         <li className="nav-item">
                             <a className="nav-link" style={{ cursor: 'pointer', color: '#2196F3', display: 'flex', alignItems: 'center' }} onClick={() => navigate("/user-erstellen")}>
-                                Benutzer registrieren <i className='bx bx-user-plus' style={{ fontSize: '24px', marginLeft: '5px' }}></i>
+                                Benutzer Registrieren <i className='bx bx-user-plus' style={{ fontSize: '24px', marginLeft: '5px' }}></i>
                             </a>
                         </li>
                     )}
@@ -56,7 +56,7 @@ const Navbar = () => {
             {/* Dropdown-Menü für "Mehr" */}
             <NavDropdown title="Mehr" id="collasible-nav-dropdown" className="d-lg-none">
                 <NavDropdown.Item href="/create">Fahrt erstellen</NavDropdown.Item>
-                <NavDropdown.Item href="/verwalten">Fahrt Verwalten</NavDropdown.Item>
+                <NavDropdown.Item href="/verwalten">Fahrt verwalten</NavDropdown.Item>
                 <NavDropdown.Item onClick={() => navigate("/user-erstellen")}>Benutzer registrieren</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleAbmelden}>Abmelden</NavDropdown.Item>
                 <NavDropdown.Divider />
