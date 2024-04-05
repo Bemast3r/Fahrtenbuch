@@ -12,7 +12,7 @@
     box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
     width: 80%;
     margin-top: 100px;
-  }
+}
 
 .section-padding {
     padding: 100px 0;
@@ -109,6 +109,11 @@
 }
 
 .services .card-body i {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Zentrieren der Inhalte horizontal */
+    text-align: center;
     font-size: 50px;
     margin-bottom: 10px;
 }
@@ -122,14 +127,21 @@
 }
 
 .btn {
-    padding: 12px 24px; /* Anpassen der Polsterung für die Höhe und Breite */
-    font-size: 24px; /* Anpassen der Schriftgröße */
+    padding: 12px 24px;
+    /* Anpassen der Polsterung für die Höhe und Breite */
+    font-size: 24px;
+    /* Anpassen der Schriftgröße */
     align-items: center;
 }
 
-
 .card-body p {
-    margin-bottom: 40px; /* Erhöhen Sie den Abstand zwischen dem Text und dem Button */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Zentrieren der Inhalte horizontal */
+    text-align: center;
+    margin-bottom: 40px;
+    /* Erhöhen Sie den Abstand zwischen dem Text und dem Button */
 }
 
 .card {
@@ -142,16 +154,16 @@
 .card-body {
     display: flex;
     flex-direction: column;
-    /* justify-content: stretch; */
     height: auto;
+    align-items: center;
+    text-align: center;
 }
 
-
-
 @media only screen and (min-width: 991px) {
-    .col-12col-md-12col-lg-4{
-        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
-        width:33%;
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+        width: 33%;
         display: inline-grid;
     }
 }
@@ -174,8 +186,10 @@
     .img-area img {
         width: 100%;
     }
-    .col-12col-md-12col-lg-4{
-        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
+
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }
 
@@ -209,15 +223,18 @@
 
     .card {
         margin-bottom: 20px;
-        
+
     }
-    .col-12col-md-12col-lg-4{
-        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
+
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }
 
 .rotating {
-    transform: rotate(180deg); /* Anpassen der Rotation je nach Bedarf */
-    transition: transform 0.3s ease; /* Hinzufügen einer Transition für eine sanfte Drehung */
+    transform: rotate(180deg);
+    /* Anpassen der Rotation je nach Bedarf */
+    transition: transform 0.3s ease;
+    /* Hinzufügen einer Transition für eine sanfte Drehung */
 }
-
