@@ -16,3 +16,7 @@
   .dark-teal-text {
     color: #004d40;
   }
+
+  .navbar-nav .nav-link.abmelden {
+    color: red;
+}
