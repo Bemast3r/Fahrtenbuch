@@ -32,6 +32,8 @@ const FahrtVerwalten: React.FC = () => {
   const [usercontexte, setUser] = useState<UserResource | null>(null)
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const [disable, setDisable] = useState<boolean>(true);
+  const [missingTime, setMissingTime] = useState<number>(0)
+
   const navigate = useNavigate();
 
   const [count, setCounter] = useState(0)
@@ -52,6 +54,7 @@ const FahrtVerwalten: React.FC = () => {
           elapsedTimePause,
           letzteFahrt
         );
+        setMissingTime(x)
         if (x === 0 || x < 0) {
           setDisable(false)
           return;
@@ -74,7 +77,7 @@ const FahrtVerwalten: React.FC = () => {
         }
       }
     }, 1000); // Timer alle 60 Sekunden ausführen
-   
+
     return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
   }, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
 
@@ -263,7 +266,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        arbeitszeit: [{ start: arbeitszeitRecord.start, stop: arbeitszeitRecord.stop! }],
+        arbeitszeit: [{ start: new Date(JSON.parse(localStorage.getItem("starter")!)), stop: arbeitszeitRecord.stop! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -282,7 +285,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        pause: [{ start: pauseRecord.start, stop: pauseRecord.stop! }],
+        pause: [{ start: new Date(JSON.parse(localStorage.getItem("starter")!)), stop: pauseRecord.stop! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -301,7 +304,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: lenkzeitRecord ? [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }] : [],
+        lenkzeit: lenkzeitRecord ? [{ start: new Date(JSON.parse(localStorage.getItem("starter")!)), stop: lenkzeitRecord.stop! }] : [],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -350,6 +353,8 @@ const FahrtVerwalten: React.FC = () => {
     await stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingLenkzeit) {
+      localStorage.setItem("starter", JSON.stringify(Date.now()));
+      console.log(Date.now)
       setLenkzeitRecord({ start: currentTime, stop: null });
       setLenkText('Lenkzeit STOP');
       const timerId = setInterval(() => {
@@ -378,6 +383,7 @@ const FahrtVerwalten: React.FC = () => {
     await stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingArbeitszeit) {
+      localStorage.setItem("starter", JSON.stringify(Date.now()));
       setArbeitszeitRecord({ start: currentTime, stop: null });
       setArbeitText('Arbeitszeit STOP');
       const timerId = setInterval(() => {
@@ -405,6 +411,7 @@ const FahrtVerwalten: React.FC = () => {
     await stopRunningTimer();
     const currentTime = moment().toDate();
     if (!isRecordingPause) {
+      localStorage.setItem("starter", JSON.stringify(Date.now()));
       setPauseRecord({ start: currentTime, stop: null });
       setPauseText('Pause STOP');
       const timerId = setInterval(() => {
@@ -439,7 +446,7 @@ const FahrtVerwalten: React.FC = () => {
     if (confirmEnde) {
       await stopRunningTimer()
       await handleEndePost()
-        navigate("/fahrten-abschluss");
+      navigate("/fahrten-abschluss");
     } else {
       return;
     }
@@ -539,7 +546,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant="danger"  disabled={disable} onClick={handleEnde}>
+                    <Button variant="danger" disabled={disable} onClick={handleEnde}>
                       Fahrt beenden
                     </Button>
                   </div>
