@@ -117,26 +117,28 @@ const FahrtErstellen = () => {
             return;
         }
 
-        if (user) {
+        if (!isNaN(kilometerstand) && kennzeichen && startpunkt) {
+            if (user) {
 
-            let fahrtResource: FahrtResource = {
-                fahrerid: user.id!,
-                kennzeichen: kennzeichen.toString(),
-                kilometerstand: kilometerstand,
-                startpunkt: startpunkt.toString(),
-                vollname: user.vorname + " " + user.name
-            };
-            const fahrt = await postFahrt(fahrtResource);
-        }
-        Object.keys(localStorage).forEach(key => {
-            if (key !== 'jwt') {
-                localStorage.removeItem(key);
+                let fahrtResource: FahrtResource = {
+                    fahrerid: user.id!,
+                    kennzeichen: kennzeichen.toString(),
+                    kilometerstand: kilometerstand,
+                    startpunkt: startpunkt.toString(),
+                    vollname: user.vorname + " " + user.name
+                };
+                const fahrt = await postFahrt(fahrtResource);
             }
-        });
-        setShowSuccess(true);
-        setTimeout(() => {
-            navigate("/verwalten");
-        }, 1000);
+            Object.keys(localStorage).forEach(key => {
+                if (key !== 'jwt') {
+                    localStorage.removeItem(key);
+                }
+            });
+            setShowSuccess(true);
+            setTimeout(() => {
+                navigate("/verwalten");
+            }, 1000);
+        }
     };
 
     const currentDate = new Date();
