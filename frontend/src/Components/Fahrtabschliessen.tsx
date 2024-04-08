@@ -108,9 +108,9 @@ const Fahrtabschliessen = () => {
                     <Loading></Loading>
                 ) : (
                     <><Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
-                        Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrtverwalten.
+                        Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrt verwalten.
                         <br></br>
-                        <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten"); }}>Fahrt Verwalten</Button>
+                        <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten"); }}>Fahrt verwalten</Button>
                     </Alert>
                         <Alert variant="success" show={success} onClose={() => setShowAlert(false)} dismissible>
                             Fahrt erfolgreich abgeschlossen!

@@ -157,9 +157,9 @@ const FahrtErstellen = () => {
                 ) : (
                     <>
                         <Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
-                            Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrtverwalten.
+                            Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrt verwalten.
                             <br />
-                            <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten"); }}>Fahrt Verwalten</Button>
+                            <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten"); }}>Fahrt verwalten</Button>
                         </Alert>
                         <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible>
                             Fahrt erfolgreich erstellt!
@@ -196,10 +196,9 @@ const FahrtErstellen = () => {
                                         <Form.Control
                                             type="text"
                                             placeholder="Kennzeichen"
-                                            className="form-control"
+                                            className={`form-control ${validated && !letzteFahrt ? 'is-invalid' : ''}`}
                                             disabled={disableFields}
                                             required
-                                            isInvalid={validated}
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             Bitte geben Sie das Kennzeichen ein.
@@ -212,10 +211,9 @@ const FahrtErstellen = () => {
                                         <Form.Control
                                             type="number"
                                             placeholder="Kilometerstand"
-                                            className="form-control"
+                                            className={`form-control ${validated && !letzteFahrt ? 'is-invalid' : ''}`}
                                             disabled={disableFields}
                                             required
-                                            isInvalid={validated}
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             Bitte geben Sie den Kilometerstand an.
@@ -228,10 +226,9 @@ const FahrtErstellen = () => {
                                         <Form.Control
                                             type="text"
                                             placeholder="Ort"
-                                            className="form-control"
+                                            className={`form-control ${validated && !letzteFahrt ? 'is-invalid' : ''}`}
                                             disabled={disableFields}
                                             required
-                                            isInvalid={validated}
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             Bitte geben Sie den Ort der Fahrtaufnahme an.
