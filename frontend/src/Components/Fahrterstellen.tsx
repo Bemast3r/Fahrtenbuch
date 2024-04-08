@@ -151,7 +151,7 @@ const FahrtErstellen = () => {
             <br />
             <br />
             <div className="form-wrapper">
-                <h2 className="form-header">Fahrt Erstellen</h2>
+                <h2 className="form-header">Fahrt erstellen</h2>
                 {loading ? (
                     <Loading />
                 ) : (
