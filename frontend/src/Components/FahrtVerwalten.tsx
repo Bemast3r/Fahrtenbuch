@@ -541,11 +541,11 @@ const FahrtVerwalten: React.FC = () => {
               <>
                 <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
                 <Link to="/create">
-                  <Button className="erstellen">Fahrt Erstellen</Button>
+                  <Button className="erstellen">Fahrt erstellen</Button>
                 </Link>
                 <Link to="/home">
                   <Button variant="danger" className="hauptmenu">
-                    Hauptmenu
+                    Zurück zum Hauptmenü
                   </Button>
                 </Link>
               </>
