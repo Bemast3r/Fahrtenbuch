@@ -271,9 +271,9 @@ const FahrtVerwalten: React.FC = () => {
   async function handlePostArbeitszeit() {
     if (usercontexte && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
       if (localStorage.getItem("last") === "Lenkzeit" && letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0) {
-        arbeitszeitRecord.start = new Date(new Date(letzteFahrt.lenkzeit![letzteFahrt.lenkzeit!.length - 1].stop!).getTime() + 100 - missingTime);
+        arbeitszeitRecord.start = new Date(new Date(letzteFahrt.lenkzeit![letzteFahrt.lenkzeit!.length - 1].stop!).getTime() + 1000 - missingTime);
       } else if (localStorage.getItem("last") === "Pause" && letzteFahrt.pause && letzteFahrt.pause.length > 0) {
-        arbeitszeitRecord.start = new Date(new Date(letzteFahrt.pause![letzteFahrt.pause!.length - 1].stop!).getTime() + 100 - missingTime);
+        arbeitszeitRecord.start = new Date(new Date(letzteFahrt.pause![letzteFahrt.pause!.length - 1].stop!).getTime() + 1000 - missingTime);
       }
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -296,9 +296,9 @@ const FahrtVerwalten: React.FC = () => {
     if (usercontexte && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
 
       if (localStorage.getItem("last") === "Lenkzeit" && letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0) {
-        pauseRecord.start = new Date(new Date(letzteFahrt.lenkzeit![letzteFahrt.lenkzeit!.length - 1].stop!).getTime() + 100 - missingTime);
+        pauseRecord.start = new Date(new Date(letzteFahrt.lenkzeit![letzteFahrt.lenkzeit!.length - 1].stop!).getTime() + 1000 - missingTime);
       } else if (localStorage.getItem("last") === "Arbeitszeit" && letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0) {
-        pauseRecord.start = new Date(new Date(letzteFahrt.arbeitszeit![letzteFahrt.arbeitszeit!.length - 1].stop!).getTime() + 100 - missingTime);
+        pauseRecord.start = new Date(new Date(letzteFahrt.arbeitszeit![letzteFahrt.arbeitszeit!.length - 1].stop!).getTime() + 1000 - missingTime);
       }
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -323,9 +323,9 @@ const FahrtVerwalten: React.FC = () => {
       if (localStorage.getItem("last") === "Lenkzeit") {
         lenkzeitRecord.start = new Date(new Date(letzteFahrt.createdAt!).getTime() + 1000)
       } else if (localStorage.getItem("last") === "Pause" && letzteFahrt.pause && letzteFahrt.pause?.length > 0) {
-        lenkzeitRecord.start = new Date(new Date(letzteFahrt.pause![letzteFahrt.pause!.length - 1].stop!).getTime() +  - missingTime);
+        lenkzeitRecord.start = new Date(new Date(letzteFahrt.pause![letzteFahrt.pause!.length - 1].stop!).getTime() + 1000 - missingTime );
       } else if (localStorage.getItem("last") === "Arbeitszeit" && letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0) {
-        lenkzeitRecord.start = new Date(new Date(letzteFahrt.arbeitszeit![letzteFahrt.arbeitszeit!.length - 1].stop!).getTime() + 100 - missingTime);
+        lenkzeitRecord.start = new Date(new Date(letzteFahrt.arbeitszeit![letzteFahrt.arbeitszeit!.length - 1].stop!).getTime() + 1000 - missingTime);
       }
 
       const fahrtResource: FahrtResource = {
