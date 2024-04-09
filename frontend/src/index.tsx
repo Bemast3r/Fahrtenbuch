@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,6 +14,7 @@ import FahrtErstellen from './Components/Fahrterstellen';
 import Statistik from './Components/Statistik';
 import UserFahrten from './Components/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtabschliessen';
+
 
 ReactDOM.render(
   

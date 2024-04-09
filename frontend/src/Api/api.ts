@@ -105,7 +105,6 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
             },
             body: JSON.stringify({ ...fahrt })
         })
-        console.log(response)
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }

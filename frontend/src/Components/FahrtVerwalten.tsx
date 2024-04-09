@@ -4,7 +4,7 @@ import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
-import { Button } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Navbar from './Navbar';
@@ -15,6 +15,7 @@ interface TimeRecord {
 }
 
 const FahrtVerwalten: React.FC = () => {
+  const [showEndModal, setShowEndModal] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false);
   const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false);
@@ -33,16 +34,23 @@ const FahrtVerwalten: React.FC = () => {
   const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
   const [disable, setDisable] = useState<boolean>(true);
   const [missingTime, setMissingTime] = useState<number>(0)
-
   const navigate = useNavigate();
-
   const [count, setCounter] = useState(0)
+  const [validated, setValidated] = useState<boolean>(false);
+  const [kilometerEnde, setKilometerstandEnde] = useState<number>(0);
+  const [ortFahrtbeendigung, setOrtFahrtbeendigung] = useState<string>('');
+
+  const handleOpenModal = () => setShowEndModal(true);
+  const handleCloseModal = () => setShowEndModal(false);
 
   const jwt = getJWT();
 
   useEffect(() => { last() }, [count]);
 
   useEffect(() => {
+    if (localStorage.getItem("last") === "") {
+      localStorage.setItem("last", "Lenkzeit")
+    }
     const timerInterval = setInterval(() => {
       if (!letzteFahrt) {
         last();
@@ -80,8 +88,6 @@ const FahrtVerwalten: React.FC = () => {
 
     return () => clearInterval(timerInterval); // Aufräumen: Timer bei Komponentenunmontage löschen
   }, [elapsedTimeArbeitszeit, elapsedTimeLenkzeit, elapsedTimePause, isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause, letzteFahrt]);
-
-
 
   // Schaue ob die Seite erneut betreten wurde und entnehme dann die Daten aus dem Storage
   useEffect(() => {
@@ -171,6 +177,9 @@ const FahrtVerwalten: React.FC = () => {
 
   async function last() {
     if (usercontexte && usercontexte.id) {
+      // if (letzteFahrt) {
+      //   return;
+      // }
       const x: FahrtResource[] = await getFahrt(usercontexte.id);
       if (x.length === 0 || x[x.length - 1].beendet) {
         setLoading(false)
@@ -224,9 +233,12 @@ const FahrtVerwalten: React.FC = () => {
       clearInterval(timerId);
       setTimerId(null);
     }
+    localStorage.setItem("last", isRecordingLenkzeit ? "Lenkzeit" : isRecordingArbeitszeit ? "Arbeitszeit" : "Pause");
+
     if (isRecordingLenkzeit) {
       const lastRecord = lenkzeitRecord;
       if (lastRecord && lastRecord.stop === null) {
+        // lastRecord.start = new Date(Date.now() - missedTime)
         lastRecord.stop = moment().toDate();
         setLenkzeitRecord(lastRecord);
         setLenkText('Lenkzeit START');
@@ -258,6 +270,11 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handlePostArbeitszeit() {
     if (usercontexte && letzteFahrt && arbeitszeitRecord && arbeitszeitRecord.stop !== null) {
+      if (localStorage.getItem("last") === "Lenkzeit" && letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0) {
+        arbeitszeitRecord.start = new Date(new Date(letzteFahrt.lenkzeit![letzteFahrt.lenkzeit!.length - 1].stop!).getTime() + 100 - missingTime);
+      } else if (localStorage.getItem("last") === "Pause" && letzteFahrt.pause && letzteFahrt.pause.length > 0) {
+        arbeitszeitRecord.start = new Date(new Date(letzteFahrt.pause![letzteFahrt.pause!.length - 1].stop!).getTime() + 100 - missingTime);
+      }
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
@@ -266,7 +283,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        arbeitszeit: [{start: new Date(new Date(arbeitszeitRecord.start).getTime() - (missingTime * 1000)), stop: arbeitszeitRecord.stop! }],
+        arbeitszeit: [{ start: arbeitszeitRecord.start, stop: arbeitszeitRecord.stop! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -277,6 +294,12 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handlePostPause() {
     if (usercontexte && letzteFahrt && pauseRecord && pauseRecord.stop !== null) {
+
+      if (localStorage.getItem("last") === "Lenkzeit" && letzteFahrt.lenkzeit && letzteFahrt.lenkzeit?.length > 0) {
+        pauseRecord.start = new Date(new Date(letzteFahrt.lenkzeit![letzteFahrt.lenkzeit!.length - 1].stop!).getTime() + 100 - missingTime);
+      } else if (localStorage.getItem("last") === "Arbeitszeit" && letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0) {
+        pauseRecord.start = new Date(new Date(letzteFahrt.arbeitszeit![letzteFahrt.arbeitszeit!.length - 1].stop!).getTime() + 100 - missingTime);
+      }
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         id: letzteFahrt._id!.toString(),
@@ -285,7 +308,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        pause: [{start: new Date(new Date(pauseRecord.start).getTime() - (missingTime * 1000)), stop: pauseRecord.stop! }],
+        pause: [{ start: pauseRecord.start, stop: pauseRecord.stop! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -295,8 +318,16 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handlePostLenkzeit() {
+
     if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
-      console.log("1", lenkzeitRecord)
+      if (localStorage.getItem("last") === "Lenkzeit") {
+        lenkzeitRecord.start = new Date(new Date(letzteFahrt.createdAt!).getTime() + 1000)
+      } else if (localStorage.getItem("last") === "Pause" && letzteFahrt.pause && letzteFahrt.pause?.length > 0) {
+        lenkzeitRecord.start = new Date(new Date(letzteFahrt.pause![letzteFahrt.pause!.length - 1].stop!).getTime() +  - missingTime);
+      } else if (localStorage.getItem("last") === "Arbeitszeit" && letzteFahrt.arbeitszeit && letzteFahrt.arbeitszeit.length > 0) {
+        lenkzeitRecord.start = new Date(new Date(letzteFahrt.arbeitszeit![letzteFahrt.arbeitszeit!.length - 1].stop!).getTime() + 100 - missingTime);
+      }
+
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         vollname: usercontexte.vorname + " " + usercontexte.name,
@@ -305,23 +336,24 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: lenkzeitRecord ? [{start: new Date(new Date(lenkzeitRecord.start).getTime() - (missingTime * 1000)), stop: lenkzeitRecord.stop! }] : [],
+        lenkzeit: lenkzeitRecord ? [{ start: lenkzeitRecord.start, stop: lenkzeitRecord.stop! }] : [],
         beendet: false,
       };
+      localStorage.setItem("last", "Lenkzeit")
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
       setCounter(count => count + 1);
     }
   }
 
-  async function handleEndePost() {
+  async function handleEndePost(formData: any) {
     if (usercontexte && letzteFahrt) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
-      const dayinMillis = 24 * (3600 * 1000) / 1000
-      const totalRuhezeit = ((elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit) - dayinMillis) * -1
+      const dayinMillis = 24 * (3600 * 1000) / 1000;
+      const totalRuhezeit = ((elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit) - dayinMillis) * -1;
 
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -339,6 +371,9 @@ const FahrtVerwalten: React.FC = () => {
         totalRuhezeit: totalRuhezeit,
         vollname: usercontexte.vorname + " " + usercontexte.name,
         beendet: true,
+        // MODAL
+        kilometerende: formData.KilometerstandEnde,
+        endpunkt: formData.OrtFahrtbeendigung
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
@@ -356,9 +391,9 @@ const FahrtVerwalten: React.FC = () => {
     if (!isRecordingLenkzeit) {
       localStorage.setItem("starter", JSON.stringify(Date.now()));
       console.log(Date.now)
-      if(missingTime > 0){
-        setLenkzeitRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)) , stop: null });
-      }else{
+      if (missingTime > 0) {
+        setLenkzeitRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)), stop: null });
+      } else {
         setLenkzeitRecord({ start: currentTime, stop: null });
       }
       setLenkText('Lenkzeit STOP');
@@ -389,9 +424,9 @@ const FahrtVerwalten: React.FC = () => {
     const currentTime = moment().toDate();
     if (!isRecordingArbeitszeit) {
       localStorage.setItem("starter", JSON.stringify(Date.now()));
-      if(missingTime > 0){
-        setArbeitszeitRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)) , stop: null });
-      }else{
+      if (missingTime > 0) {
+        setArbeitszeitRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)), stop: null });
+      } else {
         setArbeitszeitRecord({ start: currentTime, stop: null });
       }
       setArbeitText('Arbeitszeit STOP');
@@ -421,9 +456,9 @@ const FahrtVerwalten: React.FC = () => {
     const currentTime = moment().toDate();
     if (!isRecordingPause) {
       localStorage.setItem("starter", JSON.stringify(Date.now()));
-      if(missingTime > 0){
-        setPauseRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)) , stop: null });
-      }else{
+      if (missingTime > 0) {
+        setPauseRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)), stop: null });
+      } else {
         setPauseRecord({ start: currentTime, stop: null });
       }
       setPauseText('Pause STOP');
@@ -455,15 +490,19 @@ const FahrtVerwalten: React.FC = () => {
   }
 
   async function handleEnde() {
-    const confirmEnde = window.confirm("Wollen Sie wirklich die Fahrt beenden?");
-    if (confirmEnde) {
-      await stopRunningTimer()
-      await handleEndePost()
-      navigate("/fahrten-abschluss");
-    } else {
+    const form = document.getElementById('endModalForm') as HTMLFormElement;
+
+    if (form.checkValidity() === false) {
+      form.reportValidity();
       return;
     }
+
+    const formData = { KilometerstandEnde: kilometerEnde, OrtFahrtbeendigung: ortFahrtbeendigung };
+    await stopRunningTimer()
+    await handleEndePost(formData);
+    navigate("/");
   }
+
 
   function formatDate(date: Date): string {
     const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -477,7 +516,12 @@ const FahrtVerwalten: React.FC = () => {
       <div>
         <br></br>
         <br></br>
-        <h1 className="header">Fahrt Verwalten</h1>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h1 className="header">Fahrt verwalten</h1>
         {loading ? (
           <Loading />
         ) : (
@@ -485,6 +529,7 @@ const FahrtVerwalten: React.FC = () => {
             <h3>Hallo, {usercontexte ? usercontexte.name : ""}.</h3>
             {letzteFahrt && !letzteFahrt.beendet ? (
               <>
+                {/* {<iframe style={{ border: "border-radius:12px" }} src="https://open.spotify.com/embed/track/5GXeNbxOEbd7sKrbsVLVVx?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>} */}
                 <p>
                   Ihre momentane Fahrt startete am{' '}
                   {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : 'Keine Fahrt'}, mit dem Kennzeichen{' '}
@@ -559,7 +604,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant="danger" disabled={disable} onClick={handleEnde}>
+                    <Button variant="danger" disabled={disable} onClick={handleOpenModal}>
                       Fahrt beenden
                     </Button>
                   </div>
@@ -578,11 +623,11 @@ const FahrtVerwalten: React.FC = () => {
               <>
                 <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
                 <Link to="/create">
-                  <Button className="erstellen">Fahrt Erstellen</Button>
+                  <Button className="erstellen">Fahrt erstellen</Button>
                 </Link>
                 <Link to="/home">
                   <Button variant="danger" className="hauptmenu">
-                    Hauptmenu
+                    Zurück zum Hauptmenü
                   </Button>
                 </Link>
               </>
@@ -590,6 +635,46 @@ const FahrtVerwalten: React.FC = () => {
           </div>
         )}
       </div>
+
+
+      {/* Modal für die Bestätigung des Fahrtendes */}
+      <Modal show={showEndModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Fahrt beenden</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form noValidate validated={validated} id="endModalForm">
+            <Form.Group controlId="formGridKilometerEnde">
+              <Form.Label>Kilometerstand bei Fahrtende</Form.Label>
+              <Form.Control
+                required
+                type="number"
+                placeholder="Kilometerstand"
+                onChange={(e) => setKilometerstandEnde(parseInt(e.target.value))}
+              />
+              <Form.Control.Feedback type="invalid">Bitte geben Sie einen Kilometerstand ein.</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formGridOrtFahrtbeendigung">
+              <Form.Label>Ort der Fahrtbeendigung</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Ort der Fahrtbeendigung"
+                onChange={(e) => setOrtFahrtbeendigung(e.target.value)}
+              />
+              <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Abbrechen
+          </Button>
+          <Button variant="primary" onClick={handleEnde}>
+            Bestätigen
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

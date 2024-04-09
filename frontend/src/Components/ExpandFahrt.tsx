@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 import { FahrtResource, UserResource } from "../util/Resources";
 import ChartComponent from "./ChartComponent";
 import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
 import { jsPDF } from "jspdf";
-import { deleteFahrt } from "../Api/api";
 
 
 

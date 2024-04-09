@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { createUserWithAdmin } from '../Api/api';
 import { useNavigate } from 'react-router-dom';
 import { UserResource } from '../util/Resources';
+import Navbar from './Navbar';
 
 const AdminFormular = () => {
     const navigate = useNavigate()
@@ -37,7 +38,10 @@ const AdminFormular = () => {
 
     return (
         <div className="form-wrapper">
-            <h2 className="form-header">Benutzer Registrieren</h2>
+            <Navbar />
+            <br />
+            <br />
+            <h2 className="form-header">Benutzer registrieren</h2>
             <div className="form-container">
                 <Form onSubmit={handleSubmit}>
                     <Row className="mb-3">
@@ -79,7 +83,7 @@ const AdminFormular = () => {
                     </Row>
 
                     <Button variant="primary" type="submit" className="submit-button">
-                        Benutzer Registrieren
+                        Benutzer registrieren
                     </Button>
                 </Form>
             </div>

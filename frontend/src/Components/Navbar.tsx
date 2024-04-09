@@ -34,10 +34,10 @@ const Navbar = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li className="nav-item">
-                        <a className="nav-link" href="/create">Fahrt Erstellen</a>
+                        <a className="nav-link" href="/create">Fahrt erstellen</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/verwalten">Fahrt Verwalten</a>
+                        <a className="nav-link" href="/verwalten">Fahrt verwalten</a>
                     </li>
                     {user && user.admin && (
                         <li className="nav-item">
@@ -56,9 +56,9 @@ const Navbar = () => {
             {/* Dropdown-Menü für "Mehr" */}
             <NavDropdown title="Mehr" id="collasible-nav-dropdown" className="d-lg-none">
                 <NavDropdown.Item href="/create">Fahrt erstellen</NavDropdown.Item>
-                <NavDropdown.Item href="/verwalten">Fahrt Verwalten</NavDropdown.Item>
+                <NavDropdown.Item href="/verwalten">Fahrt verwalten</NavDropdown.Item>
                 <NavDropdown.Item onClick={() => navigate("/user-erstellen")}>Benutzer registrieren</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleAbmelden}>Abmelden</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleAbmelden} style={{ color: 'red' }}>Abmelden</NavDropdown.Item>
                 <NavDropdown.Divider />
             </NavDropdown>
         </div>
