@@ -266,7 +266,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        arbeitszeit: [{ start: new Date(JSON.parse(localStorage.getItem("starter")!)), stop: arbeitszeitRecord.stop! }],
+        arbeitszeit: [{start: new Date(new Date(arbeitszeitRecord.start).getTime() - (missingTime * 1000)), stop: arbeitszeitRecord.stop! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -285,7 +285,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        pause: [{ start: new Date(JSON.parse(localStorage.getItem("starter")!)), stop: pauseRecord.stop! }],
+        pause: [{start: new Date(new Date(pauseRecord.start).getTime() - (missingTime * 1000)), stop: pauseRecord.stop! }],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -296,6 +296,7 @@ const FahrtVerwalten: React.FC = () => {
 
   async function handlePostLenkzeit() {
     if (usercontexte && letzteFahrt && lenkzeitRecord && lenkzeitRecord.stop !== null) {
+      console.log("1", lenkzeitRecord)
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
         vollname: usercontexte.vorname + " " + usercontexte.name,
@@ -304,7 +305,7 @@ const FahrtVerwalten: React.FC = () => {
         kennzeichen: letzteFahrt.kennzeichen.toString(),
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
-        lenkzeit: lenkzeitRecord ? [{ start: new Date(JSON.parse(localStorage.getItem("starter")!)), stop: lenkzeitRecord.stop! }] : [],
+        lenkzeit: lenkzeitRecord ? [{start: new Date(new Date(lenkzeitRecord.start).getTime() - (missingTime * 1000)), stop: lenkzeitRecord.stop! }] : [],
         beendet: false,
       };
       const fahrt = await updateFahrt(fahrtResource);
@@ -355,7 +356,11 @@ const FahrtVerwalten: React.FC = () => {
     if (!isRecordingLenkzeit) {
       localStorage.setItem("starter", JSON.stringify(Date.now()));
       console.log(Date.now)
-      setLenkzeitRecord({ start: currentTime, stop: null });
+      if(missingTime > 0){
+        setLenkzeitRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)) , stop: null });
+      }else{
+        setLenkzeitRecord({ start: currentTime, stop: null });
+      }
       setLenkText('Lenkzeit STOP');
       const timerId = setInterval(() => {
         setElapsedTimeLenkzeit(prevElapsedTime => prevElapsedTime + 1);
@@ -384,7 +389,11 @@ const FahrtVerwalten: React.FC = () => {
     const currentTime = moment().toDate();
     if (!isRecordingArbeitszeit) {
       localStorage.setItem("starter", JSON.stringify(Date.now()));
-      setArbeitszeitRecord({ start: currentTime, stop: null });
+      if(missingTime > 0){
+        setArbeitszeitRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)) , stop: null });
+      }else{
+        setArbeitszeitRecord({ start: currentTime, stop: null });
+      }
       setArbeitText('Arbeitszeit STOP');
       const timerId = setInterval(() => {
         setElapsedTimeArbeitszeit(prevElapsedTime => prevElapsedTime + 1);
@@ -412,7 +421,11 @@ const FahrtVerwalten: React.FC = () => {
     const currentTime = moment().toDate();
     if (!isRecordingPause) {
       localStorage.setItem("starter", JSON.stringify(Date.now()));
-      setPauseRecord({ start: currentTime, stop: null });
+      if(missingTime > 0){
+        setPauseRecord({ start: new Date(new Date(currentTime).getTime() - (missingTime * 1000)) , stop: null });
+      }else{
+        setPauseRecord({ start: currentTime, stop: null });
+      }
       setPauseText('Pause STOP');
       const timerId = setInterval(() => {
         setElapsedTimePause(prevElapsedTime => prevElapsedTime + 1);
