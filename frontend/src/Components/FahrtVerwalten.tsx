@@ -4,7 +4,7 @@ import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import Loading from './LoadingIndicator';
-import { Button } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Navbar from './Navbar';
@@ -15,6 +15,7 @@ interface TimeRecord {
 }
 
 const FahrtVerwalten: React.FC = () => {
+  const [showEndModal, setShowEndModal] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false);
   const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false);
@@ -36,6 +37,13 @@ const FahrtVerwalten: React.FC = () => {
   const [start, setStart] = useState<number>(0)
   const [count, setCounter] = useState(0)
   const [missedTime, setMissedtime] = useState<number>(0)
+  const [validated, setValidated] = useState<boolean>(false);
+  const [kilometerEnde, setKilometerstandEnde] = useState<number>(0);
+  const [ortFahrtbeendigung, setOrtFahrtbeendigung] = useState<string>('');
+
+  const handleOpenModal = () => setShowEndModal(true);
+  const handleCloseModal = () => setShowEndModal(false);
+
 
   const jwt = getJWT();
 
@@ -319,14 +327,14 @@ const FahrtVerwalten: React.FC = () => {
     }
   }
 
-  async function handleEndePost() {
+  async function handleEndePost(formData: any) {
     if (usercontexte && letzteFahrt) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
-      const dayinMillis = 24 * (3600 * 1000) / 1000
-      const totalRuhezeit = ((elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit) - dayinMillis) * -1
+      const dayinMillis = 24 * (3600 * 1000) / 1000;
+      const totalRuhezeit = ((elapsedTimeArbeitszeit + elapsedTimePause + elapsedTimeLenkzeit) - dayinMillis) * -1;
 
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -340,16 +348,38 @@ const FahrtVerwalten: React.FC = () => {
           { start: new Date(Date.now()), stop: end }],
         totalLenkzeit: elapsedTimeLenkzeit,
         totalArbeitszeit: elapsedTimeArbeitszeit,
-        totalPause: elapsedTimePause,
+        totalPause:elapsedTimePause,
         totalRuhezeit: totalRuhezeit,
         vollname: usercontexte.vorname + " " + usercontexte.name,
         beendet: true,
+        kilometerende: formData.KilometerstandEnde,
+        endpunkt: formData.OrtFahrtbeendigung
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
       setCounter(count => count + 1);
     }
   }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+    if (form.checkValidity() === true) {
+      event.preventDefault();
+      event.stopPropagation();
+      const formData = new FormData(form);
+      const data = {
+        KilometerstandEnde: formData.get('formGridKilometerEnde'),
+        OrtFahrtbeendigung: formData.get('formGridOrtFahrtbeendigung')
+      };
+      console.log(data); // Hier kannst du die Daten senden oder weiterverarbeiten
+      // Hier kannst du die Fahrt beenden oder weitere Schritte durchführen
+    }
+  };
 
   async function toggleRecordingLenkzeit() {
 
@@ -419,9 +449,9 @@ const FahrtVerwalten: React.FC = () => {
   async function handleEnde() {
     const confirmEnde = window.confirm("Wollen Sie wirklich die Fahrt beenden?");
     if (confirmEnde) {
-      await stopRunningTimer()
-      await handleEndePost()
-      navigate("/fahrten-abschluss");
+      const formData = { KilometerstandEnde: kilometerEnde, OrtFahrtbeendigung: ortFahrtbeendigung };
+      await handleEndePost(formData);
+      navigate("/"); // Weiterleitung auf die Startseite
     } else {
       return;
     }
@@ -527,7 +557,7 @@ const FahrtVerwalten: React.FC = () => {
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant="danger" disabled={disable} onClick={handleEnde}>
+                    <Button variant="danger" disabled={disable} onClick={handleOpenModal}>
                       Fahrt beenden
                     </Button>
                   </div>
@@ -558,6 +588,46 @@ const FahrtVerwalten: React.FC = () => {
           </div>
         )}
       </div>
+
+      
+      {/* Modal für die Bestätigung des Fahrtendes */}
+      <Modal show={showEndModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Fahrt beenden</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form noValidate validated={validated}>
+            <Form.Group controlId="formGridKilometerEnde">
+              <Form.Label>Kilometerstand bei Fahrtende</Form.Label>
+              <Form.Control
+                required
+                type="number"
+                placeholder="Kilometerstand"
+                onChange={(e) => setKilometerstandEnde(parseInt(e.target.value))}
+              />
+              <Form.Control.Feedback type="invalid">Bitte geben Sie einen Kilometerstand ein.</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formGridOrtFahrtbeendigung">
+              <Form.Label>Ort der Fahrtbeendigung</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Ort der Fahrtbeendigung"
+                onChange={(e) => setOrtFahrtbeendigung(e.target.value)}
+              />
+              <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Abbrechen
+          </Button>
+          <Button variant="primary" onClick={handleEnde}>
+            Bestätigen
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

@@ -1,9 +1,11 @@
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./fahrtErstellen.css";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getJWT, setJWT, getLoginInfo } from './Logincontext';
 import { getFahrt, getUser, postFahrt, updateFahrt } from '../Api/api';
@@ -20,6 +22,7 @@ const Fahrtabschliessen = () => {
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [success, setShowSuccess] = useState<boolean>(false);
     const [validated, setValidated] = useState(false);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State for showing confirmation modal
 
     const jwt = getJWT()
     const navigate = useNavigate()
@@ -167,15 +170,32 @@ const Fahrtabschliessen = () => {
                                         <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
                                     </Form.Group>
                                 </Row>
-                                <Button variant="primary" type="submit" className="submit-button">
+                                <Button variant="primary" type="button" className="submit-button" onClick={() => setShowConfirmationModal(true)}>
                                     Fahrt abschließen
                                 </Button>
                             </Form>
                         </div></>
                 )}
-            </div></>
+            </div>
+            {/* Confirmation Modal */}
+            <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Fahrt abschließen</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Sind Sie sicher, dass Sie die Fahrt abschließen möchten?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="primary" onClick={handleSubmit}>
+                        Abschließen
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 }
 
 export default Fahrtabschliessen;
-
