@@ -8,7 +8,6 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
-interface TimeRecord { }
 
 const TFahrtVerwalten: React.FC = () => {
   const [showEndModal, setShowEndModal] = useState(false);
@@ -37,9 +36,25 @@ const TFahrtVerwalten: React.FC = () => {
     last();
   }, [count]);
 
+
   useEffect(() => {
     const storageItems = ['isRecordingArbeitszeit', 'isRecordingLenkzeit', 'isRecordingPause'];
-  
+    let allFalse = true;
+
+    storageItems.forEach(async (key) => {
+      const storedValue = localStorage.getItem(key);
+      if (storedValue !== null) {
+        const parsedValue = JSON.parse(storedValue);
+        if (parsedValue) {
+          allFalse = false;
+        }
+      } else {
+        setCounter((count) => count + 1)
+        setIsRecordingLenkzeit(true)
+        await stopRunningTimer()
+      }
+    });
+
     storageItems.forEach(async (key) => {
       const storedValue = localStorage.getItem(key);
       if (storedValue !== null) {
@@ -48,15 +63,15 @@ const TFahrtVerwalten: React.FC = () => {
         if (typeof parsedValue === 'boolean') {
           switch (key) {
             case 'isRecordingArbeitszeit':
-              await stopRunningTimer()
+              await stopRunningTimer();
               setIsRecordingArbeitszeit(parsedValue);
               break;
             case 'isRecordingLenkzeit':
-              await stopRunningTimer()
+              await stopRunningTimer();
               setIsRecordingLenkzeit(parsedValue);
               break;
             case 'isRecordingPause':
-              await stopRunningTimer()
+              await stopRunningTimer();
               setIsRecordingPause(parsedValue);
               break;
             default:
@@ -66,7 +81,8 @@ const TFahrtVerwalten: React.FC = () => {
       }
     });
   }, []);
-  
+
+
 
   useEffect(() => {
     const storageItems = {
@@ -179,9 +195,7 @@ const TFahrtVerwalten: React.FC = () => {
   }
 
   async function stopRunningTimer() {
-    console.log("Lenk ", isRecordingLenkzeit)
-    console.log("Arbeit ", isRecordingArbeitszeit)
-    console.log("pause ", isRecordingPause)
+
     if (isRecordingLenkzeit) {
       setIsRecordingLenkzeit(false);
       setLenkText('Lenkzeit START');
@@ -340,21 +354,21 @@ const TFahrtVerwalten: React.FC = () => {
                 <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit}>
-                      {lenkText}
+                      {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit}>
-                      {arbeitText}
+                      {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause}>
-                      {pauseText}
+                      {isRecordingPause ? "Pause läuft" : "Pause start"}
                     </Button>
                   </div>
                 </div>

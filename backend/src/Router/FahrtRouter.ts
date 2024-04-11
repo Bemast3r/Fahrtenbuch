@@ -105,6 +105,7 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("totalRuhezeit").optional().isNumeric(),
     body("startpunkt").isString(),
     body("ruhezeit").optional().isArray(),
+    body("lenkzeit").optional().isArray(),
     body("abwesend").optional().isString(),
     body("beendet").optional().isBoolean(),
     async (req, res, next) => {
