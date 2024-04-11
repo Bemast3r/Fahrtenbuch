@@ -8,7 +8,7 @@ import { jsPDF } from "jspdf";
 
 
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {    
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -98,8 +98,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
     };
 
 
-    
-    
+
+
 
     return (
         <div id="accordion">
@@ -144,7 +144,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                                     <ul>
                                         {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
                                             <li key={index}>
-                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                                Zeiten: {zeit ? formatDateTime(new Date(zeit)) : 'Keine Angabe'}
                                             </li>
                                         )) : "Keine Lenkzeit"}
                                     </ul>
@@ -156,7 +156,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                                     <ul>
                                         {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
                                             <li key={index}>
-                                                Start: {pause?.start ? formatDateTime(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause?.stop ? formatDateTime(new Date(pause.stop)) : 'Keine Angabe'}
+                                                Zeiten: {pause ? formatDateTime(new Date(pause)) : 'Keine Angabe'}
                                             </li>
                                         )) : "Keine Pausenzeit"}
                                     </ul>
@@ -168,7 +168,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                                     <ul>
                                         {fahrt.arbeitszeit.length > 0 ? fahrt.arbeitszeit.map((zeit, index) => (
                                             <li key={index}>
-                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                                Zeiten: {zeit ? formatDateTime(new Date(zeit)) : 'Keine Angabe'}
                                             </li>
                                         )) : "Keine Arbeitszeit"}
                                     </ul>

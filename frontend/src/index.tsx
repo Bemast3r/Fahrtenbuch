@@ -14,6 +14,7 @@ import FahrtErstellen from './Components/Fahrterstellen';
 import Statistik from './Components/Statistik';
 import UserFahrten from './Components/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtabschliessen';
+import TFahrtVerwalten from './Components/TFahrtVerwalten';
 
 
 ReactDOM.render(
@@ -32,6 +33,7 @@ ReactDOM.render(
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
+        <Route path="fahrten-zwei" element={<TFahrtVerwalten />} />
       </Routes>
     </Router>
   </React.StrictMode>,

@@ -40,20 +40,17 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     if (fahrt.lenkzeit) {
         fahrt.lenkzeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Lenkzeit' }); // Lenkzeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Lenkzeit' }); // Lenkzeit
+            zeitenData.push({ x: new Date(zeit), y: 'Lenkzeit' }); // Lenkzeit
         });
     }
     if (fahrt.arbeitszeit) {
         fahrt.arbeitszeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Arbeitszeit' }); // Arbeitszeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Arbeitszeit' }); // Arbeitszeit
+            zeitenData.push({ x: new Date(zeit), y: 'Arbeitszeit' }); // Arbeitszeit
         });
     }
     if (fahrt.pause) {
         fahrt.pause.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Pausezeit' }); // Pausezeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Pausezeit' }); // Pausezeit
+            zeitenData.push({ x: new Date(zeit), y: 'Pausezeit' }); // Pausezeit
         });
     }
     if (fahrt.ruhezeit) {

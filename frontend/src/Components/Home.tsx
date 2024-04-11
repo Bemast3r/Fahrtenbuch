@@ -53,7 +53,7 @@ const LandingPage = () => {
                                     <i className='bx bxs-car-mechanic' ></i>
                                     <h3 className="card-title">Fahrt verwalten</h3>
                                     <p className="lead">Verändere Informationen über deine Fahrt wie die Lenkzeit, Arbeitszeit, Pausen oder Beende deine Fahrt.</p>
-                                    <button className="btn bg-warning text-dark" onClick={() => navigate("/verwalten")} >Fahrt verwalten</button>
+                                    <button className="btn bg-warning text-dark" onClick={() => navigate("/fahrten-zwei")} >Fahrt verwalten</button>
                                 </div>
                             </div>
                         </div>
