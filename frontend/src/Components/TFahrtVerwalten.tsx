@@ -38,12 +38,50 @@ const TFahrtVerwalten: React.FC = () => {
   }, [count]);
 
   useEffect(() => {
-    const storageItems: any[] = [];
-
-    storageItems.forEach((item) => {
-      localStorage.setItem(item.key, JSON.stringify(item.value));
+    const storageItems = ['isRecordingArbeitszeit', 'isRecordingLenkzeit', 'isRecordingPause'];
+  
+    storageItems.forEach(async (key) => {
+      const storedValue = localStorage.getItem(key);
+      if (storedValue !== null) {
+        const parsedValue = JSON.parse(storedValue);
+        // Überprüfen, ob der gespeicherte Wert ein gültiger boolescher Wert ist
+        if (typeof parsedValue === 'boolean') {
+          switch (key) {
+            case 'isRecordingArbeitszeit':
+              await stopRunningTimer()
+              setIsRecordingArbeitszeit(parsedValue);
+              break;
+            case 'isRecordingLenkzeit':
+              await stopRunningTimer()
+              setIsRecordingLenkzeit(parsedValue);
+              break;
+            case 'isRecordingPause':
+              await stopRunningTimer()
+              setIsRecordingPause(parsedValue);
+              break;
+            default:
+              break;
+          }
+        }
+      }
     });
   }, []);
+  
+
+  useEffect(() => {
+    const storageItems = {
+      isRecordingArbeitszeit,
+      isRecordingLenkzeit,
+      isRecordingPause
+    };
+    if (count !== 0) {
+      Object.entries(storageItems).forEach(([key, value]) => {
+        localStorage.setItem(key, JSON.stringify(value));
+      });
+    }
+
+  }, [isRecordingArbeitszeit, isRecordingLenkzeit, isRecordingPause]);
+
 
   useEffect(() => {
     if (jwt) {
@@ -184,7 +222,7 @@ const TFahrtVerwalten: React.FC = () => {
         setCounter((count) => count + 1);
         return;
       }
-    }else if (isRecordingArbeitszeit) {
+    } else if (isRecordingArbeitszeit) {
       setIsRecordingArbeitszeit(false); // Arbeitszeit deaktivieren
       setArbeitText('Arbeitszeit START'); // Text für den Arbeitszeit-Button ändern
       if (usercontexte && letzteFahrt) {
