@@ -22,6 +22,8 @@ const TFahrtVerwalten: React.FC = () => {
   const [buttonLoading, setButtonLoading] = useState<boolean>(false); // Zustand für Button-Loading
   const [isRecordingArbeitszeit, setIsRecordingArbeitszeit] = useState<boolean>(false); // Zustand für die Aufzeichnung der Arbeitszeit
   const [arbeitText, setArbeitText] = useState<string>('Arbeitszeit START'); // Text für den Arbeitszeit-Button
+  const [isRecordingLenkzeit, setIsRecordingLenkzeit] = useState<boolean>(false); // Zustand für die Aufzeichnung der Lenkzeit
+  const [lenkText, setLenkText] = useState<string>('Lenkzeit START'); // Text für den Lenkzeit-Button
   const navigate = useNavigate();
 
   const handleOpenModal = () => setShowEndModal(true);
@@ -100,7 +102,7 @@ const TFahrtVerwalten: React.FC = () => {
         startpunkt: letzteFahrt.startpunkt.toString(),
         ruhezeit: [
           { start: today, stop: letzteFahrt.createdAt! },
-          { start: new Date(Date.now()), stop: end }],
+          { start: new Date(Date.now() + 1000), stop: end }],
         vollname: usercontexte.vorname + " " + usercontexte.name,
         beendet: true,
         kilometerende: formData.KilometerstandEnde,
@@ -133,7 +135,54 @@ const TFahrtVerwalten: React.FC = () => {
     navigate("/");
   }
 
+  async function stopRunningTimer() {
+    if (isRecordingLenkzeit) {
+      setIsRecordingLenkzeit(false);
+      setLenkText('Lenkzeit START');
+      if (usercontexte && letzteFahrt) {
+        const fahrtResource: FahrtResource = {
+          fahrerid: usercontexte.id!,
+          vollname: usercontexte.vorname + " " + usercontexte.name,
+          id: letzteFahrt._id!.toString(),
+          _id: letzteFahrt._id!.toString(),
+          kennzeichen: letzteFahrt.kennzeichen.toString(),
+          kilometerstand: letzteFahrt.kilometerstand,
+          startpunkt: letzteFahrt.startpunkt.toString(),
+          lenkzeit: [new Date(Date.now())],
+          beendet: false,
+        };
+        const fahrt = await updateFahrt(fahrtResource);
+        setLetzteFahrt(fahrt);
+        setCounter(count => count + 1);
+
+      }
+    } else if (isRecordingArbeitszeit) {
+      setIsRecordingArbeitszeit(false); // Arbeitszeit deaktivieren
+      setArbeitText('Arbeitszeit START'); // Text für den Arbeitszeit-Button ändern
+      if (usercontexte && letzteFahrt) {
+        const fahrtResource: FahrtResource = {
+          fahrerid: usercontexte.id!,
+          vollname: usercontexte.vorname + " " + usercontexte.name,
+          id: letzteFahrt._id!.toString(),
+          _id: letzteFahrt._id!.toString(),
+          kennzeichen: letzteFahrt.kennzeichen.toString(),
+          kilometerstand: letzteFahrt.kilometerstand,
+          startpunkt: letzteFahrt.startpunkt.toString(),
+          arbeitszeit: [new Date(Date.now())],
+          beendet: false,
+        };
+        const fahrt = await updateFahrt(fahrtResource);
+        setLetzteFahrt(fahrt);
+        setCounter(count => count + 1);
+      }
+
+
+    }
+  }
+
+
   async function handleLenkzeit() {
+    await stopRunningTimer()
     if (usercontexte && letzteFahrt) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -149,10 +198,13 @@ const TFahrtVerwalten: React.FC = () => {
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
       setCounter(count => count + 1);
+      setIsRecordingLenkzeit(true); // Lenkzeit wird aufgezeichnet
+      setLenkText('Lenkzeit Läuft'); // Text für den Lenkzeit-Button ändern
     }
   }
 
   async function handleArbeitszeit() {
+    await stopRunningTimer()
     if (usercontexte && letzteFahrt) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -169,9 +221,10 @@ const TFahrtVerwalten: React.FC = () => {
       setLetzteFahrt(fahrt);
       setCounter(count => count + 1);
       setIsRecordingArbeitszeit(true); // Arbeitszeit wird aufgezeichnet
-      setArbeitText('Arbeitszeit END'); // Text für den Arbeitszeit-Button ändern
+      setArbeitText('Arbeitszeit LÄUFT'); // Text für den Arbeitszeit-Button ändern
     }
   }
+
 
   return (
     <>
@@ -200,16 +253,16 @@ const TFahrtVerwalten: React.FC = () => {
                 <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant="primary" onClick={handleLenkzeit}>
-                      Lenkzeit START
+                    <Button variant={isRecordingLenkzeit ? "danger" : "primary"} onClick={handleLenkzeit}>
+                      {lenkText}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit}>
-                    {arbeitText}
-                  </Button>
+                    <Button variant={isRecordingArbeitszeit ? "danger" : "primary"} onClick={handleArbeitszeit}>
+                      {arbeitText}
+                    </Button>
                   </div>
                 </div>
                 <div className="section">
@@ -278,8 +331,6 @@ const TFahrtVerwalten: React.FC = () => {
         </Modal.Footer>
       </Modal>
     </>
-
-
   );
 }
 
