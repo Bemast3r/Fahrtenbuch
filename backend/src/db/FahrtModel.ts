@@ -42,9 +42,9 @@ const fahrtSchema = new Schema<IFahrt>({
         stop: { type: Date, required: false }
     }],
     abwesend: { type: String },
-    totalLenkzeit: { type: Number },
-    totalArbeitszeit: { type: Number },
-    totalPause: { type: Number },
+    totalLenkzeit: { type: Number , default: 0},
+    totalArbeitszeit: { type: Number, default: 0 },
+    totalPause: { type: Number, default:0 },
     totalRuhezeit: { type: Number }
 }, { timestamps: true });
 

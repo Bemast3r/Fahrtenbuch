@@ -150,6 +150,15 @@ const TFahrtVerwalten: React.FC = () => {
       const end = new Date();
       end.setHours(23, 59, 59, 0);
       const dayinMillis = (24 * 3600 * 1000) / 1000;
+      const fahrtendeTime = new Date(Date.now() + 2000)
+
+      const timeFromMidnight = letzteFahrt.createdAt ? new Date(letzteFahrt.createdAt).getTime() - today.getTime() : 0;
+
+      // Zeitdifferenz zwischen Endzeit des Tages und Fahrtendezeit berechnen
+      const timeToEndOfDay = end.getTime() - fahrtendeTime.getTime();
+
+      // Gesamtruhezeit in Sekunden berechnen
+      const totalRuhezeit = Math.round((timeFromMidnight + timeToEndOfDay) / 1000); // in Sekunden
 
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -159,13 +168,13 @@ const TFahrtVerwalten: React.FC = () => {
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
         ruhezeit: [
-          { start: today, stop: letzteFahrt.createdAt! },
-          { start: new Date(Date.now() + 2000), stop: end },
+          { start: fahrtendeTime, stop: end },
         ],
         vollname: usercontexte.vorname + ' ' + usercontexte.name,
         beendet: true,
         kilometerende: formData.KilometerstandEnde,
         endpunkt: formData.OrtFahrtbeendigung,
+        totalRuhezeit: totalRuhezeit
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
@@ -271,7 +280,7 @@ const TFahrtVerwalten: React.FC = () => {
         kilometerstand: letzteFahrt.kilometerstand,
         startpunkt: letzteFahrt.startpunkt.toString(),
         lenkzeit: [new Date(Date.now())],
-        beendet: false,
+        beendet: false
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
@@ -353,21 +362,21 @@ const TFahrtVerwalten: React.FC = () => {
                 <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit}>
+                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isRecordingLenkzeit}>
                       {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit}>
+                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit} disabled={isRecordingArbeitszeit}>
                       {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause}>
+                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause} disabled={isRecordingPause}>
                       {isRecordingPause ? "Pause läuft" : "Pause start"}
                     </Button>
                   </div>
