@@ -13,7 +13,11 @@
     width: 80%;
     margin-top: 100px;
 }
-
+.wasgeht {
+    background-image: url(loginHintergrund.jpg);
+    background-size: cover;
+    background-position: center;
+}
 .section-padding {
     padding: 100px 0;
 }

@@ -148,31 +148,27 @@ const FahrtErstellen = () => {
     const americanDateFormat = `${year}-${month}-${day}`;
 
     return (
-        <>
+        <div className="wasgehtsiedasan">
+        
             <Navbar />
-            <br />
-            <br />
-            <br />
-            <br />
             <div className="form-wrapper">
-                <h2 className="form-header">Fahrt erstellen</h2>
                 {loading ? (
                     <Loading />
                 ) : (
                     <>
-                        <Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
-                            Sie können keine Fahrt erstellen. Bitte beenden Sie die laufende Fahrt in Fahrt verwalten.
-                            <br />
-                            <Button variant="primary" type="submit" onClick={() => { navigate("/verwalten"); }}>Fahrt verwalten</Button>
-                        </Alert>
-                        <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible>
-                            Fahrt erfolgreich erstellt!
-                        </Alert>
                         <div className="form-container">
+                            <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible className="custom-alert-gut">
+                                Fahrt erfolgreich erstellt!
+                            </Alert>
+                            <Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert">
+                                Sie können keine Fahrt erstellen. Bitte beenden Sie zuerst die laufende Fahrt.
+                                <Button variant="primary" type="submit" className="popup-button" onClick={() => { navigate("/verwalten"); }}>Fahrt verwalten</Button>
+                            </Alert>
                             <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                                <h2 className="form-header">Fahrt erstellen</h2>
                                 <Row className="mb-1">
                                     <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
-                                        <Form.Label className="form-label">Name</Form.Label>
+                                        <Form.Label className="form-label">Name*</Form.Label>
                                         <Form.Control
                                             type="text"
                                             placeholder="Name"
@@ -183,7 +179,7 @@ const FahrtErstellen = () => {
                                         />
                                     </Form.Group>
                                     <Form.Group as={Col} controlId="formGridDatum" className="form-group">
-                                        <Form.Label className="form-label">Datum</Form.Label>
+                                        <Form.Label className="form-label">Datum*</Form.Label>
                                         <Form.Control
                                             type="text"
                                             placeholder="Datum"
@@ -196,7 +192,7 @@ const FahrtErstellen = () => {
                                 </Row>
                                 <Row className="mb-2">
                                     <Form.Group as={Col} controlId="formGridKennzeichen" className="form-group">
-                                        <Form.Label className="form-label">Kennzeichen</Form.Label>
+                                        <Form.Label className="form-label">Kennzeichen*</Form.Label>
                                         <Form.Control
                                             type="text"
                                             placeholder="Kennzeichen"
@@ -204,14 +200,12 @@ const FahrtErstellen = () => {
                                             disabled={disableFields}
                                             required
                                         />
-                                        <Form.Control.Feedback type="invalid">
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
                                             Bitte geben Sie das Kennzeichen ein.
                                         </Form.Control.Feedback>
                                     </Form.Group>
-                                </Row>
-                                <Row className="mb-3">
                                     <Form.Group as={Col} controlId="formGridKilometerstand" className="form-group">
-                                        <Form.Label className="form-label">Kilometerstand</Form.Label>
+                                        <Form.Label className="form-label">Kilometerstand*</Form.Label>
                                         <Form.Control
                                             type="number"
                                             placeholder="Kilometerstand"
@@ -219,14 +213,14 @@ const FahrtErstellen = () => {
                                             disabled={disableFields}
                                             required
                                         />
-                                        <Form.Control.Feedback type="invalid">
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
                                             Bitte geben Sie den Kilometerstand an.
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Row>
                                 <Row className="mb-4">
                                     <Form.Group as={Col} controlId="formGridOrt" className="form-group">
-                                        <Form.Label className="form-label">Ort der Fahrtaufnahme</Form.Label>
+                                        <Form.Label className="form-label">Ort des Fahrtbeginns*</Form.Label>
                                         <Form.Control
                                             type="text"
                                             placeholder="Ort"
@@ -234,50 +228,54 @@ const FahrtErstellen = () => {
                                             disabled={disableFields}
                                             required
                                         />
-                                        <Form.Control.Feedback type="invalid">
-                                            Bitte geben Sie den Ort der Fahrtaufnahme an.
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                            Bitte geben Sie den Ort des Fahrtbeginns an.
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Row>
-                                <Row className="mb-5">
-                                    <Form.Group className="checkbox1" controlId="formGridCheckbox1">
-                                        <Form.Check
-                                            type="checkbox"
-                                            label="Kein Fahrzeug geführt"
-                                            className="checkbox-label1"
-                                            onChange={() => handleCheckboxChange("formGridCheckbox1")}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="checkbox2" controlId="formGridCheckbox2">
-                                        <Form.Check
-                                            type="checkbox"
-                                            label="Ich bin krank"
-                                            className="checkbox-label2"
-                                            onChange={() => handleCheckboxChange("formGridCheckbox2")}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="checkbox3" controlId="formGridCheckbox3">
-                                        <Form.Check
-                                            type="checkbox"
-                                            label="Ich habe Urlaub"
-                                            className="checkbox-label3"
-                                            onChange={() => handleCheckboxChange("formGridCheckbox3")}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="checkbox4" controlId="formGridCheckbox4">
-                                        <Form.Check
-                                            type="checkbox"
-                                            label="Ich habe frei"
-                                            className="checkbox-label4"
-                                            onChange={() => handleCheckboxChange("formGridCheckbox4")}
-                                        />
-                                    </Form.Group>
+                                <Row className="mb-5 justify-content-center">
+                                    <Col md="auto" className="text-center">
+                                        <Form.Group controlId="formGridCheckbox1">
+                                            <Form.Check
+                                                type="checkbox"
+                                                label="Kein Fahrzeug geführt"
+                                                className="checkbox-label1"
+                                                onChange={() => handleCheckboxChange("formGridCheckbox1")}
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md="auto" className="text-center">
+                                        <Form.Group controlId="formGridCheckbox2">
+                                            <Form.Check
+                                                type="checkbox"
+                                                label="Ich bin krank"
+                                                className="checkbox-label2"
+                                                onChange={() => handleCheckboxChange("formGridCheckbox2")}
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md="auto" className="text-center">
+                                        <Form.Group controlId="formGridCheckbox3">
+                                            <Form.Check
+                                                type="checkbox"
+                                                label="Ich habe Urlaub"
+                                                className="checkbox-label3"
+                                                onChange={() => handleCheckboxChange("formGridCheckbox3")}
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md="auto" className="text-center">
+                                        <Form.Group controlId="formGridCheckbox4">
+                                            <Form.Check
+                                                type="checkbox"
+                                                label="Ich habe frei"
+                                                className="checkbox-label4"
+                                                onChange={() => handleCheckboxChange("formGridCheckbox4")}
+                                            />
+                                        </Form.Group>
+                                    </Col>
                                 </Row>
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                    className="submit-button"
-                                >
+                                <Button variant="primary" type="submit" className="submit-button-beginnen">
                                     Fahrt beginnen
                                 </Button>
                             </Form>
@@ -285,8 +283,8 @@ const FahrtErstellen = () => {
                     </>
                 )}
             </div>
-        </>
+        </div>
     );
-};
+}
 
 export default FahrtErstellen;

@@ -22,7 +22,7 @@ const LandingPage = () => {
 
 
     return (
-        <div>
+        <div className="wasgeht">
             <Navbar></Navbar>
             {/* Services */}
             <section className="services section-padding" id="services">
