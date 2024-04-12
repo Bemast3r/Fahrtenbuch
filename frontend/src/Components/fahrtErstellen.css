@@ -137,6 +137,12 @@
   margin-top: -0.5em;
 }
 
+.checkbox-label5 {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  margin-left: 0.75rem;
+}
+
 /* ---------- BUTTON STYLING ---------- */
 
 .submit-button-beginnen {
@@ -186,6 +192,32 @@
 }
 
 .form-header:hover {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
+}
+
+.form-header2 {
+  font-size: 34px;
+  position: relative; /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
+  margin-bottom: 2.5rem;
+  margin-top: -0.5rem;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center; 
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
+}
+
+.form-header2::after {
+  content: "";
+  position: absolute;
+  top: 55px; /* Positioniere die Linie unterhalb des Texts */
+  left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+  width: 500px; /* Breite der Linie */
+  height: 1px; /* Dicke der Linie */
+  background-color: #ccc; /* Farbe der Linie */
+  transform: translateX(-50%); /* Zentriere die Linie horizontal */
+}
+
+.form-header2:hover {
   animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
 }
 
@@ -245,30 +277,44 @@
     font-size: 26px;
   }
 
+  .form-header2 {
+    font-size: 26px;
+  }
+
   .form-header::after {
     width: 250px; /* Breite der Linie auf 100px reduziert */
   }
 
+  .form-header2::after {
+    width: 250px; /* Breite der Linie auf 100px reduziert */
+    margin-top: 2rem;
+  }
+
   .checkbox-label1 {
     margin-bottom: 10px;
-    margin-left: -70px;
+    margin-left: -72px;
     text-align: left;
   }
 
   .checkbox-label2 {
-    margin-left: -70px;
+    margin-left: -72px;
     margin-bottom: 10px;
     text-align: left;
   }
 
   .checkbox-label3 {
-    margin-left: -70px;
+    margin-left: -72px;
     margin-bottom: 10px;
     text-align: left;
   }
 
   .checkbox-label4 {
-    margin-left: -70px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label5 {
+    margin-left: -53px;
     text-align: left;
   }
 
