@@ -9,6 +9,7 @@ const AdminFormular = () => {
     const navigate = useNavigate();
     const [showSuccess, setShowSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const [formData, setFormData] = useState<UserResource>({
         vorname: '',
         name: '',
@@ -21,22 +22,47 @@ const AdminFormular = () => {
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
+        let validatedValue = value;
+    
+        // Validierung für Vor- und Nachnamen
+        if (name === 'vorname' || name === 'name') {
+            validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß]/g, ''); // Entferne alle Zeichen außer Buchstaben
+        } else if (name === 'username') {
+            validatedValue = value.replace(/[^a-zA-Z0-9_.]/g, ''); // Erlaubt nur Buchstaben, Zahlen, Unterstriche (_) und Punkte (.)
+        }
+    
         setFormData(prevState => ({
             ...prevState,
-            [name]: value
+            [name]: validatedValue
         }));
+    
+        // Passwort validieren, während der Benutzer eingibt
+        if (name === 'password') {
+            validatePassword(value);
+        }
+    };
+    
+    const validatePassword = (password: string) => {
+        // Mindestens 8 Zeichen, Groß- und Kleinbuchstaben, Ziffern und Sonderzeichen
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            setPasswordError("Das Passwort muss mindestens 8 Zeichen lang sein und aus Groß- und Kleinbuchstaben, Ziffern sowie Sonderzeichen bestehen.");
+        } else {
+            setPasswordError(null);
+        }
     };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const form = e.currentTarget;
-        if (form.checkValidity() === false) {
+        if (form.checkValidity() === false || passwordError) {
             e.stopPropagation();
         }
         setValidated(true);
 
         try {
-            if (form.checkValidity() === true) {
+            if (form.checkValidity() === true && !passwordError) {
                 await createUserWithAdmin(formData);
                 setShowSuccess(true);
                 setTimeout(() => { navigate("/home") }, 1500);
