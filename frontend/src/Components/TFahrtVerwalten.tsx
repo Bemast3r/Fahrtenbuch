@@ -25,6 +25,10 @@ const TFahrtVerwalten: React.FC = () => {
   const [lenkText, setLenkText] = useState<string>('Lenkzeit START'); // Text für den Lenkzeit-Button
   const [isRecordingPause, setIsRecordingPause] = useState<boolean>(false); // Zustand für die Aufzeichnung der Lenkzeit
   const [pauseText, setPauseText] = useState<string>('Pause START'); // Text für den Lenkzeit-Button
+  const [isDisabledLenkzeit, setisDisabledLenkzeit] = useState<boolean>(true); // Zustand für die Aufzeichnung der Lenkzeit
+  const [isDisabledArbeitzeit, setisDisabledArbeitzeit] = useState<boolean>(false); // Zustand für die Aufzeichnung der Lenkzeit
+  const [isDisabledPause, setisDisabledPause] = useState<boolean>(false); // Zustand für die Aufzeichnung der Lenkzeit
+
   const navigate = useNavigate();
 
   const handleOpenModal = () => setShowEndModal(true);
@@ -63,15 +67,15 @@ const TFahrtVerwalten: React.FC = () => {
         if (typeof parsedValue === 'boolean') {
           switch (key) {
             case 'isRecordingArbeitszeit':
-              await stopRunningTimer();
+              setisDisabledArbeitzeit(parsedValue)
               setIsRecordingArbeitszeit(parsedValue);
               break;
             case 'isRecordingLenkzeit':
-              await stopRunningTimer();
+              setisDisabledLenkzeit(parsedValue)
               setIsRecordingLenkzeit(parsedValue);
               break;
             case 'isRecordingPause':
-              await stopRunningTimer();
+              setisDisabledPause(parsedValue)
               setIsRecordingPause(parsedValue);
               break;
             default:
@@ -204,8 +208,8 @@ const TFahrtVerwalten: React.FC = () => {
   }
 
   async function stopRunningTimer() {
-
     if (isRecordingLenkzeit) {
+      setisDisabledLenkzeit(false)
       setIsRecordingLenkzeit(false);
       setLenkText('Lenkzeit START');
       if (usercontexte && letzteFahrt) {
@@ -226,8 +230,9 @@ const TFahrtVerwalten: React.FC = () => {
         return;
       }
     } else if (isRecordingPause) {
-      setIsRecordingPause(false); // Arbeitszeit deaktivieren
-      setPauseText('Pause START'); // Text für den Arbeitszeit-Button ändern
+      setisDisabledPause(false)
+      setIsRecordingPause(false); 
+      setPauseText('Pause START'); 
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
@@ -246,6 +251,7 @@ const TFahrtVerwalten: React.FC = () => {
         return;
       }
     } else if (isRecordingArbeitszeit) {
+      setisDisabledArbeitzeit(false)
       setIsRecordingArbeitszeit(false); // Arbeitszeit deaktivieren
       setArbeitText('Arbeitszeit START'); // Text für den Arbeitszeit-Button ändern
       if (usercontexte && letzteFahrt) {
@@ -269,7 +275,11 @@ const TFahrtVerwalten: React.FC = () => {
   }
 
   async function handleLenkzeit() {
+    setisDisabledLenkzeit(true)
+
     await stopRunningTimer();
+    setisDisabledLenkzeit(true)
+
     if (usercontexte && letzteFahrt) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -292,6 +302,7 @@ const TFahrtVerwalten: React.FC = () => {
 
   async function handleArbeitszeit() {
     await stopRunningTimer();
+    setisDisabledArbeitzeit(true)
     if (usercontexte && letzteFahrt) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -313,7 +324,9 @@ const TFahrtVerwalten: React.FC = () => {
   }
 
   async function handlePause() {
+    setisDisabledPause(true)
     await stopRunningTimer();
+    setisDisabledPause(true)
     if (usercontexte && letzteFahrt) {
       const fahrtResource: FahrtResource = {
         fahrerid: usercontexte.id!,
@@ -362,21 +375,21 @@ const TFahrtVerwalten: React.FC = () => {
                 <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isRecordingLenkzeit}>
+                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
                       {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit} disabled={isRecordingArbeitszeit}>
+                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
                       {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
                     </Button>
                   </div>
                 </div>
                 <div className="section">
                   <div className="button-group">
-                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause} disabled={isRecordingPause}>
+                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause} disabled={isDisabledPause}>
                       {isRecordingPause ? "Pause läuft" : "Pause start"}
                     </Button>
                   </div>

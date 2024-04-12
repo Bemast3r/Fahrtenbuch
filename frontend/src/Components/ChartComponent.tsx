@@ -36,7 +36,6 @@ ChartJS.register(
 const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     // Extrahiere die Zeiten aus der FahrtResource und konvertiere sie in Date-Objekte mit Kennungen
     const zeitenData: { x: Date; y: string; }[] = [];
-    const [loader, setLoader] = useState(false)
 
     if (fahrt.lenkzeit) {
         fahrt.lenkzeit.forEach(zeit => {
