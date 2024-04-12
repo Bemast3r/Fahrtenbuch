@@ -110,7 +110,7 @@ const FahrtErstellen = () => {
                     };
                     const fahrt = await postFahrt(fahrtResource);
                     setShowSuccess(true);
-                    setTimeout(() => { navigate("/home") }, 1000)
+                    setTimeout(() => { navigate("/home") }, 1500)
                     return;
                 }
             }
