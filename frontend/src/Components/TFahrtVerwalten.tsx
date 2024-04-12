@@ -212,6 +212,12 @@ const TFahrtVerwalten: React.FC = () => {
       setisDisabledLenkzeit(false)
       setIsRecordingLenkzeit(false);
       setLenkText('Lenkzeit START');
+      let lenkzeit = 0;
+      if (letzteFahrt!.lenkzeit!.length > 0) {
+        lenkzeit = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.lenkzeit![letzteFahrt!.lenkzeit!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalLenkzeit!
+      } else {
+        lenkzeit = (new Date(Date.now()).getTime() - new Date(letzteFahrt!.createdAt!).getTime()) / 1000
+      }
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
@@ -223,6 +229,7 @@ const TFahrtVerwalten: React.FC = () => {
           startpunkt: letzteFahrt.startpunkt.toString(),
           lenkzeit: [new Date(Date.now())],
           beendet: false,
+          totalLenkzeit: lenkzeit
         };
         const fahrt = await updateFahrt(fahrtResource);
         setLetzteFahrt(fahrt);
@@ -231,8 +238,8 @@ const TFahrtVerwalten: React.FC = () => {
       }
     } else if (isRecordingPause) {
       setisDisabledPause(false)
-      setIsRecordingPause(false); 
-      setPauseText('Pause START'); 
+      setIsRecordingPause(false);
+      setPauseText('Pause START');
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
