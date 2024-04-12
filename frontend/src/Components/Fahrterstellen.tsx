@@ -127,10 +127,11 @@ const FahrtErstellen = () => {
                     kilometerstand: kilometerstand,
                     startpunkt: startpunkt.toString(),
                     vollname: user.vorname + " " + user.name,
-                    lenkzeit: [new Date( Date.now() + 1000)],
+                    lenkzeit: [new Date(Date.now() + 1000)],
                     ruhezeit: [
                         { start: today, stop: new Date(Date.now()) },
                     ],
+                    totalRuhezeit: (new Date(Date.now()).getTime() - today.getTime()) / 1000
                 };
                 const fahrt = await postFahrt(fahrtResource);
             }
@@ -141,7 +142,7 @@ const FahrtErstellen = () => {
             });
             setShowSuccess(true);
             setTimeout(() => {
-                navigate("/fahrten-zwei");
+                navigate("/verwalten");
             }, 1000);
         }
     };

@@ -17,8 +17,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         return `${hours}:${minutes}:${seconds}`;
     }
 
-    
-    
+
+
     function formatDateString(date: Date): string {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -29,20 +29,20 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
     function formatTime(sekunden: number): string {
         // Sekunden ohne Millisekunden berechnen
         const gerundeteSekunden = Math.floor(sekunden);
-    
+
         // Stunden, Minuten und Sekunden berechnen
         const stunden: number = Math.floor(gerundeteSekunden / 3600);
         const minuten: number = Math.floor((gerundeteSekunden % 3600) / 60);
         const sekundenRest: number = gerundeteSekunden % 60;
-    
+
         // Zeit im Format HH:MM:SS zurückgeben
         const formatierteStunden: string = stunden.toString().padStart(2, '0');
         const formatierteMinuten: string = minuten.toString().padStart(2, '0');
         const formatierteSekunden: string = sekundenRest.toString().padStart(2, '0');
-    
+
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
-    
+
 
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
@@ -143,10 +143,11 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
 
                             <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
                             <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
-
+                            <br></br>
+                            <p>(Datenformat: HH:MM:SS)</p>
                             {fahrt.lenkzeit && (
                                 <details>
-                                    <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>
+                                    <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "00:00:00"}</summary>
                                     <ul>
                                         {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
                                             <li key={index}>

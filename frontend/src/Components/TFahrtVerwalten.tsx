@@ -243,7 +243,7 @@ const TFahrtVerwalten: React.FC = () => {
       let pause = 0;
       if (letzteFahrt!.pause!.length >= 1) {
         pause = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.pause![letzteFahrt!.pause!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalPause!
-      } 
+      }
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
@@ -269,7 +269,7 @@ const TFahrtVerwalten: React.FC = () => {
       let arbeitszeit = 0;
       if (letzteFahrt!.arbeitszeit!.length >= 1) {
         arbeitszeit = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.arbeitszeit![letzteFahrt!.arbeitszeit!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalArbeitszeit!
-      } 
+      }
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
@@ -421,9 +421,14 @@ const TFahrtVerwalten: React.FC = () => {
               </>
             ) : (
               <>
-                <p>{letzteFahrt ? 'Ihre letzte Fahrt endete am ' + new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') + '. ' : 'Keine Fahrt gefunden.'}</p>
-                <Link to="/">
-                  <Button variant="primary">Neue Fahrt starten</Button>
+                <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
+                <Link to="/create">
+                  <Button className="erstellen">Fahrt erstellen</Button>
+                </Link>
+                <Link to="/home">
+                  <Button variant="danger" className="hauptmenu">
+                    Zurück zum Hauptmenü
+                  </Button>
                 </Link>
               </>
             )}

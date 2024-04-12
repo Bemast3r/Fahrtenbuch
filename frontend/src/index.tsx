@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './Components/Login';
 import Home from './Components/Home';
 import Loading from './Components/LoadingIndicator';
-import FahrtVerwalten from './Components/FahrtVerwalten';
 import PasswortVergessen from './Components/PasswortVergessen';
 import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
 import AdminFormular from './Components/AdminPanel';
@@ -26,14 +25,13 @@ ReactDOM.render(
         <Route path="home" element={<Home />} />
         <Route path="test" element={<Loading />} />
         <Route path="create" element={<FahrtErstellen />} />
-        <Route path="verwalten" element={<FahrtVerwalten />} />
+        <Route path="verwalten" element={<TFahrtVerwalten />} />
         <Route path="passwort-vergessen" element={<PasswortVergessen />} />
         <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
         <Route path="user-erstellen" element={<AdminFormular />} />
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
-        <Route path="fahrten-zwei" element={<TFahrtVerwalten />} />
       </Routes>
     </Router>
   </React.StrictMode>,
