@@ -240,6 +240,10 @@ const TFahrtVerwalten: React.FC = () => {
       setisDisabledPause(false)
       setIsRecordingPause(false);
       setPauseText('Pause START');
+      let pause = 0;
+      if (letzteFahrt!.pause!.length >= 1) {
+        pause = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.pause![letzteFahrt!.pause!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalPause!
+      } 
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
@@ -251,6 +255,7 @@ const TFahrtVerwalten: React.FC = () => {
           startpunkt: letzteFahrt.startpunkt.toString(),
           pause: [new Date(Date.now())],
           beendet: false,
+          totalPause: pause
         };
         const fahrt = await updateFahrt(fahrtResource);
         setLetzteFahrt(fahrt);
@@ -261,6 +266,10 @@ const TFahrtVerwalten: React.FC = () => {
       setisDisabledArbeitzeit(false)
       setIsRecordingArbeitszeit(false); // Arbeitszeit deaktivieren
       setArbeitText('Arbeitszeit START'); // Text für den Arbeitszeit-Button ändern
+      let arbeitszeit = 0;
+      if (letzteFahrt!.arbeitszeit!.length >= 1) {
+        arbeitszeit = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.arbeitszeit![letzteFahrt!.arbeitszeit!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalArbeitszeit!
+      } 
       if (usercontexte && letzteFahrt) {
         const fahrtResource: FahrtResource = {
           fahrerid: usercontexte.id!,
@@ -272,6 +281,7 @@ const TFahrtVerwalten: React.FC = () => {
           startpunkt: letzteFahrt.startpunkt.toString(),
           arbeitszeit: [new Date(Date.now())],
           beendet: false,
+          totalArbeitszeit: arbeitszeit
         };
         const fahrt = await updateFahrt(fahrtResource);
         setLetzteFahrt(fahrt);
