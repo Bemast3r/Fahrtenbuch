@@ -152,19 +152,20 @@
   color: #000;
   background-color: #eec346;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   display: block;
   margin: -1.5rem auto 0;
   margin-bottom: -1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Hier wird der kleine schwarze Rand hinzugefügt */
 }
+
 
 .submit-button-beginnen:hover {
   color: #000;
-  background-color: #dab034; /* Ändern der Hintergrundfarbe beim Überfahren */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* Erhöhen des Schattens beim Überfahren */
+  background-color: rgb(196, 155, 34);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
 }
 
 /* ---------- HEADER STYLING ---------- */
@@ -175,7 +176,7 @@
   margin-bottom: 2.5rem;
   margin-top: -0.5rem;
   color: #333;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
   text-align: center; 
   animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
 }
@@ -265,12 +266,12 @@
 
   .submit-button-beginnen:hover {
     color: #000;
-    background-color: #dab034; /* Ändern der Hintergrundfarbe beim Überfahren */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* Erhöhen des Schattens beim Überfahren */
+    background-color: rgb(196, 155, 34);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
   }
 
   .submit-button-beginnen:active {
-    background-color: #dab034; /* Ändere die Hintergrundfarbe beim Klicken auf Gelb */
+    background-color: rgb(196, 155, 34);
   }
 
   .form-header {

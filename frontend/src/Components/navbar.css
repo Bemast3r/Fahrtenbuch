@@ -25,3 +25,8 @@
 .navbar-nav .nav-link.abmelden {
   color: red;
 }
+
+.navbar-brand:hover {
+  transform: scale(1.1); /* Vergrößere das Logo beim Hover */
+  transition: color 0.3s ease, transform 0.3s ease; /* Füge eine sanfte Übergangseffekt hinzu */
+}

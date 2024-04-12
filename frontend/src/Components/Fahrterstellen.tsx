@@ -149,7 +149,7 @@ const FahrtErstellen = () => {
 
     return (
         <div className="wasgehtsiedasan">
-        
+
             <Navbar />
             <div className="form-wrapper">
                 {loading ? (
@@ -212,11 +212,17 @@ const FahrtErstellen = () => {
                                             className={`form-control ${validated && !letzteFahrt ? 'is-invalid' : ''}`}
                                             disabled={disableFields}
                                             required
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'e' || e.key === 'E') {
+                                                    e.preventDefault();
+                                                }
+                                            }}
                                         />
                                         <Form.Control.Feedback type="invalid" className="form-control-feedback">
                                             Bitte geben Sie den Kilometerstand an.
                                         </Form.Control.Feedback>
                                     </Form.Group>
+
                                 </Row>
                                 <Row className="mb-4">
                                     <Form.Group as={Col} controlId="formGridOrt" className="form-group">
