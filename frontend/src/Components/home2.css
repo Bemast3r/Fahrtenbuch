@@ -258,7 +258,7 @@
     }
 }
 
-@media only screen and (min-width: 991px) and (max-width: 1500px) {
+@media only screen and (min-width: 1100px) and (max-width: 1500px) {
     .col-12col-md-12col-lg-4 {
         margin-bottom: 20px;
         /* Vergrößern Sie den Abstand zwischen den Cards */
@@ -277,7 +277,7 @@
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
+@media only screen and (min-width: 768px) and (max-width: 1100px) {
     .carousel-caption {
         bottom: 370px;
     }
