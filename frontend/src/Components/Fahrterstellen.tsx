@@ -218,9 +218,10 @@ const FahrtErstellen = () => {
                                             className={`form-control ${validated && !letzteFahrt ? 'is-invalid' : ''}`}
                                             disabled={disableFields}
                                             required
+                                            min="0" // Setzen Sie das min-Attribut auf 0
                                             onKeyDown={(e) => {
-                                                if (e.key === 'e' || e.key === 'E') {
-                                                    e.preventDefault();
+                                                if (e.key === 'e' || e.key === 'E' || e.key === '-') {
+                                                    e.preventDefault(); // Verhindern Sie die Eingabe von "e", "E" und "-"
                                                 }
                                             }}
                                         />
