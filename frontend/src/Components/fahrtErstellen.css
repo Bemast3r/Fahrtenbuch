@@ -236,6 +236,82 @@
   }
 }
 
+@media screen and (max-width: 993px) {
+  .form-wrapper {
+    min-height: 70vh; /* Verringere die Mindesthöhe des Wrappers */
+    min-width: 70vw; /* Verringere die Mindestbreite des Wrappers */
+  }
+
+  .form-container {
+    width: 70%; /* Verringere die Breite des Containers */
+    margin-top: 120px; /* Verringere den oberen Abstand des Containers */
+  }
+
+  .form-control {
+    margin-left: 0; /* Setze den linken Rand auf 0 */
+  }
+
+  .form-label {
+    margin-left: 0; /* Setze den linken Rand auf 0 */
+  }
+
+  .custom-alert,
+  .custom-alert-gut {
+    width: 80%; /* Ändere die Breite der benutzerdefinierten Warnungen */
+    left: 50%; /* Zentriere die benutzerdefinierten Warnungen horizontal */
+    transform: translateX(-50%); /* Zentriere die benutzerdefinierten Warnungen horizontal */
+  }
+
+  .custom-alert :nth-child(1),
+  .custom-alert-gut :nth-child(1) {
+    margin-right: 0; /* Setze den rechten Rand auf 0 */
+  }
+
+  .popup-button {
+    width: 150px; /* Ändere die Breite des Popup-Buttons */
+    font-size: 16px; /* Ändere die Schriftgröße des Popup-Buttons */
+  }
+
+  .form-control-feedback {
+    margin-left: 0; /* Setze den linken Rand auf 0 */
+    font-size: 12px; /* Ändere die Schriftgröße des Feedbacks */
+  }
+
+  .checkbox-label1 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label2 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+
+  .checkbox-label3 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label4 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .form-container {
+    margin-top: 150px;
+    width: calc(100% - 50px); /* Breite des Containers weniger breit */
+    margin-top: 12rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+
 @media only screen and (max-width: 600px) {
   .form-container {
     margin-top: 150px;
@@ -360,5 +436,22 @@
   .form-control-feedback {
     margin-left: -3.25rem;
     font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .form-header {
+    font-size: 20px;
+  }
+
+  .form-header2 {
+    font-size: 20px;
+  }
+
+  .submit-button-beginnen {
+    width: calc(100% - 10px);
+    padding: 0.6rem;
+    font-size: 0.825rem;
+    margin-bottom: -0.9rem;
   }
 }
