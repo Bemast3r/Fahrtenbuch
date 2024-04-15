@@ -6,7 +6,6 @@ import Loading from "./LoadingIndicator";
 import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
 import Navbar from "./Navbar";
-import { Button } from "react-bootstrap";
 import { jsPDF } from "jspdf";
 import html2tocanvas from 'html2canvas'
 

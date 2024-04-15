@@ -119,13 +119,19 @@ const FahrtErstellen = () => {
 
         if (!isNaN(kilometerstand) && kennzeichen && startpunkt) {
             if (user) {
-
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
                 let fahrtResource: FahrtResource = {
                     fahrerid: user.id!,
                     kennzeichen: kennzeichen.toString(),
                     kilometerstand: kilometerstand,
                     startpunkt: startpunkt.toString(),
-                    vollname: user.vorname + " " + user.name
+                    vollname: user.vorname + " " + user.name,
+                    lenkzeit: [new Date(Date.now() + 1000)],
+                    ruhezeit: [
+                        { start: today, stop: new Date(Date.now()) },
+                    ],
+                    totalRuhezeit: (new Date(Date.now()).getTime() - today.getTime()) / 1000
                 };
                 const fahrt = await postFahrt(fahrtResource);
             }

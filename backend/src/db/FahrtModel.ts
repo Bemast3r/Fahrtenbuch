@@ -3,35 +3,23 @@ import { User } from "./UserModel";
 
 export interface IFahrt {
     fahrer: Types.ObjectId; // User
+    vollname?: string;
     kennzeichen: string; // Referenz auf das Kennzeichenmodell
-    kilometerstand: number; //kilometerstand
-    kilometerende: number; //Kilometerstand am Ende 
-    lenkzeit: {
-        start: Date;
-        stop: Date;
-    }[]; // Arbeit mit Fahren
-    pause: {
-        start: Date;
-        stop: Date;
-    }[] // Normal Pause
-    arbeitszeit: {
-        start: Date;
-        stop: Date;
-    }[]; // Arbeiten ohne Fahren
-    createdAt: Date; // Wann es gestartet worden ist
-    startpunkt: string
-    beendet: Boolean
-    ruhezeit: {
-        start: Date;
-        stop: Date;
-    }[];
-    totalLenkzeit: number;
-    totalArbeitszeit: number;
-    totalPause: number;
-    totalRuhezeit: number;
-    abwesend: String;
-    endpunkt: String;
-    vollname: String;
+    kilometerstand: number; // Kilometerstand
+    kilometerende?: number; // Kilometerstand am Ende 
+    lenkzeit?: Date[]; // Arbeit mit Fahren
+    pause?: Date[]; // Pausen
+    arbeitszeit?: Date[]; // Arbeitszeiten ohne Fahren
+    createdAt: Date; // Wann es gestartet wurde
+    startpunkt: string;
+    endpunkt?: string;
+    beendet: boolean;
+    ruhezeit?: { start: Date; stop?: Date }[];
+    abwesend?: string;
+    totalLenkzeit?: number;
+    totalArbeitszeit?: number;
+    totalPause?: number;
+    totalRuhezeit?: number;
 }
 
 type FahrtModel = Model<IFahrt>;
@@ -42,32 +30,22 @@ const fahrtSchema = new Schema<IFahrt>({
     kennzeichen: { type: String, required: true },
     kilometerstand: { type: Number },
     kilometerende: { type: Number },
-    lenkzeit: [{
-        start: { type: Date },
-        stop: { type: Date }
-    }],
-    arbeitszeit: [{
-        start: { type: Date },
-        stop: { type: Date }
-    }],
-    pause: [{
-        start: { type: Date },
-        stop: { type: Date }
-    }],
+    lenkzeit: [{ type: Date }], // Array von Datumswerten für Lenkzeit
+    arbeitszeit: [{ type: Date }], // Array von Datumswerten für Arbeitszeit ohne Fahren
+    pause: [{ type: Date }], // Array von Datumswerten für Pausen
     createdAt: { type: Date },
     startpunkt: { type: String, required: true },
     endpunkt: { type: String },
     beendet: { type: Boolean, default: false },
     ruhezeit: [{
         start: { type: Date },
-        stop: { type: Date }
+        stop: { type: Date, required: false }
     }],
     abwesend: { type: String },
-    totalLenkzeit: { type: Number },
-    totalArbeitszeit: { type: Number },
-    totalPause: { type: Number },
+    totalLenkzeit: { type: Number , default: 0},
+    totalArbeitszeit: { type: Number, default: 0 },
+    totalPause: { type: Number, default:0 },
     totalRuhezeit: { type: Number }
 }, { timestamps: true });
 
 export const Fahrt = model<IFahrt, FahrtModel>("Fahrt", fahrtSchema);
-

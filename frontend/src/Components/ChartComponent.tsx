@@ -36,24 +36,20 @@ ChartJS.register(
 const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     // Extrahiere die Zeiten aus der FahrtResource und konvertiere sie in Date-Objekte mit Kennungen
     const zeitenData: { x: Date; y: string; }[] = [];
-    const [loader, setLoader] = useState(false)
 
     if (fahrt.lenkzeit) {
         fahrt.lenkzeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Lenkzeit' }); // Lenkzeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Lenkzeit' }); // Lenkzeit
+            zeitenData.push({ x: new Date(zeit), y: 'Lenkzeit' }); // Lenkzeit
         });
     }
     if (fahrt.arbeitszeit) {
         fahrt.arbeitszeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Arbeitszeit' }); // Arbeitszeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Arbeitszeit' }); // Arbeitszeit
+            zeitenData.push({ x: new Date(zeit), y: 'Arbeitszeit' }); // Arbeitszeit
         });
     }
     if (fahrt.pause) {
         fahrt.pause.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Pausezeit' }); // Pausezeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Pausezeit' }); // Pausezeit
+            zeitenData.push({ x: new Date(zeit), y: 'Pausezeit' }); // Pausezeit
         });
     }
     if (fahrt.ruhezeit) {

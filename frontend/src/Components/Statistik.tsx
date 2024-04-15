@@ -1,7 +1,6 @@
-import "./statistiken.css"
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from './Logincontext';
+import { getLoginInfo } from './Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
 import { FahrtResource, UserResource } from '../util/Resources';
 import Navbar from './Navbar';
@@ -9,6 +8,7 @@ import { Accordion } from "./Accordion";
 import ExpandFahrt from "./ExpandFahrt";
 import Loading from "./LoadingIndicator";
 import { Button } from "react-bootstrap";
+import ProtectedComponent from './PreotectComponent';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -16,18 +16,8 @@ const Statistik = () => {
     const [totalUsers, setTotalUsers] = useState<number>(0);
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
-    const [counter, setCounter] = useState<number>(0)
-    const jwt = getJWT();
+    const [counter, setCounter] = useState<number>(0);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt);
-        } else {
-            navigate("/");
-            return;
-        }
-    }, [jwt]);
 
     useEffect(() => {
         loadInitialData();
@@ -47,11 +37,13 @@ const Statistik = () => {
 
     async function loadInitialData() {
         try {
-            if (!user) {
-                const id = getLoginInfo();
-                const userserver = await getUser(id!.userID);
-                setUser(userserver);
+            const id = getLoginInfo();
+            if (!id) {
+                navigate("/");
+                return;
             }
+            const userserver = await getUser(id.userID);
+            setUser(userserver);
             await loadTrips();
             await loadUser();
             await loadAllFahrts();
@@ -122,86 +114,82 @@ const Statistik = () => {
             <br></br>
             <br></br>
             <br></br>
-            <div className="row">
-                <div className="col-md">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Gesamtanzahl der Fahrten</h5>
-                            <p className="card-text">{tripData.completedTrips + tripData.ongoingTrips}</p>
+            <ProtectedComponent requiredRole="a">
+                <div className="row">
+                    <div className="col-md">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">Gesamtanzahl der Fahrten</h5>
+                                <p className="card-text">{tripData.completedTrips + tripData.ongoingTrips}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">Beendete Fahrten</h5>
+                                <p className="card-text">{tripData.completedTrips}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">Laufende Fahrten</h5>
+                                <p className="card-text">{tripData.ongoingTrips}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">Gesamtzahl der Benutzer</h5>
+                                <p className="card-text">{totalUsers}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">Admin-Benutzer</h5>
+                                <p className="card-text">{adminUsers}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <br></br>
 
-                <div className="col-md">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Beendete Fahrten</h5>
-                            <p className="card-text">{tripData.completedTrips}</p>
-                        </div>
-                    </div>
+                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Alle Fahrten</h2>
+                <div className="fahrten">
+
+                    {fahrts && fahrts.length > 0 && user ? (
+                        <>
+                            {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
+                                <section key={index} style={{ overflowY: "auto" }}>
+                                    <div>
+                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px" }}>{date}</h2>
+                                        {fahrten.map((fahrt: FahrtResource) => (
+                                            <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
+                                                <div className={`infos-${fahrt._id}`}>
+                                                    <ExpandFahrt fahrt={fahrt} user={user!} />
+                                                    <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
+                                                </div>
+                                            </Accordion>
+                                        ))}
+                                    </div>
+                                </section>
+                            ))}
+                        </>
+                    ) : (
+                        !fahrts ? <Loading /> : fahrts.length === 0 ? <h2> Es gibt keine Fahrten</h2> : <h2> Es gibt keine Fahrten</h2>
+                    )}
                 </div>
-
-                <div className="col-md">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Laufende Fahrten</h5>
-                            <p className="card-text">{tripData.ongoingTrips}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Gesamtzahl der Benutzer</h5>
-                            <p className="card-text">{totalUsers}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Admin-Benutzer</h5>
-                            <p className="card-text">{adminUsers}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br></br>
-
-            <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Alle Fahrten</h2>
-            <div className="fahrten">
-                {fahrts && fahrts.length > 0 && user ? (
-                    <>
-                        {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
-                            <section key={index} style={{ overflowY: "auto" }}>
-                                <div>
-                                    <h2 style={{ paddingLeft: "10px", marginTop: "20px" }}>{date}</h2>
-                                    {fahrten.map((fahrt: FahrtResource) => (
-                                        <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
-                                            <div className={`infos-${fahrt._id}`}>
-                                                <ExpandFahrt fahrt={fahrt} user={user!} />
-                                                <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
-
-                                            </div>
-                                        </Accordion>
-                                    ))}
-                                </div>
-                            </section>
-                        ))}
-                    </>
-                ) : (
-                    !fahrts ? <Loading /> : fahrts.length === 0 ? <h2> Es gibt keine Fahrten</h2> : <h2> Es gibt keine Fahrten</h2>
-                )}
-
-
-            </div>
+            </ProtectedComponent>
         </>
     );
 }
 
 export default Statistik;
-
-
-
-

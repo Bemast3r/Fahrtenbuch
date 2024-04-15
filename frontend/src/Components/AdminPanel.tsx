@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
-import { useState } from 'react';
 import { createUserWithAdmin } from '../Api/api';
 import { useNavigate } from 'react-router-dom';
 import { UserResource } from '../util/Resources';
@@ -23,33 +23,34 @@ const AdminFormular = () => {
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         let validatedValue = value;
-    
+
         // Validierung für Vor- und Nachnamen
         if (name === 'vorname' || name === 'name') {
             validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß]/g, ''); // Entferne alle Zeichen außer Buchstaben
         } else if (name === 'username') {
             validatedValue = value.replace(/[^a-zA-Z0-9_.]/g, ''); // Erlaubt nur Buchstaben, Zahlen, Unterstriche (_) und Punkte (.)
         }
-    
+
         setFormData(prevState => ({
             ...prevState,
             [name]: validatedValue
         }));
-    
+
         // Passwort validieren, während der Benutzer eingibt
         if (name === 'password') {
             validatePassword(value);
         }
     };
-    
-    const validatePassword = (password: string) => {
-        // Mindestens 8 Zeichen, Groß- und Kleinbuchstaben, Ziffern und Sonderzeichen
-        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
 
-        if (!passwordRegex.test(password)) {
-            setPasswordError("Das Passwort muss mindestens 8 Zeichen lang sein und aus Groß- und Kleinbuchstaben, Ziffern sowie Sonderzeichen bestehen.");
+    const validatePassword = (password: string) => {
+        // Mindestens 8 Zeichen
+        const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+
+        if (!regex.test(password)) {
+            setPasswordError("Das Passwort muss mindestens 8 Zeichen lang, Groß-/Kleinschreibung,  sein.");
+
         } else {
-            setPasswordError(null);
+            setPasswordError(null)
         }
     };
 
@@ -66,8 +67,15 @@ const AdminFormular = () => {
                 await createUserWithAdmin(formData);
                 setShowSuccess(true);
                 setTimeout(() => { navigate("/home") }, 1500);
+            } else {
+                // Passwortfeld leeren, wenn das Passwort falsch ist
+                setFormData(prevState => ({
+                    ...prevState,
+                    password: ''
+                }));
             }
         } catch (error) {
+            console.log(passwordError)
             console.error('Fehler beim Erstellen des Benutzers:', error);
         }
     };
@@ -118,10 +126,12 @@ const AdminFormular = () => {
 
                         <Form.Group as={Col} controlId="formGridPassword" className="form-group">
                             <Form.Label className="form-label">Passwort*</Form.Label>
-                            <Form.Control type="password" placeholder="Passwort" name="password" className={`form-control ${validated && !formData.password ? 'is-invalid' : ''}`} value={formData.password} onChange={handleChange} required />
+                            <Form.Control type="password" placeholder="Passwort" name="password" className={`form-control ${validated && formData.password && formData.password.length < 8 && !passwordError ? 'is-invalid' : ''}`} value={formData.password} onChange={handleChange} required />
+                            {passwordError && (
                             <Form.Control.Feedback type="invalid" className="form-control-feedback">
-                                Bitte geben Sie das Passwort an.
+                                Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.
                             </Form.Control.Feedback>
+                            )}
                         </Form.Group>
                     </Row>
 

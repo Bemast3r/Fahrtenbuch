@@ -8,7 +8,7 @@ import { jsPDF } from "jspdf";
 
 
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {    
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -16,6 +16,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
         return `${hours}:${minutes}:${seconds}`;
     }
+
+
 
     function formatDateString(date: Date): string {
         const year = date.getFullYear();
@@ -25,10 +27,13 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
     }
 
     function formatTime(sekunden: number): string {
+        // Sekunden ohne Millisekunden berechnen
+        const gerundeteSekunden = Math.floor(sekunden);
+
         // Stunden, Minuten und Sekunden berechnen
-        const stunden: number = Math.floor(sekunden / 3600);
-        const minuten: number = Math.floor((sekunden % 3600) / 60);
-        const sekundenRest: number = sekunden % 60;
+        const stunden: number = Math.floor(gerundeteSekunden / 3600);
+        const minuten: number = Math.floor((gerundeteSekunden % 3600) / 60);
+        const sekundenRest: number = gerundeteSekunden % 60;
 
         // Zeit im Format HH:MM:SS zurückgeben
         const formatierteStunden: string = stunden.toString().padStart(2, '0');
@@ -37,6 +42,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
 
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
+
 
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
@@ -98,8 +104,8 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
     };
 
 
-    
-    
+
+
 
     return (
         <div id="accordion">
@@ -137,14 +143,15 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
 
                             <p><span style={{ fontWeight: "bold" }}>Beendet:</span> {fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}</p>
                             <p><span style={{ fontWeight: "bold" }}>Abwesend:</span> {fahrt.abwesend || 'Nein.'}</p>
-
+                            <br></br>
+                            <p>(Datenformat: HH:MM:SS)</p>
                             {fahrt.lenkzeit && (
                                 <details>
-                                    <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "----"}</summary>
+                                    <summary style={{ fontWeight: "bold" }}>Lenkzeiten: {fahrt.totalLenkzeit ? formatTime(fahrt.totalLenkzeit) : "00:00:00"}</summary>
                                     <ul>
                                         {fahrt.lenkzeit.length > 0 ? fahrt.lenkzeit.map((zeit, index) => (
                                             <li key={index}>
-                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                                Zeiten: {zeit ? formatDateTime(new Date(zeit)) : 'Keine Angabe'}
                                             </li>
                                         )) : "Keine Lenkzeit"}
                                     </ul>
@@ -152,11 +159,11 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                             )}
                             {fahrt.pause && (
                                 <details>
-                                    <summary style={{ fontWeight: "bold" }}>Pausenzeiten: {fahrt.totalPause ? formatTime(fahrt.totalPause) : "----"}</summary>
+                                    <summary style={{ fontWeight: "bold" }}>Pausenzeiten: {fahrt.totalPause ? formatTime(fahrt.totalPause) : "00:00:00"}</summary>
                                     <ul>
                                         {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
                                             <li key={index}>
-                                                Start: {pause?.start ? formatDateTime(new Date(pause.start)) : 'Keine Angabe'}, Stop: {pause?.stop ? formatDateTime(new Date(pause.stop)) : 'Keine Angabe'}
+                                                Zeiten: {pause ? formatDateTime(new Date(pause)) : 'Keine Angabe'}
                                             </li>
                                         )) : "Keine Pausenzeit"}
                                     </ul>
@@ -164,11 +171,11 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                             )}
                             {fahrt.arbeitszeit && (
                                 <details>
-                                    <summary style={{ fontWeight: "bold" }}>Arbeitszeiten: {fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "----"}</summary>
+                                    <summary style={{ fontWeight: "bold" }}>Arbeitszeiten: {fahrt.totalArbeitszeit ? formatTime(fahrt.totalArbeitszeit) : "00:00:00"}</summary>
                                     <ul>
                                         {fahrt.arbeitszeit.length > 0 ? fahrt.arbeitszeit.map((zeit, index) => (
                                             <li key={index}>
-                                                Start: {zeit?.start ? formatDateTime(new Date(zeit.start)) : 'Keine Angabe'}, Stop: {zeit?.stop ? formatDateTime(new Date(zeit.stop)) : 'Keine Angabe'}
+                                                Zeiten: {zeit ? formatDateTime(new Date(zeit)) : 'Keine Angabe'}
                                             </li>
                                         )) : "Keine Arbeitszeit"}
                                     </ul>
@@ -176,7 +183,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                             )}
                             {fahrt.ruhezeit && (
                                 <details>
-                                    <summary style={{ fontWeight: "bold" }}>Ruhezeiten: {fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "----"}</summary>
+                                    <summary style={{ fontWeight: "bold" }}>Ruhezeiten: {fahrt.totalRuhezeit ? formatTime(fahrt.totalRuhezeit) : "00:00:00"}</summary>
                                     <ul>
                                         {fahrt.ruhezeit.length > 0 ? fahrt.ruhezeit.slice(0, 2).map((zeit, index) => (
                                             <li key={index}>
