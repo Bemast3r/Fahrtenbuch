@@ -7,10 +7,12 @@ import Navbar from './Navbar';
 import { getJWT, setJWT } from './Logincontext';
 
 const AdminFormular = () => {
-    
+
     const [showSuccess, setShowSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
     const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [error, setError] = useState("")
     const [formData, setFormData] = useState<UserResource>({
         vorname: '',
         name: '',
@@ -54,7 +56,7 @@ const AdminFormular = () => {
             validatePassword(value);
         }
     };
-
+    
     const validatePassword = (password: string) => {
         // Mindestens 8 Zeichen
         const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
@@ -87,9 +89,13 @@ const AdminFormular = () => {
                     password: ''
                 }));
             }
-        } catch (error) {
-            console.log(passwordError)
-            console.error('Fehler beim Erstellen des Benutzers:', error);
+        } catch (error: any) {
+            let errorMessage = "Es gab einen Fehler beim Erstellen des Benutzers.";
+            if (error instanceof Error && error.message.includes("MongoServerError: E11000 duplicate key error")) {
+                errorMessage = "Der Benutzername ist bereits vergeben.";
+            }
+            setError(errorMessage)
+            setShowAlert(true)
         }
     };
 
@@ -99,6 +105,9 @@ const AdminFormular = () => {
             <div className="form-container">
                 <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible className="custom-alert-gut">
                     Benutzer erfolgreich registriert!
+                </Alert>
+                <Alert variant="alert alert-danger" role="alert" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert-gut">
+                    {error}
                 </Alert>
                 <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>
                     <h2 className="form-header2">Benutzer registrieren</h2>
