@@ -17,15 +17,7 @@ const LandingPage = () => {
             const x = getLoginInfo();
             setUserRole(x!.role)
         }
-    }, [jwt, navigate]);
-
-    const handleAbmelden = () => {
-        const confirmAbmeldung = window.confirm("Möchten Sie sich wirklich abmelden?");
-        if (confirmAbmeldung) {
-            removeJWT();
-            navigate("/");
-        }
-    };
+    }, [jwt]);
 
     return (
         <div className="wasgeht">

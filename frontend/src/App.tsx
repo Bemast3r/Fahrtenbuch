@@ -1,52 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { LoginContext, getLoginInfo } from './Components/Logincontext';
-import { UserContext } from './Components/UserContext';
-import { UserResource } from './util/Resources';
-import { Outlet, useLocation } from 'react-router-dom';
-import { getUser } from './Api/api';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Login from './Components/Login';
+import Home from './Components/Home';
+import Loading from './Components/LoadingIndicator';
+import PasswortVergessen from './Components/PasswortVergessen';
+import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
+import AdminFormular from './Components/AdminPanel';
+import FahrtErstellen from './Components/Fahrterstellen';
+import Statistik from './Components/Statistik';
+import UserFahrten from './Components/UserFahrten';
+import Fahrtabschliessen from './Components/Fahrtabschliessen';
+import TFahrtVerwalten from './Components/TFahrtVerwalten';
+import { getJWT } from './Components/Logincontext';
 
-function App() {
+const App = () => {
+  const jwt = getJWT();
 
-  const [loginInfo, setLoginInfo] = useState(getLoginInfo());
-  const [userInfo, setUserInfo] = useState<UserResource | null>(null);
-
-
-  useEffect(() => {
-    async function getUserData() {
-      if (!loginInfo)
-        return;
-      try {
-        setUserInfo(await getUser(loginInfo.userID));
-      } catch (error) { }
-    }
-    getUserData();
-  }, [loginInfo, userInfo]);
-
-  const route: string = useLocation().pathname.substring(1);
-
-  const getRouteName = (): string => {
-    let routeName: string = route;
-
-    if (routeName.endsWith("/")) {
-      routeName.slice(0, routeName.length - 1);
-    }
-
-    return routeName.split("/")[0];
+  // Überprüfen, ob der JWT-Token nicht vorhanden ist und die aktuelle Route nicht die Login-Seite ist
+  if (jwt === null && window.location.pathname !== "/") {
+    window.location.href = "/";
   }
 
-  // return (
-  //   <div className="App">
-  //     <LoginContext.Provider value={[loginInfo, setLoginInfo]}>
-  //       <UserContext.Provider value={[userInfo, setUserInfo]}>
-  //         <main id={(route.length > 0 ? getRouteName() : "home") + "-page-container"}>
-  //           <Outlet />
-  //         </main>
-  //       </UserContext.Provider>
-  //     </LoginContext.Provider>
-  //   </div >
-  // );
-}
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="home" element={<Home />} />
+        <Route path="test" element={<Loading />} />
+        <Route path="create" element={<FahrtErstellen />} />
+        <Route path="verwalten" element={<TFahrtVerwalten />} />
+        <Route path="passwort-vergessen" element={<PasswortVergessen />} />
+        <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
+        <Route path="user-erstellen" element={<AdminFormular />} />
+        <Route path="statistiken" element={<Statistik />} />
+        <Route path="fahrten" element={<UserFahrten />} />
+        <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
