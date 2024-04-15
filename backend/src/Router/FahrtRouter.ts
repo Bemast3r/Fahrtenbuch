@@ -96,14 +96,23 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
     body("kennzeichen").isString(),
-    body("kilometerstand").isNumeric(),
+    body("vollname").isString(),
+    body("endpunkt").optional().isString(),
+    body("kilometerstand").optional().isNumeric(),
+    body("totalArbeitszeit").optional().isNumeric(),
+    body("totalPause").optional().isNumeric(),
+    body("totalLenkzeit").optional().isNumeric(),
+    body("totalRuhezeit").optional().isNumeric(),
     body("startpunkt").isString(),
     body("ruhezeit").optional().isArray(),
+    body("lenkzeit").optional().isArray(),
     body("abwesend").optional().isString(),
     body("beendet").optional().isBoolean(),
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(errors)
+            console.log(req.body)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
@@ -122,14 +131,20 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
     param("id").isMongoId(),
     body("id").optional().isMongoId(),
     body("fahrerid").isString(),
+    body("vollname").isString(),
+    body("endpunkt").optional().isString(),
     body("kennzeichen").isString(),
-    body("kilometerstand").isNumeric(),
+    body("kilometerstand").optional().isNumeric(),
     body("kilometerende").optional().isNumeric(),
     body("lenkzeit").optional().isArray(),
     body("arbeitszeit").optional().isArray(),
     body("pause").optional().isArray(),
     body("beendet").optional().isBoolean(),
     body("ruhezeit").optional().isArray(),
+    body("totalArbeitszeit").optional().isNumeric(),
+    body("totalPause").optional().isNumeric(),
+    body("totalLenkzeit").optional().isNumeric(),
+    body("totalRuhezeit").optional().isNumeric(),
     async (req, res, next) => {
 
         const errors = validationResult(req);
@@ -150,7 +165,7 @@ fahrrouter.put("/user/fahrt/bearbeiten/:id",
 /**
  * Löscht fahrt
  */
-fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
+fahrrouter.delete("/admin/loesch/fahrt/:id", requiresAuthentication,
     param("id").isMongoId(),
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -161,8 +176,8 @@ fahrrouter.delete("/admin/lösch/fahrt/:id", requiresAuthentication,
             if (req.role !== "a") {
                 return res.sendStatus(403)
             }
-            const user = await deleteFahrt(req.params.id);
-            return res.send(user); // 200 by default
+            const res2 = await deleteFahrt(req.params.id);
+            return res.send(res2); // 200 by default
         } catch (err) {
             res.status(400);
             next(err);

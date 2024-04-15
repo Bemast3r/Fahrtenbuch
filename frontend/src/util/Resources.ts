@@ -14,33 +14,27 @@ export type UserResource = {
 }
 
 export type FahrtResource = {
-    _id?:string
-    id?:string
-    fahrerid: string; // ID des Fahrers
-    kennzeichen: string; // Kennzeichen des Fahrzeugs
-    kilometerstand: number;
+    _id?: string;
+    id?: string;
+    fahrerid: string;
+    kennzeichen: string;
+    kilometerstand?: number;
     kilometerende?: number;
-    lenkzeit?: {
-        start: Date;
-        stop: Date;
-    }[]; // Arbeit mit Fahren
-    pause?: {
-        start: Date;
-        stop: Date;
-    }[] // Normal Pause
-    arbeitszeit?: {
-        start: Date;
-        stop: Date;
-    }[]; // Arbeiten ohne Fahren
-    createdAt?: Date; // Datum der Fahrt
-    startpunkt: string
-    beendet?: boolean
-    ruhezeit?: {
-        start: Date;
-        stop: Date;
-    }[];
-    abwesend?: string
-}
+    lenkzeit?: Date[]; // Arbeit mit Fahren
+    pause?: Date[]; // Normale Pause
+    arbeitszeit?: Date[]; // Arbeiten ohne Fahren
+    createdAt?: Date;
+    startpunkt: string;
+    beendet?: boolean;
+    ruhezeit?: { start: Date; stop: Date }[];
+    endpunkt?: string;
+    abwesend?: string;
+    totalArbeitszeit?: number;
+    totalLenkzeit?: number;
+    totalPause?: number;
+    totalRuhezeit?: number;
+    vollname?: string;
+};
 
 export type LoginResource = {
     /** The JWT */

@@ -5,19 +5,136 @@
     margin-right: 15px;
 }
 
-.col-md {
-    flex: 0 0 auto;
-    width: 20%; /* Ändern Sie die Breite entsprechend Ihren Anforderungen */
-    padding-left: 15px;
-    padding-right: 15px;
-    box-sizing: border-box;
+.downloadButton {
+    margin-bottom: 10px;
+    background-color: #FFC107;
+    color: rgb(0, 0, 0);
+    border-color: #FFC107;
+    font-weight: 150;
+    size: 10px;
+    padding: 10px 10px;
+    margin: 20px;
+    font-size: medium;
+    align-self: flex-end;
+    padding-bottom: 10px;
+}
+
+#deleteButton {
+    margin-bottom: 10px;
+    background-color: #ff0707;
+    color: rgb(255, 255, 255);
+    border-color: #ff0707;
+    font-weight: 150;
+    size: 10px;
+    padding: 10px 10px;
+    margin: 20px;
+    font-size: medium;
+    align-self: flex-end;
+    padding-bottom: 10px;
+}
+
+.downloadButton:hover {
+    margin-bottom: 10px;
+    background-color: #FFC107;
+    color: rgb(0, 0, 0);
+    border-color: #FFC107;
+    font-weight: 150;
+    size: 10px;
+    padding: 10px 10px;
+    margin: 20px;
+    font-size: medium;
+    align-self: flex-end;
+    padding-bottom: 10px;
+}
+
+.downloadButton:active {
+    background-color: #FFC107; /* Setze die Hintergrundfarbe auf Gelb */
+    color: rgb(0, 0, 0); /* Optional: Setze die Schriftfarbe auf Schwarz */
+    border-color: #FFC107; /* Optional: Setze die Rahmenfarbe auf Gelb */
+}
+
+
+.card-text {
+    font-size: large;
 }
 
 .card {
     width: 100%;
-    margin-bottom: 15px; /* Platz zwischen den Karten */
+    margin-bottom: 15px;
+    /* Platz zwischen den Karten */
+    height: fit-content;
 }
 
 .card-body {
-    text-align: center; /* Zentriert den Inhalt horizontal */
+    text-align: left;
+    overflow-y: auto;
+    /* Zentriert den Inhalt horizontal */
+}
+
+.mb-0 {
+    padding-left: 10px;
+}
+
+.items {
+    padding-left: 10px;
+    /* Zentriert den Inhalt horizontal */
+}
+
+.accordion-button {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.col-md {
+    flex: 0 0 auto;
+    width: 20%;
+    /* Ändern Sie die Breite entsprechend Ihren Anforderungen */
+
+}
+
+@media only screen and (min-width: 991px) {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -15px;
+        /* Ändern Sie den Wert entsprechend Ihrem Layout */
+        margin-right: -15px;
+        /* Ändern Sie den Wert entsprechend Ihrem Layout */
+        padding: 1px;
+    }
+
+    .col-md {
+        width: 20%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .row {
+        display: grid;
+    }
+
+    .col-md {
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .row {
+        display: grid;
+    }
+
+    .col-md {
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* Stil für Dropdown-Menüs */
+details.summary.ul {
+    background-color: black;
+    margin-bottom: 10px;
+    /* Abstand zwischen den Dropdown-Menüs */
 }

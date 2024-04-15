@@ -11,8 +11,54 @@
     border-radius: 12px;
     box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
     width: 80%;
-    margin-top: 100px;
-  }
+    margin-top: 90px;
+    box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    /* Füge einen Übergangseffekt hinzu */
+    transform: translateY(0);
+}
+
+.container2:hover {
+    box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+}
+
+.card {
+    border-radius: 28px;
+    /* Ändere die Radius-Größe nach Bedarf */
+}
+
+.container2::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+/* Animation für das Ein- und Ausblenden */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    /* Startzustand */
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Endzustand */
+}
+
+.wasgeht {
+    background-image: url(loginHintergrund.jpg);
+    background-size: cover;
+    background-position: center;
+}
 
 .section-padding {
     padding: 100px 0;
@@ -54,7 +100,7 @@
 }
 
 .navbar .getstarted {
-    background: #106eea;
+    background: #ffffff;
     margin-left: 30px;
     border-radius: 4px;
     font-weight: 400;
@@ -65,7 +111,7 @@
 }
 
 .navbar-nav a {
-    font-size: 16px;
+    font-size: 18px;
     text-transform: uppercase;
     font-weight: 500;
 }
@@ -78,29 +124,13 @@
     letter-spacing: 2px;
 }
 
-.navbar-light .navbar-brand:focus,
-.navbar-light .navbar-brand:hover {
-    color: #000;
-}
-
 .navbar-light .navbar-nav .nav-link {
     color: #000;
 }
 
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link:hover {
-    color: #000;
-}
-
-.w-100 {
-    height: 100vh;
-}
-
-.navbar-toggler {
-    padding: 1px 5px;
-    font-size: 18px;
-    line-height: 0.3;
-    background: #fff;
+    color: #f4c32e;
 }
 
 .portfolio .card,
@@ -109,48 +139,109 @@
 }
 
 .services .card-body i {
-    font-size: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 58px;
     margin-bottom: 10px;
+}
+
+.section-header {
+    font-size: 18px;
 }
 
 .team .card-body i {
     font-size: 20px;
 }
 
+.subtitle {
+    border-bottom: 1.5px solid #ccc; /* Beispiel für eine Linie mit 1px Dicke */
+    width: 50%; /* Beispiel für eine Linie, die 50% der Containerbreite einnimmt */
+    margin: auto; /* Zentrieren der Linie */
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+
 .services .card-body .lead {
     font-size: 18px;
 }
 
 .btn {
-    padding: 12px 24px; /* Anpassen der Polsterung für die Höhe und Breite */
-    font-size: 24px; /* Anpassen der Schriftgröße */
+    padding: 12px 28px;
+    font-size: 22px;
     align-items: center;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    color: #000;
+    /* Textfarbe ändern beim Überfahren */
+    background-color: #dab034;
+    /* Hintergrundfarbe ändern beim Überfahren */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+    /* Schatten erhöhen beim Überfahren */
+}
+
+.section-header h2 {
+    font-size: 34px; /* Schriftgröße anpassen */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15); /* Beispiel für Textschatten */
+    transition: color 0.3s ease; /* Beispiel für eine Farbübergang-Animation */
+}
+
+.btn-custom {
+    width: 250px;
+    padding: 0.8rem 1rem;
+    font-size: 1.45rem;
+    color: #000;
+    background-color: #f4c32e;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.75px #000;
+}
+
+.btn-custom:hover {
+    color: #000;
+    background-color: rgb(196, 155, 34);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-body p {
-    margin-bottom: 40px; /* Erhöhen Sie den Abstand zwischen dem Text und dem Button */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Zentrieren der Inhalte horizontal */
+    text-align: center;
+    margin-bottom: 40px;
+    /* Erhöhen Sie den Abstand zwischen dem Text und dem Button */
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    justify-content: auto;
+    height: auto;
 }
 
 .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    height: auto;
+    align-items: center;
+    text-align: center;
 }
 
-
-
 @media only screen and (min-width: 991px) {
-    .col-12col-md-12col-lg-4{
-        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
-        width:33%;
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+        width: 33%;
         display: inline-grid;
     }
 }
@@ -172,8 +263,10 @@
     .img-area img {
         width: 100%;
     }
-    .col-12col-md-12col-lg-4{
-        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
+
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }
 
@@ -207,14 +300,18 @@
 
     .card {
         margin-bottom: 20px;
-        
+
     }
-    .col-12col-md-12col-lg-4{
-        margin-bottom: 20px; /* Vergrößern Sie den Abstand zwischen den Cards */
+
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
     }
 }
 
 .rotating {
-    transform: rotate(180deg); /* Anpassen der Rotation je nach Bedarf */
-    transition: transform 0.3s ease; /* Hinzufügen einer Transition für eine sanfte Drehung */
+    transform: rotate(180deg);
+    /* Anpassen der Rotation je nach Bedarf */
+    transition: transform 0.3s ease;
+    /* Hinzufügen einer Transition für eine sanfte Drehung */
 }

@@ -103,9 +103,8 @@ export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
                 "Authorization": `Bearer ${jwt2}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ fahrerid: fahrt.fahrerid, kennzeichen: fahrt.kennzeichen, kilometerstand: fahrt.kilometerstand, startpunkt: fahrt.startpunkt, abwesend: fahrt.abwesend, beendet: fahrt.beendet, ruhezeit: fahrt.ruhezeit })
-        });
-        console.log(response)
+            body: JSON.stringify({ ...fahrt })
+        })
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")
         }
@@ -318,4 +317,55 @@ export async function getAlleUser(): Promise<UserResource[]> {
         throw new Error(`Es gab einen Fehler: ${error}`);
     }
 }
+
+export async function getAllFahrts(): Promise<FahrtResource[]> {
+    try {
+        const jwt2 = getJWT();
+        if (!jwt2)
+            throw new Error("no jwt found");
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/alle/fahrten/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: FahrtResource[] = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+export async function deleteFahrt(fahrt: FahrtResource): Promise<void> {
+    try {
+        if (!fahrt)
+            throw new Error("Fahrt nicht definiert");
+
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("Kein JWT gefunden");
+
+        const response = await fetch(`http://localhost:5000/api/fahrt/admin/loesch/fahrt/${fahrt._id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${jwt}`
+            }
+        });
+
+        if (!response.ok)
+            throw new Error("Netzwerkantwort war nicht OK");
+
+        return;
+
+    } catch (error) {
+        throw new Error("Fehler beim Löschen der Fahrt: " + error);
+    }
+}
+
 
