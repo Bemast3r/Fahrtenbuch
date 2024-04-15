@@ -156,9 +156,12 @@
 }
 
 .subtitle {
-    border-bottom: 1.5px solid #ccc; /* Beispiel für eine Linie mit 1px Dicke */
-    width: 50%; /* Beispiel für eine Linie, die 50% der Containerbreite einnimmt */
-    margin: auto; /* Zentrieren der Linie */
+    border-bottom: 1.5px solid #ccc;
+    /* Beispiel für eine Linie mit 1px Dicke */
+    width: 50%;
+    /* Beispiel für eine Linie, die 50% der Containerbreite einnimmt */
+    margin: auto;
+    /* Zentrieren der Linie */
     text-align: center;
     padding-bottom: 15px;
 }
@@ -187,9 +190,12 @@
 }
 
 .section-header h2 {
-    font-size: 34px; /* Schriftgröße anpassen */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15); /* Beispiel für Textschatten */
-    transition: color 0.3s ease; /* Beispiel für eine Farbübergang-Animation */
+    font-size: 34px;
+    /* Schriftgröße anpassen */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    /* Beispiel für Textschatten */
+    transition: color 0.3s ease;
+    /* Beispiel für eine Farbübergang-Animation */
 }
 
 .btn-custom {
@@ -237,7 +243,7 @@
     text-align: center;
 }
 
-@media only screen and (min-width: 991px) {
+@media only screen and (min-width: 1500px){
     .col-12col-md-12col-lg-4 {
         margin-bottom: 20px;
         /* Vergrößern Sie den Abstand zwischen den Cards */
@@ -246,6 +252,24 @@
     }
 }
 
+@media only screen and (min-width: 991px) and (max-width: 1500px) {
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+        width: 33%;
+        display: inline-grid;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        width: 600px;
+    }
+
+    .card {
+        display: flex; /* Verwende Flexbox */
+        align-items: stretch; /* Strecke die Container, um die gleiche Höhe zu haben */
+    }
+}
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
     .carousel-caption {
@@ -267,6 +291,11 @@
     .col-12col-md-12col-lg-4 {
         margin-bottom: 20px;
         /* Vergrößern Sie den Abstand zwischen den Cards */
+    }
+
+    .subtitle {
+        font-size: 18px;
+        width: 490px;
     }
 }
 
@@ -306,6 +335,59 @@
     .col-12col-md-12col-lg-4 {
         margin-bottom: 20px;
         /* Vergrößern Sie den Abstand zwischen den Cards */
+    }
+    .subtitle {
+        width: 325px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .container2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%; /* Ändere die Breite der Karte nach Bedarf */
+        margin-bottom: 20px; /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
+    }
+
+    .section-header {
+        font-size: 16px;
+        text-align: justify; /* Ausrichtung des Textes am linken und rechten Rand */
+        width: 600px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .container2 {
+        margin: 20px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        margin-top: 90px;
+        box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        transform: translateY(0);
+        margin-left: 150px;
+    }
+
+    .card {
+        width: 20%; /* Ändere die Breite der Karte nach Bedarf */
+        max-width: 300px;
+        margin-bottom: 20px; /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
+    }
+
+    .subtitle {
+        font-size: 14px;
+        width: 250px;
+    }
+
+    .section-header h2 {
+        font-size: 26px;
     }
 }
 
