@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import { createUserWithAdmin } from '../Api/api';
 import { useNavigate } from 'react-router-dom';
 import { UserResource } from '../util/Resources';
 import Navbar from './Navbar';
+import { getJWT, setJWT } from './Logincontext';
 
 const AdminFormular = () => {
-    const navigate = useNavigate();
+    
     const [showSuccess, setShowSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
     const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -19,6 +20,18 @@ const AdminFormular = () => {
         admin: false,
         fahrzeuge: [],
     });
+
+    const jwt = getJWT();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt);
+        } else {
+            navigate("/");
+            return;
+        }
+    }, [jwt]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;

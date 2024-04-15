@@ -17,15 +17,7 @@ const LandingPage = () => {
             const x = getLoginInfo();
             setUserRole(x!.role)
         }
-    }, [jwt, navigate]);
-
-    const handleAbmelden = () => {
-        const confirmAbmeldung = window.confirm("Möchten Sie sich wirklich abmelden?");
-        if (confirmAbmeldung) {
-            removeJWT();
-            navigate("/");
-        }
-    };
+    }, [jwt]);
 
     return (
         <div className="wasgeht">
@@ -75,7 +67,7 @@ const LandingPage = () => {
                                 </div>
                             </div>
                         )}
-                        
+
                         {userRole !== "a" && (
                             <div className="col-12 col-md-12 col-lg-4">
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
