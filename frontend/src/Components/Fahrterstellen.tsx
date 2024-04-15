@@ -68,7 +68,7 @@ const FahrtErstellen = () => {
 
 
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
-        const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
+        const  kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
 
         // Überprüfen, ob die Checkboxen angekreuzt wurden
@@ -288,9 +288,9 @@ const FahrtErstellen = () => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <Button variant="primary" type="submit" className="submit-button-beginnen">
+                                <button type="submit" className="submit-button-beginnen">
                                     Fahrt beginnen
-                                </Button>
+                                </button>
                             </Form>
                         </div>
                     </>
