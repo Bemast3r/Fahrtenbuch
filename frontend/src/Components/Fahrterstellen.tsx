@@ -26,7 +26,7 @@ const FahrtErstellen = () => {
             navigate("/");
             return;
         }
-    }, []);
+    }, [jwt]);
 
     useEffect(() => {
         load();

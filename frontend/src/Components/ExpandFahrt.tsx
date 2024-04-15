@@ -43,14 +43,19 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
 
+    const html2tocanvasOptions: any = {
+        willReadFrequently: true
+    };
 
     // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
 
+
+
     const downloadPDF = (fahrt: FahrtResource) => {
         const capture = document.querySelector(`.diagramm-${fahrt._id}`) as HTMLElement;
         if (capture) {
-            html2tocanvas(capture).then((canvas) => {
+            html2tocanvas(capture, html2tocanvasOptions).then((canvas) => {
                 const imgdata = canvas.toDataURL('img/jpeg');
                 const doc = new jsPDF();
                 const componetwidth = doc.internal.pageSize.getWidth()
