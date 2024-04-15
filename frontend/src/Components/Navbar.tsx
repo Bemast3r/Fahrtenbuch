@@ -1,5 +1,5 @@
 import { Router, useLocation, useNavigate } from "react-router-dom";
-import { getLoginInfo, removeJWT } from "./Logincontext";
+import { getJWT, getLoginInfo, removeJWT, setJWT } from "./Logincontext";
 import { useEffect, useState } from "react";
 import { getUser, getUsers } from "../Api/api";
 import { UserResource } from "../util/Resources";
@@ -12,6 +12,18 @@ const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const jwt = getJWT();
+
+    useEffect(() => {
+        if (jwt) {
+            setJWT(jwt);
+        } else {
+            navigate("/");
+            return;
+        }
+    }, []);
+
+
     const handleAbmelden = () => {
         const confirmAbmeldung = window.confirm("Möchten Sie sich wirklich abmelden?");
         if (confirmAbmeldung) {
@@ -22,8 +34,13 @@ const Navbar = () => {
 
     async function getU() {
         const id = getLoginInfo()
-        const user = await getUser(id!.userID)
-        setUser(user)
+        if (id && id.userID) {
+            const user = await getUser(id!.userID)
+            setUser(user)
+        } else {
+            navigate("/")
+        }
+
     }
 
     useEffect(() => {

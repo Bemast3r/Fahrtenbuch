@@ -67,7 +67,7 @@ const LandingPage = () => {
                                 </div>
                             </div>
                         )}
-                        
+
                         {userRole !== "a" && (
                             <div className="col-12 col-md-12 col-lg-4">
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>

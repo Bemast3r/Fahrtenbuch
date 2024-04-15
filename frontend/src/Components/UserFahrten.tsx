@@ -7,20 +7,27 @@ import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
 import Navbar from "./Navbar";
 import { jsPDF } from "jspdf";
+import { useNavigate } from 'react-router-dom';
+
 import html2tocanvas from 'html2canvas'
 
 const UserFahrten: React.FC = () => {
     const [user, setUser] = useState<UserResource | null>(null);
     const [meineFahrten, setMeineFahrten] = useState<FahrtResource[] | []>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const navigate = useNavigate()
 
     async function getU() {
         const id = getLoginInfo();
-        const userData = await getUser(id!.userID);
-        setUser(userData);
-        const fahrten = await getFahrt(id!.userID);
-        setMeineFahrten(fahrten);
-        setLoading(false);
+        if (id && id.userID) {
+            const userData = await getUser(id!.userID);
+            setUser(userData);
+            const fahrten = await getFahrt(id!.userID);
+            setMeineFahrten(fahrten);
+            setLoading(false);
+        } else {
+            navigate("/")
+        }
     }
 
     function formatDateString(date: Date): string {
@@ -90,9 +97,9 @@ const UserFahrten: React.FC = () => {
                                                 {fahrten.map((fahrt: FahrtResource) => (
                                                     <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
                                                         <div className={`infos-${fahrt._id}`}>
-                                                            <ExpandFahrt fahrt={fahrt} user={user}/>
+                                                            <ExpandFahrt fahrt={fahrt} user={user} />
                                                         </div>
-                                                       
+
                                                     </Accordion>
                                                 ))}
                                             </div>

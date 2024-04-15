@@ -122,27 +122,31 @@ const TFahrtVerwalten: React.FC = () => {
       setLetzteFahrt(x[x.length - 1]);
     } else {
       const id = getLoginInfo();
-      const user = await getUser(id!.userID);
-      setUser(user);
-      const x: FahrtResource[] = await getFahrt(id!.userID);
-      if (x.length === 0 || x[x.length - 1].beendet) {
+      if (id && id.userID) {
+        const user = await getUser(id!.userID);
+        setUser(user);
+        const x: FahrtResource[] = await getFahrt(id!.userID);
+        if (x.length === 0 || x[x.length - 1].beendet) {
+          setLoading(false);
+          return;
+        }
+        let currentfahrt = x[x.length - 1];
+        const fahrtResource: FahrtResource = {
+          fahrerid: user.id!,
+          id: currentfahrt._id!.toString(),
+          _id: currentfahrt._id!.toString(),
+          kennzeichen: currentfahrt.kennzeichen.toString(),
+          kilometerstand: currentfahrt.kilometerstand,
+          startpunkt: currentfahrt.startpunkt.toString(),
+          beendet: false,
+          vollname: user.vorname + ' ' + user.name,
+        };
+        const fahrt = await updateFahrt(fahrtResource);
+        setLetzteFahrt(fahrt);
         setLoading(false);
-        return;
+      } else {
+        navigate("/")
       }
-      let currentfahrt = x[x.length - 1];
-      const fahrtResource: FahrtResource = {
-        fahrerid: user.id!,
-        id: currentfahrt._id!.toString(),
-        _id: currentfahrt._id!.toString(),
-        kennzeichen: currentfahrt.kennzeichen.toString(),
-        kilometerstand: currentfahrt.kilometerstand,
-        startpunkt: currentfahrt.startpunkt.toString(),
-        beendet: false,
-        vollname: user.vorname + ' ' + user.name,
-      };
-      const fahrt = await updateFahrt(fahrtResource);
-      setLetzteFahrt(fahrt);
-      setLoading(false);
     }
   }
 

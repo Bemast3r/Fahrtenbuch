@@ -26,7 +26,7 @@ const FahrtErstellen = () => {
             navigate("/");
             return;
         }
-    }, [jwt]);
+    }, []);
 
     useEffect(() => {
         load();
@@ -34,11 +34,15 @@ const FahrtErstellen = () => {
 
     async function load() {
         const id = getLoginInfo();
-        const user = await getUser(id!.userID);
-        setUser(user);
-        setLoading(false);
-        const x: FahrtResource[] = await getFahrt(id!.userID);
-        setLetzteFahrt(x[x.length - 1]);
+        if (id && id.userID) {
+            const user = await getUser(id!.userID);
+            setUser(user);
+            setLoading(false);
+            const x: FahrtResource[] = await getFahrt(id!.userID);
+            setLetzteFahrt(x[x.length - 1]);
+        } else {
+            navigate("/")
+        }
     }
 
     const handleCheckboxChange = (checkboxId: string) => {
@@ -68,7 +72,7 @@ const FahrtErstellen = () => {
 
 
         const kennzeichen = (document.getElementById("formGridKennzeichen") as HTMLInputElement)?.value;
-        const  kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
+        const kilometerstand = parseFloat((document.getElementById("formGridKilometerstand") as HTMLInputElement)?.value);
         const startpunkt = (document.getElementById("formGridOrt") as HTMLInputElement)?.value;
 
         // Überprüfen, ob die Checkboxen angekreuzt wurden
