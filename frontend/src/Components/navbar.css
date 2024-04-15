@@ -29,3 +29,7 @@
 .nav-link.active {
   color: #f4c32e; /* Gelbe Farbe für den aktiven Link */
 }
+
+.nav-link.active {
+  color: #f4c32e !important; /* Gelbe Farbe für den aktiven Link */
+}
