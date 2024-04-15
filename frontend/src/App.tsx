@@ -20,8 +20,11 @@ const App = () => {
   if (jwt === null && window.location.pathname !== "/") {
     window.location.href = "/";
   }
+ 
+
 
   return (
+    
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
