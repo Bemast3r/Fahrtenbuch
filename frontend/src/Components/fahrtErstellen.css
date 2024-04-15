@@ -145,10 +145,12 @@
 
 /* ---------- BUTTON STYLING ---------- */
 
-.submit-button-beginnen {
-  width: 250px; /* Breite erhöhen */
-  padding: 0.8rem 1rem; /* Padding anpassen */
-  font-size: 1.2rem; /* Schriftgröße erhöhen */
+/* Standard Bootstrap-Button-Stil */
+.submit-button-beginnen,
+.submit-button-beginnen:focus {
+  width: 250px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
   color: #000;
   background-color: #eec346;
   border: none;
@@ -158,9 +160,8 @@
   display: block;
   margin: -1.5rem auto 0;
   margin-bottom: -1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Hier wird der kleine schwarze Rand hinzugefügt */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
 }
-
 
 .submit-button-beginnen:hover {
   color: #000;
