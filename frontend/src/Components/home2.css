@@ -243,6 +243,12 @@
     text-align: center;
 }
 
+@media only screen and (min-width: 2000px){
+    .container2 {
+        margin-top: 200px;
+    }
+}
+
 @media only screen and (min-width: 1500px){
     .col-12col-md-12col-lg-4 {
         margin-bottom: 20px;

@@ -33,3 +33,15 @@
 .nav-link.active {
   color: #f4c32e !important; /* Gelbe Farbe für den aktiven Link */
 }
+
+@media only screen and (min-width: 1210px) and (max-width: 1400px) {
+  .navbar-nav .nav-link {
+      font-size: 16px; /* Passe die Schriftgröße hier an */
+  }
+}
+
+@media only screen and (min-width: 990px) and (max-width: 1210px) {
+  .navbar-nav .nav-link {
+      font-size: 12px; /* Passe die Schriftgröße hier an */
+  }
+}
