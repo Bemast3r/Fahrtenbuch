@@ -26,7 +26,10 @@
   color: red;
 }
 
-.navbar-brand:hover {
-  transform: scale(1.1); /* Vergrößere das Logo beim Hover */
-  transition: color 0.3s ease, transform 0.3s ease; /* Füge eine sanfte Übergangseffekt hinzu */
+.nav-link.active {
+  color: #f4c32e; /* Gelbe Farbe für den aktiven Link */
+}
+
+.nav-link.active {
+  color: #f4c32e !important; /* Gelbe Farbe für den aktiven Link */
 }

@@ -1,4 +1,4 @@
-import { Router, useNavigate } from "react-router-dom";
+import { Router, useLocation, useNavigate } from "react-router-dom";
 import { getLoginInfo, removeJWT } from "./Logincontext";
 import { useEffect, useState } from "react";
 import { getUser, getUsers } from "../Api/api";
@@ -8,6 +8,8 @@ import { Nav, NavDropdown } from "react-bootstrap";
 
 const Navbar = () => {
     const [user, setUser] = useState<UserResource | null>(null)
+    const [activeLink, setActiveLink] = useState("");
+    const location = useLocation();
     const navigate = useNavigate();
 
     const handleAbmelden = () => {
@@ -23,11 +25,13 @@ const Navbar = () => {
         const user = await getUser(id!.userID)
         setUser(user)
     }
-    
+
     useEffect(() => {
         getU()
-    }, [])
-    
+        const currentPath = location.pathname;
+        setActiveLink(currentPath);
+    }, [location.pathname])
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
             <div className="container">
@@ -35,33 +39,27 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto mb-2 mb-lg-0"> {/* Hier wird das Bootstrap-Klasse "mx-auto" verwendet, um die Links zu zentrieren */}
                         <li className="nav-item">
-                            <a className="nav-link" href="/create">Fahrt erstellen</a>
+                            <a className={`nav-link ${activeLink === "/create" ? "active" : ""}`} href="/create">Fahrt erstellen</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="/verwalten">Fahrt verwalten</a>
+                            <a className={`nav-link ${activeLink === "/verwalten" ? "active" : ""}`} href="/verwalten">Fahrt verwalten</a>
                         </li>
 
                         {user && user.admin && (
                             <li className="nav-item">
-                                <a className="nav-link" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => navigate("/statistiken")}>
-                                    Statistiken
-                                </a>
+                                <a className={`nav-link ${activeLink === "/statistiken" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/statistiken">Statistiken</a>
                             </li>
                         )}
 
                         {user && !user.admin && (
                             <li className="nav-item">
-                                <a className="nav-link" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => navigate("/fahrten")}>
-                                    Meine Fahrten
-                                </a>
+                                <a className={`nav-link ${activeLink === "/fahrten" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/fahrten">Meine Fahrten</a>
                             </li>
                         )}
 
                         {user && user.admin && (
                             <li className="nav-item">
-                                <a className="nav-link" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => navigate("/user-erstellen")}>
-                                    Benutzer registrieren
-                                </a>
+                                <a className={`nav-link ${activeLink === "/user-erstellen" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/user-erstellen">Benutzer registrieren</a>
                             </li>
                         )}
                     </ul>
