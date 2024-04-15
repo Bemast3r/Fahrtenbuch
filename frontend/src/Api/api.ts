@@ -233,14 +233,16 @@ export async function createUserWithAdmin(user: UserResource): Promise<UserResou
             body: JSON.stringify(user) // Send user data in request body
         });
         if (!response.ok) {
-            throw new Error(`Server error: ${response.statusText}`);
+            const errorMessage = await response.text(); // Parse error message from server response
+            throw new Error(`Server error: ${response.statusText} - ${errorMessage}`);
         }
         const result: UserResource = await response.json();
         return result;
-    } catch (error) {
+    } catch (error:any) {
         throw new Error(`Es gab einen Fehler: ${error}`);
     }
 }
+
 
 export async function getCompletedTrips(): Promise<FahrtResource[]> {
     try {

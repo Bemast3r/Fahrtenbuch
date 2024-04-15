@@ -34,6 +34,10 @@ export async function getUser(userid: string) {
     return mapped
 }
 
+
+
+
+
 export async function getUsersFromDB(): Promise<UserResource[]> {
     const users = await User.find().sort({ nachname: 1 });
     if (!users) {
