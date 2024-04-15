@@ -23,36 +23,34 @@ const AdminFormular = () => {
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         let validatedValue = value;
-    
+
         // Validierung für Vor- und Nachnamen
         if (name === 'vorname' || name === 'name') {
             validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß]/g, ''); // Entferne alle Zeichen außer Buchstaben
         } else if (name === 'username') {
             validatedValue = value.replace(/[^a-zA-Z0-9_.]/g, ''); // Erlaubt nur Buchstaben, Zahlen, Unterstriche (_) und Punkte (.)
         }
-    
+
         setFormData(prevState => ({
             ...prevState,
             [name]: validatedValue
         }));
-    
+
         // Passwort validieren, während der Benutzer eingibt
         if (name === 'password') {
             validatePassword(value);
         }
     };
-    
+
     const validatePassword = (password: string) => {
         // Mindestens 8 Zeichen
-        console.log("Drin")
-        if (password.length < 8) {
-            console.log("Drin 4" )
+        const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
 
-            setPasswordError("Das Passwort muss mindestens 8 Zeichen lang sein.");
+        if (!regex.test(password)) {
+            setPasswordError("Das Passwort muss mindestens 8 Zeichen lang, Groß-/Kleinschreibung,  sein.");
+
         } else {
-            console.log("Drin 4223" )
-
-            setPasswordError(null);
+            setPasswordError(null)
         }
     };
 
@@ -69,6 +67,12 @@ const AdminFormular = () => {
                 await createUserWithAdmin(formData);
                 setShowSuccess(true);
                 setTimeout(() => { navigate("/home") }, 1500);
+            } else {
+                // Passwortfeld leeren, wenn das Passwort falsch ist
+                setFormData(prevState => ({
+                    ...prevState,
+                    password: ''
+                }));
             }
         } catch (error) {
             console.log(passwordError)
@@ -122,11 +126,11 @@ const AdminFormular = () => {
 
                         <Form.Group as={Col} controlId="formGridPassword" className="form-group">
                             <Form.Label className="form-label">Passwort*</Form.Label>
-                            <Form.Control type="password" placeholder="Passwort" name="password" className={`form-control ${validated && !formData.password ? 'is-invalid' : ''}`} value={formData.password} onChange={handleChange} required />
+                            <Form.Control type="password" placeholder="Passwort" name="password" className={`form-control ${validated && formData.password && formData.password.length < 8 && !passwordError ? 'is-invalid' : ''}`} value={formData.password} onChange={handleChange} required />
                             {passwordError && (
-                                <Form.Control.Feedback type="invalid" className="form-control-feedback">
-                                    Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.
-                                </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.
+                            </Form.Control.Feedback>
                             )}
                         </Form.Group>
                     </Row>
