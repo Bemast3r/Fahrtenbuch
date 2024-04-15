@@ -4,7 +4,6 @@ import { getJWT, getLoginInfo, removeJWT, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 
-
 const LandingPage = () => {
     const jwt = getJWT();
     const navigate = useNavigate();
@@ -20,6 +19,13 @@ const LandingPage = () => {
         }
     }, [jwt, navigate]);
 
+    const handleAbmelden = () => {
+        const confirmAbmeldung = window.confirm("Möchten Sie sich wirklich abmelden?");
+        if (confirmAbmeldung) {
+            removeJWT();
+            navigate("/");
+        }
+    };
 
     return (
         <div>
@@ -37,7 +43,7 @@ const LandingPage = () => {
                     </div>
                     <div className="row">
                         {/* Service Cards */}
-                        <div className="col-12 col-md-12 col-lg-4">
+                        <div className="col-12col-md-12col-lg-4">
                             <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
                                     <i className='bx bx-plus-circle' ></i>
@@ -47,8 +53,8 @@ const LandingPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12 col-md-12 col-lg-4">
-                            <div className="card text-white text-center bg-dark pb-2" >
+                        <div className="col-12col-md-12col-lg-4">
+                            <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
                                     <i className='bx bxs-car-mechanic' ></i>
                                     <h3 className="card-title">Fahrt Verwalten</h3>
@@ -58,8 +64,8 @@ const LandingPage = () => {
                             </div>
                         </div>
                         {userRole === "a" && (
-                            <div className="col-12 col-md-12 col-lg-4">
-                                <div className="card text-white text-center bg-dark pb-2" >
+                            <div className="col-12col-md-12col-lg-4">
+                                <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
                                         <i className='bx bx-stats' ></i>
                                         <h3 className="card-title">Statistiken</h3>
@@ -69,9 +75,10 @@ const LandingPage = () => {
                                 </div>
                             </div>
                         )}
+                        
                         {userRole !== "a" && (
                             <div className="col-12 col-md-12 col-lg-4">
-                                <div className="card text-white text-center bg-dark pb-2" >
+                                <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
                                         <i className='bx bx-stats' ></i>
                                         <h3 className="card-title">Meine Fahrten</h3>
