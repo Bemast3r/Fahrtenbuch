@@ -143,9 +143,9 @@ const AdminFormular = () => {
                         </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="submit-button-beginnen">
+                    <button type="submit" className="submit-button-beginnen">
                         Benutzer erstellen
-                    </Button>
+                    </button>
                 </Form>
             </div>
         </div>
