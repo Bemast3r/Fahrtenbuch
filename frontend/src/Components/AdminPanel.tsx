@@ -127,10 +127,10 @@ const AdminFormular = () => {
                         <Form.Group as={Col} controlId="formGridPassword" className="form-group">
                             <Form.Label className="form-label">Passwort*</Form.Label>
                             <Form.Control type="password" placeholder="Passwort" name="password" className={`form-control ${validated && formData.password && formData.password.length < 8 && !passwordError ? 'is-invalid' : ''}`} value={formData.password} onChange={handleChange} required />
-                            {passwordError && (
-                            <Form.Control.Feedback type="invalid" className="form-control-feedback">
-                                Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.
-                            </Form.Control.Feedback>
+                            {(passwordError || formData.password === "") && (
+                                <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                    Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.
+                                </Form.Control.Feedback>
                             )}
                         </Form.Group>
                     </Row>
