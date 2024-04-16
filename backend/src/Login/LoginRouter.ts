@@ -28,6 +28,5 @@ loginRouter.post("/",
     }
 );
 
-loginRouter.get("/", (_, res) => { res.send('SKM Server läuft'); });
 
 export default loginRouter;
