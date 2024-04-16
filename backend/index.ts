@@ -5,9 +5,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRouter from "./Router/UserRouter";
-import fahrrouter from "./Router/FahrtRouter";
-import loginRouter from "./Login/LoginRouter";
+import userRouter from "./src/Router/UserRouter";
+import fahrrouter from "./src/Router/FahrtRouter";
+import loginRouter from "./src/Login/LoginRouter";
 import moment from "moment-timezone";
 dotenv.config();
 
