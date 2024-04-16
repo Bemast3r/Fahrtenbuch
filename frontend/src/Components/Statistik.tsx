@@ -162,7 +162,7 @@ const Statistik = () => {
                 </div>
                 <br></br>
 
-                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Alle Fahrten</h2>
+                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color:"#FFFF" }}>Alle Fahrten</h2>
                 <div className="fahrten">
 
                     {fahrts && fahrts.length > 0 && user ? (
@@ -170,7 +170,7 @@ const Statistik = () => {
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
                                     <div>
-                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px" }}>{date}</h2>
+                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px" , color:"#FFFF"}}>{date}</h2>
                                         {fahrten.map((fahrt: FahrtResource) => (
                                             <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                                 <div className={`infos-${fahrt._id}`}>
@@ -184,7 +184,7 @@ const Statistik = () => {
                             ))}
                         </>
                     ) : (
-                        !fahrts ? <Loading /> : fahrts.length === 0 ? <h2> Es gibt keine Fahrten</h2> : <h2> Es gibt keine Fahrten</h2>
+                        !fahrts ? <Loading /> : fahrts.length === 0 ? <h2 className='header'> Es gibt keine Fahrten</h2> : <h2 className='header'> Es gibt keine Fahrten</h2>
                     )}
                 </div>
             </ProtectedComponent>
