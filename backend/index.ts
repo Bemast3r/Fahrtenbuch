@@ -30,17 +30,12 @@ app.use(function (request, response, next) {
 });
 
 const corsOptions = {
-    origin: [
-        "https://fahrtenbuch-frontend.vercel.app/"
-    ], 
+    origin: "https://fahrtenbuch-frontend.vercel.app", 
     methods: ['GET,PUT,PATCH,POST,DELETE'],
     credentials: true
 };
 
 app.use("*", cors(corsOptions));
-
-
-
 
 app.use(express.json({ limit: "5mb" }));
 app.use(bodyParser.json());
@@ -53,10 +48,6 @@ app.use("/api/login", loginRouter);
 app.get("/", (_, res) => { res.send('SKM Server läuft'); });
 
 const server = http.createServer(app);
-
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}/`);
-});
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGOURL);
