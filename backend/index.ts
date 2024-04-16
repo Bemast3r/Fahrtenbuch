@@ -25,12 +25,12 @@ const app = express();
 // }));
 app.use(cors())
 
-app.use(function (request, response, next) {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    response.header("Access-Control-Expose-Headers", "Authorization");
-    next();
-});
+// app.use(function (request, response, next) {
+//     response.header("Access-Control-Allow-Origin", "*");
+//     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     response.header("Access-Control-Expose-Headers", "Authorization");
+//     next();
+// });
 
 app.use(express.json({ limit: "5mb" }));
 app.use(bodyParser.json());
