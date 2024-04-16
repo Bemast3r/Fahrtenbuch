@@ -16,12 +16,17 @@ const MONGOURL = process.env.MONGO_URL;
 
 const app = express();
 
-app.use(cors({
-    origin: "*",
-    methods: ["POST", "GET"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: false,
+app.use("*", cors({
+    origin: [
+        "https://fahrtenbuch-frontend.vercel.app/"
+    ]
 }));
+app.use(function (request, response, next) {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    response.header("Access-Control-Expose-Headers", "Authorization");
+    next();
+});
 
 
 
@@ -31,6 +36,7 @@ app.use(bodyParser.json());
 app.use("/api/user", userRouter);
 app.use("/api/fahrt", fahrrouter);
 app.use("/api/login", loginRouter);
+
 
 app.get("/", (_, res) => { res.send('SKM Server läuft'); });
 
