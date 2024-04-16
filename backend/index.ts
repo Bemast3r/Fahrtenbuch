@@ -19,7 +19,7 @@ app.use(cors({
 }));
 
 app.use("*", cors({
-    origin: ["http:localhost:3000", "http:localhost:5000"] // Frontend 
+    origin: ["http:localhost:3000", "http:localhost:5000", "https://fahrtenbuch.vercel.app/"] // Frontend 
 }));
 
 app.use(function (request: any, response: any, next: any) {
