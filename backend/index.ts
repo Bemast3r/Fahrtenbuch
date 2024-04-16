@@ -17,12 +17,12 @@ const MONGOURL = process.env.MONGO_URL;
 const app = express();
 
 app.use(cors({
-
-    origin: ["https://fahrtenbuch-frontend.vercel.app/:1"],
+    origin: "https://fahrtenbuch-frontend.vercel.app",
     methods: ["POST", "GET", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"], // Erlaubte Header
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
 }));
+
 
 
 app.use(express.json({ limit: "5mb" }));
