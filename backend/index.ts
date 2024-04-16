@@ -17,9 +17,9 @@ const MONGOURL = process.env.MONGO_URL;
 const app = express();
 
 app.use(cors({
-    
-    origin: ["http://localhost:3000", "http://localhost:5000", "https://fahrtenbuch.vercel.app", "https://fahrtenbuch-frontend.vercel.app"],
-    methods:["POST","GET", "PUT", "DELETE"],
+
+    origin: ["https://fahrtenbuch-frontend.vercel.app"],
+    methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
 }));
 
