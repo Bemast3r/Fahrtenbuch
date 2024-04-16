@@ -16,23 +16,30 @@ const MONGOURL = process.env.MONGO_URL;
 
 const app = express();
 
-app.use("*", cors({
-    origin: [
-        "https://fahrtenbuch-frontend.vercel.app/"
-    ]
-}));
-// app.use(function (request, response, next) {
-//     response.header("Access-Control-Allow-Origin", "*");
-//     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     response.header("Access-Control-Expose-Headers", "Authorization");
-//     next();
-// });
-
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "https://fahrtenbuch-frontend.vercel.app/"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-  });
+});
+
+app.use(function (request, response, next) {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    response.header("Access-Control-Expose-Headers", "Authorization");
+    next();
+});
+
+const corsOptions = {
+    origin: [
+        "https://fahrtenbuch-frontend.vercel.app/"
+    ], 
+    methods: ['GET,PUT,PATCH,POST,DELETE'],
+    credentials: true
+};
+
+app.use("*", cors(corsOptions));
+
+
 
 
 app.use(express.json({ limit: "5mb" }));

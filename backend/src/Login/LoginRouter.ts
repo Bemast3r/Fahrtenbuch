@@ -29,4 +29,7 @@ loginRouter.post("/",
 );
 
 
+loginRouter.get("/get", (_, res) => { res.send('Login läuft'); });
+
+
 export default loginRouter;
