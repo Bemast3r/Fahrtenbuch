@@ -18,7 +18,7 @@ const app = express();
 
 app.use(cors({
     credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:5000", "https://fahrtenbuch.vercel.app"]
+    origin: ["http://localhost:3000", "http://localhost:5000", "https://fahrtenbuch.vercel.app", "https://fahrtenbuch-frontend.vercel.app/"]
 }));
 
 app.use(function (request, response, next) {
