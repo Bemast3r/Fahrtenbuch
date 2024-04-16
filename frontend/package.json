@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy":"https://fahrtenbuch-backend-latest.vercel.app/",
+  "proxy": "https://fahrtenbuch-backend-latest.vercel.app/",
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@testing-library/jest-dom": "^5.17.0",
