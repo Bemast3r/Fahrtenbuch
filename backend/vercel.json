@@ -11,5 +11,16 @@
             "src": "/(.*)",
             "dest": "/"
         }
+    ],
+    "methods": [
+        "POST",
+        "PUT",
+        "DELETE",
+        "GET"
+    ],
+    "headers": [
+        {
+            "Access-Control-Allow-Origin": "*"
+        }
     ]
 }
