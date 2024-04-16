@@ -1,4 +1,3 @@
-process.env.TZ = 'Europe/Berlin';
 import express from "express";
 import http from "http";
 import bodyParser from "body-parser";
@@ -9,47 +8,48 @@ import userRouter from "./src/Router/UserRouter";
 import fahrrouter from "./src/Router/FahrtRouter";
 import loginRouter from "./src/Login/LoginRouter";
 import moment from "moment-timezone";
+
 dotenv.config();
 
-const PORT: number = 5000
-export const app = express()
+const PORT = process.env.PORT || 5000;
+const MONGOURL = process.env.MONGO_URL;
+
+const app = express();
 
 app.use(cors({
-    credentials: true
+    credentials: true,
+    origin: ["http://localhost:3000", "http://localhost:5000", "https://fahrtenbuch.vercel.app"]
 }));
 
-app.use("*", cors({
-    origin: ["http:localhost:3000", "http:localhost:5000", "https://fahrtenbuch.vercel.app/"] // Frontend 
-}));
-
-app.use(function (request: any, response: any, next: any) {
+app.use(function (request, response, next) {
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     response.header("Access-Control-Expose-Headers", "Authorization");
     next();
 });
 
-app.use("*", express.json({ limit: "5mb" }));
+app.use(express.json({ limit: "5mb" }));
 app.use(bodyParser.json());
 
-app.use("/api/user", userRouter)
-app.use("/api/fahrt", fahrrouter)
+app.use("/api/user", userRouter);
+app.use("/api/fahrt", fahrrouter);
 app.use("/api/login", loginRouter);
-app.use(bodyParser.json())
-app.get("/", (_, res) => { res.send('SKM Server läuft') })
 
-const server = http.createServer(app)
+app.get("/", (_, res) => { res.send('SKM Server läuft'); });
+
+const server = http.createServer(app);
 
 server.listen(PORT, () => {
-    console.log(`Server runnig on http://localhost:${PORT}/`)
-})
-
-const MONGOURL = process.env.MONGO_URL
+    console.log(`Server running on http://localhost:${PORT}/`);
+});
 
 mongoose.Promise = Promise;
-mongoose.connect(MONGOURL)
-mongoose.connection.on("error", (error: Error) => console.log(error));
+mongoose.connect(MONGOURL);
+mongoose.connection.on("error", (error) => console.log(error));
 mongoose.connection.once("open", () => {
     console.log("Erfolgreich mit der Datenbank verbunden!");
 });
+
 moment.tz.setDefault("Europe/Berlin");
+
+export default app;
