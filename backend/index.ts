@@ -18,7 +18,7 @@ const app = express();
 
 app.use(cors({
 
-    origin: ["https://fahrtenbuch-frontend.vercel.app/"],
+    origin: ["https://fahrtenbuch-frontend.vercel.app/:1"],
     methods: ["POST", "GET", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // Erlaubte Header
     credentials: true,
