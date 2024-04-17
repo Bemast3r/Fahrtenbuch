@@ -49,7 +49,7 @@ const PasswortZuruecksetzen = () => {
 
     return (
         <div className="login-container">
-            <Form className="login-form" onSubmit={handleSubmit}>
+            <Form className="login-form3" onSubmit={handleSubmit}>
                 <h1 className="login-title">Passwort Zurücksetzen</h1>
                 {showAlert && (
                     <Alert variant="alert alert-danger" role="alert" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert-gut">

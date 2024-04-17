@@ -90,9 +90,9 @@ const Login = () => {
                         <Link to="passwort-vergessen">Passwort vergessen?</Link>
                     </div>
 
-                    <Button className="login-btn" variant="primary" type="submit">
+                    <button className="login-btn" type="submit">
                         {loading ? <Loading /> : "Anmelden"}
-                    </Button>
+                    </button>
                 </Form>
 
                 {/* Footer */}

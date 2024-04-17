@@ -167,6 +167,15 @@
   color: #000;
   background-color: rgb(196, 155, 34);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+} 
+
+.popup-button {
+  border-radius: 30px;
+}
+
+.popup-button:hover {
+  color: #ffffff;
+  background-color: rgb(28, 93, 184);
 }
 
 /* ---------- HEADER STYLING ---------- */
