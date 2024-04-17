@@ -11,6 +11,9 @@ import moment from "moment-timezone";
 
 dotenv.config();
 
+// Diese Datei ging 
+
+
 const PORT = process.env.PORT || 5000;
 const MONGOURL = process.env.MONGO_URL;
 
