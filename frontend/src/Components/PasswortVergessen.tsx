@@ -32,9 +32,9 @@ const PasswortVergessen = () => {
                     <input type="text" value={email} placeholder="E-Mail" onChange={(e) => setEmail(e.target.value)} required />
                 </div>
 
-                <Button className="login-btn" variant="primary" type="submit">
+                <button className="login-btn" type="submit">
                     {loading ? <Loading /> : "Senden"}
-                </Button>
+                </button>
 
                 {error && (
                     <Alert className="login-error-message" variant="danger">

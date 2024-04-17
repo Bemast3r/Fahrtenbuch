@@ -69,9 +69,9 @@ const PasswortZuruecksetzen = () => {
                     )}
                 </div>
 
-                <Button className="login-btn" variant="primary" type="submit" disabled={showAlertPostitv}>
+                <button className="login-btn" type="submit" disabled={showAlertPostitv}>
                     {loading ? <Loading /> : "Aktualisieren"}
-                </Button>
+                </button>
             </Form>
 
             {/* Footer */}
