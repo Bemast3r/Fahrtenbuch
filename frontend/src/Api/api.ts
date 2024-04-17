@@ -2,7 +2,7 @@
 import { getJWT } from "../Components/Logincontext";
 import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
 
-const BASE_URL = "https://fahrtenbuch-backend-latest.vercel.app";
+const BASE_URL = "https://fahrtenbuch-backend-latest.vercel.app/";
 
 
 export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
@@ -11,7 +11,7 @@ export async function login(loginData: { username: string, password: string }): 
     if (!loginData.password)
         throw new Error("password not defined");
 
-    const response = await fetch("https://fahrtenbuch-backend-latest.vercel.app/api/login/", {
+    const response = await fetch(`${BASE_URL}api/login/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
