@@ -24,15 +24,93 @@
     backdrop-filter: blur(25px);
     text-align: center;
     color: white;
-    width: 550px;
-    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.15);
+    width: 625px;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Füge einen Übergangseffekt hinzu */
+    transform: translateY(0); 
+}
+
+.login-form:hover {
+    box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.175); /* Ändere den Schatten beim Schweben */
+    transform: translateY(-5px); /* Hebe den Container leicht an */
+}
+
+.login-form::after {
+    content: "";
+    position: absolute;
+    top: 100px; /* Positioniere die Linie unterhalb des Texts */
+    left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+    width: 300px; /* Breite der Linie */
+    height: 1px; /* Dicke der Linie */
+    background-color: #ccc; /* Farbe der Linie */
+    transform: translateX(-50%); /* Zentriere die Linie horizontal */
+}
+
+.login-form2 {
+    background: rgba(64, 64, 64, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    padding: 30px;
+    border-radius: 16px;
+    backdrop-filter: blur(25px);
+    text-align: center;
+    color: white;
+    width: 625px;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Füge einen Übergangseffekt hinzu */
+    transform: translateY(0); 
+}
+
+.login-form2:hover {
+    box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.175); /* Ändere den Schatten beim Schweben */
+    transform: translateY(-5px); /* Hebe den Container leicht an */
+}
+
+.login-form2::after {
+    content: "";
+    position: absolute;
+    top: 100px; /* Positioniere die Linie unterhalb des Texts */
+    left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+    width: 300px; /* Breite der Linie */
+    height: 1px; /* Dicke der Linie */
+    background-color: #ccc; /* Farbe der Linie */
+    transform: translateX(-50%); /* Zentriere die Linie horizontal */
+}
+
+.login-form3 {
+    background: rgba(64, 64, 64, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    padding: 30px;
+    border-radius: 16px;
+    backdrop-filter: blur(25px);
+    text-align: center;
+    color: white;
+    width: 625px;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Füge einen Übergangseffekt hinzu */
+    transform: translateY(0); 
+}
+
+.login-form3:hover {
+    box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.175); /* Ändere den Schatten beim Schweben */
+    transform: translateY(-5px); /* Hebe den Container leicht an */
+}
+
+.login-form3::after {
+    content: "";
+    position: absolute;
+    top: 100px; /* Positioniere die Linie unterhalb des Texts */
+    left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+    width: 300px; /* Breite der Linie */
+    height: 1px; /* Dicke der Linie */
+    background-color: #ccc; /* Farbe der Linie */
+    transform: translateX(-50%); /* Zentriere die Linie horizontal */
 }
 
 /* Überschrift */
 
 .login-title {
     font-size: 40px;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     font-weight: bold;
 }
 
@@ -90,8 +168,8 @@
     display: flex;
     justify-content: right;
     margin: 20px 0;
-    margin-top: -10px;
-    font-size: 15px;
+    margin-top: -7.5px;
+    font-size: 16px;
 }
 
 .login-remember-password label {
@@ -119,19 +197,24 @@
 .login-btn {
     width: 100%;
     padding: 10px 0;
-    background: #2F9CF4;
+    margin-top: 10px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #000;
+    background-color: #eec346;
     border: none;
-    border-radius: 99px;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
+    border-radius: 30px;
     cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    height: 55px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
     transition: 0.3s;
 }
 
 .login-btn:hover {
-    background: #0B87EC;
-}
+    color: #000;
+    background-color: rgb(196, 155, 34);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */}
 
 /* SKM Unterleiste */
 
@@ -142,7 +225,7 @@
     width: 100%;
     background-color: #333;
     color: #fff;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
 }
 
@@ -154,8 +237,9 @@
     left: 0;
     width: 100%;
     color: #333;
-    font-size: 16px;
+    font-size: 20px;
     text-align: center;
+    white-space: pre-line; /* Erlaube Zeilenumbrüche */
 }
 
 .login-success-message {
@@ -164,7 +248,7 @@
     left: 0;
     width: 100%;
     color: #333;
-    font-size: 16px;
+    font-size: 20px;
     text-align: center;
 }
 
@@ -175,27 +259,75 @@
         width: 90%; 
     }
 
-    .login-title {
-        font-size: 32px;
+    .login-form2 {
+        width: 90%; 
     }
 
-    .login-input-box input {
-        padding: 10px 10px 10px 45px;
+    .login-title {
+        font-size: 34px;
+    }
+
+    .login-form::after {
+        content: "";
+        position: absolute;
+        top: 90px; /* Positioniere die Linie unterhalb des Texts */
+        left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+        width: 200px; /* Breite der Linie */
+        height: 1px; /* Dicke der Linie */
+    }
+
+    .login-form2::after {
+        content: "";
+        position: absolute;
+        top: 90px; /* Positioniere die Linie unterhalb des Texts */
+        left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+        width: 200px; /* Breite der Linie */
+        height: 1px; /* Dicke der Linie */
+    }
+
+    .login-form3::after {
+        content: "";
+        position: absolute;
+        top: 90px; /* Positioniere die Linie unterhalb des Texts */
+        left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+        width: 200px; /* Breite der Linie */
+        height: 1px; /* Dicke der Linie */
     }
 
     .login-error-message {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .login-btn {
-        font-size: 14px;
+        font-size: 20px;
+        height: 50px;
     }
 
+   
+}
+
+@media only screen and (max-width: 471px) {
+    .login-form2::after {
+        content: "";
+        position: absolute;
+        top: 135px; /* Positioniere die Linie unterhalb des Texts */
+        left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+        width: 200px; /* Breite der Linie */
+        height: 1px; /* Dicke der Linie */
+    }
+
+    .login-form3::after {
+        content: "";
+        position: absolute;
+        top: 135px; /* Positioniere die Linie unterhalb des Texts */
+        left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+        width: 200px; /* Breite der Linie */
+        height: 1px; /* Dicke der Linie */
+    }
+}
+
+@media only screen and (max-width: 376px) {
     .login-input-box {
-        margin-right: 38px;
-    }
-
-    .login-input-box.password button {
-        left: calc(100% - 35px);
+        margin-left: -10px;
     }
 }

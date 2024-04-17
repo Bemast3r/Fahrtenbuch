@@ -16,13 +16,6 @@ import { getJWT } from './Components/Logincontext';
 const App = () => {
   const jwt = getJWT();
 
-  // Überprüfen, ob der JWT-Token nicht vorhanden ist und die aktuelle Route nicht die Login-Seite ist
-  if (jwt === null && window.location.pathname !== "/") {
-    window.location.href = "/";
-  }
- 
-
-
   return (
     
     <Router>

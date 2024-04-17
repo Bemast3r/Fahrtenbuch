@@ -44,7 +44,7 @@ const PasswortZuruecksetzen = () => {
 
     return (
         <div className="login-container">
-            <Form className="login-form" onSubmit={handleSubmit}>
+            <Form className="login-form3" onSubmit={handleSubmit}>
                 <h1 className="login-title">Passwort Zurücksetzen</h1>
 
                 <div className="login-input-box password">

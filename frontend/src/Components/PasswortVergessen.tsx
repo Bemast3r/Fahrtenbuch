@@ -15,16 +15,16 @@ const PasswortVergessen = () => {
         setLoading(true);
         try {
             await passwortVergessen(email);
-            navigate("/", { state: { confirmationMessage: "Eine E-Mail-Adresse für das Zurücksetzen des Passwortes wurde erfolgreich versendet." } });
+            navigate("/", { state: { confirmationMessage: "Eine E-Mail für das Zurücksetzen des Passwortes wurde erfolgreich versendet." } });
         } catch (error: any) {
-            setError("Die eingegebene E-Mail-Adresse ist mit keinem Konto verknüpft.");
+            setError("Die angegebene E-Mail-Adresse ist mit keinem Konto verknüpft.");
         }
         setLoading(false);
     };
 
     return (
         <div className="login-container">
-            <Form className="login-form" onSubmit={handleSubmit}>
+            <Form className="login-form2" onSubmit={handleSubmit}>
                 <h1 className="login-title">Passwort Vergessen</h1>
 
                 <div className="login-input-box">
