@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginInfo } from './Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
@@ -9,8 +9,6 @@ import ExpandFahrt from "./ExpandFahrt";
 import Loading from "./LoadingIndicator";
 import { Button } from "react-bootstrap";
 import ProtectedComponent from './PreotectComponent';
-import FahrtenChart from './FahrtenChart';
-import UserChart from './UserChart';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -27,7 +25,7 @@ const Statistik = () => {
             loadUser();
             loadTrips();
             loadAllFahrts();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
+        }, 60000); 
 
         return () => clearInterval(intervalId);
     }, []);
@@ -164,14 +162,6 @@ const Statistik = () => {
                 </div>
                 <br></br>
 
-                <div className="row">
-
-                    <FahrtenChart gesamt={tripData.completedTrips + tripData.ongoingTrips} laufend={tripData.ongoingTrips} beendet={tripData.completedTrips} />
-
-
-                    <UserChart gesamt={totalUsers} admin={adminUsers} user={totalUsers - adminUsers} />
-
-                </div>
                 <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color: "#FFFF" }}>Alle Fahrten</h2>
                 <div className="fahrten">
 

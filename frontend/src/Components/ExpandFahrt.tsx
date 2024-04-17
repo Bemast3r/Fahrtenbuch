@@ -27,15 +27,10 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
     }
 
     function formatTime(sekunden: number): string {
-        // Sekunden ohne Millisekunden berechnen
         const gerundeteSekunden = Math.floor(sekunden);
-
-        // Stunden, Minuten und Sekunden berechnen
         const stunden: number = Math.floor(gerundeteSekunden / 3600);
         const minuten: number = Math.floor((gerundeteSekunden % 3600) / 60);
         const sekundenRest: number = gerundeteSekunden % 60;
-
-        // Zeit im Format HH:MM:SS zurückgeben
         const formatierteStunden: string = stunden.toString().padStart(2, '0');
         const formatierteMinuten: string = minuten.toString().padStart(2, '0');
         const formatierteSekunden: string = sekundenRest.toString().padStart(2, '0');
@@ -46,11 +41,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
     const html2tocanvasOptions: any = {
         willReadFrequently: true
     };
-
-    // Titel basierend auf dem Wert von abwesend setzen
     const title = fahrt.abwesend ? "Abwesend" : `Ihre Fahrt wurde am ${formatDateString(new Date(fahrt.createdAt!))}`;
-
-
 
     const downloadPDF = (fahrt: FahrtResource) => {
         const capture = document.querySelector(`.diagramm-${fahrt._id}`) as HTMLElement;
@@ -67,7 +58,6 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                 doc.setFont("helvetica", "normal", "bold")
                 doc.setFontSize(20)
                 doc.text("SKM Service - Fahrtenbuch", (componetwidth / 2) / 2 + 5, 20);
-                // Hinzufügen der Tabelle zum PDF
                 const tableData = [
                     ['Name', `${fahrt.vollname}`],
                     ['Wurde gefahren?', `${fahrt.abwesend || 'Die Fahrt hat stattgefunden.'}`],
@@ -91,8 +81,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                     body: tableData,
                     startY: 50
                 });
-
-                // Hinzufügen des Diagramms als Bild zum PDF
+                
                 doc.addImage(imgdata, 'JPEG', 10, (componentheight * 4 / 5) - 50, componetwidth + 20, componentheight / 5);
                 doc.line(20, componentheight - 10, 80, componentheight - 10);
 

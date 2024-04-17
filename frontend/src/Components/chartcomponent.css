@@ -1,22 +1,24 @@
-@media screen and (max-width: 991px){
-    .line {
-      width: 100%;
-      height: 300px;
-      background-color: white;
-    }
-    .canvas-container {
-      background-color: blue; /* Ändere die Hintergrundfarbe hier nach deinen Wünschen */
+@media screen and (max-width: 991px) {
+  .line {
+    width: 100%;
+    height: 300px;
+    background-color: white;
   }
-  
+
+  .canvas-container {
+    background-color: blue;
   }
-  @media screen and (min-width: 991px){
-    .line {
-      width: 80%;
-      height: 400px;
-      background-color: white;
-    }
-    .canvas-container {
-      background-color: blue; /* Ändere die Hintergrundfarbe hier nach deinen Wünschen */
+
+}
+
+@media screen and (min-width: 991px) {
+  .line {
+    width: 80%;
+    height: 400px;
+    background-color: white;
   }
-  
+
+  .canvas-container {
+    background-color: blue;
   }
+}
