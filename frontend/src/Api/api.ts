@@ -46,7 +46,7 @@ export async function getUsers(userID: string): Promise<UserResource> {
         if (!jwt)
             throw new Error("no jwt found");
 
-        const response = await fetch(`${BASE_URL}/api/admin/users`, {
+        const response = await fetch(`${BASE_URL}api/admin/users`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt}`
@@ -76,7 +76,7 @@ export async function getUser(userID: string): Promise<UserResource> {
         const jwt2 = getJWT();
         if (!jwt2)
             throw new Error("no jwt found");
-        const response = await fetch(`${BASE_URL}/api/user/admin/finde/user/${userID}`, {
+        const response = await fetch(`${BASE_URL}api/user/admin/finde/user/${userID}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -98,7 +98,7 @@ export async function getUser(userID: string): Promise<UserResource> {
 export async function postFahrt(fahrt: FahrtResource): Promise<FahrtResource> {
     try {
         const jwt2 = getJWT();
-        const response = await fetch(`${BASE_URL}/api/fahrt/user/fahrt/erstellen`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/user/fahrt/erstellen`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${jwt2}`,
@@ -125,7 +125,7 @@ export async function getFahrt(userID: string): Promise<FahrtResource[]> {
         const jwt2 = getJWT();
         if (!jwt2)
             throw new Error("no jwt found");
-        const response = await fetch(`${BASE_URL}/api/fahrt/admin/fahrt/user/${userID}`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/admin/fahrt/user/${userID}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -150,7 +150,7 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
     try {
 
         const jwt2 = getJWT();
-        const response = await fetch(`${BASE_URL}/api/fahrt/user/fahrt/bearbeiten/${fahrt._id}`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/user/fahrt/bearbeiten/${fahrt._id}`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${jwt2}`,
@@ -173,7 +173,7 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
 
 export async function passwortVergessen(email: string) {
     try {
-        const response = await fetch(`${BASE_URL}/api/user/passwort-vergessen`, {
+        const response = await fetch(`${BASE_URL}api/user/passwort-vergessen`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -196,7 +196,7 @@ export async function passwortVergessen(email: string) {
 export async function passwortZuruecksetzen(token: string, password: string) {
     try {
         // const decodedToken = decodeURIComponent(token); 
-        const response = await fetch(`${BASE_URL}/api/user/passwort-zuruecksetzen/${token}`, {
+        const response = await fetch(`${BASE_URL}api/user/passwort-zuruecksetzen/${token}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -225,7 +225,7 @@ export async function createUserWithAdmin(user: UserResource): Promise<UserResou
         if (!jwt2) {
             throw new Error("no jwt found");
         }
-        const response = await fetch("${BASE_URL}/api/user/admin/user-erstellen", {
+        const response = await fetch(`${BASE_URL}api/user/admin/user-erstellen`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${jwt2}`,
@@ -248,7 +248,7 @@ export async function createUserWithAdmin(user: UserResource): Promise<UserResou
 export async function getCompletedTrips(): Promise<FahrtResource[]> {
     try {
         const jwt2 = getJWT();
-        const response = await fetch(`${BASE_URL}/api/fahrt/admin/beendete/fahrten`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/admin/beendete/fahrten`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -267,7 +267,7 @@ export async function getCompletedTrips(): Promise<FahrtResource[]> {
 export async function getOngoingTrips(): Promise<FahrtResource[]> {
     try {
         const jwt2 = getJWT();
-        const response = await fetch(`${BASE_URL}/api/fahrt/admin/laufende/fahrten`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/admin/laufende/fahrten`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -286,7 +286,7 @@ export async function getOngoingTrips(): Promise<FahrtResource[]> {
 export async function getAlleAdmin(): Promise<UserResource[]> {
     try {
         const jwt2 = getJWT();
-        const response = await fetch(`${BASE_URL}/api/user/admin/finde/user/alle/admin`, {
+        const response = await fetch(`${BASE_URL}api/user/admin/finde/user/alle/admin`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -305,7 +305,7 @@ export async function getAlleAdmin(): Promise<UserResource[]> {
 export async function getAlleUser(): Promise<UserResource[]> {
     try {
         const jwt2 = getJWT();
-        const response = await fetch(`${BASE_URL}/api/user/admin/finde/user/alle/user`, {
+        const response = await fetch(`${BASE_URL}api/user/admin/finde/user/alle/user`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -326,7 +326,7 @@ export async function getAllFahrts(): Promise<FahrtResource[]> {
         const jwt2 = getJWT();
         if (!jwt2)
             throw new Error("no jwt found");
-        const response = await fetch(`${BASE_URL}/api/fahrt/admin/alle/fahrten/`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/admin/alle/fahrten/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`
@@ -354,7 +354,7 @@ export async function deleteFahrt(fahrt: FahrtResource): Promise<void> {
         if (!jwt)
             throw new Error("Kein JWT gefunden");
 
-        const response = await fetch(`${BASE_URL}/api/fahrt/admin/loesch/fahrt/${fahrt._id}`, {
+        const response = await fetch(`${BASE_URL}api/fahrt/admin/loesch/fahrt/${fahrt._id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${jwt}`
