@@ -60,9 +60,7 @@
     ]
   },
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
     "@types/jspdf": "^2.0.0",
-    "dotenv": "^16.4.5",
     "jwt-decode": "^4.0.0"
   }
 }

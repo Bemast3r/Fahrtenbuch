@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
 dotenv.config()
 
-const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : "http://localhost:5000";
+const BASE_URL = "https://fahrtenbuch-backend-latest.vercel.app";
 
 
 export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
