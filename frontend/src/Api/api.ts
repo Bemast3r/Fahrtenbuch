@@ -11,7 +11,7 @@ export async function login(loginData: { username: string, password: string }): 
     if (!loginData.password)
         throw new Error("password not defined");
 
-    const response = await fetch(`${BASE_URL}/api/login/`, {
+    const response = await fetch("https://fahrtenbuch-backend-latest.vercel.app/api/login/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
