@@ -9,6 +9,8 @@ import ExpandFahrt from "./ExpandFahrt";
 import Loading from "./LoadingIndicator";
 import { Button } from "react-bootstrap";
 import ProtectedComponent from './PreotectComponent';
+import FahrtenChart from './FahrtenChart';
+import UserChart from './UserChart';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -162,7 +164,15 @@ const Statistik = () => {
                 </div>
                 <br></br>
 
-                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color:"#FFFF" }}>Alle Fahrten</h2>
+                <div className="row">
+
+                    <FahrtenChart gesamt={tripData.completedTrips + tripData.ongoingTrips} laufend={tripData.ongoingTrips} beendet={tripData.completedTrips} />
+
+
+                    <UserChart gesamt={totalUsers} admin={adminUsers} user={totalUsers - adminUsers} />
+
+                </div>
+                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color: "#FFFF" }}>Alle Fahrten</h2>
                 <div className="fahrten">
 
                     {fahrts && fahrts.length > 0 && user ? (
@@ -170,7 +180,7 @@ const Statistik = () => {
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
                                     <div>
-                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px" , color:"#FFFF"}}>{date}</h2>
+                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px", color: "#FFFF" }}>{date}</h2>
                                         {fahrten.map((fahrt: FahrtResource) => (
                                             <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                                 <div className={`infos-${fahrt._id}`}>
