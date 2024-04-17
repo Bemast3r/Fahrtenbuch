@@ -1,8 +1,6 @@
 
 import { getJWT } from "../Components/Logincontext";
-import dotenv from "dotenv";
 import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
-dotenv.config()
 
 const BASE_URL = "https://fahrtenbuch-backend-latest.vercel.app";
 
