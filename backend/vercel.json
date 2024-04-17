@@ -11,10 +11,12 @@
             "src": "/(.*)",
             "dest": "/",
             "methods": [
+                "GET",
                 "POST",
                 "PUT",
+                "PATCH",
                 "DELETE",
-                "GET"
+                "OPTIONS"
             ],
             "headers": {
                 "Access-Control-Allow-Origin": "*"
