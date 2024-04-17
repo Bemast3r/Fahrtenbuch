@@ -62,7 +62,7 @@ const AdminFormular = () => {
         const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
 
         if (!regex.test(password)) {
-            setPasswordError("Das Passwort muss mindestens 8 Zeichen lang, Groß-/Kleinschreibung,  sein.");
+            setPasswordError("Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.");
 
         } else {
             setPasswordError(null)

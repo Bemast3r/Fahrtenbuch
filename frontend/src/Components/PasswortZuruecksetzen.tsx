@@ -27,7 +27,7 @@ const PasswortZuruecksetzen = () => {
             const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
 
             if (!regex.test(inputPassword)) {
-                setAlertMessage("Das Passwort muss mindestens 8 Zeichen lang, Groß-/Kleinschreibung, sein.")
+                setAlertMessage("Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.")
                 setShowAlert(true)
             } else {
                 await passwortZuruecksetzen(token, inputPassword);
@@ -52,7 +52,7 @@ const PasswortZuruecksetzen = () => {
             <Form className="login-form3" onSubmit={handleSubmit}>
                 <h1 className="login-title">Passwort Zurücksetzen</h1>
                 {showAlert && (
-                    <Alert variant="alert alert-danger" role="alert" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert-gut">
+                    <Alert variant="alert alert-danger" role="alert" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="login-error-message">
                         {alertmessage}</Alert>
                 )}
                 {showAlertPostitv && (
