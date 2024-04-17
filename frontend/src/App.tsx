@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Login from './Components/Login';
 import Home from './Components/Home';
@@ -11,16 +10,8 @@ import Statistik from './Components/Statistik';
 import UserFahrten from './Components/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtabschliessen';
 import TFahrtVerwalten from './Components/TFahrtVerwalten';
-import { getJWT } from './Components/Logincontext';
 
 const App = () => {
-  const jwt = getJWT();
-
-  // Überprüfen, ob der JWT-Token nicht vorhanden ist und die aktuelle Route nicht die Login-Seite ist
-  if (jwt === null && window.location.pathname !== "/") {
-    window.location.href = "/";
-  }
- 
 
 
   return (
