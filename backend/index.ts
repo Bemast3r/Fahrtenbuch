@@ -14,7 +14,7 @@ dotenv.config();
 // Diese Datei ging 
 
 
-const PORT = 5000;
+// const PORT = 5000;
 const MONGOURL = process.env.MONGO_URL;
 
 const app = express();
@@ -51,9 +51,9 @@ app.get("/", (_, res) => { res.send('SKM Server läuft'); });
 
 const server = http.createServer(app);
 
-server.listen(PORT, () => {
-    console.log(`Server runnig on http://localhost:${PORT}/`)
-})
+// server.listen(PORT, () => {
+//     console.log(`Server runnig on http://localhost:${PORT}/`)
+// })
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGOURL);
