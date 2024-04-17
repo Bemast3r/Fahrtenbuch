@@ -1,8 +1,11 @@
-import { getJWT } from "../Components/Logincontext";
-import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
-const BASE_URL = process.env.BASE_URL ?? "http://localhost:5000";
 
-const jwt = getJWT()
+import { getJWT } from "../Components/Logincontext";
+import dotenv from "dotenv";
+import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
+dotenv.config()
+
+const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : "http://localhost:5000";
+
 
 export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
     if (!loginData.username)
