@@ -107,16 +107,7 @@ const Statistik = () => {
     return (
         <>
             <Navbar></Navbar>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
             <ProtectedComponent requiredRole="a">
-
-                {/* Main Content */}
                 <main>
                     <h1 className="uberschrift">Statistiken</h1>
                     <div className="analyse">
@@ -136,6 +127,7 @@ const Statistik = () => {
                                 </div>
                             </div>
                         </div>
+
                         <div className="visits">
                             <div className="status">
                                 <div className="info">
@@ -173,7 +165,7 @@ const Statistik = () => {
                         <div className="fahrer">
                             <div className="status">
                                 <div className="info">
-                                    <h3 className="uberschrift-klein">Anzahl der Fahrer</h3>
+                                    <h3 className="uberschrift-klein">Benutzer</h3>
                                     <h1 className="zahlen">{totalUsers}</h1>
                                 </div>
                                 <div className="progresss">
@@ -207,15 +199,13 @@ const Statistik = () => {
                     </div>
                 </main>
 
-                <h2 style={{ textAlign: "center", paddingTop: "35px", color: "#FFFF" }}>Alle Fahrten</h2>
                 <div className="fahrten">
-
                     {fahrts && fahrts.length > 0 && user ? (
                         <>
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
                                     <div>
-                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px", color: "#FFFF" }}>{date}</h2>
+                                        <h2 style={{ paddingLeft: "10px", marginTop: "50px", color: "#FFFF" }}>{date}</h2>
                                         {fahrten.map((fahrt: FahrtResource) => (
                                             <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                                 <div className={`infos-${fahrt._id}`}>

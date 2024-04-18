@@ -58,9 +58,8 @@ img {
     position: relative;
     color: #FFFFFF;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
-    animation: fadeInOut 0.3s ease;
     margin-bottom: 3rem;
-    margin-top: 2rem;
+    margin-top: 11rem;
     text-align: center;
 }
 
@@ -73,10 +72,6 @@ img {
     height: 1px; /* Dicke der Linie */
     background-color: #ccc; /* Farbe der Linie */
     transform: translateX(-50%); /* Zentriere die Linie horizontal */
-  }
-  
-  .uberschrift:hover {
-    animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
   }
 
 .zahlen {
@@ -219,12 +214,6 @@ main .analyse .progresss .percentage {
     width: 100%;
 }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: 15px;
-    margin-right: 15px;
-}
 
 
 
@@ -290,41 +279,6 @@ main .analyse .progresss .percentage {
     border-color: #FFC107;
     /* Optional: Setze die Rahmenfarbe auf Gelb */
 }
-
-
-.card-text {
-    font-size: 1.2rem;
-    /* Vergrößere die Schriftgröße */
-}
-
-.card {
-    width: 100%;
-    margin-bottom: 20px;
-    /* Leicht vergrößerter Abstand zwischen den Karten */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Füge einen sanften Schatten hinzu */
-    transition: box-shadow 0.3s ease;
-    /* Sanfte Animation beim Hover-Effekt */
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 2.2);
-    /* Hebe die Karte beim Hover-Effekt hervor */
-}
-
-.card-body {
-    text-align: left;
-    padding: 20px;
-    /* Vergrößere den Innenabstand */
-}
-
-.card-title {
-    font-size: 1.4rem;
-    /* Vergrößere die Titelschriftgröße */
-    margin-bottom: 15px;
-    /* Abstand zwischen Titel und Inhalt */
-}
-
 
 .mb-0 {
     padding-left: 10px;
