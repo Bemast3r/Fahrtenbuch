@@ -1,10 +1,9 @@
 import "./login.css";
 import 'boxicons/css/boxicons.min.css';
 
-import { useEffect, useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { useState } from "react";
+import { Form, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
-import { getJWT, setJWT } from "./Logincontext";
 import { useNavigate, useParams } from "react-router-dom";
 import { passwortZuruecksetzen } from "../Api/api";
 

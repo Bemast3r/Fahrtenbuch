@@ -283,6 +283,16 @@ main .analyse .progresss .percentage {
 
 }
 
+.statistikenchart {
+    width: auto;
+    height: auto;
+}
+
+.fahrtenChart {
+    width: 25%;
+    height: 25%;
+}
+
 @media only screen and (min-width: 991px) {
     .row {
         display: flex;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginInfo } from './Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
@@ -25,7 +25,7 @@ const Statistik = () => {
             loadUser();
             loadTrips();
             loadAllFahrts();
-        }, 60000); // Intervall von 60 Sekunden für regelmäßiges Laden der Benutzerdaten
+        }, 60000); 
 
         return () => clearInterval(intervalId);
     }, []);

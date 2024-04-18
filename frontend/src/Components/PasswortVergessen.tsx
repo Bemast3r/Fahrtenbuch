@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
 import { passwortVergessen } from "../Api/api";
 import { useNavigate } from "react-router-dom";

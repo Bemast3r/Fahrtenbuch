@@ -19,15 +19,14 @@ const MONGOURL = process.env.MONGO_URL;
 
 const app = express();
 
-
-
 const corsOptions = {
-    origin: "*",
-    credential: true,
+    origin: "https://fahrtenbuch-frontend.vercel.app",
+    credentials: true, // Set to true if you're using cookies or sessions
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
-app.options("", cors(corsOptions))
+
+app.options("/api/*", cors(corsOptions));
 
 app.use(function (request, response, next) {
     response.header("Access-Control-Allow-Origin", "*");
