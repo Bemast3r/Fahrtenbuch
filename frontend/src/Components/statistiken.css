@@ -1,3 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root{
+    --color-primary: #6C9BCF;
+    --color-danger: #FF0060;
+    --color-success: #1B9C85;
+    --color-warning: #F7D060;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+.dark-mode-variables{
+    --color-background: #181a1e;
+    --color-white: #202528;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0, 0, 0, 0.4);
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    user-select: none;
+    overflow-x: hidden;
+    color: var(--color-dark);
+    background-color: var(--color-background);
+}
+
+a{
+    color: var(--color-dark);
+}
+
+img{
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.uberschrift {
+    font-weight: 800;
+    font-size: 1.8rem;
+}
+
+.uberschrift-klein {
+    font-weight: 500;
+    font-size: 0.87rem;
+} 
+
+small{
+    font-size: 0.76rem;
+}
+
+.prozent {
+    color: var(--color-dark-variant);
+} 
+
+b{
+    color: var(--color-dark);
+}
+
+.text-muted{
+    color: var(--color-info-dark);
+}
+
+.primary{
+    color: var(--color-primary);
+}
+
+.danger{
+    color: var(--color-danger);
+}
+
+.success{
+    color: var(--color-success);
+}
+
+.warning{
+    color: var(--color-warning);
+}
+
+main {
+    margin-top: 1.4rem;
+}
+
+main .analyse {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+}
+
+main .analyse > div {
+    background-color: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-top: 1rem;
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+main .analyse>div:hover {
+    box-shadow: none;
+}
+
+main .analyse>div .status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+main .analyse h3 {
+    margin-left: 0.6rem;
+    font-size: 1rem;
+}
+
+main .analyse .progresss {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+}
+
+main .analyse svg {
+    width: 7rem;
+    height: 7rem;
+}
+
+main .analyse svg circle {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transform: translate(5px, 5px);
+}
+
+main .analyse .sales svg circle {
+    stroke: var(--color-success);
+    stroke-dashoffset: -30;
+    stroke-dasharray: 200;
+}
+
+main .analyse .visits svg circle {
+    stroke: var(--color-danger);
+    stroke-dashoffset: -30;
+    stroke-dasharray: 200;
+}
+
+main .analyse .searches svg circle {
+    stroke: var(--color-primary);
+    stroke-dashoffset: -30;
+    stroke-dasharray: 200;
+}
+
+main .analyse .progresss .percentage {
+    position: absolute;
+    top: -3px;
+    left: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -48,28 +227,40 @@
 }
 
 .downloadButton:active {
-    background-color: #FFC107; /* Setze die Hintergrundfarbe auf Gelb */
-    color: rgb(0, 0, 0); /* Optional: Setze die Schriftfarbe auf Schwarz */
-    border-color: #FFC107; /* Optional: Setze die Rahmenfarbe auf Gelb */
+    background-color: #FFC107;
+    /* Setze die Hintergrundfarbe auf Gelb */
+    color: rgb(0, 0, 0);
+    /* Optional: Setze die Schriftfarbe auf Schwarz */
+    border-color: #FFC107;
+    /* Optional: Setze die Rahmenfarbe auf Gelb */
 }
 
 
 .card-text {
-    font-size: large;
+    font-size: 1.2rem; /* Vergrößere die Schriftgröße */
 }
 
 .card {
     width: 100%;
-    margin-bottom: 15px;
-    /* Platz zwischen den Karten */
-    height: fit-content;
+    margin-bottom: 20px; /* Leicht vergrößerter Abstand zwischen den Karten */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Füge einen sanften Schatten hinzu */
+    transition: box-shadow 0.3s ease; /* Sanfte Animation beim Hover-Effekt */
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hebe die Karte beim Hover-Effekt hervor */
 }
 
 .card-body {
     text-align: left;
-    overflow-y: auto;
-    /* Zentriert den Inhalt horizontal */
+    padding: 20px; /* Vergrößere den Innenabstand */
 }
+
+.card-title {
+    font-size: 1.4rem; /* Vergrößere die Titelschriftgröße */
+    margin-bottom: 15px; /* Abstand zwischen Titel und Inhalt */
+}
+
 
 .mb-0 {
     padding-left: 10px;

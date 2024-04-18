@@ -116,7 +116,7 @@ const Statistik = () => {
             <br></br>
             <ProtectedComponent requiredRole="a">
                 <div className="row">
-                    <div className="col-md">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Gesamtanzahl der Fahrten</h5>
@@ -125,7 +125,7 @@ const Statistik = () => {
                         </div>
                     </div>
 
-                    <div className="col-md">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Beendete Fahrten</h5>
@@ -134,7 +134,7 @@ const Statistik = () => {
                         </div>
                     </div>
 
-                    <div className="col-md">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Laufende Fahrten</h5>
@@ -143,7 +143,7 @@ const Statistik = () => {
                         </div>
                     </div>
 
-                    <div className="col-md">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Gesamtzahl der Benutzer</h5>
@@ -151,7 +151,7 @@ const Statistik = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">Admin-Benutzer</h5>
@@ -162,7 +162,62 @@ const Statistik = () => {
                 </div>
                 <br></br>
 
-                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color:"#FFFF" }}>Alle Fahrten</h2>
+                {/* Main Content */}
+                <main>
+                    <h1 className="uberschrift">Analytics</h1>
+                    <div className="analyse">
+                        <div className="sales">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Total Sales</h3>
+                                    <h1 className="uberschrift">$65,024</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+81%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="visits">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Site Visit</h3>
+                                    <h1 className="uberschrift">24,981</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">-48%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="searches">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Searches</h3>
+                                    <h1 className="uberschrift">14,147</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+21%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <h2 style={{ textAlign: "center", paddingTop: "35px", color: "#FFFF" }}>Alle Fahrten</h2>
                 <div className="fahrten">
 
                     {fahrts && fahrts.length > 0 && user ? (
@@ -170,7 +225,7 @@ const Statistik = () => {
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
                                     <div>
-                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px" , color:"#FFFF"}}>{date}</h2>
+                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px", color: "#FFFF" }}>{date}</h2>
                                         {fahrten.map((fahrt: FahrtResource) => (
                                             <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                                 <div className={`infos-${fahrt._id}`}>
