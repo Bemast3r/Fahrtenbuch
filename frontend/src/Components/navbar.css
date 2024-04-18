@@ -1,0 +1,47 @@
+.fa-1x {
+  font-size: 1.5rem;
+}
+
+.navbar-toggler.toggler-example {
+  cursor: pointer;
+}
+
+.dark-blue-text {
+  color: #0A38F5;
+}
+
+.dark-pink-text {
+  color: #AC003A;
+}
+
+.dark-amber-text {
+  color: #ff6f00;
+}
+
+.dark-teal-text {
+  color: #004d40;
+}
+
+.navbar-nav .nav-link.abmelden {
+  color: red;
+}
+
+.nav-link.active {
+  color: #f4c32e; /* Gelbe Farbe für den aktiven Link */
+}
+
+.nav-link.active {
+  color: #f4c32e !important; /* Gelbe Farbe für den aktiven Link */
+}
+
+@media only screen and (min-width: 1210px) and (max-width: 1400px) {
+  .navbar-nav .nav-link {
+      font-size: 16px; /* Passe die Schriftgröße hier an */
+  }
+}
+
+@media only screen and (min-width: 990px) and (max-width: 1210px) {
+  .navbar-nav .nav-link {
+      font-size: 12px; /* Passe die Schriftgröße hier an */
+  }
+}

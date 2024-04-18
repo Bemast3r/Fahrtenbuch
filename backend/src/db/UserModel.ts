@@ -37,7 +37,7 @@ const userSchema = new Schema<IUser, IUserMethods>({
         datum: { type: String, default: new Date().toLocaleString() },
         kennzeichen: { type: String, required: true }
     }],
-    abwesend: { type: String}
+    abwesend:{type: String}
 }, { timestamps: true });
 
 userSchema.method("isPasswordCorrect", async function (passwordCandidate: string): Promise<boolean> {

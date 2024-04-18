@@ -11,6 +11,7 @@ const JWT_NAME = "jwt";
 export const LoginContext = React.createContext([] as any);
 
 export function getLoginInfo(): LoginInfo | null {
+
     const jwt = localStorage.getItem(JWT_NAME);
     if (!jwt)
         return null;
@@ -22,7 +23,8 @@ export function getLoginInfo(): LoginInfo | null {
 
     if (Date.now() >= exp * 1000) {
         removeJWT();
-        alert("Melde dich erneut an.");
+        alert("Sie müssen sich erneut anmelden.");
+        window.location.href = "/";
         return null;
     }
 

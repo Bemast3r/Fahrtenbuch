@@ -1,0 +1,405 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.container2 {
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin-top: 90px;
+    box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    /* Füge einen Übergangseffekt hinzu */
+    transform: translateY(0);
+}
+
+.container2:hover {
+    box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+}
+
+.card {
+    border-radius: 28px;
+    /* Ändere die Radius-Größe nach Bedarf */
+}
+
+.container2::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+/* Animation für das Ein- und Ausblenden */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    /* Startzustand */
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Endzustand */
+}
+
+.wasgeht {
+    background-image: url(loginHintergrund.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.section-padding {
+    padding: 100px 0;
+}
+
+.carousel-item {
+    height: 100vh;
+    min-height: 300px;
+}
+
+.carousel-caption {
+    bottom: 220px;
+    z-index: 2;
+}
+
+.carousel-caption h5 {
+    font-size: 45px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 25px;
+}
+
+.carousel-caption p {
+    width: 60%;
+    margin: auto;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+.carousel-inner:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.navbar .getstarted {
+    background: #ffffff;
+    margin-left: 30px;
+    border-radius: 4px;
+    font-weight: 400;
+    color: #fff;
+    text-decoration: none;
+    padding: .5rem 1rem;
+    line-height: 2.3;
+}
+
+.navbar-nav a {
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.navbar-light .navbar-brand {
+    color: #000;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #000;
+}
+
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #f4c32e;
+}
+
+.portfolio .card,
+.team .card {
+    box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.services .card-body i {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 58px;
+    margin-bottom: 10px;
+}
+
+.section-header {
+    font-size: 18px;
+}
+
+.team .card-body i {
+    font-size: 20px;
+}
+
+.subtitle {
+    border-bottom: 1.5px solid #ccc;
+    /* Beispiel für eine Linie mit 1px Dicke */
+    width: 50%;
+    /* Beispiel für eine Linie, die 50% der Containerbreite einnimmt */
+    margin: auto;
+    /* Zentrieren der Linie */
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+
+.services .card-body .lead {
+    font-size: 18px;
+}
+
+.btn {
+    padding: 12px 28px;
+    font-size: 22px;
+    align-items: center;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    color: #000;
+    /* Textfarbe ändern beim Überfahren */
+    background-color: #dab034;
+    /* Hintergrundfarbe ändern beim Überfahren */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+    /* Schatten erhöhen beim Überfahren */
+}
+
+.section-header h2 {
+    font-size: 34px;
+    /* Schriftgröße anpassen */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    /* Beispiel für Textschatten */
+    transition: color 0.3s ease;
+    /* Beispiel für eine Farbübergang-Animation */
+}
+
+.btn-custom {
+    width: 250px;
+    padding: 0.8rem 1rem;
+    font-size: 1.45rem;
+    color: #000;
+    background-color: #f4c32e;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.75px #000;
+}
+
+.btn-custom:hover {
+    color: #000;
+    background-color: rgb(196, 155, 34);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Zentrieren der Inhalte horizontal */
+    text-align: center;
+    margin-bottom: 40px;
+    /* Erhöhen Sie den Abstand zwischen dem Text und dem Button */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: auto;
+    height: auto;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+    text-align: center;
+}
+
+@media only screen and (min-width: 2000px){
+    .container2 {
+        margin-top: 200px;
+    }
+}
+
+@media only screen and (min-width: 1500px){
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+        width: 33%;
+        display: inline-grid;
+    }
+}
+
+@media only screen and (min-width: 1100px) and (max-width: 1500px) {
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+        width: 33%;
+        display: inline-grid;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        width: 600px;
+    }
+
+    .card {
+        display: flex; /* Verwende Flexbox */
+        align-items: stretch; /* Strecke die Container, um die gleiche Höhe zu haben */
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1100px) {
+    .carousel-caption {
+        bottom: 370px;
+    }
+
+    .carousel-caption p {
+        width: 100%;
+    }
+
+    .card {
+        margin-bottom: 30px;
+    }
+
+    .img-area img {
+        width: 100%;
+    }
+
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+    }
+
+    .subtitle {
+        font-size: 18px;
+        width: 490px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .carousel-caption {
+        bottom: 125px;
+    }
+
+    .carousel-caption h5 {
+        font-size: 17px;
+    }
+
+    .carousel-caption a {
+        padding: 10px 15px;
+        font-size: 15px;
+    }
+
+    .carousel-caption p {
+        width: 100%;
+        line-height: 1.6;
+        font-size: 12px;
+    }
+
+    .about-text {
+        padding-top: 50px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+
+    }
+
+    .col-12col-md-12col-lg-4 {
+        margin-bottom: 20px;
+        /* Vergrößern Sie den Abstand zwischen den Cards */
+    }
+    .subtitle {
+        width: 325px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .container2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%; /* Ändere die Breite der Karte nach Bedarf */
+        margin-bottom: 20px; /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
+    }
+
+    .section-header {
+        font-size: 16px;
+        text-align: justify; /* Ausrichtung des Textes am linken und rechten Rand */
+        width: 600px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .container2 {
+        margin: 20px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        margin-top: 90px;
+        box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        transform: translateY(0);
+        margin-left: 150px;
+    }
+
+    .card {
+        width: 20%; /* Ändere die Breite der Karte nach Bedarf */
+        max-width: 300px;
+        margin-bottom: 20px; /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
+    }
+
+    .subtitle {
+        font-size: 14px;
+        width: 250px;
+    }
+
+    .section-header h2 {
+        font-size: 26px;
+    }
+}
+
+.rotating {
+    transform: rotate(180deg);
+    /* Anpassen der Rotation je nach Bedarf */
+    transition: transform 0.3s ease;
+    /* Hinzufügen einer Transition für eine sanfte Drehung */
+}

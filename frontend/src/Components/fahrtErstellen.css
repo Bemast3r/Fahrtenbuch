@@ -1,43 +1,112 @@
 /* ---------- FORM STYLING ---------- */
 .body {
-  background-color: #FdF5E6;
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background-image: url(loginHintergrund.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.wasgehtsiedasan {
+  background-image: url(loginHintergrund.jpg);
+  background-size: cover;
+  background-position: center;
 }
 
 .form-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #FdF5E6;
+  justify-content: center; /* Ändern von 'flex-start' zu 'center' */
+  align-items: center; /* Ändern von 'flex-start' zu 'center' */
+  width: 100%; /* Ändern der Breite auf 100% */
+  height: 100%; /* Ändern der Höhe auf 100% */
+  min-height: 80vh; /* Mindesthöhe auf 100vh setzen */
+  min-width: 80vw;
 }
 
 .form-container {
-  width: 68rem;
-  max-width: 90%;
+  margin-top: 190px;
   background-color: #fff;
-  padding: 2rem;
+  padding: 3.5rem;
   border-radius: 12px;
-  box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Füge einen Übergangseffekt hinzu */
+  transform: translateY(0); 
 }
 
-.form-container form {
+.form-container:hover {
+  box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3); /* Ändere den Schatten beim Schweben */
+  transform: translateY(-5px); /* Hebe den Container leicht an */
+}
+
+.form-container::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
   width: 100%;
+  height: 20px;
+  border-radius: 20px 20px 0 0; /* Runde die oberen Ecken ab */
 }
 
 .form-label {
+  margin-left: 11px;
   font-weight: bold;
 }
 
 .form-control {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.8rem;
   font-size: 1rem;
   border: 2px solid #ced4da;
-  border-radius: 4px;
+  border-radius: 10px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin: auto; /* Zentriere die Textfelder und ändere den Abstand */
+  margin-bottom: 1rem;
+  margin-left: 10px;
+}
+
+.custom-alert {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 20px;
+  margin-bottom: 2.8rem;
+  margin-top: -2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.custom-alert-gut {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 20px;
+  margin-bottom: 2.8rem;
+  margin-top: -2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.custom-alert-gut :nth-child(1) {
+  margin-top: 0.1rem;
+  margin-right: 0.25rem;
+}
+
+.custom-alert button {
+  margin-top: 1rem; /* Platzieren Sie den Button etwas unterhalb des Texts */
+  margin-bottom: 0.5rem; /* Platzieren Sie den Button etwas unterhalb des Texts */
+  font-size: 20px;
+  width: 250px;
+  border-radius: 20px;
+}
+
+.custom-alert :nth-child(1) {
+  margin-top: 0.1rem;
+  margin-right: -6.75rem;
 }
 
 .form-control:focus {
@@ -46,48 +115,121 @@
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.checkbox-label {
-  margin-left: 0.5rem;
+.form-control-feedback {
+  margin-left: 0.75rem;
 }
 
-.checkbox1 {
-  margin-bottom: 1rem;
+/* ---------- CHECKBOX STYLING ---------- */
+
+.checkbox-label1 {
+  margin-top: -0.5em;
 }
 
-.checkbox2 {
-  margin-bottom: 1rem;
+.checkbox-label2 {
+  margin-top: -0.5em;
 }
 
-.checkbox3 {
-  margin-bottom: 1rem;
+.checkbox-label3 {
+  margin-top: -0.5em;
 }
 
-.checkbox4 {
-  margin-bottom: -1rem;
+.checkbox-label4 {
+  margin-top: -0.5em;
 }
 
-.submit-button {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #007bff;
+.checkbox-label5 {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  margin-left: 0.75rem;
+}
+
+/* ---------- BUTTON STYLING ---------- */
+
+/* Standard Bootstrap-Button-Stil */
+.submit-button-beginnen,
+.submit-button-beginnen:focus {
+  width: 250px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #eec346;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+  margin: -1.5rem auto 0;
+  margin-bottom: -1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
 }
 
-.submit-button:hover {
-  background-color: #0056b3;
+.submit-button-beginnen:hover {
+  color: #000;
+  background-color: rgb(196, 155, 34);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+} 
+
+.popup-button {
+  border-radius: 30px;
+}
+
+.popup-button:hover {
+  color: #ffffff;
+  background-color: rgb(28, 93, 184);
 }
 
 /* ---------- HEADER STYLING ---------- */
+
 .form-header {
-  font-size: 32px;
-  margin-bottom: 2rem;
+  font-size: 34px;
+  position: relative; /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
+  margin-bottom: 2.5rem;
+  margin-top: -0.5rem;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  text-align: center; 
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
+}
+
+.form-header::after {
+  content: "";
+  position: absolute;
+  top: 55px; /* Positioniere die Linie unterhalb des Texts */
+  left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+  width: 500px; /* Breite der Linie */
+  height: 1px; /* Dicke der Linie */
+  background-color: #ccc; /* Farbe der Linie */
+  transform: translateX(-50%); /* Zentriere die Linie horizontal */
+}
+
+.form-header:hover {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
+}
+
+.form-header2 {
+  font-size: 34px;
+  position: relative; /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
+  margin-bottom: 2.5rem;
+  margin-top: -0.5rem;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center; 
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
+}
+
+.form-header2::after {
+  content: "";
+  position: absolute;
+  top: 55px; /* Positioniere die Linie unterhalb des Texts */
+  left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+  width: 500px; /* Breite der Linie */
+  height: 1px; /* Dicke der Linie */
+  background-color: #ccc; /* Farbe der Linie */
+  transform: translateX(-50%); /* Zentriere die Linie horizontal */
+}
+
+.form-header2:hover {
+  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
 }
 
 /* Animation für das Ein- und Ausblenden */
@@ -96,17 +238,229 @@
   100% { opacity: 1; transform: scale(1); } /* Endzustand */
 }
 
-.form-header {
-  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
-}
-
-.form-header:hover {
-  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
-}
-
 /* Medienabfragen für größere Bildschirme */
 @media screen and (min-width: 768px) {
   .form-container {
     width: 60%; /* Verringere die Breite des Containers für größere Bildschirme */
+  }
+}
+
+@media screen and (max-width: 993px) {
+  .form-wrapper {
+    min-height: 70vh; /* Verringere die Mindesthöhe des Wrappers */
+    min-width: 70vw; /* Verringere die Mindestbreite des Wrappers */
+  }
+
+  .form-container {
+    width: 70%; /* Verringere die Breite des Containers */
+    margin-top: 120px; /* Verringere den oberen Abstand des Containers */
+  }
+
+  .form-control {
+    margin-left: 0; /* Setze den linken Rand auf 0 */
+  }
+
+  .form-label {
+    margin-left: 0; /* Setze den linken Rand auf 0 */
+  }
+
+  .custom-alert,
+  .custom-alert-gut {
+    width: 80%; /* Ändere die Breite der benutzerdefinierten Warnungen */
+    left: 50%; /* Zentriere die benutzerdefinierten Warnungen horizontal */
+    transform: translateX(-50%); /* Zentriere die benutzerdefinierten Warnungen horizontal */
+  }
+
+  .custom-alert :nth-child(1),
+  .custom-alert-gut :nth-child(1) {
+    margin-right: 0; /* Setze den rechten Rand auf 0 */
+  }
+
+  .popup-button {
+    width: 150px; /* Ändere die Breite des Popup-Buttons */
+    font-size: 16px; /* Ändere die Schriftgröße des Popup-Buttons */
+  }
+
+  .form-control-feedback {
+    margin-left: 0; /* Setze den linken Rand auf 0 */
+    font-size: 12px; /* Ändere die Schriftgröße des Feedbacks */
+  }
+
+  .checkbox-label1 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label2 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+
+  .checkbox-label3 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label4 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .form-container {
+    margin-top: 150px;
+    width: calc(100% - 50px); /* Breite des Containers weniger breit */
+    margin-top: 12rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+
+@media only screen and (max-width: 600px) {
+  .form-container {
+    margin-top: 150px;
+    width: calc(100% - 50px); /* Breite des Containers weniger breit */
+    margin-top: 12rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-control {
+    width: calc(100% + 80px);
+    padding: 0.7rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.7rem;
+    margin-left: -3.4rem;
+  }
+
+  .form-label {
+    margin-left: -50px;
+    font-weight: bold;
+  }
+
+  .submit-button-beginnen {
+    width: calc(100% - 22px);
+    padding: 0.65rem;
+    font-size: 1rem;
+    margin-bottom: -0.9rem;
+  }
+
+  .submit-button-beginnen:hover {
+    color: #000;
+    background-color: rgb(196, 155, 34);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+  }
+
+  .submit-button-beginnen:active {
+    background-color: rgb(196, 155, 34);
+  }
+
+  .form-header {
+    font-size: 26px;
+  }
+
+  .form-header2 {
+    font-size: 26px;
+  }
+
+  .form-header::after {
+    width: 250px; /* Breite der Linie auf 100px reduziert */
+  }
+
+  .form-header2::after {
+    width: 250px; /* Breite der Linie auf 100px reduziert */
+    margin-top: 2rem;
+  }
+
+  .checkbox-label1 {
+    margin-bottom: 10px;
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label2 {
+    margin-left: -72px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .checkbox-label3 {
+    margin-left: -72px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .checkbox-label4 {
+    margin-left: -72px;
+    text-align: left;
+  }
+
+  .checkbox-label5 {
+    margin-left: -53px;
+    text-align: left;
+  }
+
+  .checkbox-input {
+    margin-right: 10px; /* Füge Abstand zwischen dem Kästchen und dem Text hinzu */
+  }
+
+  .custom-alert {
+    font-size: 18px;
+    padding: 1.5rem;
+    width: 310px;
+    transform: translateX(-50%);
+    left: 50%;
+  }
+
+  .custom-alert-gut {
+    font-size: 18px;
+    padding: 1.5rem;
+    width: 310px;
+    transform: translateX(-50%);
+    left: 50%;
+  }
+
+  .custom-alert :nth-child(1) {
+    margin-top: 0.25rem;
+    margin-right: -7rem;
+  }
+
+  .custom-alert-gut :nth-child(1) {
+    margin-top: 0.4rem;
+    margin-right: 0.15rem;
+  }
+  
+  .popup-button {
+    width: 175px;/* Platzieren Sie den Button etwas unterhalb des Texts */
+    font-size: 16px;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem; /* Platzieren Sie den Button etwas unterhalb des Texts */
+  }
+
+  .form-control-feedback {
+    margin-left: -3.25rem;
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .form-header {
+    font-size: 20px;
+  }
+
+  .form-header2 {
+    font-size: 20px;
+  }
+
+  .submit-button-beginnen {
+    width: calc(100% - 10px);
+    padding: 0.6rem;
+    font-size: 0.825rem;
+    margin-bottom: -0.9rem;
   }
 }

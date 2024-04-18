@@ -58,48 +58,48 @@ const Login = () => {
 
     return (
         <div className="login-page">
-        <div className="login-container">
-            <Form className="login-form" onSubmit={handleSubmit}>
-                <h1 className="login-title">Login</h1>
-                {showConfirmation && (
-                    <Alert className="login-confirmation-message" variant="success" onClose={handleCloseConfirmation} dismissible>
-                        {location.state.confirmationMessage}
-                    </Alert>
-                )}
-                {error && (
-                    <Alert className="login-error-message" variant="danger">
-                        {error}
-                    </Alert>
-                )}
-                <div className="login-input-box">
-                    <i className='bx bxs-user'></i>
-                    <input type="text" value={inputUsername} placeholder="Nutzername" onChange={(e) => setInputUsername(e.target.value)} required />
-                </div>
-
-                <div className="login-input-box password">
-                    <i className='bx bxs-lock-alt'></i>
-                    <input type={showPassword ? "text" : "password"} value={inputPassword} placeholder="Passwort" onChange={handlePasswordInputChange} required />
-                    {showPasswordIcon && (
-                        <button type="button" onClick={() => setShowPassword(!showPassword)}>
-                            {showPassword ? <i className='bx bx-hide'></i> : <i className='bx bx-show'></i>}
-                        </button>
+            <div className="login-container">
+                <Form className="login-form" onSubmit={handleSubmit}>
+                    <h1 className="login-title">Login</h1>
+                    {showConfirmation && (
+                        <Alert className="login-confirmation-message" variant="success" onClose={handleCloseConfirmation} dismissible>
+                            {location.state.confirmationMessage}
+                        </Alert>
                     )}
+                    {error && (
+                        <Alert className="login-error-message" variant="danger">
+                            {error}
+                        </Alert>
+                    )}
+                    <div className="login-input-box">
+                        <i className='bx bxs-user'></i>
+                        <input type="text" value={inputUsername} placeholder="Nutzername" onChange={(e) => setInputUsername(e.target.value)} required />
+                    </div>
+
+                    <div className="login-input-box password">
+                        <i className='bx bxs-lock-alt'></i>
+                        <input type={showPassword ? "text" : "password"} value={inputPassword} placeholder="Passwort" onChange={handlePasswordInputChange} required />
+                        {showPasswordIcon && (
+                            <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <i className='bx bx-hide'></i> : <i className='bx bx-show'></i>}
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="login-remember-password">
+                        <Link to="passwort-vergessen">Passwort vergessen?</Link>
+                    </div>
+
+                    <button className="login-btn" type="submit">
+                        {loading ? <Loading /> : "Anmelden"}
+                    </button>
+                </Form>
+
+                {/* Footer */}
+                <div className="login-footer">
+                    SKM | &copy;2024
                 </div>
-
-                <div className="login-remember-password">
-                    <Link to="passwort-vergessen">Passwort vergessen?</Link>
-                </div>
-
-                <Button className="login-btn" variant="primary" type="submit">
-                    {loading ? <Loading /> : "Anmelden"}
-                </Button>
-            </Form>
-
-            {/* Footer */}
-            <div className="login-footer">
-                SKM | &copy;2024
             </div>
-        </div>
         </div>
     );
 };

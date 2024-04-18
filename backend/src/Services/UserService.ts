@@ -21,7 +21,6 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
         admin: user.admin,
         createdAt: user.createdAt,
         fahrzeuge: user.fahrzeuge,
-        abwesend: user.abwesend
     };
     return userResource;
 }
@@ -52,7 +51,6 @@ export async function createUser(userResource: UserResource): Promise<UserResour
         email: userResource.email,
         password: userResource.password,
         admin: userResource.admin,
-        abwesend: userResource.abwesend,
         fahrzeuge: userResource.fahrzeuge
     });
 
@@ -78,8 +76,6 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     if (userResource.password) user.password = userResource.password;
     if (userResource.fahrzeuge) user.fahrzeuge = userResource.fahrzeuge;
     if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
-    if (userResource.abwesend) user.abwesend = userResource.abwesend;
-
     const savedUser = await user.save();
     const mapped = await mapUserToResource(savedUser)
     return mapped
@@ -153,5 +149,24 @@ export async function deleteUser(userId: string): Promise<void> {
         await User.findByIdAndDelete(userId);
     } catch (error: any) {
         throw new Error(`Fehler beim Löschen des Benutzers: ${(error as Error).message}`);
+    }
+}
+
+export async function getAlleUser(): Promise<UserResource[]> {
+    try {
+        const users = await getUsersFromDB();
+        return users;
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen aller Benutzer: ${error.message}`);
+    }
+}
+
+export async function getAlleAdmin(): Promise<UserResource[]> {
+    try {
+        const users = await getUsersFromDB();
+        const admins = users.filter(user => user.admin);
+        return admins;
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen aller Admin-Benutzer: ${error.message}`);
     }
 }

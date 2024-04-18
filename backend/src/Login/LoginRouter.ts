@@ -1,7 +1,6 @@
 import express from "express";
 import { verifyPasswordAndCreateJWT } from "./authentication/LoginService";
-import { body, matchedData, validationResult } from "express-validator";
-
+import { body, validationResult } from "express-validator";
 
 const loginRouter = express.Router();
 
@@ -14,19 +13,23 @@ loginRouter.post("/",
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            const data = matchedData(req);            
-            const jwtString = await verifyPasswordAndCreateJWT(data.username, data.password);
+            const { username, password } = req.body;
+            const jwtString = await verifyPasswordAndCreateJWT(username, password);
             if (!jwtString) {
                 return res.status(401).json({ message: "Can't create a JWT." });
             } else {
-                const LoginRes = { token_type: "Bearer", access_token: jwtString };
-                return res.status(201).json(LoginRes);
+                const loginRes = { token_type: "Bearer", access_token: jwtString };
+                return res.status(201).json(loginRes);
             }
         } catch (error) {
-            res.sendStatus(405);
-            next(error);
+            console.error(error);
+            return res.sendStatus(500);
         }
     }
 );
+
+
+loginRouter.get("/get", (_, res) => { res.send('Login läuft'); });
+
 
 export default loginRouter;

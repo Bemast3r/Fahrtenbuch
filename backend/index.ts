@@ -15,12 +15,12 @@ dotenv.config();
 
 
 // const PORT = 5000;
-const MONGOURL = process.env.MONGO_URL!;
+const MONGOURL = process.env.MONGO_URL;
 
 const app = express();
 
 const corsOptions = {
-    origin: "https://fahrtenbuch.vercel.app",
+    origin: ["https://fahrtenbuch-frontend.vercel.app","https://fahrtenbuch.vercel.app"],
     credentials: true, // Set to true if you're using cookies or sessions
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']

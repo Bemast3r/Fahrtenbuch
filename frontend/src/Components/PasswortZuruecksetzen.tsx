@@ -1,10 +1,9 @@
 import "./login.css";
 import 'boxicons/css/boxicons.min.css';
 
-import { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { useState } from "react";
+import { Form, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
-import { getJWT, setJWT } from "./Logincontext";
 import { useNavigate, useParams } from "react-router-dom";
 import { passwortZuruecksetzen } from "../Api/api";
 
@@ -14,25 +13,30 @@ const PasswortZuruecksetzen = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordIcon, setShowPasswordIcon] = useState(false);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const [alertmessage, setAlertMessage] = useState<string | null>(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [showAlertPostitv, setShowAlertPositiv] = useState(false);
 
-    const jwt = getJWT();
-
-    useEffect(() => {
-        if (jwt) {
-            setJWT(jwt);
-            navigate("/home");
-        } else {
-            return;
-        }
-    }, [jwt, navigate]);
+    const navigate = useNavigate()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setLoading(true);
         if (token) {
-            await passwortZuruecksetzen(token, inputPassword); 
-            navigate("/");
+            const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+
+            if (!regex.test(inputPassword)) {
+                setAlertMessage("Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.")
+                setShowAlert(true)
+            } else {
+                await passwortZuruecksetzen(token, inputPassword);
+                setShowAlertPositiv(true)
+                setAlertMessage("Ihr Passwort wurde erfolgreich aktualisiert.")
+                setTimeout(() => {
+                    navigate("/");
+                }, 1000)
+            }
+
         }
         setLoading(false);
     };
@@ -44,9 +48,16 @@ const PasswortZuruecksetzen = () => {
 
     return (
         <div className="login-container">
-            <Form className="login-form" onSubmit={handleSubmit}>
+            <Form className="login-form3" onSubmit={handleSubmit}>
                 <h1 className="login-title">Passwort Zurücksetzen</h1>
-
+                {showAlert && (
+                    <Alert variant="alert alert-danger" role="alert" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="login-error-message">
+                        {alertmessage}</Alert>
+                )}
+                {showAlertPostitv && (
+                    <Alert variant="success" show={showAlertPostitv} onClose={() => setShowAlertPositiv(false)} dismissible className="custom-alert-gut">
+                        {alertmessage}</Alert>
+                )}
                 <div className="login-input-box password">
                     <i className='bx bxs-lock-alt'></i>
                     <input type={showPassword ? "text" : "password"} value={inputPassword} placeholder="Neues Passwort" onChange={handlePasswordInputChange} required />
@@ -57,9 +68,9 @@ const PasswortZuruecksetzen = () => {
                     )}
                 </div>
 
-                <Button className="login-btn" variant="primary" type="submit">
+                <button className="login-btn" type="submit" disabled={showAlertPostitv}>
                     {loading ? <Loading /> : "Aktualisieren"}
-                </Button>
+                </button>
             </Form>
 
             {/* Footer */}
