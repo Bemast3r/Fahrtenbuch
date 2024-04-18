@@ -22,7 +22,7 @@ const app = express();
 
 
 const corsOptions = {
-    origin: "fahrtenbuch-frontend.vercel.app",
+    origin: "fahrtenbuch-frontend.vercel.app/",
     credential: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
