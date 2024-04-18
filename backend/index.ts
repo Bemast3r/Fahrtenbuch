@@ -26,7 +26,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 
-app.options("", cors(corsOptions))
+app.options("/api/*", cors(corsOptions));
 
 app.use(function (request, response, next) {
     response.header("Access-Control-Allow-Origin", "*");
