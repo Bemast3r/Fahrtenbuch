@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import Loading from "./LoadingIndicator";
 import { passwortVergessen } from "../Api/api";
 import { useNavigate } from "react-router-dom";
@@ -32,9 +32,9 @@ const PasswortVergessen = () => {
                     <input type="text" value={email} placeholder="E-Mail" onChange={(e) => setEmail(e.target.value)} required />
                 </div>
 
-                <Button className="login-btn" variant="primary" type="submit">
+                <button className="login-btn" type="submit">
                     {loading ? <Loading /> : "Senden"}
-                </Button>
+                </button>
 
                 {error && (
                     <Alert className="login-error-message" variant="danger">

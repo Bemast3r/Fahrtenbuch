@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef} from "react";
 import { Button } from "react-bootstrap";
 import { ReactComponent as ArrowIcon } from "./arrow.svg";
 import "./statistiken.css"

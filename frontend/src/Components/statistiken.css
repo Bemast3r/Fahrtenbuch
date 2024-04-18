@@ -48,9 +48,12 @@
 }
 
 .downloadButton:active {
-    background-color: #FFC107; /* Setze die Hintergrundfarbe auf Gelb */
-    color: rgb(0, 0, 0); /* Optional: Setze die Schriftfarbe auf Schwarz */
-    border-color: #FFC107; /* Optional: Setze die Rahmenfarbe auf Gelb */
+    background-color: #FFC107;
+    /* Setze die Hintergrundfarbe auf Gelb */
+    color: rgb(0, 0, 0);
+    /* Optional: Setze die Schriftfarbe auf Schwarz */
+    border-color: #FFC107;
+    /* Optional: Setze die Rahmenfarbe auf Gelb */
 }
 
 
@@ -90,6 +93,16 @@
     width: 20%;
     /* Ändern Sie die Breite entsprechend Ihren Anforderungen */
 
+}
+
+.statistikenchart {
+    width: auto;
+    height: auto;
+}
+
+.fahrtenChart {
+    width: 25%;
+    height: 25%;
 }
 
 @media only screen and (min-width: 991px) {

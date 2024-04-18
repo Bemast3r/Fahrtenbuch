@@ -1,5 +1,5 @@
 import "./chartcomponent.css"
-import Chart, {
+import {
     Chart as ChartJS,
     LineElement,
     LinearScale,
@@ -16,10 +16,7 @@ import { Line } from 'react-chartjs-2';
 import { FahrtResource } from '../util/Resources';
 import Zoom from 'chartjs-plugin-zoom';
 import zoomPlugin from 'chartjs-plugin-zoom';
-import { Button } from "react-bootstrap";
-import { useRef, useState } from "react";
 
-// Registriere erforderliche Chart.js-Komponenten
 ChartJS.register(
     TimeScale,
     LinearScale,
@@ -34,38 +31,33 @@ ChartJS.register(
 );
 
 const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
-    // Extrahiere die Zeiten aus der FahrtResource und konvertiere sie in Date-Objekte mit Kennungen
     const zeitenData: { x: Date; y: string; }[] = [];
 
     if (fahrt.lenkzeit) {
         fahrt.lenkzeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit), y: 'Lenkzeit' }); // Lenkzeit
+            zeitenData.push({ x: new Date(zeit), y: 'Lenkzeit' }); 
         });
     }
     if (fahrt.arbeitszeit) {
         fahrt.arbeitszeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit), y: 'Arbeitszeit' }); // Arbeitszeit
+            zeitenData.push({ x: new Date(zeit), y: 'Arbeitszeit' }); 
         });
     }
     if (fahrt.pause) {
         fahrt.pause.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit), y: 'Pausezeit' }); // Pausezeit
+            zeitenData.push({ x: new Date(zeit), y: 'Pausezeit' }); 
         });
     }
     if (fahrt.ruhezeit) {
         fahrt.ruhezeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Ruhezeit' }); // Ruhezeit
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Ruhezeit' }); // Ruhezeit
+            zeitenData.push({ x: new Date(zeit.start), y: 'Ruhezeit' }); 
+            zeitenData.push({ x: new Date(zeit.stop), y: 'Ruhezeit' }); 
         });
     }
 
-    const canvasRef = useRef<any>(null);
-
-
-    // Sortiere die Daten nach X-Werten (Zeit)
     zeitenData.sort((a, b) => a.x.getTime() - b.x.getTime());
 
-    // Erstelle das Chart-Datenobjekt
+    
     const data = {
         datasets: [
             {
@@ -78,7 +70,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         ],
     };
 
-    // Definiere Chart-Optionen
+    
     const options: any = {
         maintainAspectRatio: false,
         plugins: {
@@ -107,7 +99,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         minute: 'HH:mm',
                         hour: 'HH'
                     }
-                    // unit: 'hour',
+                    
                 },
             },
             y: {
@@ -115,9 +107,9 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 barThickness: 2,
                 labels: ['Lenkzeit', 'Arbeitszeit', 'Pausezeit', 'Ruhezeit'],
                 ticks: {
-                    // Hier kannst du die Größe der Y-Achse anpassen
+                    
                     font: {
-                        size: 15 // Beispiel: setze die Schriftgröße auf 10
+                        size: 15
                     }
                 }
             },
@@ -128,8 +120,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     return (
         <div className='line'>
-            <Line ref={canvasRef} data={data} options={options} />
-            {/* <Button onClick={downloadPDF}>Download</Button> */}
+            <Line data={data} options={options} />
 
         </div>
     );

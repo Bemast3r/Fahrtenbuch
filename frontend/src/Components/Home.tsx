@@ -1,6 +1,6 @@
 import "./home2.css";
-import React, { useEffect, useState } from 'react';
-import { getJWT, getLoginInfo, removeJWT, setJWT } from './Logincontext';
+import { useEffect, useState } from 'react';
+import { getJWT, getLoginInfo, setJWT } from './Logincontext';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 
@@ -22,7 +22,6 @@ const LandingPage = () => {
     return (
         <div className="wasgeht">
             <Navbar></Navbar>
-            {/* Services */}
             <section className="services section-padding" id="services">
                 <div className="container2">
                     <div className="row">
@@ -34,7 +33,6 @@ const LandingPage = () => {
                         </div>
                     </div>
                     <div className="row">
-                        {/* Service Cards */}
                         <div className="col-12col-md-12col-lg-4">
                             <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
