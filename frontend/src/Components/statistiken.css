@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-:root{
+:root {
     --color-primary: #6C9BCF;
     --color-danger: #FF0060;
     --color-success: #1B9C85;
@@ -22,7 +22,7 @@
     --box-shadow: 0 2rem 3rem var(--color-light);
 }
 
-.dark-mode-variables{
+.dark-mode-variables {
     --color-background: #181a1e;
     --color-white: #202528;
     --color-dark: #edeffd;
@@ -31,7 +31,7 @@
     --box-shadow: 0 2rem 3rem var(--color-light);
 }
 
-body{
+body {
     width: 100vw;
     height: 100vh;
     font-family: 'Poppins', sans-serif;
@@ -42,69 +42,99 @@ body{
     background-color: var(--color-background);
 }
 
-a{
+a {
     color: var(--color-dark);
 }
 
-img{
+img {
     display: block;
     width: 100%;
     object-fit: cover;
 }
 
 .uberschrift {
+    font-size: 34px;
     font-weight: 800;
-    font-size: 1.8rem;
+    position: relative;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    animation: fadeInOut 0.3s ease;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.uberschrift::after {
+    content: "";
+    position: absolute;
+    top: 55px; /* Positioniere die Linie unterhalb des Texts */
+    left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
+    width: 500px; /* Breite der Linie */
+    height: 1px; /* Dicke der Linie */
+    background-color: #ccc; /* Farbe der Linie */
+    transform: translateX(-50%); /* Zentriere die Linie horizontal */
+  }
+  
+  .uberschrift:hover {
+    animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
+  }
+
+.zahlen {
+    font-weight: 800;
+    font-size: 2rem;
+    margin-left: 0.6rem;
 }
 
 .uberschrift-klein {
     font-weight: 500;
     font-size: 0.87rem;
-} 
+}
 
-small{
+small {
     font-size: 0.76rem;
 }
 
 .prozent {
     color: var(--color-dark-variant);
-} 
+}
 
-b{
+b {
     color: var(--color-dark);
 }
 
-.text-muted{
+.text-muted {
     color: var(--color-info-dark);
 }
 
-.primary{
+.primary {
     color: var(--color-primary);
 }
 
-.danger{
+.danger {
     color: var(--color-danger);
 }
 
-.success{
+.success {
     color: var(--color-success);
 }
 
-.warning{
+.warning {
     color: var(--color-warning);
 }
 
 main {
-    margin-top: 1.4rem;
+    margin-top: 1.5rem;
 }
 
 main .analyse {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.6rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
 }
 
-main .analyse > div {
+main .analyse>div {
     background-color: var(--color-white);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
@@ -149,26 +179,38 @@ main .analyse svg circle {
 }
 
 main .analyse .sales svg circle {
-    stroke: var(--color-success);
-    stroke-dashoffset: -30;
-    stroke-dasharray: 200;
-}
-
-main .analyse .visits svg circle {
-    stroke: var(--color-danger);
-    stroke-dashoffset: -30;
-    stroke-dasharray: 200;
-}
-
-main .analyse .searches svg circle {
     stroke: var(--color-primary);
     stroke-dashoffset: -30;
     stroke-dasharray: 200;
 }
 
+main .analyse .visits svg circle {
+    stroke: var(--color-success);
+    stroke-dashoffset: -90;
+    stroke-dasharray: 200;
+}
+
+main .analyse .searches svg circle {
+    stroke: var(--color-danger);
+    stroke-dashoffset: 30;
+    stroke-dasharray: 200;
+}
+
+main .analyse .fahrer svg circle {
+    stroke: var(--color-info-dark);
+    stroke-dashoffset: 400;
+    stroke-dasharray: 90;
+}
+
+main .analyse .admins svg circle {
+    stroke: var(--color-info-dark);
+    stroke-dashoffset: 100;
+    stroke-dasharray: 100;
+}
+
 main .analyse .progresss .percentage {
     position: absolute;
-    top: -3px;
+    top: 5px;
     left: -1px;
     display: flex;
     align-items: center;
@@ -183,6 +225,20 @@ main .analyse .progresss .percentage {
     margin-left: 15px;
     margin-right: 15px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .downloadButton {
     margin-bottom: 10px;
@@ -237,28 +293,36 @@ main .analyse .progresss .percentage {
 
 
 .card-text {
-    font-size: 1.2rem; /* Vergrößere die Schriftgröße */
+    font-size: 1.2rem;
+    /* Vergrößere die Schriftgröße */
 }
 
 .card {
     width: 100%;
-    margin-bottom: 20px; /* Leicht vergrößerter Abstand zwischen den Karten */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Füge einen sanften Schatten hinzu */
-    transition: box-shadow 0.3s ease; /* Sanfte Animation beim Hover-Effekt */
+    margin-bottom: 20px;
+    /* Leicht vergrößerter Abstand zwischen den Karten */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Füge einen sanften Schatten hinzu */
+    transition: box-shadow 0.3s ease;
+    /* Sanfte Animation beim Hover-Effekt */
 }
 
 .card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hebe die Karte beim Hover-Effekt hervor */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 2.2);
+    /* Hebe die Karte beim Hover-Effekt hervor */
 }
 
 .card-body {
     text-align: left;
-    padding: 20px; /* Vergrößere den Innenabstand */
+    padding: 20px;
+    /* Vergrößere den Innenabstand */
 }
 
 .card-title {
-    font-size: 1.4rem; /* Vergrößere die Titelschriftgröße */
-    margin-bottom: 15px; /* Abstand zwischen Titel und Inhalt */
+    font-size: 1.4rem;
+    /* Vergrößere die Titelschriftgröße */
+    margin-bottom: 15px;
+    /* Abstand zwischen Titel und Inhalt */
 }
 
 

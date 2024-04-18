@@ -25,7 +25,7 @@ const Statistik = () => {
             loadUser();
             loadTrips();
             loadAllFahrts();
-        }, 60000); 
+        }, 60000);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -115,62 +115,16 @@ const Statistik = () => {
             <br></br>
             <br></br>
             <ProtectedComponent requiredRole="a">
-                <div className="row">
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Gesamtanzahl der Fahrten</h5>
-                                <p className="card-text">{tripData.completedTrips + tripData.ongoingTrips}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Beendete Fahrten</h5>
-                                <p className="card-text">{tripData.completedTrips}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Laufende Fahrten</h5>
-                                <p className="card-text">{tripData.ongoingTrips}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Gesamtzahl der Benutzer</h5>
-                                <p className="card-text">{totalUsers}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Admin-Benutzer</h5>
-                                <p className="card-text">{adminUsers}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br></br>
 
                 {/* Main Content */}
                 <main>
-                    <h1 className="uberschrift">Analytics</h1>
+                    <h1 className="uberschrift">Statistiken</h1>
                     <div className="analyse">
                         <div className="sales">
                             <div className="status">
                                 <div className="info">
-                                    <h3 className="uberschrift-klein">Total Sales</h3>
-                                    <h1 className="uberschrift">$65,024</h1>
+                                    <h3 className="uberschrift-klein">Alle Fahrten</h3>
+                                    <h1 className="zahlen">{tripData.completedTrips + tripData.ongoingTrips}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -185,8 +139,8 @@ const Statistik = () => {
                         <div className="visits">
                             <div className="status">
                                 <div className="info">
-                                    <h3 className="uberschrift-klein">Site Visit</h3>
-                                    <h1 className="uberschrift">24,981</h1>
+                                    <h3 className="uberschrift-klein">Laufende Fahrten</h3>
+                                    <h1 className="zahlen">{tripData.ongoingTrips}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -198,11 +152,12 @@ const Statistik = () => {
                                 </div>
                             </div>
                         </div>
+
                         <div className="searches">
                             <div className="status">
                                 <div className="info">
-                                    <h3 className="uberschrift-klein">Searches</h3>
-                                    <h1 className="uberschrift">14,147</h1>
+                                    <h3 className="uberschrift-klein">Beendete Fahrten</h3>
+                                    <h1 className="zahlen">{tripData.completedTrips}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -214,6 +169,41 @@ const Statistik = () => {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="fahrer">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Anzahl der Fahrer</h3>
+                                    <h1 className="zahlen">{totalUsers}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+11%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="admins">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Admins</h3>
+                                    <h1 className="zahlen">{adminUsers}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+72%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </main>
 
