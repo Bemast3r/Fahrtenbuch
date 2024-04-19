@@ -1,7 +1,7 @@
-import { Fahrt, IFahrt } from "../db/FahrtModel"
+import { Fahrt, IFahrt } from "../../Model/FahrtModel"
 import { Types } from "mongoose";
-import TestDB from "../Services/TestDb";
-import { IUser, User } from "../db/UserModel";
+import TestDB from "../TestDatenbank/TestDb";
+import { IUser, User } from "../../Model/UserModel";
 
 let userUmut: IUser & { _id: Types.ObjectId; }
 let fahrermo: IFahrt & { _id: Types.ObjectId }

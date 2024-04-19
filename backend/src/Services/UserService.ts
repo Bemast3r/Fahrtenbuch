@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { UserResource } from "../db/Resources";
-import { IUser, User } from "../db/UserModel";
+import { UserResource } from "../Model/Resources";
+import { IUser, User } from "../Model/UserModel";
 import { Types } from "mongoose"
 import { hash } from "bcryptjs";
 

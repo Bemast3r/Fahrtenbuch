@@ -1,7 +1,7 @@
-import TestDB from "../Services/TestDb";
-import { getUsersFromDB, changeUser, createUser, deleteUser, updateUser } from "../Services/UserService";
-import { UserResource } from "../db/Resources";
-import { IUser, User } from "../db/UserModel";
+import TestDB from "../TestDatenbank/TestDb";
+import { getUsersFromDB, changeUser, createUser, deleteUser, updateUser } from "../../Services/UserService";
+import { UserResource } from "../../Model/Resources";
+import { IUser, User } from "../../Model/UserModel";
 import mongoose, { Types } from "mongoose";
 
 // Mock-Up Daten für die Tests
