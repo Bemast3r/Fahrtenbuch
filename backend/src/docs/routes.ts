@@ -1,19 +1,16 @@
 import userRouter from "Router/UserRouter";
+import loginRouter from "../Login/LoginRouter";
 import { Express } from "express";
 
 
 export default function routes(app: Express) {
-
-    // ------------------------------------------------------------------------- USER ROUTES --------------------------------------------------------------------------------
-
     /**
  * @openapi
- * /api/login:
+ * '/':
  *   post:
  *     tags:
- *       - Auth
- *     summary: User login
- *     description: Logs in a user and returns an access token.
+ *       - Login User
+ *     summary: Register a user
  *     requestBody:
  *       required: true
  *       content:
@@ -23,13 +20,13 @@ export default function routes(app: Express) {
  *             properties:
  *               username:
  *                 type: string
- *                 description: The username of the user.
+ *                 minLength: 2
+ *                 maxLength: 12
  *               password:
  *                 type: string
- *                 description: The password of the user.
  *     responses:
  *       201:
- *         description: Successful login. Returns an access token.
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
@@ -37,12 +34,10 @@ export default function routes(app: Express) {
  *               properties:
  *                 token_type:
  *                   type: string
- *                   description: Type of the token.
  *                 access_token:
  *                   type: string
- *                   description: The access token.
  *       400:
- *         description: Bad Request. Indicates missing or invalid parameters.
+ *         description: Validation error
  *         content:
  *           application/json:
  *             schema:
@@ -53,14 +48,10 @@ export default function routes(app: Express) {
  *                   items:
  *                     type: object
  *                     properties:
- *                       msg:
+ *                       message:
  *                         type: string
- *                         description: Error message.
- *                       param:
- *                         type: string
- *                         description: Parameter related to the error.
  *       401:
- *         description: Unauthorized. Indicates authentication failure.
+ *         description: Can't create a JWT
  *         content:
  *           application/json:
  *             schema:
@@ -68,9 +59,646 @@ export default function routes(app: Express) {
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Error message.
  *       500:
- *         description: Internal Server Error. Indicates server-side failure.
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
+
+
+
+    app.post("/api/login", loginRouter);
+
+  /**
+ * @openapi
+ * '/admin/users':
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Get all users (requires authentication)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   vorname:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   username:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   password:
+ *                     type: string
+ *                   admin:
+ *                     type: boolean
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   fahrzeuge:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         datum:
+ *                           type: string
+ *                         kennzeichen:
+ *                           type: string
+ *       403:
+ *         description: Forbidden (User is not an admin)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ */
+
+
+
+
+
+
+    app.get("/admin/users", userRouter);
+
+    
+  /**
+ * @openapi
+ * '/admin/finde/user/{id}':
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Get user by ID (requires authentication)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: mongo-id
+ *         required: true
+ *         description: ID of the user to find
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 vorname:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 password:
+ *                   type: string
+ *                 admin:
+ *                   type: boolean
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 fahrzeuge:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       datum:
+ *                         type: string
+ *                       kennzeichen:
+ *                         type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       404:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+
+
+
+
+
+
+    app.get("/admin/finde/user/:id", userRouter);
+
+  /**
+ * @openapi
+ * '/admin/finde/user/alle/admin':
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Get all admin users (requires authentication)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   vorname:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   username:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   password:
+ *                     type: string
+ *                   admin:
+ *                     type: boolean
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   fahrzeuge:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         datum:
+ *                           type: string
+ *                         kennzeichen:
+ *                           type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       403:
+ *         description: Forbidden (User is not an admin)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+    app.get("/admin/finde/user/alle/admin", userRouter);
+
+  /**
+ * @openapi
+ * '/admin/user-erstellen':
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Create a new user (requires authentication)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               vorname:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               admin:
+ *                 type: boolean
+ *               fahrzeuge:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     datum:
+ *                       type: string
+ *                     kennzeichen:
+ *                       type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 vorname:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 password:
+ *                   type: string
+ *                 admin:
+ *                   type: boolean
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 fahrzeuge:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       datum:
+ *                         type: string
+ *                       kennzeichen:
+ *                         type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       403:
+ *         description: Forbidden (User is not an admin)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+
+    app.post("/admin/user-erstellen", userRouter);
+
+    /**
+ * @openapi
+ * '/passwort-vergessen':
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Request password reset
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+    app.post("/passwort-vergessen", userRouter);
+
+    /**
+ * @openapi
+ * '/passwort-zuruecksetzen/{token}':
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Reset password with token
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for password reset
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+    app.post("/passwort-zuruecksetzen/{token}", userRouter);
+
+    /**
+ * @openapi
+ * '/admin/user/aendern':
+ *   put:
+ *     tags:
+ *       - User
+ *     summary: Update user information (requires authentication)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               vorname:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               fahrzeuge:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     datum:
+ *                       type: string
+ *                     kennzeichen:
+ *                       type: string
+ *               password:
+ *                 type: string
+ *               admin:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 vorname:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 fahrzeuge:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       datum:
+ *                         type: string
+ *                       kennzeichen:
+ *                         type: string
+ *                 password:
+ *                   type: string
+ *                 admin:
+ *                   type: boolean
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       403:
+ *         description: Forbidden (User is not an admin)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+    app.put("/admin/user/aendern", userRouter);
+
+ /**
+ * @openapi
+ * '/admin/delete/{id}':
+ *   delete:
+ *     tags:
+ *       - User
+ *     summary: Delete user by ID (requires authentication)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: mongo-id
+ *         required: true
+ *         description: <strong>ID of the user to delete</strong>
+ *     responses:
+ *       200:
+ *         description: <strong>Success</strong>
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: <strong>Bad request</strong>
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *       403:
+ *         description: <strong>Forbidden (User is not an admin)</strong>
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: <strong>Internal Server Error</strong>
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+
+    app.put("/admin/delete/{id}", userRouter);
 }
