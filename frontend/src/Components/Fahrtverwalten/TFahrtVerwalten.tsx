@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
-import { getJWT, getLoginInfo, setJWT } from './Logincontext';
-import { getUser, getFahrt, updateFahrt } from '../Api/api';
-import { FahrtResource, UserResource } from '../util/Resources';
-import Loading from './LoadingIndicator';
+import { getJWT, getLoginInfo, setJWT } from '../Contexte/Logincontext';
+import { getUser, getFahrt, updateFahrt } from '../../Api/api';
+import { FahrtResource, UserResource } from '../../util/Resources';
+import Loading from '../../util/Components/LoadingIndicator';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
+import Navbar from '../Home/Navbar';
 
 
 const TFahrtVerwalten: React.FC = () => {

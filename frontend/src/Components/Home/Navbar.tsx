@@ -1,8 +1,8 @@
 import { Router, useLocation, useNavigate } from "react-router-dom";
-import { getJWT, getLoginInfo, removeJWT, setJWT } from "./Logincontext";
+import { getJWT, getLoginInfo, removeJWT, setJWT } from "../Contexte/Logincontext";
 import { useEffect, useState } from "react";
-import { getUser, getUsers } from "../Api/api";
-import { UserResource } from "../util/Resources";
+import { getUser, getUsers } from "../../Api/api";
+import { UserResource } from "../../util/Resources";
 import "./navbar.css"
 import { Nav, NavDropdown } from "react-bootstrap";
 

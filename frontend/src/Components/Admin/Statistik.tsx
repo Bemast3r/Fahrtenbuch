@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLoginInfo } from './Logincontext';
-import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../Api/api';
-import { FahrtResource, UserResource } from '../util/Resources';
-import Navbar from './Navbar';
-import { Accordion } from "./Accordion";
-import ExpandFahrt from "./ExpandFahrt";
-import Loading from "./LoadingIndicator";
+import { getLoginInfo } from '../Contexte/Logincontext';
+import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
+import { FahrtResource, UserResource } from '../../util/Resources';
+import Navbar from '../Home/Navbar';
+import { Accordion } from "../Statistiken/Accordion";
+import ExpandFahrt from "../Statistiken/ExpandFahrt";
+import Loading from "../../util/Components/LoadingIndicator";
 import { Button } from "react-bootstrap";
-import ProtectedComponent from './PreotectComponent';
+import ProtectedComponent from '../../util/Components/PreotectComponent';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
