@@ -17,6 +17,7 @@ const Statistik = () => {
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [counter, setCounter] = useState<number>(0);
+    const [expandedFahrtId, setExpandedFahrtId] = useState<string | null>(null); // Zustand für die erweiterte Ansicht der Fahrt
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -232,7 +233,7 @@ const Statistik = () => {
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-                                                                    <tr key={fahrtIndex}>
+                                                                    <tr key={fahrtIndex} >
                                                                         <td>
                                                                             <p>{fahrt.vollname}</p>
                                                                         </td>
@@ -243,6 +244,7 @@ const Statistik = () => {
                                                                             </span>
                                                                         </td>
                                                                     </tr>
+                                                                    
                                                                 );
                                                             })}
                                                         </tbody>
@@ -257,10 +259,12 @@ const Statistik = () => {
                     ) : (
                         !fahrts ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
                     )}
+
+                    {/* Einbinden der ExpandFahrt-Komponente */}
+                    {fahrts && fahrts.map(fahrt => (
+                        <ExpandFahrt key={fahrt._id} fahrt={fahrt} user={user!} />
+                    ))}
                 </div>
-
-
-
 
                 <div className="fahrten">
                     {fahrts && fahrts.length > 0 && user ? (

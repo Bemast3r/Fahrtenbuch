@@ -6,8 +6,6 @@ import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
 import { jsPDF } from "jspdf";
 
-
-
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {
 
     function formatDateTime(date: Date): string {
@@ -16,8 +14,6 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         const seconds = new Date(date).getSeconds().toString().padStart(2, '0');
         return `${hours}:${minutes}:${seconds}`;
     }
-
-
 
     function formatDateString(date: Date): string {
         const year = date.getFullYear();
@@ -81,7 +77,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                     body: tableData,
                     startY: 50
                 });
-                
+
                 doc.addImage(imgdata, 'JPEG', 10, (componentheight * 4 / 5) - 50, componetwidth + 20, componentheight / 5);
                 doc.line(20, componentheight - 10, 80, componentheight - 10);
 
@@ -96,10 +92,6 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
             console.log("Nicht gefunden.");
         }
     };
-
-
-
-
 
     return (
         <div id="accordion">
@@ -202,6 +194,5 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         </div>
     );
 };
-
 
 export default ExpandFahrt;
