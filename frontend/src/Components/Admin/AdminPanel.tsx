@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Form, Row, Col, Alert } from 'react-bootstrap';
-import { createUserWithAdmin } from '../Api/api';
+import { createUserWithAdmin } from '../../Api/api';
 import { useNavigate } from 'react-router-dom';
-import { UserResource } from '../util/Resources';
-import Navbar from './Navbar';
-import { getJWT, setJWT } from './Logincontext';
+import { UserResource } from '../../util/Resources';
+import Navbar from '../Home/Navbar';
+import { getJWT, setJWT } from '../Contexte/Logincontext';
 
 const AdminFormular = () => {
 

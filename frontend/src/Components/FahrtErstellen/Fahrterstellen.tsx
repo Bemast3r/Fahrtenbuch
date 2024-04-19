@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getFahrt, getUser, postFahrt } from '../Api/api';
-import { FahrtResource, UserResource } from '../util/Resources';
-import Loading from './LoadingIndicator';
+import { getJWT, setJWT, getLoginInfo } from '../Contexte/Logincontext';
+import { getFahrt, getUser, postFahrt } from '../../Api/api';
+import { FahrtResource, UserResource } from '../../util/Resources';
+import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import Navbar from './Navbar';
+import Navbar from '../Home/Navbar';
 
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);

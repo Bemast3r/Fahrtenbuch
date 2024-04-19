@@ -1,9 +1,9 @@
-import TestDB from "../Services/TestDb";
-import { User, IUser } from "../db/UserModel";
+import TestDB from "../TestDatenbank/TestDb";
+import { User, IUser } from "../../Model/UserModel";
 import mongoose, { Types } from "mongoose";
 import supertest from "supertest"
-import { LoginResource } from "../db/Resources";
-import app from "../testing/testindex";
+import { LoginResource } from "../../Model/Resources";
+import app from "../TestDatenbank/testindex";
 
 import dotenv from "dotenv";
 dotenv.config();

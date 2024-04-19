@@ -1,4 +1,4 @@
-import { User } from "../../db/UserModel"
+import { User } from "../../Model/UserModel"
 
 /**
  * Checks email and password and upon success returns the user's ID and name, with success set to true. 

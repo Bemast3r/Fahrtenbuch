@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import Loading from "./LoadingIndicator";
-import { login } from "../Api/api";
-import { getJWT, setJWT } from "./Logincontext";
+import Loading from "../../util/Components/LoadingIndicator";
+import { login } from "../../Api/api";
+import { getJWT, setJWT } from "../Contexte/Logincontext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./login.css";
 

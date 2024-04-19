@@ -1,8 +1,8 @@
-import { User, IUser } from "../db/UserModel";
+import { User, IUser } from "../../Model/UserModel";
 import mongoose, { Types } from "mongoose";
-import TestDB from "../Services/TestDb";
-import { Fahrt, IFahrt } from "../db/FahrtModel";
-import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
+import TestDB from "../TestDatenbank/TestDb";
+import { Fahrt, IFahrt } from "../../Model/FahrtModel";
+import { createUserFahrt, deleteFahrt, getFahrten, getUserFahrten, updateUserfahrt } from "../../Services/FahrtService";
 
 let Fahrer: IUser & { _id: Types.ObjectId };
 let fahrt: IFahrt & { _id: Types.ObjectId };

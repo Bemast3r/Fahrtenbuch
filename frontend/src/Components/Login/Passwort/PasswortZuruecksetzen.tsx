@@ -1,11 +1,11 @@
-import "./login.css";
+import "../login.css";
 import 'boxicons/css/boxicons.min.css';
 
 import { useState } from "react";
 import { Form, Alert } from "react-bootstrap";
-import Loading from "./LoadingIndicator";
+import Loading from "../../../util/Components/LoadingIndicator";
 import { useNavigate, useParams } from "react-router-dom";
-import { passwortZuruecksetzen } from "../Api/api";
+import { passwortZuruecksetzen } from "../../../Api/api";
 
 const PasswortZuruecksetzen = () => {
     const { token } = useParams();

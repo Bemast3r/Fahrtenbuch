@@ -14,13 +14,13 @@ dotenv.config();
 // Diese Datei ging 
 
 
-// const PORT = 5000;
+const PORT = 5000;
 const MONGOURL = process.env.MONGO_URL;
 
 const app = express();
 
 const corsOptions = {
-    origin: "https://fahrtenbuch-frontend.vercel.app",
+    origin: ["https://fahrtenbuch-frontend.vercel.app", "http://localhost:3000"],
     credentials: true, // Set to true if you're using cookies or sessions
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -50,9 +50,9 @@ app.get("/", (_, res) => { res.send('SKM Server läuft'); });
 
 const server = http.createServer(app);
 
-// server.listen(PORT, () => {
-//     console.log(`Server runnig on http://localhost:${PORT}/`)
-// })
+server.listen(PORT, () => {
+    console.log(`Server runnig on http://localhost:${PORT}/`)
+})
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGOURL);

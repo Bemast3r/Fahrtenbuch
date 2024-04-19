@@ -1,6 +1,6 @@
 import "./home2.css";
 import { useEffect, useState } from 'react';
-import { getJWT, getLoginInfo, setJWT } from './Logincontext';
+import { getJWT, getLoginInfo, setJWT } from '../Contexte/Logincontext';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 

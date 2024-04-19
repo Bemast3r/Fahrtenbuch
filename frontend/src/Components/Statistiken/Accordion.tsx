@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef} from "react";
 import { Button } from "react-bootstrap";
-import { ReactComponent as ArrowIcon } from "./arrow.svg";
+import { ReactComponent as ArrowIcon } from "../../util/arrow.svg";
 import "./statistiken.css"
 export declare interface AccordionProps {
     title?: string;

@@ -1,5 +1,5 @@
-import { Fahrt } from "../db/FahrtModel";
-import { FahrtResource, UserResource } from "../db/Resources";
+import { Fahrt } from "../Model/FahrtModel";
+import { FahrtResource, UserResource } from "../Model/Resources";
 
 // Admin kann alle Fahrten sehen
 export async function getFahrten() {

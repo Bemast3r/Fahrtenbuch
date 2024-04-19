@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Alert } from "react-bootstrap";
-import Loading from "./LoadingIndicator";
-import { passwortVergessen } from "../Api/api";
+import Loading from "../../../util/Components/LoadingIndicator";
+import { passwortVergessen } from "../../../Api/api";
 import { useNavigate } from "react-router-dom";
 
 const PasswortVergessen = () => {
