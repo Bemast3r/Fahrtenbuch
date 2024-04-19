@@ -195,9 +195,69 @@ const Statistik = () => {
                                 </div>
                             </div>
                         </div>
+                        </div>
+                        </main>
 
-                    </div>
-                </main>
+                        <section id="content">
+                        <main>
+                        {/* NEU */}
+                        <div className="table-data">
+                            <div className="order">
+                                <div className="head">
+                                    <h3>Fahrten</h3>
+                                    <i className='bx bx-search' ></i>
+                                    <i className='bx bx-filter' ></i>
+                                </div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Fahrer</th>
+                                            <th>Datum der Fahrt</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                    <p>John Doe</p>
+                                            </td>
+                                            <td>01-10-2021</td>
+                                            <td><span className="status completed">Beendet</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                    <p>John Doe</p>
+                                            </td>
+                                            <td>01-10-2021</td>
+                                            <td><span className="status completed">Beendet</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                    <p>John Doe</p>
+                                            </td>
+                                            <td>01-10-2021</td>
+                                            <td><span className="status pending">Läuft noch</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                    <p>John Doe</p>
+                                            </td>
+                                            <td>01-10-2021</td>
+                                            <td><span className="status pending">Läuft noch</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                    <p>John Doe</p>
+                                            </td>
+                                            <td>01-10-2021</td>
+                                            <td><span className="status completed">Beendet</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                            </main>
+                            </section>
 
                 <div className="fahrten">
                     {fahrts && fahrts.length > 0 && user ? (
@@ -205,7 +265,7 @@ const Statistik = () => {
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
                                     <div>
-                                        <h2 style={{ paddingLeft: "10px", marginTop: "50px", color: "#FFFF" }}>{date}</h2>
+                                        <h3 style={{ paddingLeft: "10px", marginTop: "50px", color: "#FFFF" }}>{date}</h3>
                                         {fahrten.map((fahrt: FahrtResource) => (
                                             <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
                                                 <div className={`infos-${fahrt._id}`}>
