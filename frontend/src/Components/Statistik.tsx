@@ -195,69 +195,72 @@ const Statistik = () => {
                                 </div>
                             </div>
                         </div>
-                        </div>
-                        </main>
+                    </div>
+                </main>
 
-                        <section id="content">
-                        <main>
-                        {/* NEU */}
-                        <div className="table-data">
-                            <div className="order">
-                                <div className="head">
-                                    <h3>Fahrten</h3>
-                                    <i className='bx bx-search' ></i>
-                                    <i className='bx bx-filter' ></i>
-                                </div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Fahrer</th>
-                                            <th>Datum der Fahrt</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                    <p>John Doe</p>
-                                            </td>
-                                            <td>01-10-2021</td>
-                                            <td><span className="status completed">Beendet</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                    <p>John Doe</p>
-                                            </td>
-                                            <td>01-10-2021</td>
-                                            <td><span className="status completed">Beendet</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                    <p>John Doe</p>
-                                            </td>
-                                            <td>01-10-2021</td>
-                                            <td><span className="status pending">Läuft noch</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                    <p>John Doe</p>
-                                            </td>
-                                            <td>01-10-2021</td>
-                                            <td><span className="status pending">Läuft noch</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                    <p>John Doe</p>
-                                            </td>
-                                            <td>01-10-2021</td>
-                                            <td><span className="status completed">Beendet</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div>
-                            </main>
-                            </section>
+                <div className="fahrten">
+                    {fahrts && fahrts.length > 0 && user ? (
+                        <>
+                            {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
+                                <section key={index} style={{ overflowY: "auto" }}>
+                                    <section id="content">
+                                        <main>
+                                            <div className="table-data">
+                                                <div className="order">
+                                                    <div className="head">
+                                                        <h3>Fahrten vom {date}</h3>
+                                                        <i className='bx bx-search' ></i>
+                                                        <i className='bx bx-filter' ></i>
+                                                    </div>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Fahrer</th>
+                                                                <th>Dauer der Fahrt</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {fahrten.map((fahrt, fahrtIndex) => {
+                                                                // Berechnung der Gesamtdauer der Fahrt
+                                                                const totalDuration = fahrt.totalArbeitszeit! + fahrt.totalLenkzeit! + fahrt.totalPause!;
+                                                                // Umwandlung der Dauer in das Format HH:MM:SS
+                                                                const hours = Math.floor(totalDuration / 3600);
+                                                                const minutes = Math.floor((totalDuration % 3600) / 60);
+                                                                const seconds = totalDuration % 60;
+                                                                const formattedSeconds = seconds.toFixed(0).padStart(2, '0'); // Rundung auf 2 Stellen und Auffüllen mit Nullen
+                                                                const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
+
+                                                                return (
+                                                                    <tr key={fahrtIndex}>
+                                                                        <td>
+                                                                            <p>{fahrt.vollname}</p>
+                                                                        </td>
+                                                                        <td>{formattedDuration}</td> {/* Anzeige der formatierten Dauer */}
+                                                                        <td>
+                                                                            <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
+                                                                                {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </main>
+                                    </section>
+                                </section>
+                            ))}
+                        </>
+                    ) : (
+                        !fahrts ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
+                    )}
+                </div>
+
+
+
 
                 <div className="fahrten">
                     {fahrts && fahrts.length > 0 && user ? (
