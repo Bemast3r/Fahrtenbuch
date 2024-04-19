@@ -26,7 +26,7 @@ export default function routes(app: Express) {
  *                 type: string
  *     responses:
  *       201:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -37,7 +37,7 @@ export default function routes(app: Express) {
  *                 access_token:
  *                   type: string
  *       400:
- *         description: Validation error
+ *         description: <strong>Validation error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -51,7 +51,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       401:
- *         description: Can't create a JWT
+ *         description: <strong>Can't create a JWT</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -60,7 +60,7 @@ export default function routes(app: Express) {
  *                 message:
  *                   type: string
  *       500:
- *         description: Internal Server Error
+ *         description: <strong>Internal Server Error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -88,7 +88,7 @@ export default function routes(app: Express) {
  *       required: false
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -123,7 +123,7 @@ export default function routes(app: Express) {
  *                         kennzeichen:
  *                           type: string
  *       403:
- *         description: Forbidden (User is not an admin)
+ *         description: <strong>Forbidden (User is not an admin)</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -132,7 +132,7 @@ export default function routes(app: Express) {
  *                 message:
  *                   type: string
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -171,10 +171,10 @@ export default function routes(app: Express) {
  *           type: string
  *           format: mongo-id
  *         required: true
- *         description: ID of the user to find
+ *         description: <strong>ID of the user to find</strong>
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -207,7 +207,7 @@ export default function routes(app: Express) {
  *                       kennzeichen:
  *                         type: string
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -221,7 +221,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       404:
- *         description: Validation error
+ *         description: <strong>Validation error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -250,7 +250,7 @@ export default function routes(app: Express) {
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -285,7 +285,7 @@ export default function routes(app: Express) {
  *                         kennzeichen:
  *                           type: string
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -299,7 +299,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       403:
- *         description: Forbidden (User is not an admin)
+ *         description: <strong>Forbidden (User is not an admin)</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -308,7 +308,7 @@ export default function routes(app: Express) {
  *                 message:
  *                   type: string
  *       500:
- *         description: Internal Server Error
+ *         description: <strong>Internal Server Error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -359,7 +359,7 @@ export default function routes(app: Express) {
  *                       type: string
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -392,7 +392,7 @@ export default function routes(app: Express) {
  *                       kennzeichen:
  *                         type: string
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -406,7 +406,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       403:
- *         description: Forbidden (User is not an admin)
+ *         description: <strong>Forbidden (User is not an admin)</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -415,7 +415,7 @@ export default function routes(app: Express) {
  *                 message:
  *                   type: string
  *       500:
- *         description: Internal Server Error
+ *         description: <strong>Internal Server Error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -446,13 +446,13 @@ export default function routes(app: Express) {
  *                 type: string
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -466,7 +466,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       500:
- *         description: Internal Server Error
+ *         description: <strong>Internal Server Error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -491,7 +491,7 @@ export default function routes(app: Express) {
  *         schema:
  *           type: string
  *         required: true
- *         description: Token for password reset
+ *         description: <strong>Token for password reset</strong>
  *     requestBody:
  *       required: true
  *       content:
@@ -503,13 +503,13 @@ export default function routes(app: Express) {
  *                 type: string
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -523,7 +523,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       500:
- *         description: Internal Server Error
+ *         description: <strong>Internal Server Error</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -572,7 +572,7 @@ export default function routes(app: Express) {
  *                 type: boolean
  *     responses:
  *       200:
- *         description: Success
+ *         description: <strong>Success</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -603,7 +603,7 @@ export default function routes(app: Express) {
  *                   type: string
  *                   format: date-time
  *       400:
- *         description: Bad request
+ *         description: <strong>Bad request</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -617,7 +617,7 @@ export default function routes(app: Express) {
  *                       message:
  *                         type: string
  *       403:
- *         description: Forbidden (User is not an admin)
+ *         description: <strong>Forbidden (User is not an admin)</strong>
  *         content:
  *           application/json:
  *             schema:
@@ -626,7 +626,7 @@ export default function routes(app: Express) {
  *                 message:
  *                   type: string
  *       500:
- *         description: Internal Server Error
+ *         description: <strong>Internal Server Error</strong>
  *         content:
  *           application/json:
  *             schema:
