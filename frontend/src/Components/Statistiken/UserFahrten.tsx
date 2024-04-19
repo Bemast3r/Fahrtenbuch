@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FahrtResource, UserResource } from "../util/Resources";
-import { getLoginInfo } from "./Logincontext";
-import { getFahrt, getUser } from "../Api/api";
-import Loading from "./LoadingIndicator";
+import { FahrtResource, UserResource } from "../../util/Resources";
+import { getLoginInfo } from "../Contexte/Logincontext";
+import { getFahrt, getUser } from "../../Api/api";
+import Loading from "../../util/Components/LoadingIndicator";
 import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
-import Navbar from "./Navbar";
+import Navbar from "../Home/Navbar";
 import { jsPDF } from "jspdf";
 import { useNavigate } from 'react-router-dom';
 

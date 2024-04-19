@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Login from './Components/Login';
-import Home from './Components/Home';
-import Loading from './Components/LoadingIndicator';
-import PasswortVergessen from './Components/PasswortVergessen';
-import PasswortZuruecksetzen from './Components/PasswortZuruecksetzen';
-import AdminFormular from './Components/AdminPanel';
-import FahrtErstellen from './Components/Fahrterstellen';
-import Statistik from './Components/Statistik';
-import UserFahrten from './Components/UserFahrten';
-import Fahrtabschliessen from './Components/Fahrtabschliessen';
-import TFahrtVerwalten from './Components/TFahrtVerwalten';
+import Login from './Components/Login/Login';
+import Home from './Components/Home/Home';
+import Loading from './util/Components/LoadingIndicator';
+import PasswortVergessen from './Components/Login/Passwort/PasswortVergessen';
+import PasswortZuruecksetzen from './Components/Login/Passwort/PasswortZuruecksetzen';
+import AdminFormular from './Components/Admin/AdminPanel';
+import FahrtErstellen from './Components/FahrtErstellen/Fahrterstellen';
+import Statistik from './Components/Admin/Statistik';
+import UserFahrten from './Components/Statistiken/UserFahrten';
+import Fahrtabschliessen from './Components/Fahrtverwalten/Fahrtabschliessen';
+import TFahrtVerwalten from './Components/Fahrtverwalten/TFahrtVerwalten';
 
 const App = () => {
 

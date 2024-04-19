@@ -4,15 +4,15 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import "./fahrtErstellen.css";
+import "../FahrtErstellen/fahrtErstellen.css";
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from './Logincontext';
-import { getFahrt, getUser, postFahrt, updateFahrt } from '../Api/api';
-import { FahrtResource, UserResource } from '../util/Resources';
-import Loading from './LoadingIndicator';
+import { getJWT, setJWT, getLoginInfo } from '../Contexte/Logincontext';
+import { getFahrt, getUser, postFahrt, updateFahrt } from '../../Api/api';
+import { FahrtResource, UserResource } from '../../util/Resources';
+import Loading from '../../util/Components/LoadingIndicator';
 import { Alert } from 'react-bootstrap';
-import Navbar from './Navbar';
+import Navbar from '../Home/Navbar';
 
 const Fahrtabschliessen = () => {
     const [loading, setLoading] = useState<boolean>(true);

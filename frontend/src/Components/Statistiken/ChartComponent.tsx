@@ -13,7 +13,7 @@ import {
 
 import "chartjs-adapter-date-fns";
 import { Line } from 'react-chartjs-2';
-import { FahrtResource } from '../util/Resources';
+import { FahrtResource } from '../../util/Resources';
 import Zoom from 'chartjs-plugin-zoom';
 import zoomPlugin from 'chartjs-plugin-zoom';
 

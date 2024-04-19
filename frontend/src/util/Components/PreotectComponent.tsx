@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { LoginContext, LoginInfo, getLoginInfo } from "./Logincontext";
+import { LoginContext, LoginInfo, getLoginInfo } from "../../Components/Contexte/Logincontext";
 import { useNavigate } from 'react-router-dom';
 
 const ProtectedComponent: React.FC<{ requiredRole: "a" | "u"; children: React.ReactNode }> = ({ requiredRole, children }: any) => {

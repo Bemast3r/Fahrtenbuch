@@ -1,6 +1,6 @@
 import { requiresAuthentication } from "../Middleware/auth";
 import { createUserFahrt, deleteFahrt, getBeendeteFahrten, getFahrten, getLaufendeFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
-import { FahrtResource } from "../db/Resources";
+import { FahrtResource } from "../Model/Resources";
 import express from "express";
 import { body, validationResult, matchedData, param } from "express-validator";
 
