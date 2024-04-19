@@ -1,4 +1,5 @@
-﻿﻿# SKM Journey Log
+
+# SKM Journey Log
 
 ### The SKM Journey Log is a digital solution developed in response to a commission from SKM. It serves as a modern alternative to traditional manual journey logging processes.
 
