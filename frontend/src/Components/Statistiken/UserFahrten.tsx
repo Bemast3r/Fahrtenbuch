@@ -30,29 +30,6 @@ const UserFahrten: React.FC = () => {
         }
     }
 
-    function formatDateString(date: Date): string {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${day}.${month}.${year}`;
-    }
-
-    const downloadPDF = (fahrt: FahrtResource) => {
-        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
-        if (capture) {
-            html2tocanvas(capture).then((canvas) => {
-                const imgdata = canvas.toDataURL('img/jpeg');
-                const doc = new jsPDF('p', 'pt', 'letter');
-                const componetwidth = doc.internal.pageSize.getWidth()
-                const componentheight = doc.internal.pageSize.getHeight()
-                doc.addImage(imgdata, 'JPEG', 0, 0, componetwidth + 150, componentheight);
-                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
-            });
-        } else {
-            console.log("Nicht gefunden.");
-        }
-    };
-
     useEffect(() => {
         getU();
     }, []);

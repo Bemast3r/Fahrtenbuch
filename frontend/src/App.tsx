@@ -10,6 +10,7 @@ import Statistik from './Components/Admin/Statistik';
 import UserFahrten from './Components/Statistiken/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtverwalten/Fahrtabschliessen';
 import TFahrtVerwalten from './Components/Fahrtverwalten/TFahrtVerwalten';
+import FahrtenContent from "./Components/Contexte/context";
 
 const App = () => {
 
@@ -28,6 +29,8 @@ const App = () => {
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
+        <Route path="context" element={<FahrtenContent />} />
+
       </Routes>
     </Router>
   );
