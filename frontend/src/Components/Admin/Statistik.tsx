@@ -4,11 +4,9 @@ import { getLoginInfo } from '../Contexte/Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
-import { Accordion } from "../Statistiken/Accordion";
-import ExpandFahrt from "../Statistiken/ExpandFahrt";
 import Loading from "../../util/Components/LoadingIndicator";
-import { Button } from "react-bootstrap";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
+import Modal from './Modal';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -17,7 +15,8 @@ const Statistik = () => {
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [counter, setCounter] = useState<number>(0);
-    const [expandedFahrtId, setExpandedFahrtId] = useState<string | null>(null); // Zustand für die erweiterte Ansicht der Fahrt
+    const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null); // State für ausgewählte Fahrt hinzufügen
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -105,10 +104,19 @@ const Statistik = () => {
         }
     }
 
+    function openModal(fahrt: FahrtResource) {
+        setSelectedFahrt(fahrt);
+    }
+
+    function closeModal() {
+        setSelectedFahrt(null);
+    }
+
     return (
         <>
             <Navbar></Navbar>
             <ProtectedComponent requiredRole="a">
+                {/* 5 Statistiken */}
                 <main>
                     <h1 className="uberschrift">Statistiken</h1>
                     <div className="analyse">
@@ -199,8 +207,9 @@ const Statistik = () => {
                     </div>
                 </main>
 
+                {/* Alle Fahrten */}
                 <div className="fahrten">
-                    {fahrts && fahrts.length > 0 && user ? (
+                    {fahrts && fahrts.length > 0 ? (
                         <>
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
@@ -223,28 +232,27 @@ const Statistik = () => {
                                                         </thead>
                                                         <tbody>
                                                             {fahrten.map((fahrt, fahrtIndex) => {
-                                                                // Berechnung der Gesamtdauer der Fahrt
                                                                 const totalDuration = fahrt.totalArbeitszeit! + fahrt.totalLenkzeit! + fahrt.totalPause!;
-                                                                // Umwandlung der Dauer in das Format HH:MM:SS
                                                                 const hours = Math.floor(totalDuration / 3600);
                                                                 const minutes = Math.floor((totalDuration % 3600) / 60);
                                                                 const seconds = totalDuration % 60;
-                                                                const formattedSeconds = seconds.toFixed(0).padStart(2, '0'); // Rundung auf 2 Stellen und Auffüllen mit Nullen
+                                                                const formattedSeconds = seconds.toFixed(0).padStart(2, '0');
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-                                                                    <tr key={fahrtIndex} >
+
+                                                                    <tr key={fahrtIndex} onClick={() => openModal(fahrt)}>
                                                                         <td>
-                                                                            <p>{fahrt.vollname}</p>
+                                                                            <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
-                                                                        <td>{formattedDuration}</td> {/* Anzeige der formatierten Dauer */}
+                                                                        <td>{formattedDuration}</td>
                                                                         <td>
                                                                             <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
                                                                                 {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
                                                                             </span>
                                                                         </td>
                                                                     </tr>
-                                                                    
+
                                                                 );
                                                             })}
                                                         </tbody>
@@ -259,36 +267,12 @@ const Statistik = () => {
                     ) : (
                         !fahrts ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
                     )}
-
-                    {/* Einbinden der ExpandFahrt-Komponente */}
-                    {fahrts && fahrts.map(fahrt => (
-                        <ExpandFahrt key={fahrt._id} fahrt={fahrt} user={user!} />
-                    ))}
                 </div>
 
-                <div className="fahrten">
-                    {fahrts && fahrts.length > 0 && user ? (
-                        <>
-                            {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
-                                <section key={index} style={{ overflowY: "auto" }}>
-                                    <div>
-                                        <h3 style={{ paddingLeft: "10px", marginTop: "50px", color: "#FFFF" }}>{date}</h3>
-                                        {fahrten.map((fahrt: FahrtResource) => (
-                                            <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
-                                                <div className={`infos-${fahrt._id}`}>
-                                                    <ExpandFahrt fahrt={fahrt} user={user!} />
-                                                    <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
-                                                </div>
-                                            </Accordion>
-                                        ))}
-                                    </div>
-                                </section>
-                            ))}
-                        </>
-                    ) : (
-                        !fahrts ? <Loading /> : fahrts.length === 0 ? <h2 className='header'> Es gibt keine Fahrten</h2> : <h2 className='header'> Es gibt keine Fahrten</h2>
-                    )}
-                </div>
+                {/* Modal */}
+                {selectedFahrt && (
+                    <Modal fahrt={selectedFahrt} onClose={closeModal} />
+                )}
             </ProtectedComponent>
         </>
     );
