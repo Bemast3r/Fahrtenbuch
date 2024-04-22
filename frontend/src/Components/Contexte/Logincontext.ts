@@ -23,7 +23,6 @@ export function getLoginInfo(): LoginInfo | null {
 
     if (Date.now() >= exp * 1000) {
         removeJWT();
-        alert("Sie müssen sich erneut anmelden.");
         window.location.href = "/";
         return null;
     }
