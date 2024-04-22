@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from '../Context/Logincontext';
-import { getFahrt, getUser, postFahrt } from '../../Api/api';
-import { FahrtResource, UserResource } from '../../util/Resources';
+import { useNavigate } from 'react-router-dom';
+import { getJWT, setJWT } from '../Context/Logincontext';
+import { getFahrt, postFahrt } from '../../Api/api';
+import { FahrtResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import Navbar from '../Home/Navbar';
@@ -36,9 +36,8 @@ const FahrtErstellen = () => {
     }, []);
 
     async function load() {
-        const id = getLoginInfo();
-        if (user && FahrtenContext) {
-            const fahrten: FahrtResource[] = await getFahrt(id!.userID);
+        if (user&& user.id && FahrtenContext) {
+            const fahrten: FahrtResource[] = await getFahrt(user.id);
             FahrtenContext.setFahrten(fahrten);
             setLetzteFahrt(fahrten[fahrten.length - 1])
             setLoading(false);
