@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from '../Contexte/Logincontext';
+import { getJWT, setJWT, getLoginInfo } from '../Context/Logincontext';
 import { getFahrt, getUser, postFahrt } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import Navbar from '../Home/Navbar';
+import { useUser } from '../Context/UserContext';
+import { useFahrten } from '../Context/FahrtenContext';
 
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);
     const [disableFields, setDisableFields] = useState(false);
-    const [user, setUser] = useState<UserResource | null>(null);
+    const user = useUser()
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
+    const FahrtenContext = useFahrten()
     const [showAlert, setShowAlert] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -34,12 +37,11 @@ const FahrtErstellen = () => {
 
     async function load() {
         const id = getLoginInfo();
-        if (id && id.userID) {
-            const user = await getUser(id!.userID);
-            setUser(user);
+        if (user && FahrtenContext) {
+            const fahrten: FahrtResource[] = await getFahrt(id!.userID);
+            FahrtenContext.setFahrten(fahrten);
+            setLetzteFahrt(fahrten[fahrten.length - 1])
             setLoading(false);
-            const x: FahrtResource[] = await getFahrt(id!.userID);
-            setLetzteFahrt(x[x.length - 1]);
         } else {
             navigate("/")
         }

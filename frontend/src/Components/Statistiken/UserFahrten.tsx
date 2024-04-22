@@ -1,38 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { FahrtResource, UserResource } from "../../util/Resources";
-import { getLoginInfo } from "../Contexte/Logincontext";
+import { getLoginInfo } from "../Context/Logincontext";
 import { getFahrt, getUser } from "../../Api/api";
 import Loading from "../../util/Components/LoadingIndicator";
 import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
 import Navbar from "../Home/Navbar";
-import { jsPDF } from "jspdf";
 import { useNavigate } from 'react-router-dom';
-
-import html2tocanvas from 'html2canvas'
+import { useUser } from "../Context/UserContext";
+import { useFahrten } from "../Context/FahrtenContext";
 
 const UserFahrten: React.FC = () => {
-    const [user, setUser] = useState<UserResource | null>(null);
-    const [meineFahrten, setMeineFahrten] = useState<FahrtResource[] | []>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const user = useUser()
+    const fahrtContext = useFahrten()
     const navigate = useNavigate()
 
-    async function getU() {
-        const id = getLoginInfo();
-        if (id && id.userID) {
-            const userData = await getUser(id!.userID);
-            setUser(userData);
-            const fahrten = await getFahrt(id!.userID);
-            setMeineFahrten(fahrten);
-            setLoading(false);
-        } else {
+    useEffect(() => {
+        if (!user) {
             navigate("/")
         }
-    }
-
-    useEffect(() => {
-        getU();
-    }, []);
+    }, [])
 
     // Funktion zur Gruppierung der Fahrten nach Datum
     function groupFahrtenByDate(fahrten: FahrtResource[]) {
@@ -49,50 +36,46 @@ const UserFahrten: React.FC = () => {
 
 
     return (
+
         <>
-            {loading ? (
-                <><h1 className="header">Statistiken werden geladen</h1><Loading /></>
-            ) : (
+            {user && (
                 <>
-                    {user && (
-                        <>
-                            <Navbar />
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <div style={{ padding: "10px" }}>
-                                <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Ihre letzten Fahrten</h3>
-                                {meineFahrten.length > 0 ? (
-                                    <>
-                                        {Object.entries(groupFahrtenByDate(meineFahrten)).map(([date, fahrten]) => (
-                                            <div key={date}>
-                                                <h2 style={{ marginTop: "20px", padding: "10px" }}>{date}</h2>
-                                                {fahrten.map((fahrt: FahrtResource) => (
-                                                    <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
-                                                        <div className={`infos-${fahrt._id}`}>
-                                                            <ExpandFahrt fahrt={fahrt} user={user} />
-                                                        </div>
+                    <Navbar />
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <div style={{ padding: "10px" }}>
+                        <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Ihre letzten Fahrten</h3>
+                        {fahrtContext !== null && fahrtContext.fahrten && fahrtContext.fahrten.length > 0 ? (
+                            <>
+                                {Object.entries(groupFahrtenByDate(fahrtContext.fahrten)).map(([date, fahrten]) => (
+                                    <div key={date}>
+                                        <h2 style={{ marginTop: "20px", padding: "10px" }}>{date}</h2>
+                                        {fahrten.map((fahrt: FahrtResource) => (
+                                            <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
+                                                <div className={`infos-${fahrt._id}`}>
+                                                    <ExpandFahrt fahrt={fahrt} user={user} />
+                                                </div>
 
-                                                    </Accordion>
-                                                ))}
-                                            </div>
+                                            </Accordion>
                                         ))}
-                                    </>
-                                ) : (
-                                    <p>Keine Fahrten gefunden</p>
-                                )}
-                            </div>
+                                    </div>
+                                ))}
+                            </>
+                        ) : (
+                            <p>Keine Fahrten gefunden</p>
+                        )}
+                    </div>
 
-                        </>
-                    )}
                 </>
             )}
         </>
-    );
-};
+    )
+}
+
 
 export default UserFahrten;

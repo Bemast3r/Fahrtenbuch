@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLoginInfo } from '../Contexte/Logincontext';
+import { getLoginInfo } from '../Context/Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';

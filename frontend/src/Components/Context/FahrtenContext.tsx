@@ -2,7 +2,7 @@ import React, { createContext, useState, ReactNode, useEffect, useContext } from
 import { getFahrt, getUser } from '../../Api/api'
 import { FahrtResource } from "../../util/Resources"
 import { useUser } from "./UserContext"
-import { getJWT } from "../Contexte/Logincontext"
+import { getJWT } from "./Logincontext"
 
 
 type FahrtenContextValue = {
@@ -10,7 +10,12 @@ type FahrtenContextValue = {
     setFahrten: React.Dispatch<React.SetStateAction<FahrtResource[] | null>>;
 };
 
-const FahrtenContext = createContext<FahrtenContextValue| null>(null)
+const defaultFahrtenContextValue: FahrtenContextValue = {
+    fahrten: null,
+    setFahrten: () => {} 
+};
+
+const FahrtenContext = createContext<FahrtenContextValue>(defaultFahrtenContextValue);
 
 type FahrtProvider = {
     children: ReactNode

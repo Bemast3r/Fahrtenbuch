@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
-import { getJWT, getLoginInfo, setJWT } from '../Contexte/Logincontext';
+import { getJWT, getLoginInfo, setJWT } from '../Context/Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';

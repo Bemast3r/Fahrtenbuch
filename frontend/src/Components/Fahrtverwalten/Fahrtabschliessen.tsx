@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import "../FahrtErstellen/fahrtErstellen.css";
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from '../Contexte/Logincontext';
+import { getJWT, setJWT, getLoginInfo } from '../Context/Logincontext';
 import { getFahrt, getUser, postFahrt, updateFahrt } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';

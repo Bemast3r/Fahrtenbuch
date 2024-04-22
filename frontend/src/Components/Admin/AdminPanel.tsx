@@ -4,7 +4,7 @@ import { createUserWithAdmin } from '../../Api/api';
 import { useNavigate } from 'react-router-dom';
 import { UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
-import { getJWT, setJWT } from '../Contexte/Logincontext';
+import { getJWT, setJWT } from '../Context/Logincontext';
 
 const AdminFormular = () => {
 

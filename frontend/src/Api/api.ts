@@ -1,5 +1,5 @@
 
-import { getJWT } from "../Components/Contexte/Logincontext";
+import { getJWT } from "../Components/Context/Logincontext";
 import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
 
 // const BASE_URL = "https://fahrtenbuch-backend.vercel.app/";

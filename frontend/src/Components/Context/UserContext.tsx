@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { getUser } from '../../Api/api';
-import { getJWT, getLoginInfo } from '../Contexte/Logincontext';
+import { getJWT, getLoginInfo } from './Logincontext';
 import { UserResource } from '../../util/Resources';
 
 
