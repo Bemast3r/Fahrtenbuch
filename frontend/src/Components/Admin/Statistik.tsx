@@ -6,7 +6,8 @@ import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
 import Loading from "../../util/Components/LoadingIndicator";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
-import Modal from './Modal';
+import { Button, Modal } from 'react-bootstrap';
+import ExpandFahrt from '../Statistiken/ExpandFahrt';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -15,7 +16,8 @@ const Statistik = () => {
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [counter, setCounter] = useState<number>(0);
-    const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null); // State für ausgewählte Fahrt hinzufügen
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State for showing confirmation modal
+    const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
 
     const navigate = useNavigate();
 
@@ -104,13 +106,14 @@ const Statistik = () => {
         }
     }
 
-    function openModal(fahrt: FahrtResource) {
+    const handleOpenModal = (fahrt: FahrtResource) => {
         setSelectedFahrt(fahrt);
-    }
-
-    function closeModal() {
+        setShowConfirmationModal(true);
+    };
+    const handleCloseModal = () => {
         setSelectedFahrt(null);
-    }
+        setShowConfirmationModal(false);
+    };
 
     return (
         <>
@@ -241,7 +244,7 @@ const Statistik = () => {
 
                                                                 return (
 
-                                                                    <tr key={fahrtIndex} onClick={() => openModal(fahrt)}>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)}>
                                                                         <td>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
@@ -270,9 +273,29 @@ const Statistik = () => {
                 </div>
 
                 {/* Modal */}
-                {selectedFahrt && (
-                    <Modal fahrt={selectedFahrt} onClose={closeModal} />
-                )}
+                <Modal show={showConfirmationModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Fahrt Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {selectedFahrt && (
+                            <div>
+                                <ExpandFahrt fahrt={selectedFahrt} user={user!} />
+                            </div>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                            Abbrechen
+                        </Button>
+                        {/* Hier kannst du die Abschließen-Funktion implementieren, die du benötigst */}
+                        {/* <Button variant="primary" onClick={handleCompleteFahrt}>
+            Abschließen
+        </Button> */}
+                    </Modal.Footer>
+                </Modal>
+
+
             </ProtectedComponent>
         </>
     );
