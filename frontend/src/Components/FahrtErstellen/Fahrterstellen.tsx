@@ -7,14 +7,12 @@ import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import Navbar from '../Home/Navbar';
 import { useUser } from '../Context/UserContext';
-import { useFahrten } from '../Context/FahrtenContext';
 
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);
     const [disableFields, setDisableFields] = useState(false);
     const user = useUser()
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
-    const FahrtenContext = useFahrten()
     const [showAlert, setShowAlert] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -25,6 +23,7 @@ const FahrtErstellen = () => {
     useEffect(() => {
         if (jwt) {
             setJWT(jwt);
+            return
         } else {
             navigate("/");
             return;
@@ -33,18 +32,17 @@ const FahrtErstellen = () => {
 
     useEffect(() => {
         load();
-    }, []);
+    }, [user]);
 
     async function load() {
-        if (user&& user.id && FahrtenContext) {
+       
+        if (user !== null && user.id) {
             const fahrten: FahrtResource[] = await getFahrt(user.id);
-            FahrtenContext.setFahrten(fahrten);
             setLetzteFahrt(fahrten[fahrten.length - 1])
             setLoading(false);
-        } else {
-            navigate("/")
-        }
+        } 
     }
+    
 
     const handleCheckboxChange = (checkboxId: string) => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');

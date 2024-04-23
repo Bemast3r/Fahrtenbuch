@@ -1,25 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { FahrtResource, UserResource } from "../../util/Resources";
-import { getLoginInfo } from "../Context/Logincontext";
 import { getFahrt, getUser } from "../../Api/api";
 import Loading from "../../util/Components/LoadingIndicator";
 import ExpandFahrt from "./ExpandFahrt";
 import { Accordion } from "./Accordion";
 import Navbar from "../Home/Navbar";
+import { jsPDF } from "jspdf";
 import { useNavigate } from 'react-router-dom';
-import { useUser } from "../Context/UserContext";
-import { useFahrten } from "../Context/FahrtenContext";
+import html2tocanvas from 'html2canvas'
+import { getLoginInfo } from "../Context/Logincontext";
 
 const UserFahrten: React.FC = () => {
-    const user = useUser()
-    const fahrtContext = useFahrten()
+    const [user, setUser] = useState<UserResource | null>(null);
+    const [meineFahrten, setMeineFahrten] = useState<FahrtResource[] | []>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!user) {
+    async function getU() {
+        const id = getLoginInfo();
+        if (id && id.userID) {
+            const userData = await getUser(id!.userID);
+            setUser(userData);
+            const fahrten = await getFahrt(id!.userID);
+            setMeineFahrten(fahrten);
+            setLoading(false);
+        } else {
             navigate("/")
         }
-    }, [])
+    }
+
+    function formatDateString(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${day}.${month}.${year}`;
+    }
+
+    const downloadPDF = (fahrt: FahrtResource) => {
+        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
+        if (capture) {
+            html2tocanvas(capture).then((canvas) => {
+                const imgdata = canvas.toDataURL('img/jpeg');
+                const doc = new jsPDF('p', 'pt', 'letter');
+                const componetwidth = doc.internal.pageSize.getWidth()
+                const componentheight = doc.internal.pageSize.getHeight()
+                doc.addImage(imgdata, 'JPEG', 0, 0, componetwidth + 150, componentheight);
+                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
+            });
+        } else {
+            console.log("Nicht gefunden.");
+        }
+    };
+
+    useEffect(() => {
+        getU();
+    }, []);
 
     // Funktion zur Gruppierung der Fahrten nach Datum
     function groupFahrtenByDate(fahrten: FahrtResource[]) {
@@ -36,46 +71,50 @@ const UserFahrten: React.FC = () => {
 
 
     return (
-
         <>
-            {user && (
+            {loading ? (
+                <><h1 className="header">Statistiken werden geladen</h1><Loading /></>
+            ) : (
                 <>
-                    <Navbar />
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <div style={{ padding: "10px" }}>
-                        <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Ihre letzten Fahrten</h3>
-                        {fahrtContext !== null && fahrtContext.fahrten && fahrtContext.fahrten.length > 0 ? (
-                            <>
-                                {Object.entries(groupFahrtenByDate(fahrtContext.fahrten)).map(([date, fahrten]) => (
-                                    <div key={date}>
-                                        <h2 style={{ marginTop: "20px", padding: "10px" }}>{date}</h2>
-                                        {fahrten.map((fahrt: FahrtResource) => (
-                                            <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
-                                                <div className={`infos-${fahrt._id}`}>
-                                                    <ExpandFahrt fahrt={fahrt} user={user} />
-                                                </div>
+                    {user && (
+                        <>
+                            <Navbar />
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <div style={{ padding: "10px" }}>
+                                <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Ihre letzten Fahrten</h3>
+                                {meineFahrten.length > 0 ? (
+                                    <>
+                                        {Object.entries(groupFahrtenByDate(meineFahrten)).map(([date, fahrten]) => (
+                                            <div key={date}>
+                                                <h2 style={{ marginTop: "20px", padding: "10px" }}>{date}</h2>
+                                                {fahrten.map((fahrt: FahrtResource) => (
+                                                    <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
+                                                        <div className={`infos-${fahrt._id}`}>
+                                                            <ExpandFahrt fahrt={fahrt} user={user} />
+                                                        </div>
 
-                                            </Accordion>
+                                                    </Accordion>
+                                                ))}
+                                            </div>
                                         ))}
-                                    </div>
-                                ))}
-                            </>
-                        ) : (
-                            <p>Keine Fahrten gefunden</p>
-                        )}
-                    </div>
+                                    </>
+                                ) : (
+                                    <p>Keine Fahrten gefunden</p>
+                                )}
+                            </div>
 
+                        </>
+                    )}
                 </>
             )}
         </>
-    )
-}
-
+    );
+};
 
 export default UserFahrten;
