@@ -16,7 +16,7 @@ const Statistik = () => {
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [counter, setCounter] = useState<number>(0);
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State for showing confirmation modal
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
 
     const navigate = useNavigate();
@@ -244,7 +244,7 @@ const Statistik = () => {
 
                                                                 return (
 
-                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)}>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer' }}>
                                                                         <td>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
@@ -273,8 +273,8 @@ const Statistik = () => {
                 </div>
 
                 {/* Modal */}
-                <Modal show={showConfirmationModal} onHide={handleCloseModal}>
-                    <Modal.Header closeButton>
+                <Modal show={showConfirmationModal} onHide={handleCloseModal} size='xl'>
+                    <Modal.Header closeButton style={{ marginLeft: "20px", marginRight: "20px", fontSize: "16px" }}>
                         <Modal.Title>Fahrt Details</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
@@ -284,17 +284,7 @@ const Statistik = () => {
                             </div>
                         )}
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseModal}>
-                            Abbrechen
-                        </Button>
-                        {/* Hier kannst du die Abschließen-Funktion implementieren, die du benötigst */}
-                        {/* <Button variant="primary" onClick={handleCompleteFahrt}>
-            Abschließen
-        </Button> */}
-                    </Modal.Footer>
                 </Modal>
-
 
             </ProtectedComponent>
         </>
