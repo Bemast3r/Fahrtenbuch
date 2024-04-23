@@ -65,6 +65,29 @@ export async function getUsers(): Promise<UserResource[]> {
     }
 }
 
+
+export async function deleteUser(id: string): Promise<void> {
+    try {
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("no jwt found");
+
+        const response = await fetch(`${BASE_URL}api/user/admin/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
+            }
+        });
+        console.log(response)
+        if (!response || !response.ok)
+            throw new Error("network response was not OK");
+
+    } catch (error) {
+        throw new Error("Error occurred during get: " + error);
+    }
+}
+
 export async function getUser(userID: string): Promise<UserResource> {
     try {
         if (!userID) {

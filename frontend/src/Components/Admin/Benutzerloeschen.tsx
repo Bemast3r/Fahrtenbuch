@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Col, Row, Alert, ListGroup, Modal, Button } from 'react-bootstrap';
 import { UserResource } from '../../util/Resources';
-import { getUsers } from '../../Api/api';
+import { deleteUser, getUsers } from '../../Api/api';
 
 const Benutzerloeschen = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -29,11 +29,12 @@ const Benutzerloeschen = () => {
         setShowConfirmationModal(true);
     };
 
-    const confirmDeleteUser = () => {
+    const confirmDeleteUser = async () => {
         // Implement logic to delete user here
         // For example, remove the selected user from the users state
         setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser?.id));
         // setSelectedUser(null);
+        await deleteUser(selectedUser!.id!)
         setShowConfirmationModal(false);
         setShowAlert(true); // Show the alert after confirming user deletion
     };
