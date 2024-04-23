@@ -1790,52 +1790,172 @@ app.delete("/admin/loesch/fahrt/{id}", loginRouter)
 /**
  * @openapi
  * components:
-*   schemas:
-*     User:
-*       type: object
-*       properties:
-*         id:
-*           type: string
-*           format: mongo-id
-*           example: 123a456b789c01234de567fg
-*         vorname:
-*           type: string
-*           example: John
-*         name:
-*           type: string
-*           example: Doe
-*         username:
-*           type: string
-*           example: JohnDoe69
-*         email:
-*           type: string
-*           format: email
-*           example: johndoe@example.com
-*         password:
-*           type: string
-*           format: Strong password
-*           example: Test123!!Test123!!
-*         admin:
-*           type: boolean
-*           example: true
-*         createdAt:
-*           type: string
-*           format: date-time
-*           example: "2024-04-22T16:11:09+02:00"
-*         fahrzeuge:
-*           type: array
-*           items:
-*             type: object
-*             properties:
-*               datum:
-*                 type: string
-*                 example: "2024-04-22"
-*               kennzeichen:
-*                 type: string
-*                 example: "ABC123"
-*         abwesend:
-*           type: boolean
-*           example: false
-*       
-*/
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: mongo-id
+ *           example: 123a456b789c01234de567fg
+ *           description: The MongoDB ID for a user uniquely identifies their record in the database.
+ *         vorname:
+ *           required: true
+ *           type: string
+ *           example: John
+ *           description: The first name of a user is stored as a string representing their given name or forename.
+ *         name:
+ *           required: true
+ *           type: string
+ *           example: Doe
+ *           description: The last name of a user is stored as a string representing their surname or family name.
+ *         username:
+ *           required: true
+ *           type: string
+ *           example: JohnDoe69
+ *           description: The username of a user is stored as a string representing their unique identifier for authentication and identification purposes.
+ *         email:
+ *           required: true
+ *           type: string
+ *           format: email
+ *           example: johndoe@example.com
+ *           description: The email address of a user is stored as a string representing their unique identifier and must adhere to the syntax of an email address format.
+ *         password:
+ *           required: true
+ *           type: string
+ *           format: Strong password
+ *           example: Test123!!Test123!!
+ *           description: The password for a user is stored as a string and must be at least 8 characters long, meeting the criteria for a strong password.
+ *         admin:
+ *           type: boolean
+ *           example: true
+ *           description: The "admin" property for a user is stored as a boolean value, indicating whether the user has administrative privileges. It is false by default. An admin user possesses special rights, such as viewing all users, deleting rides, and deleting users.
+ *         createdAt:
+ *           type: Date
+ *           format: date-time
+ *           example: 2024-04-22T16:11:09+02:00
+ *           description: The "createdAt" property for a user is stored as a date object, indicating the date and time when the user account was created.
+ *         fahrzeuge:
+ *           required: true
+ *           description: The "fahrzeuge" property for a user is stored as an array of objects, with each object containing properties "datum" and "kennzeichen", representing the date and license plate of the vehicles associated with the user.
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               datum:
+ *                 type: Date
+ *                 example: 2024-04-23T09:25:32.602Z
+ *               kennzeichen:
+ *                 required: true
+ *                 type: string
+ *                 example: "ABC123"
+ *         abwesend:
+ *           type: boolean
+ *           example: false
+ *           description: The "abwesend" property for a user is stored as a string representing the user's absence status. It can have values such as "Kein Fahrzeug geführt" (Not driving any vehicle), "Ich bin krank" (I am sick), "Ich habe Urlaub" (I am on vacation), or "Ich habe frei" (I am off-duty). The driver can choose on of those values in "Fahrt erstellen".
+ *     Fahrt:
+ *       type: object
+ *       properties:
+ *         fahrer:
+ *           required: true
+ *           description: The "driver" property of a ride is a MongoDB ID that uniquely identifies the driver associated with the ride.
+ *           type: Types.ObjectID
+ *           format: mongoose SchemaType ObjectId
+ *           example: 5e1a12341b255aaaa996u1
+ *         vollname:
+ *           description: The "vollname" property of a ride is a string representing the full name of the driver associated with the ride.
+ *           type: string
+ *           example: "John Doe"
+ *         kennzeichen:
+ *           required: true
+ *           description: The property is a string representing the license plate of the vehicle associated with the ride.
+ *           type: string
+ *           example: "A AA 0000"
+ *         kilometerstand:
+ *           description: The property represents the initial mileage of the vehicle at the start of the ride and is a number.
+ *           type: number
+ *           example: 191000
+ *         kilometerende:
+ *           description: The property represents the final mileage of the vehicle at the end of the ride and is also a number.
+ *           type: number
+ *           example: 191400
+ *         lenkzeit:
+ *           description: The property represents start and stop timestamps throughout the ride-time, which are used for drawing a Chart.js graph and calculating the total driving time.
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               datum:
+ *                 type: Date
+ *                 example: 2024-04-23T09:25:32.602Z
+ *         pause:
+ *           description: The property represents timestamps for break times during the work, used for drawing a Chart.js graph and calculating total break time.
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               datum:
+ *                 type: Date
+ *                 example: 2024-04-23T09:25:32.602Z
+ *         arbeitszeit:
+ *           description: The property represents timestamps for active work times during the workday, used for drawing a Chart.js graph and calculating total work time. In this case "work" means the time where the is no break and no ride.
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               datum:
+ *                 type: Date
+ *                 example: 2024-04-23T09:25:32.602Z
+ *         createdAt:
+ *           description: The "createdAt" property for a "Fahrt" is stored as a date object, indicating the date and time when the user account was created.
+ *           type: Date
+ *           example: 2024-04-22T16:11:09+02:00
+ *         startpunkt:
+ *           required: true
+ *           description: The property represents the starting point of the ride and is a string indicating the starting location.
+ *           type: string
+ *           example: "Altonaer Straße 85-99 1358 Berlin"
+ *         endpunkt:
+ *           description: The property represents the ending point of the ride and is a string indicating the ending location.
+ *           type: string
+ *           example: "Altonaer Straße 85-99 1358 Berlin"
+ *         beendet:
+ *           description: The property represents whether the ride has been completed, defaulting to false, and is a boolean indicating whether the ride has been finished or not. 
+ *           type: boolean
+ *           example: true
+ *         ruhezeit:
+ *           description: The property is an array containing objects with "start" and "stop" properties, both of type Date. The "stop" property is optional.
+ *           type: object
+ *           properties:
+ *             start:
+ *               type: Date
+ *               format: date-time
+ *               example: 2024-04-23T10:00:00Z
+ *             stop:
+ *               type: Date
+ *               format: date-time
+ *               example: 2024-04-23T11:00:00Z
+ *         abwesend:
+ *           description: The "abwesend" property for a user is stored as a string representing the user's absence status. It can have values such as "Kein Fahrzeug geführt" (Not driving any vehicle), "Ich bin krank" (I am sick), "Ich habe Urlaub" (I am on vacation), or "Ich habe frei" (I am off-duty).
+ *           type: string
+ *           example: "Ich habe Urlaub"
+ *         totalLenkzeit:
+ *           description: The property is a number representing the total driving time in seconds, calculated from the timestamps of the "lenkzeit" property. It defaults to 0.
+ *           type: number
+ *           example: 1223
+ *         totalArbeitszeit:
+ *           description: The property is a number representing the total working time in seconds, calculated from the timestamps of the "arbeitszeit" property. It defaults to 0. Arbeitszeit is the time where there is no driving and no break.
+ *           type: number
+ *           example: 1233
+ *         totalPause:
+ *           description: The property is a number representing the total break time in seconds, calculated from the timestamps of the "pause" property. It defaults to 0.
+ *           type: number
+ *           example: 1253
+ *         totalRuhezeit: 
+ *           description: The property is a number representing the total resting time in seconds, calculated from the timestamps of the "ruhezeit" property. It defaults to 0. Resting time ist the time where the user is not actively working(drive,work,break).
+ *           type: number
+ *           example: 5000
+ * 
+ */
+
 }
