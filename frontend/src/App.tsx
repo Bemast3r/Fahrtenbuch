@@ -6,7 +6,7 @@ import PasswortVergessen from './Components/Login/Passwort/PasswortVergessen';
 import PasswortZuruecksetzen from './Components/Login/Passwort/PasswortZuruecksetzen';
 import AdminFormular from './Components/Admin/AdminPanel';
 import FahrtErstellen from './Components/FahrtErstellen/Fahrterstellen';
-import Statistik from './Components/Admin/Statistik';
+import Statistik from './Components/Statistiken/Statistik';
 import UserFahrten from './Components/Statistiken/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtverwalten/Fahrtabschliessen';
 import TFahrtVerwalten from './Components/Fahrtverwalten/TFahrtVerwalten';
@@ -28,7 +28,6 @@ const App = () => {
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
-
       </Routes>
     </Router>
   );
