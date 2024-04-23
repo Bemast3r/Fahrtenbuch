@@ -3,6 +3,7 @@ import { Form, Col, Row, Alert, ListGroup, Modal, Button } from 'react-bootstrap
 import { UserResource } from '../../util/Resources';
 import { deleteUser, getUsers } from '../../Api/api';
 import { useUser } from '../Context/UserContext';
+import "./benutzerregistrieren.css"
 
 const Benutzerloeschen = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -47,8 +48,8 @@ const Benutzerloeschen = () => {
     };
 
     return (
-        <div className="form-wrapper">
-            <div className="form-container">
+        <div className="form-wrapper-loesch">
+            <div className="form-container-loesch">
                 <h2 className="form-header2">Benutzer löschen</h2>
                 <Alert variant="success" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert-gut">
                     Benutzer erfolgreich gelöscht: {selectedUser?.vorname} {selectedUser?.name}

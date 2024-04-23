@@ -81,7 +81,7 @@ const BenutzerRegistrieren = () => {
             if (form.checkValidity() === true && !passwordError) {
                 await createUserWithAdmin(formData);
                 setShowSuccess(true);
-                setTimeout(() => { navigate("/home") }, 1500);
+                // setTimeout(() => { navigate("/home") }, 1500);
             } else {
                 // Passwortfeld leeren, wenn das Passwort falsch ist
                 setFormData(prevState => ({
