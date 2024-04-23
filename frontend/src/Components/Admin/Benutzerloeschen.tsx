@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Col, Row, Alert, ListGroup, Modal, Button } from 'react-bootstrap';
 import { UserResource } from '../../util/Resources';
 import { deleteUser, getUsers } from '../../Api/api';
+import { useUser } from '../Context/UserContext';
 
 const Benutzerloeschen = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -9,12 +10,16 @@ const Benutzerloeschen = () => {
     const [users, setUsers] = useState<UserResource[]>([]); // Dummy data, replace with actual user data
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const userc = useUser()
 
 
     async function getallUser() {
         const all: UserResource[] = await getUsers()
         setUsers(all)
     }
+    const isCurrentUser = (selected: UserResource): boolean => {
+        return selected.id === userc!.id!;
+    };
 
     useEffect(() => {
         getallUser()
@@ -30,10 +35,7 @@ const Benutzerloeschen = () => {
     };
 
     const confirmDeleteUser = async () => {
-        // Implement logic to delete user here
-        // For example, remove the selected user from the users state
         setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser?.id));
-        // setSelectedUser(null);
         await deleteUser(selectedUser!.id!)
         setShowConfirmationModal(false);
         setShowAlert(true); // Show the alert after confirming user deletion
@@ -63,7 +65,11 @@ const Benutzerloeschen = () => {
                     {searchQuery && users
                         .filter(user => `${user.vorname} ${user.name}`.toLowerCase().includes(searchQuery.toLowerCase()))
                         .map(user => (
-                            <ListGroup.Item key={user.id} action onClick={() => handleUserSelect(user)}>
+                            <ListGroup.Item
+                                key={user.id}
+                                action
+                                disabled={isCurrentUser(user)}
+                                onClick={() => handleUserSelect(user)}>
                                 {user.vorname} {user.name}
                             </ListGroup.Item>
                         ))}

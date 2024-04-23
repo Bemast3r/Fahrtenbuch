@@ -51,7 +51,6 @@ export async function getUsers(): Promise<UserResource[]> {
                 "Content-Type": "application/json"
             }
         });
-        console.log(response)
         if (!response || !response.ok)
             throw new Error("network response was not OK");
 
