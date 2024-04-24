@@ -109,7 +109,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                 ticks: {
                     
                     font: {
-                        size: 15
+                        size: 16
                     }
                 }
             },
@@ -121,7 +121,6 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
     return (
         <div className='line'>
             <Line data={data} options={options} />
-
         </div>
     );
 };

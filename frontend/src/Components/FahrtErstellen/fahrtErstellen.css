@@ -180,7 +180,7 @@
   padding: 0.8rem 1rem;
   font-size: 1.2rem;
   color: #000;
-  background-color: #eec346;
+  background-color: #e75530  ;
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -193,7 +193,7 @@
 
 .submit-button-beginnen2:hover {
   color: #000;
-  background-color: rgb(196, 155, 34);
+  background-color: rgb(196, 34, 34);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
 } 
 

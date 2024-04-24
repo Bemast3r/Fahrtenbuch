@@ -90,7 +90,7 @@ const FahrtErstellen = () => {
                     return;
                 }
                 let abwesendText = '';
-                if (checkbox1Checked) abwesendText = "Kein Fahrzeug geführt.";
+                if (checkbox1Checked) abwesendText = "Ich habe kein Fahrzeug geführt.";
                 else if (checkbox2Checked) abwesendText = "Ich bin krank.";
                 else if (checkbox3Checked) abwesendText = "Ich habe Urlaub.";
                 else if (checkbox4Checked) abwesendText = "Ich habe frei.";
@@ -255,7 +255,7 @@ const FahrtErstellen = () => {
                                         <Form.Group controlId="formGridCheckbox1">
                                             <Form.Check
                                                 type="checkbox"
-                                                label="Kein Fahrzeug geführt"
+                                                label="Ich habe kein Fahrzeug geführt"
                                                 className="checkbox-label1"
                                                 onChange={() => handleCheckboxChange("formGridCheckbox1")}
                                             />
