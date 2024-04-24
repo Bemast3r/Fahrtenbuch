@@ -23,7 +23,6 @@ const app = express();
 const corsOptions = {
 
     origin: ["https://fahrtenbuch-frontend.vercel.app", "http://localhost:3000"],
-
     credentials: true, // Set to true if you're using cookies or sessions
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']

@@ -1,0 +1,31 @@
+    .form-container-loesch {
+        /* margin-top: 190px; */
+        background-color: #fff;
+        padding: 3.5rem;
+        border-radius: 12px;
+        box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        /* Füge einen Übergangseffekt hinzu */
+        transform: translateY(0);
+        max-width: 60%;
+        margin: 0 auto; /* Zentriere das Element horizontal */  
+        margin-top: -100px;
+    }
+
+    .form-container-loesch:hover {
+        box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
+        /* Ändere den Schatten beim Schweben */
+        transform: translateY(-5px);
+        /* Hebe den Container leicht an */
+        max-width: 60%;
+        margin: 0 auto; /* Zentriere das Element horizontal */  
+        margin-top: -100px;
+
+    }
+
+
+
+    .form-wrapper-loesch {
+        width: 100%;
+        height: 100%;
+    }

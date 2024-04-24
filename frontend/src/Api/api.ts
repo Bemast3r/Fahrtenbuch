@@ -1,9 +1,9 @@
 
-import { getJWT } from "../Components/Contexte/Logincontext";
+import { getJWT } from "../Components/Context/Logincontext";
 import { FahrtResource, LoginResource, UserResource } from "../util/Resources";
 
-const BASE_URL = "https://fahrtenbuch-backend.vercel.app/";
-// const BASE_URL = "http://localhost:5000/";
+// const BASE_URL = "https://fahrtenbuch-backend.vercel.app/";
+const BASE_URL = "http://localhost:5000/";
 
 
 export async function login(loginData: { username: string, password: string }): Promise<LoginResource> {
@@ -38,31 +38,49 @@ export async function login(loginData: { username: string, password: string }): 
     return result;
 }
 
-export async function getUsers(userID: string): Promise<UserResource> {
+export async function getUsers(): Promise<UserResource[]> {
     try {
-        if (!userID)
-            throw new Error("userID not defined");
-
         const jwt = getJWT();
         if (!jwt)
             throw new Error("no jwt found");
 
-        const response = await fetch(`${BASE_URL}api/admin/users`, {
+        const response = await fetch(`${BASE_URL}api/user/admin/users`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${jwt}`
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
             }
         });
-
         if (!response || !response.ok)
             throw new Error("network response was not OK");
 
         const result: any = await response.json();
         if (!result)
             throw new Error("invalid result from server");
-        if (!result.id || !result.email || !result.name)
-            throw new Error("result from server is missing fields");
-        return result as UserResource;
+        return result;
+
+    } catch (error) {
+        throw new Error("Error occurred during get: " + error);
+    }
+}
+
+
+export async function deleteUser(id: string): Promise<void> {
+    try {
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("no jwt found");
+
+        const response = await fetch(`${BASE_URL}api/user/admin/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
+            }
+        });
+        console.log(response)
+        if (!response || !response.ok)
+            throw new Error("network response was not OK");
 
     } catch (error) {
         throw new Error("Error occurred during get: " + error);
