@@ -4,11 +4,10 @@ import { getLoginInfo } from '../Context/Logincontext';
 import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
-import { Accordion } from "./Accordion";
-import ExpandFahrt from "./ExpandFahrt";
 import Loading from "../../util/Components/LoadingIndicator";
-import { Button } from "react-bootstrap";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
+import { Button, Modal } from 'react-bootstrap';
+import ExpandFahrt from '../Statistiken/ExpandFahrt';
 
 const Statistik = () => {
     const [user, setUser] = useState<UserResource | null>(null);
@@ -17,6 +16,9 @@ const Statistik = () => {
     const [adminUsers, setAdminUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [counter, setCounter] = useState<number>(0);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State for showing confirmation modal
+    const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const Statistik = () => {
             loadUser();
             loadTrips();
             loadAllFahrts();
-        }, 60000); 
+        }, 60000);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -104,89 +106,196 @@ const Statistik = () => {
         }
     }
 
+    const handleOpenModal = (fahrt: FahrtResource) => {
+        setSelectedFahrt(fahrt);
+        setShowConfirmationModal(true);
+    };
+    const handleCloseModal = () => {
+        setSelectedFahrt(null);
+        setShowConfirmationModal(false);
+    };
+
     return (
         <>
             <Navbar></Navbar>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
             <ProtectedComponent requiredRole="a">
-                <div className="row">
-                    <div className="col-md">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Gesamtanzahl der Fahrten</h5>
-                                <p className="card-text">{tripData.completedTrips + tripData.ongoingTrips}</p>
+                {/* 5 Statistiken */}
+                <main>
+                    <h1 className="uberschrift">Statistiken</h1>
+                    <div className="analyse">
+                        <div className="sales">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Alle Fahrten</h3>
+                                    <h1 className="zahlen">{tripData.completedTrips + tripData.ongoingTrips}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+81%</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-md">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Beendete Fahrten</h5>
-                                <p className="card-text">{tripData.completedTrips}</p>
+                        <div className="visits">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Laufende Fahrten</h3>
+                                    <h1 className="zahlen">{tripData.ongoingTrips}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">-48%</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-md">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Laufende Fahrten</h5>
-                                <p className="card-text">{tripData.ongoingTrips}</p>
+                        <div className="searches">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Beendete Fahrten</h3>
+                                    <h1 className="zahlen">{tripData.completedTrips}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+21%</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-md">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Gesamtzahl der Benutzer</h5>
-                                <p className="card-text">{totalUsers}</p>
+                        <div className="fahrer">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Benutzer</h3>
+                                    <h1 className="zahlen">{totalUsers}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+11%</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Admin-Benutzer</h5>
-                                <p className="card-text">{adminUsers}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br></br>
 
-                <h2 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color: "#FFFF" }}>Alle Fahrten</h2>
+                        <div className="admins">
+                            <div className="status">
+                                <div className="info">
+                                    <h3 className="uberschrift-klein">Admins</h3>
+                                    <h1 className="zahlen">{adminUsers}</h1>
+                                </div>
+                                <div className="progresss">
+                                    <svg>
+                                        <circle cx="38" cy="38" r="36"></circle>
+                                    </svg>
+                                    <div className="percentage">
+                                        <p className="prozent">+72%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                {/* Alle Fahrten */}
                 <div className="fahrten">
-
-                    {fahrts && fahrts.length > 0 && user ? (
+                    {fahrts && fahrts.length > 0 ? (
                         <>
                             {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
-                                    <div>
-                                        <h2 style={{ paddingLeft: "10px", marginTop: "20px", color: "#FFFF" }}>{date}</h2>
-                                        {fahrten.map((fahrt: FahrtResource) => (
-                                            <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend + " - " + fahrt.vollname : fahrt.vollname}>
-                                                <div className={`infos-${fahrt._id}`}>
-                                                    <ExpandFahrt fahrt={fahrt} user={user!} />
-                                                    <span>{user.admin && <span><Button id={`deleteButton`} variant="danger" onClick={() => { handleDelete(fahrt); }}>FAHRT LÖSCHEN</Button></span>}</span>
+                                    <section id="content">
+                                        <main>
+                                            <div className="table-data">
+                                                <div className="order">
+                                                    <div className="head">
+                                                        <h3>Fahrten vom {date}</h3>
+                                                        <i className='bx bx-search' ></i>
+                                                        <i className='bx bx-filter' ></i>
+                                                    </div>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Fahrer</th>
+                                                                <th>Dauer der Fahrt</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {fahrten.map((fahrt, fahrtIndex) => {
+                                                                const totalDuration = fahrt.totalArbeitszeit! + fahrt.totalLenkzeit! + fahrt.totalPause!;
+                                                                const hours = Math.floor(totalDuration / 3600);
+                                                                const minutes = Math.floor((totalDuration % 3600) / 60);
+                                                                const seconds = totalDuration % 60;
+                                                                const formattedSeconds = seconds.toFixed(0).padStart(2, '0');
+                                                                const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
+
+                                                                return (
+
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)}>
+                                                                        <td>
+                                                                            <p key={fahrtIndex}>{fahrt.vollname}</p>
+                                                                        </td>
+                                                                        <td>{formattedDuration}</td>
+                                                                        <td>
+                                                                            <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
+                                                                                {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </Accordion>
-                                        ))}
-                                    </div>
+                                            </div>
+                                        </main>
+                                    </section>
                                 </section>
                             ))}
                         </>
                     ) : (
-                        !fahrts ? <Loading /> : fahrts.length === 0 ? <h2 className='header'> Es gibt keine Fahrten</h2> : <h2 className='header'> Es gibt keine Fahrten</h2>
+                        !fahrts ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
                     )}
                 </div>
+
+                {/* Modal */}
+                <Modal show={showConfirmationModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Fahrt Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {selectedFahrt && (
+                            <div>
+                                <ExpandFahrt fahrt={selectedFahrt} user={user!} />
+                            </div>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                            Abbrechen
+                        </Button>
+                        {/* Hier kannst du die Abschließen-Funktion implementieren, die du benötigst */}
+                        {/* <Button variant="primary" onClick={handleCompleteFahrt}>
+            Abschließen
+        </Button> */}
+                    </Modal.Footer>
+                </Modal>
+
+
             </ProtectedComponent>
         </>
     );

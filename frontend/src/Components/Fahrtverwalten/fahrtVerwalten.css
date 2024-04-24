@@ -1,7 +1,6 @@
 body {
-  background-image: url('../../util/loginHintergrund.jpg');
-  background-size: cover;
-  background-position: center;
+  /* background-image: url('../../util/loginHintergrund.jpg'); */
+  background-image: linear-gradient(to left, #000000, #3e1d00, #593b00, #7b5b00, #a27c00, #cb9f00, #f4c32e, #cb9f00, #a27c00, #7b5b00, #593b00, #3e1d00, #000000);
   margin: 0;
   font-family: Arial, sans-serif;
 }
