@@ -18,6 +18,7 @@ const Statistik = () => {
     const [counter, setCounter] = useState<number>(0);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
+    const [isLastFahrt, setIsLastFahrt] = useState<boolean>(false); // State für letzte Fahrt
 
     const navigate = useNavigate();
 
@@ -244,7 +245,7 @@ const Statistik = () => {
 
                                                                 return (
 
-                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer' }}>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer'}}>
                                                                         <td>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
