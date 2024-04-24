@@ -24,7 +24,7 @@ const App = () => {
         <Route path="verwalten" element={<TFahrtVerwalten />} />
         <Route path="passwort-vergessen" element={<PasswortVergessen />} />
         <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
-        <Route path="user-erstellen" element={<AdminFormular />} />
+        <Route path="user-verwalten" element={<AdminFormular />} />
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
