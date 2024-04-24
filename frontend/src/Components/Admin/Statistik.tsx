@@ -134,9 +134,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+81%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -151,9 +151,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">-48%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -168,9 +168,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+21%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -185,9 +185,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+11%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -202,9 +202,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+72%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -223,8 +223,8 @@ const Statistik = () => {
                                                 <div className="order">
                                                     <div className="head">
                                                         <h3>Fahrten vom {date}</h3>
-                                                        <i className='bx bx-search' ></i>
-                                                        <i className='bx bx-filter' ></i>
+                                                        {/* <i className='bx bx-search' ></i>
+                                                        <i className='bx bx-filter' ></i> */}
                                                     </div>
                                                     <table>
                                                         <thead>
