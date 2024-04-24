@@ -226,12 +226,12 @@ const Statistik = () => {
                                                         {/* <i className='bx bx-search' ></i>
                                                         <i className='bx bx-filter' ></i> */}
                                                     </div>
-                                                    <table>
+                                                    <table style={{ width: "100%", tableLayout: "fixed" }}>
                                                         <thead>
                                                             <tr>
-                                                                <th>Fahrer</th>
-                                                                <th>Dauer der Fahrt</th>
-                                                                <th>Status</th>
+                                                                <th style={{ width: "33%" }}>Fahrer</th>
+                                                                <th style={{ width: "33%" }}>Dauer der Fahrt</th>
+                                                                <th style={{ width: "10%" }}>Status</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -244,19 +244,17 @@ const Statistik = () => {
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-
                                                                     <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer'}}>
-                                                                        <td>
+                                                                        <td style={{ width: "33%" }}>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
-                                                                        <td>{formattedDuration}</td>
-                                                                        <td>
+                                                                        <td style={{ width: "33%" }}>{formattedDuration}</td>
+                                                                        <td style={{ width: "33%" }}>
                                                                             <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
                                                                                 {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
                                                                             </span>
                                                                         </td>
                                                                     </tr>
-
                                                                 );
                                                             })}
                                                         </tbody>
