@@ -154,20 +154,6 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                             </ul>
                         </details>
                     )}
-                    {fahrt.pause && (
-                        <details>
-                            <summary style={{ margin: '5px 0', fontSize: '20px', color: '#555', cursor: 'pointer' }}>
-                                Pausenzeiten: <span style={{ fontWeight: 'bold' }}>{fahrt.totalPause ? formatTime(fahrt.totalPause) : "00:00:00"}</span>
-                            </summary>
-                            <ul>
-                                {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
-                                    <li key={index}>
-                                        Zeiten: <span style={{ fontWeight: 'bold' }}>{pause ? formatDateTime(new Date(pause)) : 'Keine Angabe'}</span>
-                                    </li>
-                                )) : "Keine Pausenzeit"}
-                            </ul>
-                        </details>
-                    )}
                     {fahrt.arbeitszeit && (
                         <details>
                             <summary style={{ margin: '5px 0', fontSize: '20px', color: '#555', cursor: 'pointer' }}>
@@ -179,6 +165,20 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                                         Zeiten: <span style={{ fontWeight: 'bold' }}>{zeit ? formatDateTime(new Date(zeit)) : 'Keine Angabe'}</span>
                                     </li>
                                 )) : "Keine Arbeitszeit"}
+                            </ul>
+                        </details>
+                    )}
+                    {fahrt.pause && (
+                        <details>
+                            <summary style={{ margin: '5px 0', fontSize: '20px', color: '#555', cursor: 'pointer' }}>
+                                Pausezeiten: <span style={{ fontWeight: 'bold' }}>{fahrt.totalPause ? formatTime(fahrt.totalPause) : "00:00:00"}</span>
+                            </summary>
+                            <ul>
+                                {fahrt.pause.length > 0 ? fahrt.pause.map((pause, index) => (
+                                    <li key={index}>
+                                        Zeiten: <span style={{ fontWeight: 'bold' }}>{pause ? formatDateTime(new Date(pause)) : 'Keine Angabe'}</span>
+                                    </li>
+                                )) : "Keine Pausenzeit"}
                             </ul>
                         </details>
                     )}
