@@ -19,7 +19,7 @@ const Benutzerloeschen = () => {
         setUsers(all)
     }
     const isCurrentUser = (selected: UserResource): boolean => {
-        return selected.id === userc!.id!;
+        return selected.id === userc!.user!.id!;
     };
 
     useEffect(() => {

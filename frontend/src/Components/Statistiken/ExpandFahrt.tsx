@@ -7,7 +7,7 @@ import autoTable from 'jspdf-autotable'
 import { jsPDF } from "jspdf";
 import { deleteFahrt } from "../../Api/api";
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  removeFromFahrt?: any}> = ({ fahrt, removeFromFahrt }) => {
     const [counter, setCounter] = useState<number>(0);
 
     function formatDateTime(date: Date): string {
@@ -35,9 +35,11 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
 
-    async function handleDelete(fahrt: FahrtResource): Promise<void> {
+    async function handleDelete() {
         try {
             await deleteFahrt(fahrt);
+            // Rufe die Funktion removeFromFahrts aus der Prop auf, um die Fahrt zu entfernen und das Modal zu schließen
+            await removeFromFahrt(fahrt);
             setCounter(prev => prev + 1);
         } catch (error) {
             console.error('Fehler beim Löschen der Fahrt:', error);
@@ -206,7 +208,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
                 <button className="submit-button-beginnen" style={{ margin: '0 10px' }} onClick={() => { downloadPDF(fahrt) }}>Herunterladen</button>
-                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete(fahrt) }}>Fahrt Löschen</button>
+                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete() }}>Fahrt Löschen</button>
             </div>
         </div>
     );

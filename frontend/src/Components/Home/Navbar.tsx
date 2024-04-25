@@ -1,5 +1,5 @@
 import { Router, useLocation, useNavigate } from "react-router-dom";
-import { getJWT, removeJWT, setJWT } from "../Context/Logincontext";
+import { getJWT, getLoginInfo, removeJWT, setJWT } from "../Context/Logincontext";
 import { useEffect, useState } from "react";
 import "./navbar.css"
 import { NavDropdown } from "react-bootstrap";
@@ -12,6 +12,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const jwt = getJWT();
 
+    const logininfo = getLoginInfo()
     useEffect(() => {
         if (jwt) {
             setJWT(jwt);
@@ -29,6 +30,7 @@ const Navbar = () => {
         const confirmAbmeldung = window.confirm("Möchten Sie sich wirklich abmelden?");
         if (confirmAbmeldung) {
             removeJWT();
+            user.setUser(null)
             navigate("/");
         }
     };
@@ -45,17 +47,17 @@ const Navbar = () => {
                         <li className="nav-item">
                             <a className={`nav-link ${activeLink === "/verwalten" ? "active" : ""}`} href="/verwalten">Fahrt verwalten</a>
                         </li>
-                        {user && user.admin && (
+                        {logininfo && logininfo.role === "a" && (
                             <li className="nav-item">
                                 <a className={`nav-link ${activeLink === "/statistiken" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/statistiken">Statistiken</a>
                             </li>
                         )}
-                        {user && !user.admin && (
+                        {logininfo && logininfo.role === "u" && (
                             <li className="nav-item">
                                 <a className={`nav-link ${activeLink === "/fahrten" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/fahrten">Meine Fahrten</a>
                             </li>
                         )}
-                        {user && user.admin && (
+                        {logininfo && logininfo.role === "a" &&(
                             <li className="nav-item">
                                 <a className={`nav-link ${activeLink === "/user-erstellen" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/user-verwalten">Benutzer verwalten</a>
                             </li>

@@ -101,9 +101,21 @@ const Statistik = () => {
     async function handleDelete(fahrt: FahrtResource): Promise<void> {
         try {
             await deleteFahrt(fahrt);
+
             setCounter(prev => prev + 1);
         } catch (error) {
             console.error('Fehler beim Löschen der Fahrt:', error);
+        }
+    }
+
+    async function removeFromFahrts(fahrtToRemove: FahrtResource): Promise<void> {
+        try {
+            // Entferne die Fahrt aus der Liste
+            setFahrts(prevFahrts => prevFahrts!.filter(fahrt => fahrt._id !== fahrtToRemove._id));
+            // Schließe das Modal
+            handleCloseModal();
+        } catch (error) {
+            console.error('Fehler beim Entfernen der Fahrt:', error);
         }
     }
 
@@ -279,7 +291,7 @@ const Statistik = () => {
                     <Modal.Body>
                         {selectedFahrt && (
                             <div>
-                                <ExpandFahrt fahrt={selectedFahrt} user={user!} />
+                                <ExpandFahrt fahrt={selectedFahrt} user={user!} removeFromFahrt={removeFromFahrts} />
                             </div>
                         )}
                     </Modal.Body>

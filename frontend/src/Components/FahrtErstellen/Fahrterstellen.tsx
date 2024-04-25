@@ -11,7 +11,7 @@ import { useUser } from '../Context/UserContext';
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);
     const [disableFields, setDisableFields] = useState(false);
-    const user = useUser()
+    const { user } = useUser()
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
     const [showAlert, setShowAlert] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -35,14 +35,14 @@ const FahrtErstellen = () => {
     }, [user]);
 
     async function load() {
-       
+
         if (user !== null && user.id) {
             const fahrten: FahrtResource[] = await getFahrt(user.id);
             setLetzteFahrt(fahrten[fahrten.length - 1])
             setLoading(false);
-        } 
+        }
     }
-    
+
 
     const handleCheckboxChange = (checkboxId: string) => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
