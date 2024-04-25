@@ -1,3 +1,4 @@
+import { User } from "../Model/UserModel";
 import { Fahrt } from "../Model/FahrtModel";
 import { FahrtResource, UserResource } from "../Model/Resources";
 
@@ -121,3 +122,23 @@ export async function deleteFahrt(fahrtid: string) {
 }
 
 
+export async function getFahrtenOfModUsers(userid: string) {
+    try {
+        // Finde den Benutzer anhand der ID
+        const user = await User.findById(userid).populate('modUser.users').exec();
+        if (!user) {
+            throw new Error("Benutzer existiert nicht.");
+        }
+        
+        // Sammle die IDs aller Benutzer im modUser-Array
+        const modUserIds = user.modUser.map(modUser => modUser.users);
+
+        // Finde alle Fahrten, die von Benutzern im modUser-Array gemacht wurden
+        const fahrten = await Fahrt.find({ user: { $in: modUserIds } }).exec();
+        
+        return fahrten;
+    } catch (error) {
+        console.error(`Fehler beim Abrufen der Fahrten der Mod-User: ${(error as Error).message}`);
+        throw error;
+    }
+}

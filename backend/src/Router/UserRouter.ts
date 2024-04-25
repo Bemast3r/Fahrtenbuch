@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUser, deleteUser, getAlleAdmin, getAlleUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getAllMods, getAlleAdmin, getAlleUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
 import { UserResource } from "../Model/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -86,6 +86,27 @@ userRouter.get("/admin/finde/user/alle/user", requiresAuthentication,
         }
     }
 );
+
+userRouter.get("/admin/mods", requiresAuthentication,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const user = await getAllMods()
+            return res.send(user)
+        } catch (error) {
+            res.status(400);
+            next(error);
+        }
+    }
+);
+
+
 /**
  * Erstellt einen Benutzer 
  */
@@ -96,7 +117,8 @@ userRouter.post("/admin/user-erstellen", requiresAuthentication,
     body("email").isString(),
     body("password").isString(),
     body("admin").isBoolean(),
-    body("fahrzeuge").isArray().withMessage('fahrzeuge muss ein Array sein'),
+    body("mod").optional().isBoolean(),
+    body("modUser").optional().isArray(),
 
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -174,15 +196,17 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
     body("vorname").isString(),
     body("name").isString(),
     body("username").isString(),
-    body('fahrzeuge').isArray().withMessage('fahrzeuge muss ein Array sein'),
     body("password").isString(),
     body("admin").isBoolean(),
+    body("mod").optional().isBoolean(),
+    body("modUser").optional().isArray(),
     // Das Datum sollte automatisch gesetzt werden.
     // body('fahrzeuge.*.datum').isString().notEmpty().withMessage('datum ist erforderlich und muss eine Zeichenkette sein'), 
-    body('fahrzeuge.*.kennzeichen').isString().notEmpty().withMessage('kennzeichen ist erforderlich und muss eine Zeichenkette sein'),
-    async (req, res, next) => {
+    async (req: any, res: any, next: any) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(errors)
+
             return res.status(400).json({ errors: errors.array() });
         }
         try {
@@ -191,6 +215,7 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
             }
             const userRes = req.body as UserResource; // Annahme: Die Benutzerressource ist im Anforderungskörper enthalten
             const user = await updateUser(userRes);
+            console.log(user)
             return res.send(user);
         } catch (error) {
             res.status(400);
@@ -222,5 +247,10 @@ userRouter.delete("/admin/delete/:id", requiresAuthentication,
         }
     }
 );
+
+
+
+
+
 
 export default userRouter;

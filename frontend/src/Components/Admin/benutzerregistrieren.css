@@ -9,18 +9,19 @@
         transform: translateY(0);
         max-width: 60%;
         margin: 0 auto; /* Zentriere das Element horizontal */  
-        margin-top: -100px;
+        margin-top: 50px;
+        /* padding-bottom: 100px; */
+
     }
 
     .form-container-loesch:hover {
         box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
         /* Ändere den Schatten beim Schweben */
-        transform: translateY(-5px);
+        /* transform: translateY(0); */
         /* Hebe den Container leicht an */
-        max-width: 60%;
-        margin: 0 auto; /* Zentriere das Element horizontal */  
-        margin-top: -100px;
-
+        /* max-width: 60%; */
+        /* margin: 0 auto; Zentriere das Element horizontal   */
+        /* margin-bottom: 70px; */
     }
 
 

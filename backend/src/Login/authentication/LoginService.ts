@@ -34,7 +34,7 @@ export async function verifyPasswordAndCreateJWT(username: string, password: str
     return sign(payload, secret, { algorithm: "HS512", expiresIn: ttl });
 }
 
-export function verifyJWT(jwtString: string | undefined): { userId: string, role: "u" | "a" } {
+export function verifyJWT(jwtString: string | undefined): { userId: string, role: "u" | "a" | "m"} {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
         throw Error("JWT_SECRET not set.");

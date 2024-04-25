@@ -64,6 +64,32 @@ export async function getUsers(): Promise<UserResource[]> {
     }
 }
 
+export async function getMods(): Promise<UserResource[]> {
+    try {
+        const jwt = getJWT();
+        if (!jwt)
+            throw new Error("no jwt found");
+
+        const response = await fetch(`${BASE_URL}api/user/admin/mods`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (!response || !response.ok)
+            throw new Error("network response was not OK");
+
+        const result: any = await response.json();
+        if (!result)
+            throw new Error("invalid result from server");
+        return result;
+
+    } catch (error) {
+        throw new Error("Error occurred during get: " + error);
+    }
+}
+
 
 export async function deleteUser(id: string): Promise<void> {
     try {
@@ -189,6 +215,36 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
         throw new Error(`Es gab einen Fehler: ${error}`)
     }
 }
+
+export async function updateUser(user: UserResource): Promise<UserResource> {
+    try {
+
+        const jwt2 = getJWT();
+        const response = await fetch(`${BASE_URL}api/user/admin/user/aendern`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        console.log(response)
+
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+
+
 
 export async function passwortVergessen(email: string) {
     try {

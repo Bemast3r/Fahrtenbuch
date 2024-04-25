@@ -1,5 +1,6 @@
 import BenutzerRegistrieren from './BenutzerRegistrieren';
 import Benutzerloeschen from './Benutzerloeschen';
+import ModBenutzer from './ModBenutzer';
 
 const AdminFormular = () => {
 
@@ -7,6 +8,7 @@ const AdminFormular = () => {
         <>
             <BenutzerRegistrieren></BenutzerRegistrieren>
             <Benutzerloeschen></Benutzerloeschen>
+            <ModBenutzer></ModBenutzer>
         </>
     );
 }
