@@ -62,6 +62,11 @@ const Navbar = () => {
                                 <a className={`nav-link ${activeLink === "/user-erstellen" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/user-verwalten">Benutzer verwalten</a>
                             </li>
                         )}
+                             {logininfo && logininfo.role === "m" &&(
+                            <li className="nav-item">
+                                <a className={`nav-link ${activeLink === "/mod-fahrten" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/mod-fahrten">Statistiken</a>
+                            </li>
+                        )}
                     </ul>
                     <ul className="navbar-nav mb-2 mb-lg-0">
                         <li className="nav-item">

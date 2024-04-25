@@ -10,6 +10,7 @@ import Statistik from './Components/Statistiken/Statistik';
 import UserFahrten from './Components/Statistiken/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtverwalten/Fahrtabschliessen';
 import TFahrtVerwalten from './Components/Fahrtverwalten/TFahrtVerwalten';
+import ModStatistik from "./Components/Statistiken/ModStatistiken";
 
 const App = () => {
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
+        <Route path="mod-fahrten" element={<ModStatistik />} />
       </Routes>
     </Router>
   );

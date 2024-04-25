@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { LoginContext, LoginInfo, getLoginInfo } from "../../Components/Context/Logincontext";
 import { useNavigate } from 'react-router-dom';
 
-const ProtectedComponent: React.FC<{ requiredRole: "a" | "u"; children: React.ReactNode }> = ({ requiredRole, children }: any) => {
+const ProtectedComponent: React.FC<{ requiredRole: "a" | "u" | "m"; children: React.ReactNode }> = ({ requiredRole, children }: any) => {
     const navigate = useNavigate();
 
     const { userID, role } = getLoginInfo()!;

@@ -1,42 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginInfo } from '../Context/Logincontext';
-import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
+import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getModFahrten, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
 import Loading from "../../util/Components/LoadingIndicator";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
 import { Button, Modal } from 'react-bootstrap';
-import ExpandFahrt from '../Statistiken/ExpandFahrt';
+import ExpandFahrt from './ExpandFahrt';
+import { useUser } from '../Context/UserContext';
 
-const Statistik = () => {
-    const [user, setUser] = useState<UserResource | null>(null);
-    const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
-    const [totalUsers, setTotalUsers] = useState<number>(0);
-    const [adminUsers, setAdminUsers] = useState<number>(0);
+const ModStatistik = () => {
+    const { user } = useUser();
+    // const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
+    // const [totalUsers, setTotalUsers] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
-    const [counter, setCounter] = useState<number>(0);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
-    const [isLastFahrt, setIsLastFahrt] = useState<boolean>(false); // State für letzte Fahrt
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        loadInitialData();
-        const intervalId = setInterval(() => {
-            loadUser();
-            loadTrips();
-            loadAllFahrts();
-        }, 60000);
+    // useEffect(() => {
+    //     loadInitialData();
+    //     const intervalId = setInterval(() => {
+    //         // loadUser();
+    //         // loadTrips();
+    //         loadAllFahrts();
+    //     }, 60000);
 
-        return () => clearInterval(intervalId);
-    }, []);
+    //     return () => clearInterval(intervalId);
+    // }, []);
 
     useEffect(() => {
         loadAllFahrts();
-        console.log(counter)
-    }, [counter])
+        
+        console.log()
+    }, [])
 
     async function loadInitialData() {
         try {
@@ -45,47 +44,46 @@ const Statistik = () => {
                 navigate("/");
                 return;
             }
-            const userserver = await getUser(id.userID);
-            setUser(userserver);
-            await loadTrips();
-            await loadUser();
+            // await loadTrips();
+            // await loadUser();
             await loadAllFahrts();
         } catch (error) {
             console.error("Fehler beim Laden der Daten:", error);
         }
     }
 
-    async function loadTrips() {
-        try {
-            const completed = await getCompletedTrips();
-            const ongoing = await getOngoingTrips();
-            setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
-        } catch (error) {
-            console.error("Fehler beim Laden der Fahrten:", error);
-        }
-    }
+    // async function loadTrips() {
+    //     try {
+    //         const completed = await getCompletedTrips();
+    //         const ongoing = await getOngoingTrips();
+    //         setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
+    //     } catch (error) {
+    //         console.error("Fehler beim Laden der Fahrten:", error);
+    //     }
+    // }
 
     async function loadAllFahrts() {
         try {
-            const fahrts = await getAllFahrts();
+            const fahrts = await getModFahrten();
             setFahrts(fahrts);
+            console.log(fahrts)
         } catch (error) {
             console.error("Fehler beim Laden der Fahrten:", error);
         }
     }
 
-    async function loadUser() {
-        try {
-            const alleUser = await getAlleUser();
-            const alleAdmins = await getAlleAdmin();
-            const totalUsers = alleUser.length;
-            const adminUsers = alleAdmins.length;
-            setTotalUsers(totalUsers);
-            setAdminUsers(adminUsers);
-        } catch (error) {
-            console.error("Fehler beim Laden der User:", error);
-        }
-    }
+    // async function loadUser() {
+    //     try {
+    //         const alleUser = await getAlleUser();
+    //         const alleAdmins = await getAlleAdmin();
+    //         const totalUsers = alleUser.length;
+    //         const adminUsers = alleAdmins.length;
+    //         setTotalUsers(totalUsers);
+    //         setAdminUsers(adminUsers);
+    //     } catch (error) {
+    //         console.error("Fehler beim Laden der User:", error);
+    //     }
+    // }
 
     function groupFahrtenByDate(fahrten: FahrtResource[]) {
         return fahrten.slice().reverse().reduce((acc: { [date: string]: FahrtResource[] }, fahrt: FahrtResource) => {
@@ -121,16 +119,16 @@ const Statistik = () => {
     return (
         <>
             <Navbar></Navbar>
-            <ProtectedComponent requiredRole="a">
+            <ProtectedComponent requiredRole="m">
                 {/* 5 Statistiken */}
                 <main>
-                    <h1 className="uberschrift">Statistiken</h1>
+                    <h1 className="uberschrift">Mod - Statistiken</h1>
                     <div className="analyse">
                         <div className="sales">
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Alle Fahrten</h3>
-                                    <h1 className="zahlen">{tripData.completedTrips + tripData.ongoingTrips}</h1>
+                                    {/* <h1 className="zahlen">{tripData.completedTrips + tripData.ongoingTrips}</h1> */}
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -147,7 +145,7 @@ const Statistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Laufende Fahrten</h3>
-                                    <h1 className="zahlen">{tripData.ongoingTrips}</h1>
+                                    {/* <h1 className="zahlen">{tripData.ongoingTrips}</h1> */}
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -164,7 +162,7 @@ const Statistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Beendete Fahrten</h3>
-                                    <h1 className="zahlen">{tripData.completedTrips}</h1>
+                                    {/* <h1 className="zahlen">{tripData.completedTrips}</h1> */}
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -181,7 +179,7 @@ const Statistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Benutzer</h3>
-                                    <h1 className="zahlen">{totalUsers}</h1>
+                                    {/* <h1 className="zahlen">{totalUsers}</h1> */}
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -198,7 +196,7 @@ const Statistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Admins</h3>
-                                    <h1 className="zahlen">{adminUsers}</h1>
+                                    {/* <h1 className="zahlen">{adminUsers}</h1> */}
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -246,7 +244,7 @@ const Statistik = () => {
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer'}}>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer' }}>
                                                                         <td style={{ width: "33%" }}>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
@@ -292,4 +290,4 @@ const Statistik = () => {
     );
 }
 
-export default Statistik;
+export default ModStatistik;

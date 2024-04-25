@@ -91,6 +91,9 @@ export async function getMods(): Promise<UserResource[]> {
 }
 
 
+
+
+
 export async function deleteUser(id: string): Promise<void> {
     try {
         const jwt = getJWT();
@@ -171,6 +174,30 @@ export async function getFahrt(userID: string): Promise<FahrtResource[]> {
         if (!jwt2)
             throw new Error("no jwt found");
         const response = await fetch(`${BASE_URL}api/fahrt/admin/fahrt/user/${userID}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response || !response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.")
+        }
+        const result: FahrtResource[] = await response.json();
+        if (!result) {
+            throw new Error("Result ist nicht ok.")
+        }
+        return result
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`)
+    }
+}
+
+export async function getModFahrten(): Promise<FahrtResource[]> {
+    try {
+        const jwt2 = getJWT();
+        if (!jwt2)
+            throw new Error("no jwt found");
+        const response = await fetch(`${BASE_URL}api/fahrt/mod/alle/fahrten `, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${jwt2}`

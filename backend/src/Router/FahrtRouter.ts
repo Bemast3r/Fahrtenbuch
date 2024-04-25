@@ -61,7 +61,7 @@ fahrrouter.get("/mod/alle/fahrten", requiresAuthentication,
             if (req.role !== "m") {
                 return res.sendStatus(403)
             }
-            const user = await getFahrtenOfModUsers(req.params.id);
+            const user = await getFahrtenOfModUsers(req.userId);
             return res.send(user); // 200 by default
         } catch (err) {
             res.status(400);
