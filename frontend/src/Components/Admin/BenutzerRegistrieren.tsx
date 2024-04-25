@@ -20,7 +20,7 @@ const BenutzerRegistrieren = () => {
         email: '',
         password: '',
         admin: false,
-        fahrzeuge: [],
+        mod: false,
     });
 
     const jwt = getJWT();
@@ -81,7 +81,20 @@ const BenutzerRegistrieren = () => {
             if (form.checkValidity() === true && !passwordError) {
                 await createUserWithAdmin(formData);
                 setShowSuccess(true);
-                // setTimeout(() => { navigate("/home") }, 1500);
+                setTimeout(() => {
+                    // setShowSuccess(false);
+                    setFormData({
+                        vorname: '',
+                        name: '',
+                        username: '',
+                        email: '',
+                        password: '',
+                        admin: false,
+                        mod: false,
+                    });
+                    setValidated(false);
+                    window.location.reload()
+                }, 1000);
             } else {
                 // Passwortfeld leeren, wenn das Passwort falsch ist
                 setFormData(prevState => ({
@@ -161,7 +174,12 @@ const BenutzerRegistrieren = () => {
                         <Row className="mb-3 justify-content-left">
                             <Col md="auto" className="text-center">
                                 <Form.Group as={Col} controlId="formGridAdmin">
-                                    <Form.Check type="checkbox" label="Benutzer ist Admin" name="admin" className="checkbox-label5" checked={formData.admin} onChange={(e) => setFormData(prevState => ({ ...prevState, admin: e.target.checked }))} />
+                                    <Form.Check type="checkbox" label="Benutzer ist Admin" name="admin" className="checkbox-label5" disabled={formData.mod} checked={formData.admin} onChange={(e) => setFormData(prevState => ({ ...prevState, admin: e.target.checked }))} />
+                                </Form.Group>
+                            </Col>
+                            <Col md="auto" className="text-center">
+                                <Form.Group as={Col} controlId="formGridAdmin">
+                                    <Form.Check type="checkbox" label="Benutzer ist Mod" name="admin" className="checkbox-label5" disabled={formData.admin} checked={formData.mod} onChange={(e) => setFormData(prevState => ({ ...prevState, mod: e.target.checked }))} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -172,7 +190,7 @@ const BenutzerRegistrieren = () => {
                     </Form>
                 </div>
             </div>
-            
+
         </>
     );
 }

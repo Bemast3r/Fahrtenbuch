@@ -15,7 +15,7 @@ declare global {
              * Mongo-ID of currently logged in user; or undefined, if user is a guest.
              */
             userId?: string;
-            role: "u" | "a";
+            role: "u" | "a" | "m";
         }
     }
 }

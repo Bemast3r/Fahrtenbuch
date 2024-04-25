@@ -57,7 +57,7 @@ const Navbar = () => {
                         )}
                         {user && user.admin && (
                             <li className="nav-item">
-                                <a className={`nav-link ${activeLink === "/user-erstellen" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/user-erstellen">Benutzer registrieren</a>
+                                <a className={`nav-link ${activeLink === "/user-erstellen" ? "active" : ""}`} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} href="/user-verwalten">Benutzer verwalten</a>
                             </li>
                         )}
                     </ul>
@@ -73,7 +73,7 @@ const Navbar = () => {
                     <NavDropdown.Item href="/create">Fahrt erstellen</NavDropdown.Item>
                     <NavDropdown.Item href="/verwalten">Fahrt verwalten</NavDropdown.Item>
                     <NavDropdown.Item href="/statistiken">Statistiken</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => navigate("/user-erstellen")}>Benutzer registrieren</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => navigate("/user-verwalten")}>Benutzer verwalten</NavDropdown.Item>
                     <NavDropdown.Item onClick={handleAbmelden} style={{ color: 'red' }}>Abmelden</NavDropdown.Item>
                     <NavDropdown.Divider />
                 </NavDropdown>

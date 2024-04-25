@@ -18,6 +18,7 @@ const Statistik = () => {
     const [counter, setCounter] = useState<number>(0);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
+    const [isLastFahrt, setIsLastFahrt] = useState<boolean>(false); // State für letzte Fahrt
 
     const navigate = useNavigate();
 
@@ -133,9 +134,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+81%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -150,9 +151,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">-48%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -167,9 +168,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+21%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -184,9 +185,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+11%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -201,9 +202,9 @@ const Statistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    <div className="percentage">
+                                    {/* <div className="percentage">
                                         <p className="prozent">+72%</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -222,15 +223,15 @@ const Statistik = () => {
                                                 <div className="order">
                                                     <div className="head">
                                                         <h3>Fahrten vom {date}</h3>
-                                                        <i className='bx bx-search' ></i>
-                                                        <i className='bx bx-filter' ></i>
+                                                        {/* <i className='bx bx-search' ></i>
+                                                        <i className='bx bx-filter' ></i> */}
                                                     </div>
-                                                    <table>
+                                                    <table style={{ width: "100%", tableLayout: "fixed" }}>
                                                         <thead>
                                                             <tr>
-                                                                <th>Fahrer</th>
-                                                                <th>Dauer der Fahrt</th>
-                                                                <th>Status</th>
+                                                                <th style={{ width: "33%" }}>Fahrer</th>
+                                                                <th style={{ width: "33%" }}>Dauer der Fahrt</th>
+                                                                <th style={{ width: "10%" }}>Status</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -243,19 +244,17 @@ const Statistik = () => {
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-
-                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer' }}>
-                                                                        <td>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer'}}>
+                                                                        <td style={{ width: "33%" }}>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
-                                                                        <td>{formattedDuration}</td>
-                                                                        <td>
+                                                                        <td style={{ width: "33%" }}>{formattedDuration}</td>
+                                                                        <td style={{ width: "33%" }}>
                                                                             <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
                                                                                 {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
                                                                             </span>
                                                                         </td>
                                                                     </tr>
-
                                                                 );
                                                             })}
                                                         </tbody>

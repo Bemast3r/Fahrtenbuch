@@ -1,6 +1,6 @@
 body {
-  background-image: url('../../util/loginHintergrund.jpg');
-  /* background-image: linear-gradient(to right, #f4c32e, #ddb33f, #c7a44b, #b09455, #99865d, #827763, #696969, #827763, #99865d, #b09455, #c7a44b, #ddb33f, #f4c32e); */
+  /* background-image: url('../../util/loginHintergrund.jpg'); */
+  background-image: linear-gradient(to bottom, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4);
   margin: 0;
   font-family: Arial, sans-serif;
 }
