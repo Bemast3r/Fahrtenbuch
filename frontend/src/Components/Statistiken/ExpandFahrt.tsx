@@ -118,19 +118,19 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kennzeichen: <span style={{ fontWeight: 'bold' }}>{fahrt.kennzeichen || 'Keine Angabe'}</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Anfang der Fahrt: <span style={{ fontWeight: 'bold' }}>{formatDateString(new Date(fahrt.createdAt!))} um {new Date(fahrt.createdAt!).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                        Ende der Fahrt: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? `${formatDateString(new Date(fahrt.ruhezeit[1].start))} um ${new Date(fahrt.ruhezeit[1].start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}` : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."} Uhr</span>
+                        Ende der Fahrt: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? `${formatDateString(new Date(fahrt.ruhezeit[1].start))} um ${new Date(fahrt.ruhezeit[1].start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr` : fahrt.abwesend ? "Sie waren abwesend." : "Fahrt läuft noch"}</span>
                     </p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtbeginn: <span style={{ fontWeight: 'bold' }}>{fahrt.startpunkt || 'Keine Angabe'}</span></p>
-                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.endpunkt || 'Keine Angabe.'}</span></p>
+                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.endpunkt || 'Fahrt läuft noch'}</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtbeginn: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerstand + " km" || 'Keine Angabe'}</span></p>
-                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende + " km" || 'Keine Angabe'}</span></p>
+                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende + " km" || 'Fahrt läuft noch'}</span></p>
                     {fahrt.kilometerende && fahrt.kilometerstand ? (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
                             Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende - fahrt.kilometerstand} km </span>
                         </p>
                     ) : (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>Keine Angabe</span>
+                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>Fahrt läuft noch</span>
                         </p>
                     )}
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
