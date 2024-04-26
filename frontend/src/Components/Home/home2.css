@@ -381,8 +381,6 @@
         margin-bottom: -50px;
     }
 
-   
-
     .card {
         width: 100%; /* Ändere die Breite der Karte nach Bedarf */
         max-width: 300px;
@@ -397,8 +395,6 @@
     .section-header h2 {
         font-size: 26px;
     }
-
-    
 }
 
 .rotating {
