@@ -68,31 +68,34 @@ const ModBenutzer = () => {
 
 
     const handleAddUsersToMod = async () => {
-        const ids = selectedUsers.map(user => user.id);
+        const ids = selectedUsers.map(user => user.id).filter(id => typeof id === 'string');
         try {
             if (selectedMod && ids.length > 0) {
+                // Kopiere die vorherigen Mod-Benutzer
+                const existingModUsers = selectedMod.modUser || [];
+                const newModUsers = [
+                    ...existingModUsers,
+                    ...ids.map(userId => ({ users: userId as string }))
+                ];
+    
                 const newModUser: UserResource = {
                     ...selectedMod,
                     id: selectedMod._id!, // Umbenennen von _id zu id
-                    modUser: [
-                        {
-                            users: ids.join(',')
-                        }
-                    ]
+                    modUser: newModUsers
                 };
+    
                 // Fügen Sie hier die Logik hinzu, um das neue Mod-Benutzer-Objekt zu verwenden
                 await updateUser(newModUser);
                 // console.log(sendmod);
-                fetchMods()
-                fetchUsers()
+                fetchMods();
+                fetchUsers();
             }
         } catch (error) {
-
+            // Handle error
         }
-
     };
-
-
+    
+    
 
     return (
         <div className="form-wrapper-loesch">
