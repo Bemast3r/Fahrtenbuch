@@ -5,10 +5,12 @@ import ChartComponent from "./ChartComponent";
 import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
 import { jsPDF } from "jspdf";
-import { deleteFahrt } from "../../Api/api";
+import { deleteFahrt, deleteFahrtMod } from "../../Api/api";
+import { useUser } from "../Context/UserContext";
 
 const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  removeFromFahrt?: any}> = ({ fahrt, removeFromFahrt }) => {
     const [counter, setCounter] = useState<number>(0);
+    const { user } = useUser()
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -37,7 +39,12 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
 
     async function handleDelete() {
         try {
-            await deleteFahrt(fahrt);
+            if(user?.admin){
+                await deleteFahrt(fahrt);
+            } else if (user?.mod){
+                await deleteFahrtMod(fahrt);
+            }
+            
             // Rufe die Funktion removeFromFahrts aus der Prop auf, um die Fahrt zu entfernen und das Modal zu schließen
             await removeFromFahrt(fahrt);
             setCounter(prev => prev + 1);

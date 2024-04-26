@@ -207,4 +207,24 @@ fahrrouter.delete("/admin/loesch/fahrt/:id", requiresAuthentication,
     }
 );
 
+fahrrouter.delete("/mod/loesch/fahrt/:id", requiresAuthentication,
+    param("id").isMongoId(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "m") {
+                return res.sendStatus(403)
+            }
+            const res2 = await deleteFahrt(req.params.id);
+            return res.send(res2); // 200 by default
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
 export default fahrrouter;
