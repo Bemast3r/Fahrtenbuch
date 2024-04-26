@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FahrtResource, UserResource } from "../../util/Resources";
-import { getLoginInfo } from "../Contexte/Logincontext";
 import { getFahrt, getUser } from "../../Api/api";
 import Loading from "../../util/Components/LoadingIndicator";
 import ExpandFahrt from "./ExpandFahrt";
@@ -8,11 +7,12 @@ import { Accordion } from "./Accordion";
 import Navbar from "../Home/Navbar";
 import { jsPDF } from "jspdf";
 import { useNavigate } from 'react-router-dom';
-
 import html2tocanvas from 'html2canvas'
+import { getLoginInfo } from "../Context/Logincontext";
+import { useUser } from "../Context/UserContext";
 
 const UserFahrten: React.FC = () => {
-    const [user, setUser] = useState<UserResource | null>(null);
+    const { user } = useUser()
     const [meineFahrten, setMeineFahrten] = useState<FahrtResource[] | []>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate()
@@ -20,8 +20,6 @@ const UserFahrten: React.FC = () => {
     async function getU() {
         const id = getLoginInfo();
         if (id && id.userID) {
-            const userData = await getUser(id!.userID);
-            setUser(userData);
             const fahrten = await getFahrt(id!.userID);
             setMeineFahrten(fahrten);
             setLoading(false);
@@ -29,29 +27,6 @@ const UserFahrten: React.FC = () => {
             navigate("/")
         }
     }
-
-    function formatDateString(date: Date): string {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${day}.${month}.${year}`;
-    }
-
-    const downloadPDF = (fahrt: FahrtResource) => {
-        const capture = document.querySelector(`.infos-${fahrt._id}`) as HTMLElement;
-        if (capture) {
-            html2tocanvas(capture).then((canvas) => {
-                const imgdata = canvas.toDataURL('img/jpeg');
-                const doc = new jsPDF('p', 'pt', 'letter');
-                const componetwidth = doc.internal.pageSize.getWidth()
-                const componentheight = doc.internal.pageSize.getHeight()
-                doc.addImage(imgdata, 'JPEG', 0, 0, componetwidth + 150, componentheight);
-                doc.save(`Fahrt_von_${fahrt.vollname}_am_${formatDateString(new Date(fahrt.createdAt!))}.pdf`);
-            });
-        } else {
-            console.log("Nicht gefunden.");
-        }
-    };
 
     useEffect(() => {
         getU();

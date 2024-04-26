@@ -1,0 +1,67 @@
+    .form-container-loesch {
+        /* margin-top: 190px; */
+        background-color: #fff;
+        padding: 3.5rem;
+        border-radius: 12px;
+        box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        /* Füge einen Übergangseffekt hinzu */
+        transform: translateY(0);
+        max-width: 60%;
+        margin: 0 auto;
+        /* Zentriere das Element horizontal */
+        margin-top: 50px;
+        /* padding-bottom: 100px; */
+
+    }
+
+    .form-container-loesch:hover {
+        box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
+        /* Ändere den Schatten beim Schweben */
+        /* transform: translateY(0); */
+        /* Hebe den Container leicht an */
+        /* max-width: 60%; */
+        /* margin: 0 auto; Zentriere das Element horizontal   */
+        /* margin-bottom: 70px; */
+    }
+
+
+
+    .form-wrapper-loesch {
+        width: 100%;
+        height: 100%;
+    }
+
+    .containerModBen {
+        display: flex;
+        justify-content: space-between;
+        /* Verteilt den verfügbaren Platz zwischen den beiden Divs */
+    }
+
+    .Moderatordiv,
+    .Benutzerdiv {
+        width: 48%;
+        /* Breite der Divs festlegen */
+    }
+
+    .Moderatordiv,
+    .Benutzerdiv {
+        text-align: center;
+    }
+
+    .Moderatordiv ul,
+    .Benutzerdiv ul {
+        list-style-type: none;
+        /* Entfernt die Punkte für Listenitems */
+        padding: 0;
+        /* Entfernt den Standardabstand der Liste */
+        text-align: center;
+        font-size: large;
+    }
+
+    .Moderatordiv ul li,
+    .Benutzerdiv ul li {
+        display: flex;
+        align-items: center;
+        /* Zentriert die Elemente vertikal */
+    }

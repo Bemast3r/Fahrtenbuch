@@ -1,42 +1,44 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLoginInfo } from '../Contexte/Logincontext';
-import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
+import { getLoginInfo } from '../Context/Logincontext';
+import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleModUser, getAlleUser, getCompletedTrips, getModFahrten, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
 import Loading from "../../util/Components/LoadingIndicator";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
 import { Button, Modal } from 'react-bootstrap';
-import ExpandFahrt from '../Statistiken/ExpandFahrt';
+import ExpandFahrt from './ExpandFahrt';
+import { useUser } from '../Context/UserContext';
 
-const Statistik = () => {
-    const [user, setUser] = useState<UserResource | null>(null);
+const ModStatistik = () => {
+    const { user } = useUser();
     const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
-    const [totalUsers, setTotalUsers] = useState<number>(0);
-    const [adminUsers, setAdminUsers] = useState<number>(0);
+    const [totalModFahrts, setTotalModFahrts] = useState<number>(0);
+    const [totalOngoingModFahrts, setTotalOngoingModFahrts] = useState<number>(0);
+    const [totalEndedModFahrts, setTotalEndedModFahrts] = useState<number>(0);
+    const [totalmoduser, setTotalModUser] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
-    const [counter, setCounter] = useState<number>(0);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
-    const [isLastFahrt, setIsLastFahrt] = useState<boolean>(false); // State für letzte Fahrt
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        loadInitialData();
-        const intervalId = setInterval(() => {
-            loadUser();
-            loadTrips();
-            loadAllFahrts();
-        }, 60000);
+    // useEffect(() => {
+    //     loadInitialData();
+    //     const intervalId = setInterval(() => {
+    //         // loadUser();
+    //         // loadTrips();
+    //         loadAllFahrts();
+    //     }, 60000);
 
-        return () => clearInterval(intervalId);
-    }, []);
+    //     return () => clearInterval(intervalId);
+    // }, []);
 
     useEffect(() => {
-        loadAllFahrts();
-        console.log(counter)
-    }, [counter])
+        loadAllFahrtsAndUser();
+        
+        console.log()
+    }, [])
 
     async function loadInitialData() {
         try {
@@ -45,45 +47,52 @@ const Statistik = () => {
                 navigate("/");
                 return;
             }
-            const userserver = await getUser(id.userID);
-            setUser(userserver);
-            await loadTrips();
-            await loadUser();
-            await loadAllFahrts();
+            // await loadTrips();
+            // await loadUser();
+            await loadAllFahrtsAndUser();
         } catch (error) {
             console.error("Fehler beim Laden der Daten:", error);
         }
     }
 
-    async function loadTrips() {
-        try {
-            const completed = await getCompletedTrips();
-            const ongoing = await getOngoingTrips();
-            setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
-        } catch (error) {
-            console.error("Fehler beim Laden der Fahrten:", error);
-        }
+    useEffect(() => {
+    // Überprüfen Sie, ob der Benutzer angemeldet ist und laden Sie die Daten neu
+    if (user && user.id) {
+        loadUser();
     }
+}, [user]); 
 
-    async function loadAllFahrts() {
+    // async function loadTrips() {
+    //     try {
+    //         const completed = await getCompletedTrips();
+    //         const ongoing = await getOngoingTrips();
+    //         setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
+    //     } catch (error) {
+    //         console.error("Fehler beim Laden der Fahrten:", error);
+    //     }
+    // }
+
+    async function loadAllFahrtsAndUser() {
         try {
-            const fahrts = await getAllFahrts();
+            const fahrts = await getModFahrten();
             setFahrts(fahrts);
+            setTotalModFahrts(fahrts.length);
+            
+            const ongoingFahrts = fahrts.filter(fahrt => fahrt.beendet === false);
+            const endedFahrts = fahrts.filter(fahrt => fahrt.beendet === true);
+            
+            setTotalOngoingModFahrts(ongoingFahrts.length);
+            setTotalEndedModFahrts(endedFahrts.length);
         } catch (error) {
             console.error("Fehler beim Laden der Fahrten:", error);
         }
     }
+    
 
     async function loadUser() {
-        try {
-            const alleUser = await getAlleUser();
-            const alleAdmins = await getAlleAdmin();
-            const totalUsers = alleUser.length;
-            const adminUsers = alleAdmins.length;
-            setTotalUsers(totalUsers);
-            setAdminUsers(adminUsers);
-        } catch (error) {
-            console.error("Fehler beim Laden der User:", error);
+        if(user&&user.id){
+            const allemoduser = await getAlleModUser(user.id)
+            setTotalModUser(allemoduser.length) 
         }
     }
 
@@ -98,12 +107,14 @@ const Statistik = () => {
         }, {});
     }
 
-    async function handleDelete(fahrt: FahrtResource): Promise<void> {
+    async function removeFromFahrts(fahrtToRemove: FahrtResource): Promise<void> {
         try {
-            await deleteFahrt(fahrt);
-            setCounter(prev => prev + 1);
+            // Entferne die Fahrt aus der Liste
+            setFahrts(prevFahrts => prevFahrts!.filter(fahrt => fahrt._id !== fahrtToRemove._id));
+            // Schließe das Modal
+            handleCloseModal();
         } catch (error) {
-            console.error('Fehler beim Löschen der Fahrt:', error);
+            console.error('Fehler beim Entfernen der Fahrt:', error);
         }
     }
 
@@ -119,16 +130,16 @@ const Statistik = () => {
     return (
         <>
             <Navbar></Navbar>
-            <ProtectedComponent requiredRole="a">
+            <ProtectedComponent requiredRole="m">
                 {/* 5 Statistiken */}
-                <main>
-                    <h1 className="uberschrift">Statistiken</h1>
+                <main className="modmain">
+                    <h1 className="uberschrift">Mod - Statistiken</h1>
                     <div className="analyse">
                         <div className="sales">
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Alle Fahrten</h3>
-                                    <h1 className="zahlen">{tripData.completedTrips + tripData.ongoingTrips}</h1>
+                                    <h1 className="zahlen">{totalModFahrts}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -145,7 +156,7 @@ const Statistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Laufende Fahrten</h3>
-                                    <h1 className="zahlen">{tripData.ongoingTrips}</h1>
+                                    <h1 className="zahlen">{totalOngoingModFahrts}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -162,7 +173,7 @@ const Statistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Beendete Fahrten</h3>
-                                    <h1 className="zahlen">{tripData.completedTrips}</h1>
+                                    <h1 className="zahlen">{totalEndedModFahrts}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -178,8 +189,8 @@ const Statistik = () => {
                         <div className="fahrer">
                             <div className="status">
                                 <div className="info">
-                                    <h3 className="uberschrift-klein">Benutzer</h3>
-                                    <h1 className="zahlen">{totalUsers}</h1>
+                                    <h3 className="uberschrift-klein">Meine Fahrer</h3>
+                                    <h1 className="zahlen">{totalmoduser}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -187,23 +198,6 @@ const Statistik = () => {
                                     </svg>
                                     {/* <div className="percentage">
                                         <p className="prozent">+11%</p>
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="admins">
-                            <div className="status">
-                                <div className="info">
-                                    <h3 className="uberschrift-klein">Admins</h3>
-                                    <h1 className="zahlen">{adminUsers}</h1>
-                                </div>
-                                <div className="progresss">
-                                    <svg>
-                                        <circle cx="38" cy="38" r="36"></circle>
-                                    </svg>
-                                    {/* <div className="percentage">
-                                        <p className="prozent">+72%</p>
                                     </div> */}
                                 </div>
                             </div>
@@ -244,7 +238,7 @@ const Statistik = () => {
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer'}}>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer' }}>
                                                                         <td style={{ width: "33%" }}>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>
@@ -279,7 +273,7 @@ const Statistik = () => {
                     <Modal.Body>
                         {selectedFahrt && (
                             <div>
-                                <ExpandFahrt fahrt={selectedFahrt} user={user!} />
+                                <ExpandFahrt fahrt={selectedFahrt} user={user!} removeFromFahrt={removeFromFahrts} />
                             </div>
                         )}
                     </Modal.Body>
@@ -290,4 +284,4 @@ const Statistik = () => {
     );
 }
 
-export default Statistik;
+export default ModStatistik;

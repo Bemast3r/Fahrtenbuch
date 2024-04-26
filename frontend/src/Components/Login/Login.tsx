@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import Loading from "../../util/Components/LoadingIndicator";
 import { login } from "../../Api/api";
-import { getJWT, setJWT } from "../Contexte/Logincontext";
+import { getJWT, setJWT } from "../Context/Logincontext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./login.css";
 

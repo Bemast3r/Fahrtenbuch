@@ -1,13 +1,14 @@
 /* ---------- FORM STYLING ---------- */
 .body {
   font-family: 'Arial', sans-serif;
-  background-image: url('../../util/loginHintergrund.jpg');
+  /* background-image: url('../../util/loginHintergrund.jpg'); */
+  background-color: #eec346;
   background-size: cover;
   background-position: center;
 }
 
 .wasgehtsiedasan {
-  background-image: url('../../util/loginHintergrund.jpg');
+  /* background-image: url('../../util/loginHintergrund.jpg'); */
   background-size: cover;
   background-position: center;
 }

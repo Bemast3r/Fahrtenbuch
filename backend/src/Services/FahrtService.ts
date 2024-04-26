@@ -1,5 +1,7 @@
+import { User } from "../Model/UserModel";
 import { Fahrt } from "../Model/FahrtModel";
 import { FahrtResource, UserResource } from "../Model/Resources";
+import mongoose from "mongoose";
 
 // Admin kann alle Fahrten sehen
 export async function getFahrten() {
@@ -59,6 +61,7 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             arbeitszeit: fahrt.arbeitszeit,
             pause: fahrt.pause,
             startpunkt: fahrt.startpunkt,
+            endpunkt: fahrt.endpunkt,
             ruhezeit: fahrt.ruhezeit,
             abwesend: fahrt.abwesend,
             beendet: fahrt.beendet,
@@ -120,4 +123,30 @@ export async function deleteFahrt(fahrtid: string) {
     }
 }
 
+export async function getFahrtenOfModUsers(userid: string) {
+    try {
+        // Finde den Benutzer anhand der ID und populiere das modUser-Feld
+        const user = await User.findById(userid).populate('modUser.users').exec();
+        let fahrten: any = [];
+
+        // Annahme: modUser ist das Array von Objekten, das die Benutzer-IDs enthält
+        for (const mod of user.modUser) {
+            const userIds = mod.users.split(','); // Splitten der Zeichenkette bei den Kommas
+
+            // Durchlaufe jede Benutzer-ID in userIds
+            for (const userId of userIds) {
+                // Finde alle Fahrten, bei denen der Benutzer der Fahrer ist
+                const userFahrten = await Fahrt.find({ fahrer: userId.trim() }).exec(); // Verwende trim(), um Leerzeichen zu entfernen
+                
+                // Füge die gefundenen Fahrten zu fahrten hinzu
+                fahrten = fahrten.concat(userFahrten);
+            }
+        }
+        
+        return fahrten;
+    } catch (error) {
+        console.error(`Fehler beim Abrufen der Fahrten der Mod-User: ${(error as Error).message}`);
+        throw error;
+    }
+}
 

@@ -5,10 +5,12 @@ import ChartComponent from "./ChartComponent";
 import html2tocanvas from 'html2canvas'
 import autoTable from 'jspdf-autotable'
 import { jsPDF } from "jspdf";
-import { deleteFahrt } from "../../Api/api";
+import { deleteFahrt, deleteFahrtMod } from "../../Api/api";
+import { useUser } from "../Context/UserContext";
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ fahrt, user }) => {
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  removeFromFahrt?: any}> = ({ fahrt, removeFromFahrt }) => {
     const [counter, setCounter] = useState<number>(0);
+    const { user } = useUser()
 
     function formatDateTime(date: Date): string {
         const hours = new Date(date).getHours().toString().padStart(2, '0');
@@ -35,9 +37,16 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
         return `${formatierteStunden}:${formatierteMinuten}:${formatierteSekunden}`;
     }
 
-    async function handleDelete(fahrt: FahrtResource): Promise<void> {
+    async function handleDelete() {
         try {
-            await deleteFahrt(fahrt);
+            if(user?.admin){
+                await deleteFahrt(fahrt);
+            } else if (user?.mod){
+                await deleteFahrtMod(fahrt);
+            }
+            
+            // Rufe die Funktion removeFromFahrts aus der Prop auf, um die Fahrt zu entfernen und das Modal zu schließen
+            await removeFromFahrt(fahrt);
             setCounter(prev => prev + 1);
         } catch (error) {
             console.error('Fehler beim Löschen der Fahrt:', error);
@@ -66,17 +75,17 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                 const tableData = [
                     ['Name', `${fahrt.vollname}`],
                     ['Wurde gefahren?', `${fahrt.abwesend || 'Die Fahrt hat stattgefunden.'}`],
-                    ['Ort des Fahrtbeginns', `${fahrt.startpunkt || 'Keine Angabe'}`],
+                    ['Ort des Fahrtbeginns', `${fahrt.startpunkt || '-'}`],
                     ['Ort der Fahrtbeendigung', `${fahrt.endpunkt || '-'}`],
-                    ['Kennzeichen', `${fahrt.kennzeichen || 'Keine Angabe'}`],
-                    ['Kilometerstand Fahrtbeginn', `${fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : 'Keine Angabe'}`],
-                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : 'Keine Angabe'}`],
+                    ['Kennzeichen', `${fahrt.kennzeichen || '-'}`],
+                    ['Kilometerstand Fahrtbeginn', `${fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : '-'}`],
+                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : '-'}`],
                     ['Gesamtfahrtstrecke', `${fahrt.kilometerende ? fahrt.kilometerende - (fahrt.kilometerstand || 0) : 0} km`],
                     ['Zeitpunkt Fahrtende', `${fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}`],
-                    ['Gesamte Lenkzeit', `${lenkzeit || 'Keine Angabe'}`],
-                    ['Gesamte Arbeitszeit', `${arbeitszeit || 'Keine Angabe'}`],
-                    ['Gesamte Pausenzeit', `${pause || 'Keine Angabe'}`],
-                    ['Gesamte Ruhezeit', `${ruhezeit || 'Keine Angabe'}`]
+                    ['Gesamte Lenkzeit', `${lenkzeit || '-'}`],
+                    ['Gesamte Arbeitszeit', `${arbeitszeit || '-'}`],
+                    ['Gesamte Pausenzeit', `${pause || '-'}`],
+                    ['Gesamte Ruhezeit', `${ruhezeit || '-'}`]
                 ];
                 const headers = [['Ihre Fahrt', 'Daten']];
 
@@ -116,19 +125,19 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kennzeichen: <span style={{ fontWeight: 'bold' }}>{fahrt.kennzeichen || 'Keine Angabe'}</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Anfang der Fahrt: <span style={{ fontWeight: 'bold' }}>{formatDateString(new Date(fahrt.createdAt!))} um {new Date(fahrt.createdAt!).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                        Ende der Fahrt: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? `${formatDateString(new Date(fahrt.ruhezeit[1].start))} um ${new Date(fahrt.ruhezeit[1].start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr` : fahrt.abwesend ? "Sie waren abwesend." : "Fahrt läuft noch"}</span>
+                        Ende der Fahrt: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? `${formatDateString(new Date(fahrt.ruhezeit[1].start))} um ${new Date(fahrt.ruhezeit[1].start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr` : fahrt.abwesend ? "Sie waren abwesend" : "Fahrt läuft noch"}</span>
                     </p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtbeginn: <span style={{ fontWeight: 'bold' }}>{fahrt.startpunkt || 'Keine Angabe'}</span></p>
-                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.endpunkt || 'Fahrt läuft noch'}</span></p>
+                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.endpunkt && fahrt.beendet ? fahrt.endpunkt : !fahrt.beendet ? 'Fahrt läuft noch' : "Keine Angabe"}</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtbeginn: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerstand + " km" || 'Keine Angabe'}</span></p>
-                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende + " km" || 'Fahrt läuft noch'}</span></p>
+                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende && fahrt.beendet ? fahrt.kilometerende : !fahrt.beendet ? 'Fahrt läuft noch' : "Keine Angabe"}</span></p>
                     {fahrt.kilometerende && fahrt.kilometerstand ? (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
                             Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende - fahrt.kilometerstand} km </span>
                         </p>
                     ) : (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>Fahrt läuft noch</span>
+                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet ? "Sie waren abwesend": "Fahrt läuft noch"}</span>
                         </p>
                     )}
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
@@ -206,7 +215,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource }> = ({ f
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
                 <button className="submit-button-beginnen" style={{ margin: '0 10px' }} onClick={() => { downloadPDF(fahrt) }}>Herunterladen</button>
-                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete(fahrt) }}>Fahrt Löschen</button>
+                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete() }}>Fahrt Löschen</button>
             </div>
         </div>
     );
