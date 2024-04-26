@@ -99,36 +99,41 @@ const ModBenutzer = () => {
 
     return (
         <div className="form-wrapper-loesch">
-            <div className="form-container-loesch">
-                <div style={{ float: 'left', width: '50%' }}>
-                    <h2>Moderatoren</h2>
-                    <ul>
-                        {mods.map(mod => (
-                            <ol key={mod.id}>
-                                <input type="checkbox" checked={selectedMod?.email === mod.email ? true : false} onChange={() => handleModSelect(mod)} />
-                                <label style={{ marginLeft: '5px' }}>{mod.name}</label>
-                            </ol>
-                        ))}
-
-                    </ul>
-                </div>
-                <div style={{ float: 'right', width: '50%' }}>
-                    <h2>Benutzer</h2>
-                    <ul>
-                        {users.map(user => (
-                            <ul key={user.id}>
-                                <input type="checkbox" checked={selectedUsers.some(selectedUser => selectedUser.id === user.id)} disabled={user.id ? isUserDisabled(user.id!) : false} onChange={() => handleUserSelect(user)} />
-                                <label style={{ marginLeft: '5px', color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
-                            </ul>
-                        ))}
-                    </ul>
-                </div>
-                <button disabled={!selectedMod || (selectedMod && selectedUsers.length === 0)} onClick={handleAddUsersToMod}>
-                    Ausgewählte Benutzer hinzufügen
-                </button>
-
-            </div>
+    <div className="form-container-loesch">
+        <h1 className="form-header2">Moderator zuweisen</h1>
+        <div className="containerModBen">
+            <span className="Moderatordiv">
+                <h2>Moderatoren</h2>
+                <ul>
+                    {mods.map(mod => (
+                        <li key={mod.id}>
+                            <input type="checkbox" checked={selectedMod?.email === mod.email} onChange={() => handleModSelect(mod)} />
+                            <label className="moderatoritems">{mod.name}</label>
+                        </li>
+                    ))}
+                </ul>
+            </span>
+            <span className="Benutzerdiv">
+                <h2>Benutzer</h2>
+                <ul>
+                    {users.map(user => (
+                        <li key={user.id}>
+                            <input type="checkbox" checked={selectedUsers.some(selectedUser => selectedUser.id === user.id)} disabled={user.id ? isUserDisabled(user.id!) : false} onChange={() => handleUserSelect(user)} />
+                            <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
+                        </li>
+                    ))}
+                </ul>
+            </span>
         </div>
+        <br></br>
+        <br></br>
+        <button className="submit-button-beginnen" disabled={!selectedMod || (selectedMod && selectedUsers.length === 0)} onClick={handleAddUsersToMod}>
+            Fahrer zuweisen
+        </button>
+    </div>
+</div>
+
+    
     );
 };
 
