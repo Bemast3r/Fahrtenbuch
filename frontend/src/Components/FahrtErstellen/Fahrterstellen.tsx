@@ -89,10 +89,10 @@ const FahrtErstellen = () => {
                     return;
                 }
                 let abwesendText = '';
-                if (checkbox1Checked) abwesendText = "Ich habe kein Fahrzeug geführt.";
-                else if (checkbox2Checked) abwesendText = "Ich bin krank.";
-                else if (checkbox3Checked) abwesendText = "Ich habe Urlaub.";
-                else if (checkbox4Checked) abwesendText = "Ich habe frei.";
+                if (checkbox1Checked) abwesendText = "Ich habe kein Fahrzeug geführt";
+                else if (checkbox2Checked) abwesendText = "Ich bin krank";
+                else if (checkbox3Checked) abwesendText = "Ich habe Urlaub";
+                else if (checkbox4Checked) abwesendText = "Ich habe frei";
 
                 if (user) {
                     const today = new Date()
@@ -105,7 +105,9 @@ const FahrtErstellen = () => {
                         vollname: user.vorname + " " + user.name,
                         kennzeichen: "-",
                         kilometerstand: 0,
+                        kilometerende:0,
                         startpunkt: "-",
+                        endpunkt:"-",
                         abwesend: abwesendText,
                         ruhezeit: [{ start: today, stop: end }],
                         beendet: true,

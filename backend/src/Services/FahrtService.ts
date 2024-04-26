@@ -61,6 +61,7 @@ export async function createUserFahrt(fahrt: FahrtResource) {
             arbeitszeit: fahrt.arbeitszeit,
             pause: fahrt.pause,
             startpunkt: fahrt.startpunkt,
+            endpunkt: fahrt.endpunkt,
             ruhezeit: fahrt.ruhezeit,
             abwesend: fahrt.abwesend,
             beendet: fahrt.beendet,

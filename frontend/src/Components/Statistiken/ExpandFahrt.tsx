@@ -75,17 +75,17 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
                 const tableData = [
                     ['Name', `${fahrt.vollname}`],
                     ['Wurde gefahren?', `${fahrt.abwesend || 'Die Fahrt hat stattgefunden.'}`],
-                    ['Ort des Fahrtbeginns', `${fahrt.startpunkt || 'Keine Angabe'}`],
+                    ['Ort des Fahrtbeginns', `${fahrt.startpunkt || '-'}`],
                     ['Ort der Fahrtbeendigung', `${fahrt.endpunkt || '-'}`],
-                    ['Kennzeichen', `${fahrt.kennzeichen || 'Keine Angabe'}`],
-                    ['Kilometerstand Fahrtbeginn', `${fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : 'Keine Angabe'}`],
-                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : 'Keine Angabe'}`],
+                    ['Kennzeichen', `${fahrt.kennzeichen || '-'}`],
+                    ['Kilometerstand Fahrtbeginn', `${fahrt.kilometerstand !== 0 ? `${fahrt.kilometerstand} km` : '-'}`],
+                    ['Kilometerstand Fahrtende', `${fahrt.kilometerende !== undefined ? `${fahrt.kilometerende} km` : '-'}`],
                     ['Gesamtfahrtstrecke', `${fahrt.kilometerende ? fahrt.kilometerende - (fahrt.kilometerstand || 0) : 0} km`],
                     ['Zeitpunkt Fahrtende', `${fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? "Ihre Fahrt wurde um " + formatDateTime(new Date(fahrt.ruhezeit[1].start)) + " Uhr beendet." : fahrt.abwesend ? "Sie waren abwesend." : "Ihre Fahrt läuft noch."}`],
-                    ['Gesamte Lenkzeit', `${lenkzeit || 'Keine Angabe'}`],
-                    ['Gesamte Arbeitszeit', `${arbeitszeit || 'Keine Angabe'}`],
-                    ['Gesamte Pausenzeit', `${pause || 'Keine Angabe'}`],
-                    ['Gesamte Ruhezeit', `${ruhezeit || 'Keine Angabe'}`]
+                    ['Gesamte Lenkzeit', `${lenkzeit || '-'}`],
+                    ['Gesamte Arbeitszeit', `${arbeitszeit || '-'}`],
+                    ['Gesamte Pausenzeit', `${pause || '-'}`],
+                    ['Gesamte Ruhezeit', `${ruhezeit || '-'}`]
                 ];
                 const headers = [['Ihre Fahrt', 'Daten']];
 
@@ -125,19 +125,19 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kennzeichen: <span style={{ fontWeight: 'bold' }}>{fahrt.kennzeichen || 'Keine Angabe'}</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Anfang der Fahrt: <span style={{ fontWeight: 'bold' }}>{formatDateString(new Date(fahrt.createdAt!))} um {new Date(fahrt.createdAt!).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                        Ende der Fahrt: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? `${formatDateString(new Date(fahrt.ruhezeit[1].start))} um ${new Date(fahrt.ruhezeit[1].start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr` : fahrt.abwesend ? "Sie waren abwesend." : "Fahrt läuft noch"}</span>
+                        Ende der Fahrt: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet && fahrt.ruhezeit && fahrt.ruhezeit[1]?.start ? `${formatDateString(new Date(fahrt.ruhezeit[1].start))} um ${new Date(fahrt.ruhezeit[1].start).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr` : fahrt.abwesend ? "Sie waren abwesend" : "Fahrt läuft noch"}</span>
                     </p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtbeginn: <span style={{ fontWeight: 'bold' }}>{fahrt.startpunkt || 'Keine Angabe'}</span></p>
-                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.endpunkt || 'Fahrt läuft noch'}</span></p>
+                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Ort Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.endpunkt && fahrt.beendet ? fahrt.endpunkt : !fahrt.beendet ? 'Fahrt läuft noch' : "Keine Angabe"}</span></p>
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtbeginn: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerstand + " km" || 'Keine Angabe'}</span></p>
-                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende + " km" || 'Fahrt läuft noch'}</span></p>
+                    <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>Kilometerstand Fahrtende: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende && fahrt.beendet ? fahrt.kilometerende : !fahrt.beendet ? 'Fahrt läuft noch' : "Keine Angabe"}</span></p>
                     {fahrt.kilometerende && fahrt.kilometerstand ? (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
                             Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.kilometerende - fahrt.kilometerstand} km </span>
                         </p>
                     ) : (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>Fahrt läuft noch</span>
+                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet ? "Sie waren abwesend": "Fahrt läuft noch"}</span>
                         </p>
                     )}
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
