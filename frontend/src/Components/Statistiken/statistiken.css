@@ -317,8 +317,8 @@ main .analyse .progresss .percentage {
 }
 
 #content main .table-data .order table tr td .status {
-    font-size: 14px;
-    padding: 6px 16px;
+    font-size: 16px;
+    padding: 8px 22px;
     color: var(--light);
     border-radius: 20px;
     font-weight: 700;
@@ -412,6 +412,12 @@ main .analyse .progresss .percentage {
     height: 25%;
 }
 
+/* Stil für Dropdown-Menüs */
+details.summary.ul {
+    background-color: black;
+    margin-bottom: 10px;
+}
+
 @media only screen and (min-width: 991px) {
     .row {
         display: flex;
@@ -428,33 +434,121 @@ main .analyse .progresss .percentage {
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    .row {
-        display: grid;
+@media only screen and (min-width: 992px) and (max-width: 1350px) {
+    .uberschrift {
+        font-size: 28px;
+        margin-top: 11rem;
     }
 
-    .col-md {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+    .uberschrift::after {
+        top: 50px;
+        width: 400px; 
+    }
+
+    /* Analyse-Grid */
+    main .analyse {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatische Anpassung der Spaltenanzahl */
+        gap: 1rem; /* Verringerte Lücken zwischen den Elementen */
+        margin-left: 2rem; /* Reduzierter linker Seitenabstand */
+        margin-right: 2rem; /* Reduzierter rechter Seitenabstand */
+    }
+
+    /* Tabelle */
+    #content main .table-data {
+        width: 90%; /* Volle Breite für Tabellencontainer */
+    }
+
+    #content main .table-data>div {
+        padding: 16px; /* Kleinere Innenpolsterung für Tabellenelemente */
+    }
+
+    #content main .table-data .head h3 {
+        font-size: 24px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+        margin-bottom: -5px;
+    }
+
+    #content main .table-data .order table {
+        min-width: 300px; /* Mindestbreite für Tabellenelemente */
+    }
+
+    #content main .table-data .order table th {
+        font-size: 20px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+    }
+
+    #content main .table-data .order table td {
+        font-size: 20px; /* Kleinere Schriftgröße für Tabellenzellen */
+    }
+
+    #content main .table-data .order table tr td:first-child {
+        font-size: 20px;
+        padding-left: 0; /* Kein zusätzlicher Abstand für die erste Zelle */
+    }
+
+    #content main .table-data .order table tr td .status {
+        font-size: 14px;
+        padding: 8px 26px;
+        color: var(--light);
+        border-radius: 20px;
+        font-weight: 700;
     }
 }
 
-@media only screen and (max-width: 767px) {
-    .row {
-        display: grid;
+@media only screen and (max-width: 991px) {
+    .uberschrift {
+        font-size: 24px;
+        margin-top: 11rem;
     }
 
-    .col-md {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+    .uberschrift::after {
+        top: 40px;
+        width: 250px; 
     }
-}
 
-/* Stil für Dropdown-Menüs */
-details.summary.ul {
-    background-color: black;
-    margin-bottom: 10px;
-    /* Abstand zwischen den Dropdown-Menüs */
-}
+    /* Analyse-Grid */
+    main .analyse {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatische Anpassung der Spaltenanzahl */
+        gap: 1rem; /* Verringerte Lücken zwischen den Elementen */
+        margin-left: 2rem; /* Reduzierter linker Seitenabstand */
+        margin-right: 2rem; /* Reduzierter rechter Seitenabstand */
+    }
+
+    /* Tabelle */
+    #content main .table-data {
+        width: 90%; /* Volle Breite für Tabellencontainer */
+    }
+
+    #content main .table-data>div {
+        padding: 16px; /* Kleinere Innenpolsterung für Tabellenelemente */
+    }
+
+    #content main .table-data .head h3 {
+        font-size: 20px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+        margin-bottom: -5px;
+    }
+
+    #content main .table-data .order table {
+        min-width: 300px; /* Mindestbreite für Tabellenelemente */
+    }
+
+    #content main .table-data .order table th {
+        font-size: 16px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+    }
+
+    #content main .table-data .order table td {
+        font-size: 16px; /* Kleinere Schriftgröße für Tabellenzellen */
+    }
+
+    #content main .table-data .order table tr td:first-child {
+        font-size: 16px;
+        padding-left: 0; /* Kein zusätzlicher Abstand für die erste Zelle */
+    }
+
+    #content main .table-data .order table tr td .status {
+        font-size: 12px;
+        padding: 8px 26px;
+        color: var(--light);
+        border-radius: 20px;
+        font-weight: 700;
+    }
+} 
+
