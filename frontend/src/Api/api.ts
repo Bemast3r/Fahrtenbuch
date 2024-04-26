@@ -404,6 +404,25 @@ export async function getAlleAdmin(): Promise<UserResource[]> {
     }
 }
 
+export async function getAlleModUser(userid: string): Promise<UserResource[]> {
+    try {
+        const jwt2 = getJWT();
+        const response = await fetch(`${BASE_URL}api/user/mod/finde/mods/${userid}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt2}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Netzwerkfehler, versuche es erneut.");
+        }
+        const result: UserResource[] = await response.json();
+        return result;
+    } catch (error) {
+        throw new Error(`Es gab einen Fehler: ${error}`);
+    }
+}
+
 export async function getAlleUser(): Promise<UserResource[]> {
     try {
         const jwt2 = getJWT();

@@ -144,6 +144,14 @@ main .analyse {
     margin-right: 5rem;
 }
 
+.modmain .analyse {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
 main .analyse>div {
     background-color: var(--color-white);
     padding: var(--card-padding);

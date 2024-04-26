@@ -1,5 +1,5 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUser, deleteUser, getAllMods, getAlleAdmin, getAlleUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
+import { createUser, deleteUser, getAllMods, getAlleAdmin, getAlleModUser, getAlleUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
 import { UserResource } from "../Model/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
@@ -41,6 +41,23 @@ userRouter.get("/admin/finde/user/:id", requiresAuthentication,
         }
         try {
             const user = await getUser(req.params.id)
+            return res.send(user)
+        } catch (error) {
+            res.status(400);
+            next(error);
+        }
+    }
+);
+
+userRouter.get("/mod/finde/mods/:id", requiresAuthentication,
+    param("id").isMongoId(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const user = await getAlleModUser(req.params.id)
             return res.send(user)
         } catch (error) {
             res.status(400);

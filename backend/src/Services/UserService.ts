@@ -184,6 +184,26 @@ export async function getAlleAdmin(): Promise<UserResource[]> {
     }
 }
 
+export async function getAlleModUser(userid: string): Promise<{ users: string; }[]> {
+    try {
+        // Suchen Sie den Benutzer basierend auf der übergebenen Benutzer-ID und laden Sie die Mods
+        const user = await User.findById(userid).populate('modUser.users').exec();
+
+        // Überprüfen Sie, ob der Benutzer gefunden wurde
+        if (!user) {
+            throw new Error('Benutzer nicht gefunden');
+        }
+
+        // Extrahieren Sie die Mods aus dem gefundenen Benutzer
+        const mods = user.modUser;
+        // Rückgabe der gefundenen Mods
+        return mods;
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen aller Mods-Benutzer: ${error.message}`);
+    }
+}
+
+
 export async function addnewModUsers(userid: string, users: UserResource[]): Promise<boolean> {
     try {
         const user = await User.findById(userid).exec()

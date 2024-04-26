@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginInfo } from '../Context/Logincontext';
-import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getModFahrten, getOngoingTrips, getUser } from '../../Api/api';
+import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleModUser, getAlleUser, getCompletedTrips, getModFahrten, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
 import Loading from "../../util/Components/LoadingIndicator";
@@ -12,8 +12,11 @@ import { useUser } from '../Context/UserContext';
 
 const ModStatistik = () => {
     const { user } = useUser();
-    // const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
-    // const [totalUsers, setTotalUsers] = useState<number>(0);
+    const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
+    const [totalModFahrts, setTotalModFahrts] = useState<number>(0);
+    const [totalOngoingModFahrts, setTotalOngoingModFahrts] = useState<number>(0);
+    const [totalEndedModFahrts, setTotalEndedModFahrts] = useState<number>(0);
+    const [totalmoduser, setTotalModUser] = useState<number>(0);
     const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
@@ -32,7 +35,7 @@ const ModStatistik = () => {
     // }, []);
 
     useEffect(() => {
-        loadAllFahrts();
+        loadAllFahrtsAndUser();
         
         console.log()
     }, [])
@@ -46,11 +49,18 @@ const ModStatistik = () => {
             }
             // await loadTrips();
             // await loadUser();
-            await loadAllFahrts();
+            await loadAllFahrtsAndUser();
         } catch (error) {
             console.error("Fehler beim Laden der Daten:", error);
         }
     }
+
+    useEffect(() => {
+    // Überprüfen Sie, ob der Benutzer angemeldet ist und laden Sie die Daten neu
+    if (user && user.id) {
+        loadUser();
+    }
+}, [user]); 
 
     // async function loadTrips() {
     //     try {
@@ -62,28 +72,29 @@ const ModStatistik = () => {
     //     }
     // }
 
-    async function loadAllFahrts() {
+    async function loadAllFahrtsAndUser() {
         try {
             const fahrts = await getModFahrten();
             setFahrts(fahrts);
-            console.log(fahrts)
+            setTotalModFahrts(fahrts.length);
+            
+            const ongoingFahrts = fahrts.filter(fahrt => fahrt.beendet === false);
+            const endedFahrts = fahrts.filter(fahrt => fahrt.beendet === true);
+            
+            setTotalOngoingModFahrts(ongoingFahrts.length);
+            setTotalEndedModFahrts(endedFahrts.length);
         } catch (error) {
             console.error("Fehler beim Laden der Fahrten:", error);
         }
     }
+    
 
-    // async function loadUser() {
-    //     try {
-    //         const alleUser = await getAlleUser();
-    //         const alleAdmins = await getAlleAdmin();
-    //         const totalUsers = alleUser.length;
-    //         const adminUsers = alleAdmins.length;
-    //         setTotalUsers(totalUsers);
-    //         setAdminUsers(adminUsers);
-    //     } catch (error) {
-    //         console.error("Fehler beim Laden der User:", error);
-    //     }
-    // }
+    async function loadUser() {
+        if(user&&user.id){
+            const allemoduser = await getAlleModUser(user.id)
+            setTotalModUser(allemoduser.length) 
+        }
+    }
 
     function groupFahrtenByDate(fahrten: FahrtResource[]) {
         return fahrten.slice().reverse().reduce((acc: { [date: string]: FahrtResource[] }, fahrt: FahrtResource) => {
@@ -121,14 +132,14 @@ const ModStatistik = () => {
             <Navbar></Navbar>
             <ProtectedComponent requiredRole="m">
                 {/* 5 Statistiken */}
-                <main>
+                <main className="modmain">
                     <h1 className="uberschrift">Mod - Statistiken</h1>
                     <div className="analyse">
                         <div className="sales">
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Alle Fahrten</h3>
-                                    {/* <h1 className="zahlen">{tripData.completedTrips + tripData.ongoingTrips}</h1> */}
+                                    <h1 className="zahlen">{totalModFahrts}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -145,7 +156,7 @@ const ModStatistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Laufende Fahrten</h3>
-                                    {/* <h1 className="zahlen">{tripData.ongoingTrips}</h1> */}
+                                    <h1 className="zahlen">{totalOngoingModFahrts}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -162,7 +173,7 @@ const ModStatistik = () => {
                             <div className="status">
                                 <div className="info">
                                     <h3 className="uberschrift-klein">Beendete Fahrten</h3>
-                                    {/* <h1 className="zahlen">{tripData.completedTrips}</h1> */}
+                                    <h1 className="zahlen">{totalEndedModFahrts}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -178,8 +189,8 @@ const ModStatistik = () => {
                         <div className="fahrer">
                             <div className="status">
                                 <div className="info">
-                                    <h3 className="uberschrift-klein">Benutzer</h3>
-                                    {/* <h1 className="zahlen">{totalUsers}</h1> */}
+                                    <h3 className="uberschrift-klein">Meine Fahrer</h3>
+                                    <h1 className="zahlen">{totalmoduser}</h1>
                                 </div>
                                 <div className="progresss">
                                     <svg>
@@ -187,23 +198,6 @@ const ModStatistik = () => {
                                     </svg>
                                     {/* <div className="percentage">
                                         <p className="prozent">+11%</p>
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="admins">
-                            <div className="status">
-                                <div className="info">
-                                    <h3 className="uberschrift-klein">Admins</h3>
-                                    {/* <h1 className="zahlen">{adminUsers}</h1> */}
-                                </div>
-                                <div className="progresss">
-                                    <svg>
-                                        <circle cx="38" cy="38" r="36"></circle>
-                                    </svg>
-                                    {/* <div className="percentage">
-                                        <p className="prozent">+72%</p>
                                     </div> */}
                                 </div>
                             </div>
