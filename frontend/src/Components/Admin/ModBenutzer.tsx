@@ -8,6 +8,8 @@ const ModBenutzer = () => {
     const [selectedMod, setSelectedMod] = useState<UserResource | null>(null);
     const [selectedUsers, setSelectedUsers] = useState<UserResource[]>([]);
     const [modListe, setModListe] = useState<{ users: string, name: string }[]>([])
+    const [payload, setPayload] = useState<{ users: string, name: string }[]>([])
+
 
     useEffect(() => {
         fetchMods();
@@ -19,6 +21,24 @@ const ModBenutzer = () => {
             updateModList(selectedMod)
         }
     }, [selectedMod, mods])
+
+    useEffect(() => {
+        const transformedData = selectedUsers.map(user => ({
+            users: user.id!,
+            name: `${user.vorname}  ${user.name}`
+        }));
+        setPayload(transformedData);
+    }, [selectedUsers]);
+    
+
+    useEffect(() => {
+        if (modListe.length > 0) {
+            const modUserIds = modListe.map(user => user.users);
+            const filteredUsers = users.filter(user => modUserIds.includes(user.id!));
+            setSelectedUsers(filteredUsers);
+        }
+    }, [modListe]);
+    
 
     const fetchMods = async () => {
         try {
@@ -71,48 +91,42 @@ const ModBenutzer = () => {
         });
     };
 
-    const isUserDisabled = (userId: string) => {
-        if (selectedMod && selectedMod.modUser) {
-            // Überprüfe, ob der Benutzer bereits in der Modliste enthalten ist
-            return selectedMod.modUser.some(modUser => modUser.users === userId);
-        } else {
-            return false;
-        }
-    };
-
-    const handleAddUsersToMod = async () => {
-        const ids = selectedUsers.map(user => user.id).filter(id => typeof id === 'string');
+    
+    
+    const addUserToMod = async () => {
         try {
-            if (selectedMod && ids.length > 0) {
-                const existingModUsers = selectedMod.modUser || [];
-                const newModUsers = [
-                    ...existingModUsers,
-                    ...ids.map(userId => ({ users: userId as string, name: `${selectedUsers.find(user => user.id === userId)?.vorname} ${selectedUsers.find(user => user.id === userId)?.name}` }))
-                ];
-
-                const newModUser: UserResource = {
-                    ...selectedMod,
-                    id: selectedMod._id!,
-                    modUser: newModUsers
-                };
-                const response = await updateUser(newModUser);
-
-                if (response !== null) {
-                    const index = mods.findIndex(mod =>  mod._id === selectedMod._id)
-                    mods[index] = newModUser
-                    updateModList(newModUser)
-                }
+            if (!selectedMod || selectedUsers.length === 0) {
+                // Kein ausgewählter Moderator oder keine ausgewählten Benutzer
+                return;
+            }
+    
+            const modId = selectedMod._id!;
+            
+            // Ersetze das Mod-User-Array des ausgewählten Moderators durch den Payload
+            const updatedModData: UserResource = {
+                ...selectedMod,
+                id: modId,
+                modUser: payload
+            };
+            
+            const response = await updateUser(updatedModData);
+            if (response !== null) {
+                // Aktualisiere die Liste der Moderatoren
+                const index = mods.findIndex(mod =>  mod._id === selectedMod._id)
+                mods[index] = response
+                updateModList(response)
             }
         } catch (error) {
-
+            // Fehlerbehandlung
         }
     };
+    
 
 
     return (
         <div className="form-wrapper-loesch">
             <div className="form-container-loesch">
-                <h1 className="form-header2">Moderator zuweisen</h1>
+                <h1 className="form-header2">Benutzer einem Moderator zuweisen</h1>
                 <div className="containerModBen">
                     <span className="Moderatordiv">
                         <h2>Moderatoren</h2>
@@ -130,10 +144,15 @@ const ModBenutzer = () => {
                         <ul>
                             {users.map(user => (
                                 <li key={user.id}>
-                                    <input type="checkbox" checked={selectedUsers.some(selectedUser => selectedUser.id === user.id)} disabled={user.id ? isUserDisabled(user.id!) : false} onChange={() => handleUserSelect(user)} />
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedUsers.some(modUser => modUser.id === user.id)}
+                                        onChange={() => handleUserSelect(user)}
+                                    />
                                     <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
                                 </li>
                             ))}
+
                         </ul>
                     </span>
                     <span className="Benutzerdiv">
@@ -149,7 +168,7 @@ const ModBenutzer = () => {
                 </div>
                 <br></br>
                 <br></br>
-                <button className="submit-button-beginnen" disabled={selectedUsers.length === 0} onClick={handleAddUsersToMod}>
+                <button className="submit-button-beginnen" onClick={addUserToMod}>
                     Fahrer zuweisen
                 </button>
 
