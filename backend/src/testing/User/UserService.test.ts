@@ -1,6 +1,6 @@
 import TestDB from "../TestDatenbank/TestDb";
 import { getUsersFromDB, changeUser, createUser, deleteUser, updateUser } from "../../Services/UserService";
-import { UserResource } from "../../Model/Resources";
+import { UserResource } from "../../util/Resources";
 import { IUser, User } from "../../Model/UserModel";
 import mongoose, { Types } from "mongoose";
 

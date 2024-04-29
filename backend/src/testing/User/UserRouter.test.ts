@@ -2,7 +2,7 @@ import TestDB from "../TestDatenbank/TestDb";
 import { User, IUser } from "../../Model/UserModel";
 import mongoose, { Types } from "mongoose";
 import supertest from "supertest"
-import { LoginResource } from "../../Model/Resources";
+import { LoginResource } from "../../util/Resources";
 import app from "../TestDatenbank/testindex";
 
 import dotenv from "dotenv";

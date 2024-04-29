@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getMods, getUsers, updateUser } from '../../Api/api';
+import { getAlleModUser, getMods, getUsers, updateUser } from '../../Api/api';
 import { UserResource } from '../../util/Resources';
 
 const ModBenutzer = () => {
@@ -7,11 +7,18 @@ const ModBenutzer = () => {
     const [users, setUsers] = useState<UserResource[]>([]);
     const [selectedMod, setSelectedMod] = useState<UserResource | null>(null);
     const [selectedUsers, setSelectedUsers] = useState<UserResource[]>([]);
+    const [modListe, setModListe] = useState<{ users: string, name: string }[]>([])
 
     useEffect(() => {
         fetchMods();
         fetchUsers();
     }, []);
+
+    useEffect(() => {
+        if (selectedMod) {
+            updateModList(selectedMod)
+        }
+    }, [selectedMod, mods])
 
     const fetchMods = async () => {
         try {
@@ -33,19 +40,25 @@ const ModBenutzer = () => {
         }
     };
 
+    async function updateModList(mod: UserResource) {
+        if (mod.modUser) {
+            setModListe(mod.modUser);
+        } else {
+            console.log("Keine Id bei dem Moderator.")
+        }
+    }
 
     const handleModSelect = (mod: UserResource) => {
         if (selectedMod && selectedMod.id === mod.id) {
-            // Wenn der ausgewählte Mod bereits der aktuelle Mod ist, füge die ausgewählten Benutzer hinzu
             setSelectedMod(mod)
             setSelectedUsers([])
+            updateModList(mod)
         } else {
-            // Setze den ausgewählten Mod und lösche die ausgewählten Benutzer
             setSelectedMod(mod);
+            updateModList(mod)
             setSelectedUsers([]);
         }
     };
-
 
     const handleUserSelect = (user: UserResource) => {
         setSelectedUsers(prevSelectedUsers => {
@@ -59,81 +72,93 @@ const ModBenutzer = () => {
     };
 
     const isUserDisabled = (userId: string) => {
-        if (selectedMod && selectedMod.modUser && selectedMod.modUser.length > 0 && selectedMod.modUser[0].users) {
-            return selectedMod.modUser[0].users.includes(userId);
+        if (selectedMod && selectedMod.modUser) {
+            // Überprüfe, ob der Benutzer bereits in der Modliste enthalten ist
+            return selectedMod.modUser.some(modUser => modUser.users === userId);
         } else {
             return false;
         }
     };
 
-
     const handleAddUsersToMod = async () => {
         const ids = selectedUsers.map(user => user.id).filter(id => typeof id === 'string');
         try {
             if (selectedMod && ids.length > 0) {
-                // Kopiere die vorherigen Mod-Benutzer
                 const existingModUsers = selectedMod.modUser || [];
                 const newModUsers = [
                     ...existingModUsers,
-                    ...ids.map(userId => ({ users: userId as string }))
+                    ...ids.map(userId => ({ users: userId as string, name: `${selectedUsers.find(user => user.id === userId)?.vorname} ${selectedUsers.find(user => user.id === userId)?.name}` }))
                 ];
-    
+
                 const newModUser: UserResource = {
                     ...selectedMod,
-                    id: selectedMod._id!, // Umbenennen von _id zu id
+                    id: selectedMod._id!,
                     modUser: newModUsers
                 };
-    
-                // Fügen Sie hier die Logik hinzu, um das neue Mod-Benutzer-Objekt zu verwenden
-                await updateUser(newModUser);
-                // console.log(sendmod);
-                fetchMods();
-                fetchUsers();
+                console.log(newModUser)
+                // Wir haben newModUser hier mit den upgedateten werten, nun muss der Mod um diesen Erweitert werden. 
+                // Am besten wäre dass wenn wir es machen wenn die response richtig ist. 
+
+                const response = await updateUser(newModUser);
+
+                if (response !== null) {
+                    const index = mods.findIndex(mod =>  mod._id === selectedMod._id)
+                    mods[index] = newModUser
+                    updateModList(newModUser)
+                }
             }
         } catch (error) {
-            // Handle error
+
         }
     };
-    
-    
+
 
     return (
         <div className="form-wrapper-loesch">
-    <div className="form-container-loesch">
-        <h1 className="form-header2">Moderator zuweisen</h1>
-        <div className="containerModBen">
-            <span className="Moderatordiv">
-                <h2>Moderatoren</h2>
-                <ul>
-                    {mods.map(mod => (
-                        <li key={mod.id}>
-                            <input type="checkbox" checked={selectedMod?.email === mod.email} onChange={() => handleModSelect(mod)} />
-                            <label className="moderatoritems">{mod.name}</label>
-                        </li>
-                    ))}
-                </ul>
-            </span>
-            <span className="Benutzerdiv">
-                <h2>Benutzer</h2>
-                <ul>
-                    {users.map(user => (
-                        <li key={user.id}>
-                            <input type="checkbox" checked={selectedUsers.some(selectedUser => selectedUser.id === user.id)} disabled={user.id ? isUserDisabled(user.id!) : false} onChange={() => handleUserSelect(user)} />
-                            <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
-                        </li>
-                    ))}
-                </ul>
-            </span>
-        </div>
-        <br></br>
-        <br></br>
-        <button className="submit-button-beginnen" disabled={!selectedMod || (selectedMod && selectedUsers.length === 0)} onClick={handleAddUsersToMod}>
-            Fahrer zuweisen
-        </button>
-    </div>
-</div>
+            <div className="form-container-loesch">
+                <h1 className="form-header2">Moderator zuweisen</h1>
+                <div className="containerModBen">
+                    <span className="Moderatordiv">
+                        <h2>Moderatoren</h2>
+                        <ul>
+                            {mods.map(mod => (
+                                <li key={mod.id}>
+                                    <input type="checkbox" checked={selectedMod?.email === mod.email} onChange={() => handleModSelect(mod)} />
+                                    <label className="moderatoritems">{mod.name}</label>
+                                </li>
+                            ))}
+                        </ul>
+                    </span>
+                    <span className="Benutzerdiv">
+                        <h2>Benutzer</h2>
+                        <ul>
+                            {users.map(user => (
+                                <li key={user.id}>
+                                    <input type="checkbox" checked={selectedUsers.some(selectedUser => selectedUser.id === user.id)} disabled={user.id ? isUserDisabled(user.id!) : false} onChange={() => handleUserSelect(user)} />
+                                    <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
+                                </li>
+                            ))}
+                        </ul>
+                    </span>
+                    <span className="Benutzerdiv">
+                        <h2>Liste vom Mod</h2>
+                        <ul>
+                            {modListe.map((user, index) => (
+                                <li key={index}>
+                                    <label className="benutzeritems" >{user.name}</label>
+                                </li>
+                            ))}
+                        </ul>
+                    </span>
+                </div>
+                <br></br>
+                <br></br>
+                <button className="submit-button-beginnen" disabled={selectedUsers.length === 0} onClick={handleAddUsersToMod}>
+                    Fahrer zuweisen
+                </button>
 
-    
+            </div>
+        </div>
     );
 };
 

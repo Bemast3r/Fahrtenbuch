@@ -1,6 +1,6 @@
 import { User } from "../Model/UserModel";
 import { Fahrt } from "../Model/FahrtModel";
-import { FahrtResource, UserResource } from "../Model/Resources";
+import { FahrtResource, UserResource } from "../util/Resources";
 import mongoose from "mongoose";
 
 // Admin kann alle Fahrten sehen

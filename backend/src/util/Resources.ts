@@ -12,6 +12,7 @@ export type UserResource = {
     mod?: boolean;
     modUser?: {
         users: string
+        name: string
     }[];
 }
 

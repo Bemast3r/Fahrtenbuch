@@ -1,6 +1,6 @@
 import { requiresAuthentication } from "../Middleware/auth";
 import { createUser, deleteUser, getAllMods, getAlleAdmin, getAlleModUser, getAlleUser, getUser, getUsersFromDB, sendEmail, sendPasswortZurücksetzen, updateUser } from "../Services/UserService";
-import { UserResource } from "../Model/Resources";
+import { UserResource } from "../util/Resources";
 import express from "express";
 import { body, matchedData, param, validationResult } from "express-validator";
 

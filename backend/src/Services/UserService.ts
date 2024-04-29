@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { UserResource } from "../Model/Resources";
+import { UserResource } from "../util/Resources";
 import { IUser, User } from "../Model/UserModel";
 import { Types } from "mongoose"
 import { hash } from "bcryptjs";
@@ -210,7 +210,7 @@ export async function addnewModUsers(userid: string, users: UserResource[]): Pro
         if (!user) {
             throw new Error("User existiert nicht.")
         }
-        const modUserIds = users.map(user2 => user.modUser.push({ users: user2.id }));
+        const modUserIds = users.map(user2 => user.modUser.push({ users: user2.id, name: user2.vorname + " " + user2.name }));
         // const modUserObjects = modUserIds.map(userId => ({ users: userId }));
         // user.modUser.push(...modUserIds);
         await user.save();

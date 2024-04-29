@@ -14,6 +14,7 @@ export interface IUser {
     createdAt?: Date
     modUser: {
         users: string
+        name: string
     }[];
     mod?: boolean
     abwesend: string
@@ -35,7 +36,10 @@ const userSchema = new Schema<IUser, UserModel>({
     mod: { type: Boolean, default: false },
     createdAt: { type: Date },
     modUser: [
-        { users: { type: String } }
+        {
+            users: { type: String },
+            name: { type: String }
+        }
     ],
     abwesend: { type: String }
 }, { timestamps: true });
