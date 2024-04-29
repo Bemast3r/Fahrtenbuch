@@ -365,19 +365,20 @@
     }
 }
 
+
 @media only screen and (max-width: 500px) {
     .container2 {
-        margin: 20px auto;
+        width: calc(100% - 40px); /* Breite auf 100% des Bildschirms minus 40px Abstand */
+        margin: 20px auto; /* Zentrierung des Containers */
         padding: 30px;
         background-color: #fff;
         border-radius: 12px;
         box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
-        width: 80%;
         margin-top: 90px;
         box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.3s ease, transform 0.3s ease;
         transform: translateY(0);
-        margin-left: 150px;
+        margin-bottom: -50px;
     }
 
     .card {
