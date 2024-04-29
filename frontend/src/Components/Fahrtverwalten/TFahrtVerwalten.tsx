@@ -260,7 +260,7 @@ const TFahrtVerwalten: React.FC = () => {
       return;
     }
   }
-  
+
   async function stopRunningPauseTimer() {
     setisDisabledPause(false);
     setIsRecordingPause(false);
@@ -293,7 +293,7 @@ const TFahrtVerwalten: React.FC = () => {
       return;
     }
   }
-  
+
   async function stopRunningArbeitszeitTimer() {
     setisDisabledArbeitzeit(false);
     setIsRecordingArbeitszeit(false);
@@ -326,7 +326,7 @@ const TFahrtVerwalten: React.FC = () => {
       return;
     }
   }
-  
+
 
 
 
@@ -411,19 +411,12 @@ const TFahrtVerwalten: React.FC = () => {
     <>
       <Navbar />
       <div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <h1 className="header">Fahrt verwalten</h1>
         {loading ? (
           <Loading />
         ) : (
-          <div className="container">
-            <h3>Hallo, {usercontexte ? usercontexte.name : ''}.</h3>
+          <div className="form-container3">
+            <h1 className="form-header">Fahrt verwalten</h1>
+            <h3 className="Hallo">Hallo, {usercontexte ? usercontexte.name : ''}!</h3>
             {letzteFahrt && !letzteFahrt.beendet ? (
               <>
                 <p>
@@ -463,14 +456,12 @@ const TFahrtVerwalten: React.FC = () => {
               </>
             ) : (
               <>
-                <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
-                <Link to="/create">
-                  <Button className="erstellen">Fahrt erstellen</Button>
+                <p className='Text-Abschnitt'>Erstelle eine Fahrt, um sie verwalten zu können.</p>
+                <Link to="/create" style={{ textDecoration: "none" }}>
+                  <button className="submit-button-beginnen4">Fahrt beginnen</button>
                 </Link>
-                <Link to="/home">
-                  <Button variant="danger" className="hauptmenu">
-                    Zurück zum Hauptmenü
-                  </Button>
+                <Link to="/home" style={{ textDecoration: "none" }}>
+                  <button className="submit-button-beginnen3">Zum Hauptmenü</button>
                 </Link>
               </>
             )}
