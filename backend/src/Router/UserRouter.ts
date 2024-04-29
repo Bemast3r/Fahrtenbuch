@@ -222,7 +222,6 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
     async (req: any, res: any, next: any) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors)
 
             return res.status(400).json({ errors: errors.array() });
         }
@@ -232,7 +231,6 @@ userRouter.put("/admin/user/aendern", requiresAuthentication,
             }
             const userRes = req.body as UserResource; // Annahme: Die Benutzerressource ist im Anforderungskörper enthalten
             const user = await updateUser(userRes);
-            console.log(user)
             return res.send(user);
         } catch (error) {
             res.status(400);

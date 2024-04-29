@@ -107,7 +107,6 @@ export async function deleteUser(id: string): Promise<void> {
                 "Content-Type": "application/json"
             }
         });
-        console.log(response)
         if (!response || !response.ok)
             throw new Error("network response was not OK");
 
@@ -255,7 +254,6 @@ export async function updateUser(user: UserResource): Promise<UserResource> {
             },
             body: JSON.stringify(user)
         });
-        console.log(response)
 
         if (!response || !response.ok) {
             throw new Error("Netzwerkfehler, versuche es erneut.")

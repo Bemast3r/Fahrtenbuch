@@ -76,11 +76,6 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
         throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
     }
 
-    // Annahme: userResource ist eine Instanz von UserResource
-    const modUserWithObjectIds = userResource.modUser.map(user => {
-        console.log(user)
-    });
-
     if (userResource.vorname) user.vorname = userResource.vorname;
     if (userResource.name) user.name = userResource.name;
     if (userResource.username) user.username = userResource.username;

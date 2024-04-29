@@ -23,21 +23,8 @@ const ModStatistik = () => {
 
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     loadInitialData();
-    //     const intervalId = setInterval(() => {
-    //         // loadUser();
-    //         // loadTrips();
-    //         loadAllFahrts();
-    //     }, 60000);
-
-    //     return () => clearInterval(intervalId);
-    // }, []);
-
     useEffect(() => {
         loadAllFahrtsAndUser();
-        
-        console.log()
     }, [])
 
     async function loadInitialData() {

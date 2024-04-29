@@ -35,7 +35,6 @@ const Statistik = () => {
 
     useEffect(() => {
         loadAllFahrts();
-        console.log(counter)
     }, [counter])
 
     async function loadInitialData() {

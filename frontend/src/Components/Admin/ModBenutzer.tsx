@@ -95,10 +95,6 @@ const ModBenutzer = () => {
                     id: selectedMod._id!,
                     modUser: newModUsers
                 };
-                console.log(newModUser)
-                // Wir haben newModUser hier mit den upgedateten werten, nun muss der Mod um diesen Erweitert werden. 
-                // Am besten wäre dass wenn wir es machen wenn die response richtig ist. 
-
                 const response = await updateUser(newModUser);
 
                 if (response !== null) {
