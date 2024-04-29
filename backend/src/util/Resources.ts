@@ -14,6 +14,7 @@ export type UserResource = {
         users: string
         name: string
     }[];
+    abwesend: string
 }
 
 export type FahrtResource = {

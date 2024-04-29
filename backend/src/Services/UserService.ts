@@ -20,6 +20,7 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
         createdAt: user.createdAt,
         mod: user.mod,
         modUser: user.modUser,
+        abwesend: user.abwesend
     };
     return userResource;
 }
