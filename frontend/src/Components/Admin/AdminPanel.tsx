@@ -2,15 +2,18 @@ import BenutzerRegistrieren from './BenutzerRegistrieren';
 import Benutzerbearbeiten from './BenutzerBearbeiten';
 import Benutzerloeschen from './Benutzerloeschen';
 import ModBenutzer from './ModBenutzer';
+import ProtectedComponent from '../../util/Components/PreotectComponent';
 
 const AdminFormular = () => {
 
     return (
         <>
-            <BenutzerRegistrieren />
-            <Benutzerbearbeiten />
-            <Benutzerloeschen />
-            <ModBenutzer />
+            <ProtectedComponent requiredRole='a'>
+                <BenutzerRegistrieren />
+                <Benutzerbearbeiten />
+                <Benutzerloeschen />
+                <ModBenutzer />
+            </ProtectedComponent>
         </>
     );
 }

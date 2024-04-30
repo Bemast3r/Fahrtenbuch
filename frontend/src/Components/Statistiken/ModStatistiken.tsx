@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginInfo } from '../Context/Logincontext';
-import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleModUser, getAlleUser, getCompletedTrips, getModFahrten, getOngoingTrips, getUser } from '../../Api/api';
-import { FahrtResource, UserResource } from '../../util/Resources';
+import { getAlleModUser, getModFahrten } from '../../Api/api';
+import { FahrtResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
 import Loading from "../../util/Components/LoadingIndicator";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import ExpandFahrt from './ExpandFahrt';
 import { useUser } from '../Context/UserContext';
 
@@ -43,11 +43,11 @@ const ModStatistik = () => {
     }
 
     useEffect(() => {
-    // Überprüfen Sie, ob der Benutzer angemeldet ist und laden Sie die Daten neu
-    if (user && user.id) {
-        loadUser();
-    }
-}, [user]); 
+        // Überprüfen Sie, ob der Benutzer angemeldet ist und laden Sie die Daten neu
+        if (user && user.id) {
+            loadUser();
+        }
+    }, [user]);
 
     // async function loadTrips() {
     //     try {
@@ -64,22 +64,22 @@ const ModStatistik = () => {
             const fahrts = await getModFahrten();
             setFahrts(fahrts);
             setTotalModFahrts(fahrts.length);
-            
+
             const ongoingFahrts = fahrts.filter(fahrt => fahrt.beendet === false);
             const endedFahrts = fahrts.filter(fahrt => fahrt.beendet === true);
-            
+
             setTotalOngoingModFahrts(ongoingFahrts.length);
             setTotalEndedModFahrts(endedFahrts.length);
         } catch (error) {
             console.error("Fehler beim Laden der Fahrten:", error);
         }
     }
-    
+
 
     async function loadUser() {
-        if(user&&user.id){
+        if (user && user.id) {
             const allemoduser = await getAlleModUser(user.id)
-            setTotalModUser(allemoduser.length) 
+            setTotalModUser(allemoduser.length)
         }
     }
 

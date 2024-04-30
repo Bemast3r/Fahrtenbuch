@@ -49,7 +49,7 @@ const UserFahrten: React.FC = () => {
     return (
         <>
             {loading ? (
-                <><h1 className="header">Statistiken werden geladen</h1><Loading /></>
+                <><h1 className="header" style={{ color: "white", paddingTop: "35px", textAlign: "center" }}>Statistiken werden geladen</h1><Loading /></>
             ) : (
                 <>
                     {user && (
@@ -63,12 +63,12 @@ const UserFahrten: React.FC = () => {
                             <br></br>
                             <br></br>
                             <div style={{ padding: "10px" }}>
-                                <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline" }}>Ihre letzten Fahrten</h3>
+                                <h3 style={{ textAlign: "center", paddingTop: "35px", textDecoration: "underline", color: "white" }}>Ihre letzten Fahrten</h3>
                                 {meineFahrten.length > 0 ? (
                                     <>
                                         {Object.entries(groupFahrtenByDate(meineFahrten)).map(([date, fahrten]) => (
                                             <div key={date}>
-                                                <h2 style={{ marginTop: "20px", padding: "10px" }}>{date}</h2>
+                                                <h2 style={{ marginTop: "20px", padding: "10px", color: "white" }}>{date}</h2>
                                                 {fahrten.map((fahrt: FahrtResource) => (
                                                     <Accordion key={fahrt.id} title={fahrt.abwesend ? fahrt.abwesend : fahrt.startpunkt}>
                                                         <div className={`infos-${fahrt._id}`}>
@@ -81,7 +81,7 @@ const UserFahrten: React.FC = () => {
                                         ))}
                                     </>
                                 ) : (
-                                    <p>Keine Fahrten gefunden</p>
+                                    <h2 style={{ color: "white" }}>Keine Fahrten gefunden</h2>
                                 )}
                             </div>
 

@@ -66,7 +66,7 @@ const LandingPage = () => {
                             </div>
                         )}
 
-                        {userRole !== "a" && (
+                        {userRole === "u" && (
                             <div className="col-12 col-md-12 col-lg-4">
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
@@ -74,6 +74,18 @@ const LandingPage = () => {
                                         <h3 className="card-title">Meine Fahrten</h3>
                                         <p className="lead">Siehe alle wichtigen Informationen über deine Fahrt wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
                                         <button className="btn bg-warning text-dark" onClick={() => navigate("/fahrten")}>Erfahre Mehr</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {userRole === "m" && (
+                            <div className="col-12 col-md-12 col-lg-4">
+                                <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
+                                    <div className="card-body">
+                                        <i className='bx bx-stats' ></i>
+                                        <h3 className="card-title">Meine Fahrten</h3>
+                                        <p className="lead">Siehe alle wichtigen Informationen über deine Fahrt wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
+                                        <button className="btn bg-warning text-dark" onClick={() => navigate("/mod-fahrten")}>Erfahre Mehr</button>
                                     </div>
                                 </div>
                             </div>
