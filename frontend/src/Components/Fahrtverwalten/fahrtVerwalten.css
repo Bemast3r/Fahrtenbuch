@@ -54,21 +54,22 @@ body {
   font-size: 22px;
 }
 
+.Text-Abschnitt2 {
+  font-size: 22px;
+  margin-top: -1rem;
+}
+
 .section {
-  height: auto;
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 2px solid #ddd;
-  border-radius: 6px;
-  overflow-y: auto;
-  max-height: 200px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: -10px;
 }
 
 .button-group {
-  flex-direction: column; /* Ändere die Ausrichtung in eine Spalte für kleinere Bildschirme */
-  align-items: center; /* Zentriere die Schaltflächen horizontal */
-  margin-bottom: 10px;
+  flex-direction: column;
+  align-items: center; 
+  margin: 0 10px; /* optional: fügt etwas Abstand zwischen den Button-Gruppen hinzu */
 }
 
 /* .button-group button {
@@ -86,9 +87,10 @@ body {
   margin-bottom: 0; /* Entferne den Abstand unterhalb der letzten Schaltfläche */
 }
 
-/* .button-group button:hover {
+.button-group button:hover {
   background-color: #0056b3;
-} */
+  color: #fff;
+}
 
 .dates {
   margin-top: 20px;
@@ -115,6 +117,12 @@ body {
   margin-top: 20px;
   font-weight: bold;
   text-align: center;
+}
+
+.custom-modal-header {
+  justify-content: flex-start;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 /* Buttons */
@@ -166,6 +174,52 @@ body {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
 }
 
+.submit-button-beginnen5,
+.submit-button-beginnen5:focus {
+  width: 200px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #eec346;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: -1.5rem 0 0; /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin-top: 0rem;
+  margin-right: 29px; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+}
+
+.submit-button-beginnen5:hover {
+  color: #000;
+  background-color: rgb(196, 155, 34);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+} 
+
+.submit-button-beginnen6,
+.submit-button-beginnen6:focus {
+  width: 200px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #bababa;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: -1.5rem 0 0; /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin-top: 0rem;
+  margin-right: 15px; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  margin-left: 30px; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+}
+
+.submit-button-beginnen6:hover {
+  color: #000;
+  background-color: rgb(160, 159, 159);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+} 
 
 /* Medienabfragen für größere Bildschirme */
 @media screen and (min-width: 768px) {

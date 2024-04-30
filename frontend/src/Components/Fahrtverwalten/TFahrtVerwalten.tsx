@@ -3,7 +3,7 @@ import './fahrtVerwalten.css';
 import { getUser, getFahrt, updateFahrt } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Col, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Home/Navbar';
 import { getJWT, setJWT, getLoginInfo } from '../Context/Logincontext';
@@ -39,6 +39,12 @@ const TFahrtVerwalten: React.FC = () => {
   useEffect(() => {
     last();
   }, [count]);
+
+  const formatTime = (date: Date): string => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
 
   useEffect(() => {
@@ -419,40 +425,53 @@ const TFahrtVerwalten: React.FC = () => {
             <h3 className="Hallo">Hallo, {usercontexte ? usercontexte.name : ''}!</h3>
             {letzteFahrt && !letzteFahrt.beendet ? (
               <>
-                <p>
-                  Ihre momentane Fahrt startete am{' '}
-                  {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : 'Keine Fahrt'}, mit dem Kennzeichen{' '}
-                  {letzteFahrt ? letzteFahrt.kennzeichen : 'Kein Kennzeichen'}.{' '}
+
+                <p className='Text-Abschnitt'>
+                  Start der Fahrt: {' '}
+                  {letzteFahrt ?
+                    <>
+                      <strong>{new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE')} um </strong>
+                      <strong>{formatTime(new Date(letzteFahrt.createdAt!))} Uhr</strong>
+                    </>
+                    : 'Keine Fahrt'}
                 </p>
-                <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
+                <p className='Text-Abschnitt2'>
+                  Kennzeichen: {' '}
+                  {letzteFahrt ?
+                    <strong>{letzteFahrt.kennzeichen}</strong>
+                    : 'Kein Kennzeichen'}
+                </p>
+                <p className='Text-Abschnitt2'>
+                  Startpunkt: {' '}
+                  {letzteFahrt ?
+                    <strong>{letzteFahrt?.startpunkt}</strong>
+                    : 'Kein Startpunkt'}
+                </p>
+
+
                 <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
                       {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
                     </Button>
                   </div>
-                </div>
-                <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
                       {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
                     </Button>
                   </div>
-                </div>
-                <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause} disabled={isDisabledPause}>
                       {isRecordingPause ? "Pause läuft" : "Pause start"}
                     </Button>
                   </div>
-                </div>
-                <div className="section">
                   <div className="button-group">
                     <Button variant="primary" onClick={handleOpenModal} disabled={buttonLoading}>
                       {buttonLoading ? 'Wird aufgenommen' : 'Fahrt beenden'}
                     </Button>
                   </div>
                 </div>
+
               </>
             ) : (
               <>
@@ -470,31 +489,42 @@ const TFahrtVerwalten: React.FC = () => {
       </div>
 
       <Modal show={showEndModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="custom-modal-header">
           <Modal.Title>Fahrt beenden</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form noValidate validated={validated} id="endModalForm">
             <Form.Group controlId="formBasicEnd">
-              <Form.Label>Kilometerstand am Ende</Form.Label>
-              <Form.Control type="number" placeholder="Kilometerstand eingeben" onChange={(e) => setKilometerstandEnde(parseInt(e.target.value))} required />
-              <Form.Control.Feedback type="invalid">Bitte geben Sie den Kilometerstand am Ende ein.</Form.Control.Feedback>
+              <Form.Label className="col-m-4">Kilometerstand am Ende</Form.Label>
+              <Col sm={11}>
+                <Form.Control onKeyDown={(e) => {
+                  if (e.key === 'e' || e.key === 'E' || e.key === '-') {
+                    e.preventDefault(); // Verhindern Sie die Eingabe von "e", "E" und "-"
+                  }
+                }} type="number" placeholder="Kilometerstand eingeben" onChange={(e) => setKilometerstandEnde(parseInt(e.target.value))} required />
+                <Form.Control.Feedback type="invalid">Bitte geben Sie den Kilometerstand am Ende ein.</Form.Control.Feedback>
+              </Col>
             </Form.Group>
 
             <Form.Group controlId="formBasicEndOrt">
-              <Form.Label>Ort der Fahrtbeendigung</Form.Label>
-              <Form.Control type="text" placeholder="Ort eingeben" onChange={(e) => setOrtFahrtbeendigung(e.target.value)} required />
-              <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
+              <Form.Label className="col-m-4">Ort der Fahrtbeendigung</Form.Label>
+              <Col sm={11}>
+                <Form.Control type="text" placeholder="Ort eingeben" onChange={(e) => setOrtFahrtbeendigung(e.target.value)} required />
+                <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
+              </Col>
             </Form.Group>
           </Form>
         </Modal.Body>
+
+
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <button className="submit-button-beginnen6" onClick={handleCloseModal}>
             Abbrechen
-          </Button>
-          <Button variant="primary" onClick={handleEnde} disabled={buttonLoading}>
+          </button>
+          <button className="submit-button-beginnen5" onClick={handleEnde} disabled={buttonLoading}>
             {buttonLoading ? 'Wird aufgenommen' : 'Speichern'}
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     </>
