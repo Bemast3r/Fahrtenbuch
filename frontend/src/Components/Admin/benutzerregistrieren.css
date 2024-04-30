@@ -25,11 +25,9 @@
         /* margin-bottom: 70px; */
     }
 
-    .form-container-regist {
-      
+    .form-wrapper-register{
+        margin-top: 200px;
     }
-
-
 
     .form-wrapper-loesch {
         width: 100%;

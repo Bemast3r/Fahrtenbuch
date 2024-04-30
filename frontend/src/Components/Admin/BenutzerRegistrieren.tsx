@@ -114,7 +114,7 @@ const BenutzerRegistrieren = () => {
 
     return (
         <>
-            <div className="form-wrapper">
+            <div className="form-wrapper-register">
                 <Navbar />
                 <div className="form-container-loesch">
                     <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible className="custom-alert-gut">

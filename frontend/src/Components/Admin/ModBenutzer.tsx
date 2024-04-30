@@ -30,7 +30,7 @@ const ModBenutzer = () => {
         }));
         setPayload(transformedData);
     }, [selectedUsers]);
-    
+
 
     useEffect(() => {
         if (modListe.length > 0) {
@@ -39,7 +39,7 @@ const ModBenutzer = () => {
             setSelectedUsers(filteredUsers);
         }
     }, [modListe]);
-    
+
 
     const fetchMods = async () => {
         try {
@@ -92,28 +92,28 @@ const ModBenutzer = () => {
         });
     };
 
-    
-    
+
+
     const addUserToMod = async () => {
         try {
             if (!selectedMod || selectedUsers.length === 0) {
                 // Kein ausgewählter Moderator oder keine ausgewählten Benutzer
                 return;
             }
-    
+
             const modId = selectedMod._id!;
-            
+
             // Ersetze das Mod-User-Array des ausgewählten Moderators durch den Payload
             const updatedModData: UserResource = {
                 ...selectedMod,
                 id: modId,
                 modUser: payload
             };
-            
+
             const response = await updateUser(updatedModData);
             if (response !== null) {
                 // Aktualisiere die Liste der Moderatoren
-                const index = mods.findIndex(mod =>  mod._id === selectedMod._id)
+                const index = mods.findIndex(mod => mod._id === selectedMod._id)
                 mods[index] = response
                 updateModList(response)
             }
@@ -121,7 +121,7 @@ const ModBenutzer = () => {
             // Fehlerbehandlung
         }
     };
-    
+
 
 
     return (
@@ -135,7 +135,7 @@ const ModBenutzer = () => {
                             {mods.map(mod => (
                                 <ListGroup.Item key={mod.id} action active={selectedMod?.email === mod.email} onClick={() => handleModSelect(mod)}>
                                     <input type="checkbox" checked={selectedMod?.email === mod.email} readOnly />
-                                    <label className="moderatoritems">{mod.name}</label>
+                                    <label className="moderatoritems" style={{ margin: "5px" }}>{mod.name}</label>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>
@@ -146,7 +146,7 @@ const ModBenutzer = () => {
                             {users.map(user => (
                                 <ListGroup.Item key={user.id} action onClick={() => handleUserSelect(user)}>
                                     <input type="checkbox" checked={selectedUsers.some(modUser => modUser.id === user.id)} readOnly />
-                                    <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
+                                    <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' , margin: "5px"}}>{user.name}</label>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>
@@ -156,7 +156,7 @@ const ModBenutzer = () => {
                         <ListGroup>
                             {modListe.map((user, index) => (
                                 <ListGroup.Item key={index}>
-                                    <label className="benutzeritems">{user.name}</label>
+                                    <label className="benutzeritems"  style={{ margin: "5px" }}>{user.name}</label>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>

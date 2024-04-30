@@ -7,10 +7,10 @@ const AdminFormular = () => {
 
     return (
         <>
-            <BenutzerRegistrieren></BenutzerRegistrieren>
-            <Benutzerbearbeiten></Benutzerbearbeiten>
-            <Benutzerloeschen></Benutzerloeschen>
-            <ModBenutzer></ModBenutzer>
+            <BenutzerRegistrieren />
+            <Benutzerbearbeiten />
+            <Benutzerloeschen />
+            <ModBenutzer />
         </>
     );
 }

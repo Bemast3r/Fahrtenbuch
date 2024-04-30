@@ -37,12 +37,10 @@ const BenutzerBearbeiten = () => {
 
     const fetchUserList = async () => {
         try {
-            // Hier Fetch-Anfrage für Benutzerliste durchführen und Liste setzen
             const response = await getUsers(); // Annahme: Funktion fetchUserList() ruft die Benutzerliste ab
-            setUserList(response); // Annahme: userListResponse ist ein Array von Benutzern
+            setUserList(response); 
         } catch (error) {
             console.error("Fehler beim Abrufen der Benutzerliste:", error);
-            // Behandlung des Fehlers, z.B. Anzeige einer Fehlermeldung
         }
     };
 
@@ -73,8 +71,17 @@ const BenutzerBearbeiten = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const form = e.currentTarget;
+
+        // Manuelle Validierung für leere Felder
+        const emptyFields = Object.values(formData).some(value => value === '');
+        if (emptyFields) {
+            setShowAlert(true);
+            return;
+        }
+
         if (form.checkValidity() === false) {
             e.stopPropagation();
+            return;
         }
         setValidated(true);
 
@@ -83,8 +90,7 @@ const BenutzerBearbeiten = () => {
                 const response = await updateUser(formData);
                 setShowSuccess(true);
                 setValidated(false);
-                fetchUserList(); // Aktualisiere die Benutzerliste nach dem Erstellen eines Benutzers
-
+                fetchUserList(); 
             };
 
         } catch (error: any) {
@@ -99,9 +105,9 @@ const BenutzerBearbeiten = () => {
 
     return (
         <>
-            <div className="form-wrapper">
+            <div className="form-wrapper-bearbeiten">
                 <Navbar />
-                <div className="form-container">
+                <div className="form-container-loesch">
                     <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible className="custom-alert-gut">
                         Benutzer erfolgreich bearbeitet!
                     </Alert>
@@ -111,7 +117,7 @@ const BenutzerBearbeiten = () => {
                     <Row>
                         <Col sm={4}>
                             {/* Benutzerliste */}
-                            <h2>Benutzerliste</h2>
+                            <h2>Benutzerliste:</h2>
                             <ListGroup>
                                 {userList.map((user, index) => (
                                     <ListGroup.Item
@@ -127,7 +133,7 @@ const BenutzerBearbeiten = () => {
                         </Col>
                         <Col sm={8}>
                             {/* Benutzerformular */}
-                            <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                            <Form className="row g-3" validated={validated} onSubmit={handleSubmit}>
                                 <h2 className="form-header2">Benutzer bearbeiten</h2>
                                 {/* Hier die Formularfelder für die Benutzerdaten einfügen */}
                                 <Row className="mb-1">
@@ -178,10 +184,10 @@ const BenutzerBearbeiten = () => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
+                                <button type="submit" className="submit-button-beginnen">
+                                    Benutzer bearbeiten
+                                </button>
                             </Form>
-                            <button type="submit" className="submit-button-beginnen" onClick={handleSubmit} >
-                                Benutzer bearbeiten
-                            </button>
                         </Col>
                     </Row>
                 </div>

@@ -252,7 +252,7 @@ const Statistik = () => {
                                                                         <td style={{ width: "33%" }}>{formattedDuration}</td>
                                                                         <td style={{ width: "33%" }}>
                                                                             <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
-                                                                                {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
+                                                                                {fahrt.beendet === true ? 'Beendet' : 'Läuft'}
                                                                             </span>
                                                                         </td>
                                                                     </tr>
