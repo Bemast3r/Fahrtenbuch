@@ -52,11 +52,11 @@ const Benutzerloeschen = () => {
             <div className="form-container-loesch">
                 <h2 className="form-header2">Benutzer löschen</h2>
                 <Alert variant="success" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert-gut">
-                    Benutzer erfolgreich gelöscht: {selectedUser?.vorname} {selectedUser?.name}
+                    Benutzer: {selectedUser?.vorname} {selectedUser?.name} erfolgreich gelöscht.
                 </Alert>
                 <Form>
                     <Form.Group as={Row} controlId="formSearch">
-                        <Form.Label column sm="2">Benutzer suchen:</Form.Label>
+                        <Form.Label column sm="2">Benutzer suchen</Form.Label>
                         <Col sm="10">
                             <Form.Control type="text" placeholder="Vor- und Nachname eingeben" value={searchQuery} onChange={handleSearchChange} />
                         </Col>
@@ -84,7 +84,7 @@ const Benutzerloeschen = () => {
                     <Modal.Title>Benutzer löschen</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Möchten Sie den Benutzer wirklich löschen: {selectedUser?.vorname} {selectedUser?.name}?
+                    Möchten Sie den Benutzer: {selectedUser?.vorname} {selectedUser?.name} wirklich löschen?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={closeModal}>
