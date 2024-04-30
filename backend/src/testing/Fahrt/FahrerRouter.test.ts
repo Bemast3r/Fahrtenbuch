@@ -1,6 +1,6 @@
 import { IUser, User } from "../../Model/UserModel";
 import dotenv from "dotenv";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import supertest from "supertest";
 import { LoginResource } from "util/Resources";
 import app from "../TestDatenbank/testindex";
@@ -208,6 +208,223 @@ describe('GET /admin/alle/fahrten', () => {
   
       // Überprüfen Sie die Fehlermeldung
       expect(response.body).toEqual({}); // Stellen Sie sicher, dass keine Fahrten zurückgegeben wurden
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Fehlermeldung Ihren Erwartungen entspricht
+    });
+  });
+
+  describe('POST /user/fahrt/erstellen', () => {
+    it('should create a new trip for user', async () => {
+      // Mock-Daten für die Fahrt
+      const tripData = {
+        id: fahrt._id,
+        fahrerid: fahrt._id,
+        fahrer: fahrt.fahrer.id,
+        kennzeichen: "fahrt.kennzeichen",
+        kilometerstand: 1,
+        kilometerende: 1,
+        lenkzeit: fahrt.lenkzeit,
+        arbeitszeit: fahrt.arbeitszeit,
+        pause: fahrt.pause,
+        startpunkt: fahrt.startpunkt,
+        endpunkt: fahrt.endpunkt,
+        ruhezeit: fahrt.ruhezeit,
+        abwesend: fahrt.abwesend,
+        beendet: fahrt.beendet,
+        totalLenkzeit: fahrt.totalLenkzeit,
+        totalArbeitszeit: fahrt.totalArbeitszeit,
+        totalPause: fahrt.totalPause,
+        totalRuhezeit: fahrt.totalRuhezeit,
+        vollname: "sss"
+      };
+  
+      // Erstellen Sie eine Testanfrage mit den Fahrt-Daten
+      const response = await supertest(app)
+        .post('/api/fahrt/user/fahrt/erstellen')
+        .send(tripData)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Antwort
+      expect(response.body).toBeDefined(); // Stellen Sie sicher, dass die Antwort definiert ist
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
+    });
+
+  
+    it('should return 400 if validation fails', async () => {
+      // Ungültige Fahrt-Daten
+      const invalidTripData = {
+        fahrerid: 'yourDriverIdHere',
+        kennzeichen: 123, // Ungültiges Format
+        vollname: 'John Doe',
+        startpunkt: 'Start',
+        // Fehlende erforderliche Felder...
+      };
+  
+      // Erstellen Sie eine Testanfrage mit ungültigen Fahrt-Daten
+      const response = await supertest(app)
+        .post('/api/fahrt/user/fahrt/erstellen')
+        .set('Authorization', `Bearer ${token}`)
+        .send(invalidTripData)
+        .expect(400); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Fehlermeldung
+      expect(response.body.errors).toBeDefined(); // Stellen Sie sicher, dass Fehler zurückgegeben wurden
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Fehlermeldung Ihren Erwartungen entspricht
+    });
+  });
+
+  describe('POST /user/fahrt/bearbeiten/:id', () => {
+    it('should update a new trip for user', async () => {
+      // Mock-Daten für die Fahrt
+      const tripData = {
+        id: fahrt._id,
+        fahrerid: fahrt._id,
+        fahrer: fahrt.fahrer.id,
+        kennzeichen: "fahrt.kennzeichen",
+        kilometerstand: 1,
+        kilometerende: 1,
+        lenkzeit: fahrt.lenkzeit,
+        arbeitszeit: fahrt.arbeitszeit,
+        pause: fahrt.pause,
+        startpunkt: fahrt.startpunkt,
+        endpunkt: fahrt.endpunkt,
+        ruhezeit: fahrt.ruhezeit,
+        abwesend: fahrt.abwesend,
+        beendet: fahrt.beendet,
+        totalLenkzeit: fahrt.totalLenkzeit,
+        totalArbeitszeit: fahrt.totalArbeitszeit,
+        totalPause: fahrt.totalPause,
+        totalRuhezeit: fahrt.totalRuhezeit,
+        vollname: "sss"
+      };
+  
+      // Erstellen Sie eine Testanfrage mit den Fahrt-Daten
+      const response = await supertest(app)
+        .put(`/api/fahrt/user/fahrt/bearbeiten/${userid}`)
+        .send(tripData)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Antwort
+      expect(response.body).toBeDefined(); // Stellen Sie sicher, dass die Antwort definiert ist
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
+    });
+
+  
+    it('should return 400 if validation fails', async () => {
+      // Ungültige Fahrt-Daten
+      const invalidTripData = {
+        fahrerid: 'yourDriverIdHere',
+        kennzeichen: 123, // Ungültiges Format
+        vollname: 'John Doe',
+        startpunkt: 'Start',
+        // Fehlende erforderliche Felder...
+      };
+  
+      // Erstellen Sie eine Testanfrage mit ungültigen Fahrt-Daten
+      const response = await supertest(app)
+        .put(`/api/fahrt/user/fahrt/bearbeiten/${'yourDriverIdHere'}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(invalidTripData)
+        .expect(400); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Fehlermeldung
+      expect(response.body.errors).toBeDefined(); // Stellen Sie sicher, dass Fehler zurückgegeben wurden
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Fehlermeldung Ihren Erwartungen entspricht
+    });
+  });
+
+  
+  describe('POST /user/fahrt/bearbeiten/:id', () => {
+    it('should delete a trip for user', async () => {
+      // Mock-Daten für die Fahrt
+      
+  
+      // Erstellen Sie eine Testanfrage mit den Fahrt-Daten
+      const response = await supertest(app)
+        .delete(`/api/fahrt/admin/loesch/fahrt/${userid}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Antwort
+      expect(response.body).toBeDefined(); // Stellen Sie sicher, dass die Antwort definiert ist
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
+    });
+
+    it('should delete a trip for user', async () => {
+        // Mock-Daten für die Fahrt
+        
+    
+        // Erstellen Sie eine Testanfrage mit den Fahrt-Daten
+        const response = await supertest(app)
+          .delete(`/api/fahrt/admin/loesch/fahrt/${userid}`)
+          .set('Authorization', `Bearer ${token2}`)
+          .expect(403); // Erwartete Antwortstatuscode
+    
+        // Überprüfen Sie die Antwort
+        expect(response.body).toBeDefined(); // Stellen Sie sicher, dass die Antwort definiert ist
+        // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
+      });
+
+  
+    it('should return 400 if validation fails', async () => {
+      // Ungültige Fahrt-Daten
+  
+      // Erstellen Sie eine Testanfrage mit ungültigen Fahrt-Daten
+      const response = await supertest(app)
+        .delete(`/api/fahrt/admin/loesch/fahrt/${"lala"}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(400); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Fehlermeldung
+      expect(response.body.errors).toBeDefined(); // Stellen Sie sicher, dass Fehler zurückgegeben wurden
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Fehlermeldung Ihren Erwartungen entspricht
+    });
+  });
+
+  describe('POST /user/fahrt/bearbeiten/:id', () => {
+    it('should delete a trip for user', async () => {
+      // Mock-Daten für die Fahrt
+      
+  
+      // Erstellen Sie eine Testanfrage mit den Fahrt-Daten
+      const response = await supertest(app)
+        .delete(`/api/fahrt/mod/loesch/fahrt/${userid2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(403); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Antwort
+      expect(response.body).toBeDefined(); // Stellen Sie sicher, dass die Antwort definiert ist
+      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
+    });
+
+    it('should delete a trip for user', async () => {
+        // Mock-Daten für die Fahrt
+        
+    
+        // Erstellen Sie eine Testanfrage mit den Fahrt-Daten
+        const response = await supertest(app)
+          .delete(`/api/fahrt/mod/loesch/fahrt/${userid}`)
+          .set('Authorization', `Bearer ${token2}`)
+          .expect(200); // Erwartete Antwortstatuscode
+    
+        // Überprüfen Sie die Antwort
+        expect(response.body).toBeDefined(); // Stellen Sie sicher, dass die Antwort definiert ist
+        // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
+      });
+
+  
+    it('should return 400 if validation fails', async () => {
+      // Ungültige Fahrt-Daten
+  
+      // Erstellen Sie eine Testanfrage mit ungültigen Fahrt-Daten
+      const response = await supertest(app)
+        .delete(`/api/fahrt/admin/loesch/fahrt/${"lala"}`)
+        .set('Authorization', `Bearer ${token2}`)
+        .expect(400); // Erwartete Antwortstatuscode
+  
+      // Überprüfen Sie die Fehlermeldung
+      expect(response.body.errors).toBeDefined(); // Stellen Sie sicher, dass Fehler zurückgegeben wurden
       // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Fehlermeldung Ihren Erwartungen entspricht
     });
   });

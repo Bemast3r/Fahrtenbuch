@@ -135,7 +135,6 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             console.log(errors)
-            console.log(req.body)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
@@ -144,6 +143,7 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
             return res.send(fahrt); // 200 by default
         } catch (err) {
             res.status(400);
+            console.log("wwwwwwww",err)
             next(err);
         }
     }

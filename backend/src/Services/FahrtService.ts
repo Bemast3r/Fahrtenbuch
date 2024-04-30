@@ -74,6 +74,8 @@ export async function createUserFahrt(fahrt: FahrtResource) {
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
     } catch (error) {
+        console.log("wwwwsssssssssssswwww",error)
+
         throw new Error(`Fehler beim Erstellen der Fahrt: ${error.message}`);
     }
 }
