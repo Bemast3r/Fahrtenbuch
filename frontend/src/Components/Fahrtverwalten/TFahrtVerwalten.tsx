@@ -523,7 +523,7 @@ const TFahrtVerwalten: React.FC = () => {
             Abbrechen
           </button>
           <button className="submit-button-beginnen5" onClick={handleEnde} disabled={buttonLoading}>
-            {buttonLoading ? 'Gespeichert' : 'Speichern'}
+            {buttonLoading ? 'Speichern...' : 'Speichern'}
           </button>
         </Modal.Footer>
       </Modal>
