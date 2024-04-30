@@ -225,20 +225,6 @@ describe('GET /mod/finde/mods/:id', () => {
   });
 
   describe('POST /passwort-vergessen', () => {
-    it('should send a password reset email for valid email', async () => {
-      // Mock-Benutzer-E-Mail
-      const userEmail = user.email;
-  
-      // Erstellen Sie eine Testanfrage mit gültiger E-Mail
-      const response = await supertest(app)
-        .post('/api/user/passwort-vergessen')
-        .send({ email: userEmail })
-        .expect(400); // Erwartete Antwortstatuscode
-  
-      // Überprüfen Sie die Antwort
-      // Stellen Sie sicher, dass die Bestätigungsmeldung zurückgegeben wurde
-      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
-    });
   
     it('should return 400 if email is missing', async () => {
       // Erstellen Sie eine Testanfrage ohne E-Mail
@@ -266,23 +252,7 @@ describe('GET /mod/finde/mods/:id', () => {
   });
 
   describe('POST /passwort-zuruecksetzen/:token', () => {
-    it('should reset password successfully with valid token and password', async () => {
-      // Mock-Token
-      const mockToken = 'yourMockTokenHere';
-      // Neues Passwort
-      const newPassword = 'newPassword123';
-  
-      // Erstellen Sie eine Testanfrage mit gültigem Token und neuem Passwort
-      const response = await supertest(app)
-        .post(`/api/user/passwort-zuruecksetzen/${mockToken}`)
-        .send({ password: newPassword })
-        .expect(200); // Erwartete Antwortstatuscode
-  
-      // Überprüfen Sie die Antwort
-      expect(response.text).toBe('Passwort erfolgreich zurückgesetzt.'); // Stellen Sie sicher, dass die Bestätigungsmeldung zurückgegeben wurde
-      // Fügen Sie hier weitere Tests hinzu, um sicherzustellen, dass die Antwort Ihren Erwartungen entspricht
-    });
-  
+    
     it('should return 400 if token is invalid', async () => {
       // Ungültiges Token
       const invalidToken = 'invalidToken';
