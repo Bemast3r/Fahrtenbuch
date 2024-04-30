@@ -16,11 +16,16 @@
 .form-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Ändern von 'flex-start' zu 'center' */
-  align-items: center; /* Ändern von 'flex-start' zu 'center' */
-  width: 100%; /* Ändern der Breite auf 100% */
-  height: 100%; /* Ändern der Höhe auf 100% */
-  min-height: 80vh; /* Mindesthöhe auf 100vh setzen */
+  justify-content: center;
+  /* Ändern von 'flex-start' zu 'center' */
+  align-items: center;
+  /* Ändern von 'flex-start' zu 'center' */
+  width: 100%;
+  /* Ändern der Breite auf 100% */
+  height: 100%;
+  /* Ändern der Höhe auf 100% */
+  min-height: 80vh;
+  /* Mindesthöhe auf 100vh setzen */
   min-width: 80vw;
 }
 
@@ -30,13 +35,16 @@
   padding: 3.5rem;
   border-radius: 12px;
   box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Füge einen Übergangseffekt hinzu */
-  transform: translateY(0); 
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  /* Füge einen Übergangseffekt hinzu */
+  transform: translateY(0);
 }
 
 .form-container:hover {
-  box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3); /* Ändere den Schatten beim Schweben */
-  transform: translateY(-5px); /* Hebe den Container leicht an */
+  box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
+  /* Ändere den Schatten beim Schweben */
+  transform: translateY(-5px);
+  /* Hebe den Container leicht an */
 }
 
 .form-container::before {
@@ -46,7 +54,8 @@
   left: 0;
   width: 100%;
   height: 20px;
-  border-radius: 20px 20px 0 0; /* Runde die oberen Ecken ab */
+  border-radius: 20px 20px 0 0;
+  /* Runde die oberen Ecken ab */
 }
 
 .form-label {
@@ -61,7 +70,8 @@
   border: 2px solid #ced4da;
   border-radius: 10px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  margin: auto; /* Zentriere die Textfelder und ändere den Abstand */
+  margin: auto;
+  /* Zentriere die Textfelder und ändere den Abstand */
   margin-bottom: 1rem;
   margin-left: 10px;
 }
@@ -98,8 +108,10 @@
 }
 
 .custom-alert button {
-  margin-top: 1rem; /* Platzieren Sie den Button etwas unterhalb des Texts */
-  margin-bottom: 0.5rem; /* Platzieren Sie den Button etwas unterhalb des Texts */
+  margin-top: 1rem;
+  /* Platzieren Sie den Button etwas unterhalb des Texts */
+  margin-bottom: 0.5rem;
+  /* Platzieren Sie den Button etwas unterhalb des Texts */
   font-size: 20px;
   width: 250px;
   border-radius: 20px;
@@ -172,8 +184,9 @@
 .submit-button-beginnen:hover {
   color: #000;
   background-color: rgb(196, 155, 34);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
-} 
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
 
 .submit-button-beginnen2,
 .submit-button-beginnen2:focus {
@@ -181,7 +194,7 @@
   padding: 0.8rem 1rem;
   font-size: 1.2rem;
   color: #000;
-  background-color: #e75530  ;
+  background-color: #e75530;
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -195,8 +208,9 @@
 .submit-button-beginnen2:hover {
   color: #000;
   background-color: rgb(196, 34, 34);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
-} 
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
 
 .popup-button {
   border-radius: 30px;
@@ -211,56 +225,81 @@
 
 .form-header {
   font-size: 34px;
-  position: relative; /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
+  position: relative;
+  /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
   margin-bottom: 2.5rem;
   margin-top: -0.5rem;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
-  text-align: center; 
+  text-align: center;
 }
 
 .form-header::after {
   content: "";
   position: absolute;
-  top: 55px; /* Positioniere die Linie unterhalb des Texts */
-  left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
-  width: 500px; /* Breite der Linie */
-  height: 1px; /* Dicke der Linie */
-  background-color: #ccc; /* Farbe der Linie */
-  transform: translateX(-50%); /* Zentriere die Linie horizontal */
+  top: 55px;
+  /* Positioniere die Linie unterhalb des Texts */
+  left: 50%;
+  /* Beginne die Linie in der horizontalen Mitte des .form-header */
+  width: 500px;
+  /* Breite der Linie */
+  height: 1px;
+  /* Dicke der Linie */
+  background-color: #ccc;
+  /* Farbe der Linie */
+  transform: translateX(-50%);
+  /* Zentriere die Linie horizontal */
 }
 
 .form-header2 {
   font-size: 34px;
-  position: relative; /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
+  position: relative;
+  /* Stelle sicher, dass das Pseudoelement relativ zum .form-header positioniert wird */
   margin-bottom: 2.5rem;
   margin-top: -0.5rem;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  text-align: center; 
+  text-align: center;
 }
 
 .form-header2::after {
   content: "";
   position: absolute;
-  top: 55px; /* Positioniere die Linie unterhalb des Texts */
-  left: 50%; /* Beginne die Linie in der horizontalen Mitte des .form-header */
-  width: 500px; /* Breite der Linie */
-  height: 1px; /* Dicke der Linie */
-  background-color: #ccc; /* Farbe der Linie */
-  transform: translateX(-50%); /* Zentriere die Linie horizontal */
+  top: 55px;
+  /* Positioniere die Linie unterhalb des Texts */
+  left: 50%;
+  /* Beginne die Linie in der horizontalen Mitte des .form-header */
+  width: 500px;
+  /* Breite der Linie */
+  height: 1px;
+  /* Dicke der Linie */
+  background-color: #ccc;
+  /* Farbe der Linie */
+  transform: translateX(-50%);
+  /* Zentriere die Linie horizontal */
 }
 
 /* Animation für das Ein- und Ausblenden */
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.9); } /* Startzustand */
-  100% { opacity: 1; transform: scale(1); } /* Endzustand */
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  /* Startzustand */
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Endzustand */
 }
 
 /* Medienabfragen für größere Bildschirme */
 @media screen and (min-width: 768px) {
   .form-container {
-    width: 60%; /* Verringere die Breite des Containers für größere Bildschirme */
+    width: 60%;
+    /* Verringere die Breite des Containers für größere Bildschirme */
   }
 }
 
@@ -275,43 +314,57 @@
   }
 
   .form-wrapper {
-    min-height: 70vh; /* Verringere die Mindesthöhe des Wrappers */
-    min-width: 70vw; /* Verringere die Mindestbreite des Wrappers */
+    min-height: 70vh;
+    /* Verringere die Mindesthöhe des Wrappers */
+    min-width: 70vw;
+    /* Verringere die Mindestbreite des Wrappers */
   }
 
   .form-container {
-    width: 70%; /* Verringere die Breite des Containers */
-    margin-top: 120px; /* Verringere den oberen Abstand des Containers */
+    width: 70%;
+    /* Verringere die Breite des Containers */
+    margin-top: 120px;
+    /* Verringere den oberen Abstand des Containers */
   }
 
   .form-control {
-    margin-left: 0; /* Setze den linken Rand auf 0 */
+    margin-left: 0;
+    /* Setze den linken Rand auf 0 */
   }
 
   .form-label {
-    margin-left: 0; /* Setze den linken Rand auf 0 */
+    margin-left: 0;
+    /* Setze den linken Rand auf 0 */
   }
 
   .custom-alert,
   .custom-alert-gut {
-    width: 80%; /* Ändere die Breite der benutzerdefinierten Warnungen */
-    left: 50%; /* Zentriere die benutzerdefinierten Warnungen horizontal */
-    transform: translateX(-50%); /* Zentriere die benutzerdefinierten Warnungen horizontal */
+    width: 80%;
+    /* Ändere die Breite der benutzerdefinierten Warnungen */
+    left: 50%;
+    /* Zentriere die benutzerdefinierten Warnungen horizontal */
+    transform: translateX(-50%);
+    /* Zentriere die benutzerdefinierten Warnungen horizontal */
   }
 
   .custom-alert :nth-child(1),
   .custom-alert-gut :nth-child(1) {
-    margin-right: 0; /* Setze den rechten Rand auf 0 */
+    margin-right: 0;
+    /* Setze den rechten Rand auf 0 */
   }
 
   .popup-button {
-    width: 150px; /* Ändere die Breite des Popup-Buttons */
-    font-size: 16px; /* Ändere die Schriftgröße des Popup-Buttons */
+    width: 150px;
+    /* Ändere die Breite des Popup-Buttons */
+    font-size: 16px;
+    /* Ändere die Schriftgröße des Popup-Buttons */
   }
 
   .form-control-feedback {
-    margin-left: 0; /* Setze den linken Rand auf 0 */
-    font-size: 12px; /* Ändere die Schriftgröße des Feedbacks */
+    margin-left: 0;
+    /* Setze den linken Rand auf 0 */
+    font-size: 12px;
+    /* Ändere die Schriftgröße des Feedbacks */
   }
 
   .checkbox-label1 {
@@ -342,7 +395,8 @@
 
   .form-container {
     margin-top: 150px;
-    width: calc(100% - 50px); /* Breite des Containers weniger breit */
+    width: calc(100% - 50px);
+    /* Breite des Containers weniger breit */
     margin-top: 12rem;
     margin-bottom: 3rem;
     box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.2);
@@ -350,10 +404,11 @@
 }
 
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
   .form-container {
     margin-top: 150px;
-    width: calc(100% - 50px); /* Breite des Containers weniger breit */
+    width: calc(100% - 50px);
+    /* Breite des Containers weniger breit */
     margin-top: 12rem;
     margin-bottom: 3rem;
     box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.2);
@@ -385,7 +440,8 @@
   .submit-button-beginnen:hover {
     color: #000;
     background-color: rgb(196, 155, 34);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+    /* Erhöhen des Schattens beim Überfahren */
   }
 
   .submit-button-beginnen:active {
@@ -401,11 +457,13 @@
   }
 
   .form-header::after {
-    width: 250px; /* Breite der Linie auf 100px reduziert */
+    width: 250px;
+    /* Breite der Linie auf 100px reduziert */
   }
 
   .form-header2::after {
-    width: 250px; /* Breite der Linie auf 100px reduziert */
+    width: 250px;
+    /* Breite der Linie auf 100px reduziert */
   }
 
   .checkbox-label1 {
@@ -433,7 +491,8 @@
   }
 
   .checkbox-input {
-    margin-right: 10px; /* Füge Abstand zwischen dem Kästchen und dem Text hinzu */
+    margin-right: 10px;
+    /* Füge Abstand zwischen dem Kästchen und dem Text hinzu */
   }
 
   .custom-alert {
@@ -461,12 +520,12 @@
     margin-top: 0.4rem;
     margin-right: 0.15rem;
   }
-  
+
   .popup-button {
-    width: 175px;/* Platzieren Sie den Button etwas unterhalb des Texts */
+    width: 175px;
     font-size: 16px;
     padding: 0.8rem;
-    margin-bottom: 0.5rem; /* Platzieren Sie den Button etwas unterhalb des Texts */
+    margin-bottom: 0.5rem;
   }
 
   .form-control-feedback {
@@ -476,8 +535,9 @@
 }
 
 @media only screen and (max-width: 444px) {
-  .form-header2 {
-    font-size: 22px;
+  .form-header2::after {
+    margin-top: 0.75rem;
+    width: 200px;
   }
 
   .form-header2::after {
@@ -494,6 +554,8 @@
     margin-top: -1rem;
   }
 
+
+
   .form-header2 {
     font-size: 20px;
   }
@@ -507,8 +569,8 @@
 }
 
 @media only screen and (max-width: 379px) {
-.form-header2::after {
-  margin-top: 0.75rem;
-  width: 200px;
-}
+  .form-header2::after {
+    margin-top: 0.75rem;
+    width: 200px; 
+  }
 }

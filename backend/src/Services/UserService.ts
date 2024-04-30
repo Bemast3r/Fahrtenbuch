@@ -20,6 +20,7 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
         createdAt: user.createdAt,
         mod: user.mod,
         modUser: user.modUser,
+        abwesend: user.abwesend
     };
     return userResource;
 }
@@ -73,6 +74,7 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     }
     const user = await User.findById(userResource.id).exec();
     if (!user) {
+
         throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
     }
 

@@ -145,7 +145,6 @@ export async function getFahrtenOfModUsers(userid: string) {
         
         return fahrten;
     } catch (error) {
-        console.error(`Fehler beim Abrufen der Fahrten der Mod-User: ${(error as Error).message}`);
         throw error;
     }
 }
