@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoginInfo } from '../Context/Logincontext';
-import { deleteFahrt, getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
+import { getAllFahrts, getAlleAdmin, getAlleUser, getCompletedTrips, getOngoingTrips, getUser } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
 import Loading from "../../util/Components/LoadingIndicator";
 import ProtectedComponent from '../../util/Components/PreotectComponent';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import ExpandFahrt from '../Statistiken/ExpandFahrt';
 
 const Statistik = () => {
@@ -18,7 +18,6 @@ const Statistik = () => {
     const [counter, setCounter] = useState<number>(0);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
-    const [isLastFahrt, setIsLastFahrt] = useState<boolean>(false); // State für letzte Fahrt
 
     const navigate = useNavigate();
 
@@ -245,7 +244,7 @@ const Statistik = () => {
                                                                 const formattedDuration = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${formattedSeconds}`;
 
                                                                 return (
-                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer'}}>
+                                                                    <tr key={fahrtIndex} onClick={() => handleOpenModal(fahrt)} style={{ cursor: 'pointer' }}>
                                                                         <td style={{ width: "33%" }}>
                                                                             <p key={fahrtIndex}>{fahrt.vollname}</p>
                                                                         </td>

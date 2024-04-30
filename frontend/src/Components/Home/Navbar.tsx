@@ -79,8 +79,10 @@ const Navbar = () => {
                 <NavDropdown title="Mehr" id="collasible-nav-dropdown" className="d-lg-none">
                     <NavDropdown.Item href="/create">Fahrt erstellen</NavDropdown.Item>
                     <NavDropdown.Item href="/verwalten">Fahrt verwalten</NavDropdown.Item>
-                    <NavDropdown.Item href="/statistiken">Statistiken</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => navigate("/user-verwalten")}>Benutzer verwalten</NavDropdown.Item>
+                    {logininfo && logininfo.role === "a" && <NavDropdown.Item href="/statistiken">Statistiken</NavDropdown.Item>}
+                    {logininfo && logininfo.role === "m" && <NavDropdown.Item href="/mod-fahrten">Statistiken</NavDropdown.Item>}
+                    {logininfo && logininfo.role === "u" && <NavDropdown.Item href="/fahrten">Meine Fahrten</NavDropdown.Item>}
+                    {logininfo && logininfo.role === "a" && <NavDropdown.Item onClick={() => navigate("/user-verwalten")}>Benutzer verwalten</NavDropdown.Item>}
                     <NavDropdown.Item onClick={handleAbmelden} style={{ color: 'red' }}>Abmelden</NavDropdown.Item>
                     <NavDropdown.Divider />
                 </NavDropdown>

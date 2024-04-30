@@ -9,10 +9,10 @@ import ProtectedComponent from '../../util/Components/PreotectComponent';
 import { Modal } from 'react-bootstrap';
 import ExpandFahrt from './ExpandFahrt';
 import { useUser } from '../Context/UserContext';
+import "./statistiken.css"
 
 const ModStatistik = () => {
     const { user } = useUser();
-    const [tripData, setTripData] = useState<{ completedTrips: number; ongoingTrips: number }>({ completedTrips: 0, ongoingTrips: 0 });
     const [totalModFahrts, setTotalModFahrts] = useState<number>(0);
     const [totalOngoingModFahrts, setTotalOngoingModFahrts] = useState<number>(0);
     const [totalEndedModFahrts, setTotalEndedModFahrts] = useState<number>(0);
@@ -21,26 +21,9 @@ const ModStatistik = () => {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         loadAllFahrtsAndUser();
     }, [])
-
-    async function loadInitialData() {
-        try {
-            const id = getLoginInfo();
-            if (!id) {
-                navigate("/");
-                return;
-            }
-            // await loadTrips();
-            // await loadUser();
-            await loadAllFahrtsAndUser();
-        } catch (error) {
-            console.error("Fehler beim Laden der Daten:", error);
-        }
-    }
 
     useEffect(() => {
         // Überprüfen Sie, ob der Benutzer angemeldet ist und laden Sie die Daten neu
@@ -48,16 +31,6 @@ const ModStatistik = () => {
             loadUser();
         }
     }, [user]);
-
-    // async function loadTrips() {
-    //     try {
-    //         const completed = await getCompletedTrips();
-    //         const ongoing = await getOngoingTrips();
-    //         setTripData({ completedTrips: completed.length, ongoingTrips: ongoing.length });
-    //     } catch (error) {
-    //         console.error("Fehler beim Laden der Fahrten:", error);
-    //     }
-    // }
 
     async function loadAllFahrtsAndUser() {
         try {
@@ -166,9 +139,6 @@ const ModStatistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    {/* <div className="percentage">
-                                        <p className="prozent">+21%</p>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -183,9 +153,6 @@ const ModStatistik = () => {
                                     <svg>
                                         <circle cx="38" cy="38" r="36"></circle>
                                     </svg>
-                                    {/* <div className="percentage">
-                                        <p className="prozent">+11%</p>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -232,7 +199,7 @@ const ModStatistik = () => {
                                                                         <td style={{ width: "33%" }}>{formattedDuration}</td>
                                                                         <td style={{ width: "33%" }}>
                                                                             <span className={`status ${fahrt.beendet === true ? 'completed' : 'pending'}`}>
-                                                                                {fahrt.beendet === true ? 'Beendet' : 'Läuft noch'}
+                                                                                {fahrt.beendet === true ? 'Beendet' : 'Läuft'}
                                                                             </span>
                                                                         </td>
                                                                     </tr>
