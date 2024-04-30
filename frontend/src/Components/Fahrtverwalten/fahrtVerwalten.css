@@ -125,6 +125,11 @@ body {
   margin-left: 10px;
 }
 
+.custom-modal-footer {
+  height: 100px;
+}
+
+
 /* Buttons */
 
 .submit-button-beginnen4,

@@ -467,7 +467,7 @@ const TFahrtVerwalten: React.FC = () => {
                   </div>
                   <div className="button-group">
                     <Button variant="primary" onClick={handleOpenModal} disabled={buttonLoading}>
-                      {buttonLoading ? 'Wird aufgenommen' : 'Fahrt beenden'}
+                      {buttonLoading ? 'Fahrt beendet' : 'Fahrt beenden'}
                     </Button>
                   </div>
                 </div>
@@ -518,12 +518,12 @@ const TFahrtVerwalten: React.FC = () => {
         </Modal.Body>
 
 
-        <Modal.Footer>
+        <Modal.Footer className="custom-modal-footer">
           <button className="submit-button-beginnen6" onClick={handleCloseModal}>
             Abbrechen
           </button>
           <button className="submit-button-beginnen5" onClick={handleEnde} disabled={buttonLoading}>
-            {buttonLoading ? 'Wird aufgenommen' : 'Speichern'}
+            {buttonLoading ? 'Gespeichert' : 'Speichern'}
           </button>
         </Modal.Footer>
       </Modal>
