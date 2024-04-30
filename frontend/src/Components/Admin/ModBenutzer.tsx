@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAlleModUser, getMods, getUsers, updateUser } from '../../Api/api';
 import { UserResource } from '../../util/Resources';
+import { ListGroup } from 'react-bootstrap';
 
 const ModBenutzer = () => {
     const [mods, setMods] = useState<UserResource[]>([]);
@@ -130,40 +131,35 @@ const ModBenutzer = () => {
                 <div className="containerModBen">
                     <span className="Moderatordiv">
                         <h2>Moderatoren</h2>
-                        <ul>
+                        <ListGroup>
                             {mods.map(mod => (
-                                <li key={mod.id}>
-                                    <input type="checkbox" checked={selectedMod?.email === mod.email} onChange={() => handleModSelect(mod)} />
+                                <ListGroup.Item key={mod.id} action active={selectedMod?.email === mod.email} onClick={() => handleModSelect(mod)}>
+                                    <input type="checkbox" checked={selectedMod?.email === mod.email} readOnly />
                                     <label className="moderatoritems">{mod.name}</label>
-                                </li>
+                                </ListGroup.Item>
                             ))}
-                        </ul>
+                        </ListGroup>
                     </span>
                     <span className="Benutzerdiv">
                         <h2>Benutzer</h2>
-                        <ul>
+                        <ListGroup>
                             {users.map(user => (
-                                <li key={user.id}>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedUsers.some(modUser => modUser.id === user.id)}
-                                        onChange={() => handleUserSelect(user)}
-                                    />
+                                <ListGroup.Item key={user.id} action onClick={() => handleUserSelect(user)}>
+                                    <input type="checkbox" checked={selectedUsers.some(modUser => modUser.id === user.id)} readOnly />
                                     <label className="benutzeritems" style={{ color: selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'gray' : 'black' }}>{user.name}</label>
-                                </li>
+                                </ListGroup.Item>
                             ))}
-
-                        </ul>
+                        </ListGroup>
                     </span>
                     <span className="Benutzerdiv">
                         <h2>Liste vom Mod</h2>
-                        <ul>
+                        <ListGroup>
                             {modListe.map((user, index) => (
-                                <li key={index}>
-                                    <label className="benutzeritems" >{user.name}</label>
-                                </li>
+                                <ListGroup.Item key={index}>
+                                    <label className="benutzeritems">{user.name}</label>
+                                </ListGroup.Item>
                             ))}
-                        </ul>
+                        </ListGroup>
                     </span>
                 </div>
                 <br></br>

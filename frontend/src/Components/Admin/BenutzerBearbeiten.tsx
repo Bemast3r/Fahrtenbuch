@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Form, Row, Col, Alert, ListGroup } from 'react-bootstrap';
-import { createUserWithAdmin, getUsers } from '../../Api/api';
+import { createUserWithAdmin, getUsers, updateUser } from '../../Api/api';
 import { useNavigate } from 'react-router-dom';
 import { UserResource } from '../../util/Resources';
 import Navbar from '../Home/Navbar';
@@ -9,7 +9,6 @@ import { getJWT, setJWT } from '../Context/Logincontext';
 const BenutzerBearbeiten = () => {
     const [showSuccess, setShowSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
-    const [passwordError, setPasswordError] = useState<string | null>(null);
     const [showAlert, setShowAlert] = useState(false);
     const [error, setError] = useState("");
     const [formData, setFormData] = useState<UserResource>({
@@ -17,7 +16,6 @@ const BenutzerBearbeiten = () => {
         name: '',
         username: '',
         email: '',
-        password: '',
         admin: false,
         mod: false,
     });
@@ -51,7 +49,6 @@ const BenutzerBearbeiten = () => {
     const handleUserClick = (user: UserResource) => {
         setSelectedUser(user); // Setzt den ausgewählten Benutzer
         setFormData(user); // Setzt die Daten des ausgewählten Benutzers in das Formular
-        console.log(user)
     };
 
     const handleChange = (e: any) => {
@@ -70,56 +67,26 @@ const BenutzerBearbeiten = () => {
             [name]: validatedValue
         }));
 
-        // Passwort validieren, während der Benutzer eingibt
-        if (name === 'password') {
-            validatePassword(value);
-        }
     };
 
-    const validatePassword = (password: string) => {
-        // Mindestens 8 Zeichen
-        const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
-
-        if (!regex.test(password)) {
-            setPasswordError("Das Passwort sollte 8 Buchstaben lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.");
-        } else {
-            setPasswordError(null)
-        }
-    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const form = e.currentTarget;
-        if (form.checkValidity() === false || passwordError) {
+        if (form.checkValidity() === false) {
             e.stopPropagation();
         }
         setValidated(true);
 
         try {
-            if (form.checkValidity() === true && !passwordError) {
-                await createUserWithAdmin(formData);
+            if (form.checkValidity() === true) {
+                const response = await updateUser(formData);
                 setShowSuccess(true);
-                setTimeout(() => {
-                    setShowSuccess(false);
-                    setFormData({
-                        vorname: '',
-                        name: '',
-                        username: '',
-                        email: '',
-                        password: '',
-                        admin: false,
-                        mod: false,
-                    });
-                    setValidated(false);
-                    fetchUserList(); // Aktualisiere die Benutzerliste nach dem Erstellen eines Benutzers
-                }, 1000);
-            } else {
-                // Passwortfeld leeren, wenn das Passwort falsch ist
-                setFormData(prevState => ({
-                    ...prevState,
-                    password: ''
-                }));
-            }
+                setValidated(false);
+                fetchUserList(); // Aktualisiere die Benutzerliste nach dem Erstellen eines Benutzers
+
+            };
+
         } catch (error: any) {
             let errorMessage = "Es gab einen Fehler beim Erstellen des Benutzers.";
             if (error instanceof Error && error.message.includes("MongoServerError: E11000 duplicate key error")) {
@@ -163,7 +130,58 @@ const BenutzerBearbeiten = () => {
                             <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>
                                 <h2 className="form-header2">Benutzer bearbeiten</h2>
                                 {/* Hier die Formularfelder für die Benutzerdaten einfügen */}
+                                <Row className="mb-1">
+                                    <Form.Group as={Col} controlId="formGridName" className="form-group">
+                                        <Form.Label className="form-label">Vorname*</Form.Label>
+                                        <Form.Control type="text" placeholder="Vorname" name="vorname" className={`form-control ${validated && !formData.vorname ? 'is-invalid' : ''}`} value={formData.vorname} onChange={handleChange} required />
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                            Bitte geben Sie den Vornamen an.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} controlId="formGridNachname" className="form-group">
+                                        <Form.Label className="form-label">Nachname*</Form.Label>
+                                        <Form.Control type="text" placeholder="Nachname" name="name" className={`form-control ${validated && !formData.name ? 'is-invalid' : ''}`} value={formData.name} onChange={handleChange} required />
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                            Bitte geben Sie den Nachnamen an.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+
+                                    <Form.Group as={Col} controlId="formGridUsername" className="form-group">
+                                        <Form.Label className="form-label">Benutzername*</Form.Label>
+                                        <Form.Control type="text" placeholder="Benutzername" name="username" className={`form-control ${validated && !formData.username ? 'is-invalid' : ''}`} value={formData.username} onChange={handleChange} required />
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                            Bitte geben Sie den Benutzernamen an.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Row>
+
+                                <Row className="mb-2">
+                                    <Form.Group as={Col} controlId="formGridEmail" className="form-group">
+                                        <Form.Label className="form-label">Email*</Form.Label>
+                                        <Form.Control type="email" placeholder="Email" name="email" className={`form-control ${validated && !formData.email ? 'is-invalid' : ''}`} value={formData.email} onChange={handleChange} required />
+                                        <Form.Control.Feedback type="invalid" className="form-control-feedback">
+                                            Bitte geben Sie die E-Mail-Adresse an.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Row>
+
+                                <Row className="mb-3 justify-content-left">
+                                    <Col md="auto" className="text-center">
+                                        <Form.Group as={Col} controlId="formGridAdmin">
+                                            <Form.Check type="checkbox" label="Benutzer ist Admin" name="admin" className="checkbox-label5" disabled={formData.mod} checked={formData.admin} onChange={(e) => setFormData(prevState => ({ ...prevState, admin: e.target.checked }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md="auto" className="text-center">
+                                        <Form.Group as={Col} controlId="formGridAdmin">
+                                            <Form.Check type="checkbox" label="Benutzer ist Mod" name="admin" className="checkbox-label5" disabled={formData.admin} checked={formData.mod} onChange={(e) => setFormData(prevState => ({ ...prevState, mod: e.target.checked }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
                             </Form>
+                            <button type="submit" className="submit-button-beginnen" onClick={handleSubmit} >
+                                Benutzer bearbeiten
+                            </button>
                         </Col>
                     </Row>
                 </div>
