@@ -40,6 +40,12 @@ const TFahrtVerwalten: React.FC = () => {
     last();
   }, [count]);
 
+  const formatTime = (date: Date): string => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
 
   useEffect(() => {
     const storageItems = ['isRecordingArbeitszeit', 'isRecordingLenkzeit', 'isRecordingPause'];
@@ -419,12 +425,30 @@ const TFahrtVerwalten: React.FC = () => {
             <h3 className="Hallo">Hallo, {usercontexte ? usercontexte.name : ''}!</h3>
             {letzteFahrt && !letzteFahrt.beendet ? (
               <>
-                <p>
-                  Ihre momentane Fahrt startete am{' '}
-                  {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : 'Keine Fahrt'}, mit dem Kennzeichen{' '}
-                  {letzteFahrt ? letzteFahrt.kennzeichen : 'Kein Kennzeichen'}.{' '}
+
+                <p className='Text-Abschnitt'>
+                  Start der Fahrt: {' '}
+                  {letzteFahrt ?
+                    <>
+                      <strong>{new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE')} um </strong>
+                      <strong>{formatTime(new Date(letzteFahrt.createdAt!))} Uhr</strong>
+                    </>
+                    : 'Keine Fahrt'}
                 </p>
-                <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
+                <p className='Text-Abschnitt2'>
+                  Kennzeichen: {' '}
+                  {letzteFahrt ?
+                    <strong>{letzteFahrt.kennzeichen}</strong>
+                    : 'Kein Kennzeichen'}
+                </p>
+                <p className='Text-Abschnitt2'>
+                  Startpunkt: {' '}
+                  {letzteFahrt ?
+                    <strong>{letzteFahrt?.startpunkt}</strong>
+                    : 'Kein Startpunkt'}
+                </p>
+
+
                 <div className="section">
                   <div className="button-group">
                     <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
@@ -453,6 +477,7 @@ const TFahrtVerwalten: React.FC = () => {
                     </Button>
                   </div>
                 </div>
+
               </>
             ) : (
               <>

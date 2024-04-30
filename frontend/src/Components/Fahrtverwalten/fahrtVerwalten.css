@@ -54,6 +54,11 @@ body {
   font-size: 22px;
 }
 
+.Text-Abschnitt2 {
+  font-size: 22px;
+  margin-top: -1rem;
+}
+
 .section {
   height: auto;
   margin-bottom: 20px;
