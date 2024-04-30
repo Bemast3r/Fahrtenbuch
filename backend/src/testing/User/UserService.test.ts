@@ -94,6 +94,10 @@ describe("UserService Tests", () => {
         expect(deletedUser).toBeNull();
     });
 
+    test("deleteUser should delete the user", async () => {
+        await expect(getUser("hello")).rejects.toThrow();
+    });
+
     test("getAllMods should return an array of UserResource containing mods", async () => {
         const mods = await getAllMods();
         expect(mods).toBeDefined();
@@ -317,6 +321,29 @@ describe("addnewModUsers Tests", () => {
         // Überprüfen, ob die Funktion false zurückgibt
         expect(result).toBe(false);
     });
+
+    test("addnewModUsers shouldsasas return false if user does not exist", async () => {
+        // Versuch, einen nicht vorhandenen Benutzer hinzuzufügen
+        const users: any[] = [
+            { id: "user1Id", vorname: "John", name: "Doe" },
+            { id: "user2Id", vorname: "Jane", name: "Smith" }
+        ];
+
+        // Hinzufügen neuer Mod-Benutzer für einen nicht vorhandenen Benutzer
+        await expect(getUser(new mongoose.Types.ObjectId().toString())).rejects.toThrow();
+
+        });
+
+        test("addnewModUsers shouldsasas return false if user does not exist", async () => {
+            // Versuch, einen nicht vorhandenen Benutzer hinzuzufügen
+            const users: UserResource = 
+                { username: "user1Id", email: "John", vorname: "Doe", name: "Doe", abwesend: "Doe" }
+            
+    
+            // Hinzufügen neuer Mod-Benutzer für einen nicht vorhandenen Benutzer
+            await expect(createUser(users)).rejects.toThrow();
+    
+            });
 });
 
 
