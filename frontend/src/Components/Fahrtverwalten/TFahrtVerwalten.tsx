@@ -416,7 +416,7 @@ const TFahrtVerwalten: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div>
+      <div className='fahrt-verwalten'>
         {loading ? (
           <Loading />
         ) : (
