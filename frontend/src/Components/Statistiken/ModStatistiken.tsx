@@ -120,7 +120,7 @@ const ModStatistik = () => {
             <ProtectedComponent requiredRole="m">
                 {/* 5 Statistiken */}
                 <main className="modmain">
-                    <h1 className="uberschrift">Mod - Statistiken</h1>
+                    <h1 className="uberschrift">Supervisor - Statistiken</h1>
                     <div className="analyse">
                         <div className="sales">
                             <div className="status">
