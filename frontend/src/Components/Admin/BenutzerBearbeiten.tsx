@@ -126,7 +126,7 @@ const BenutzerBearbeiten = () => {
                                         active={selectedUser && (selectedUser.username === user.username)}
                                         onClick={() => handleUserClick(user)}
                                     >
-                                        {user.username}
+                                        {user.vorname +  " " + user.name}
                                     </ListGroup.Item>
                                 ))}
                             </ListGroup>
@@ -180,7 +180,7 @@ const BenutzerBearbeiten = () => {
                                     </Col>
                                     <Col md="auto" className="text-center">
                                         <Form.Group as={Col} controlId="formGridAdmin">
-                                            <Form.Check type="checkbox" label="Benutzer ist Mod" name="admin" className="checkbox-label5" disabled={formData.admin} checked={formData.mod} onChange={(e) => setFormData(prevState => ({ ...prevState, mod: e.target.checked }))} />
+                                            <Form.Check type="checkbox" label="Benutzer ist Supervisor" name="admin" className="checkbox-label5" disabled={formData.admin} checked={formData.mod} onChange={(e) => setFormData(prevState => ({ ...prevState, mod: e.target.checked }))} />
                                         </Form.Group>
                                     </Col>
                                 </Row>
