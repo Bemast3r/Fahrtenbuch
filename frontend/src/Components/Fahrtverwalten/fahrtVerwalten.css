@@ -31,18 +31,11 @@ body {
   padding: 3.5rem;
   border-radius: 12px;
   box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  /* transition: box-shadow 0.3s ease, transform 0.3s ease; */
   /* Füge einen Übergangseffekt hinzu */
-  transform: translateY(0);
+  /* transform: translateY(0); */
   margin-left: auto;
   margin-right: auto;
-}
-
-.form-container3:hover {
-  box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
-  /* Ändere den Schatten beim Schweben */
-  transform: translateY(-5px);
-  /* Hebe den Container leicht an */
 }
 
 .form-container3::before {
@@ -80,7 +73,6 @@ body {
 .button-group {
   flex-direction: column;
   align-items: center;
-  margin: 0 10px;
   /* optional: fügt etwas Abstand zwischen den Button-Gruppen hinzu */
 }
 
@@ -414,5 +406,9 @@ body {
     margin-top: 0rem;
     margin-right: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  }
+
+  .form-control {
+    width: 100%;
   }
 }
