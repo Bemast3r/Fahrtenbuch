@@ -94,7 +94,7 @@ const BenutzerBearbeiten = () => {
             };
 
         } catch (error: any) {
-            let errorMessage = "Es gab einen Fehler beim Erstellen des Benutzers.";
+            let errorMessage = "Es gab einen Fehler beim Bearbeiten des Benutzers.";
             if (error instanceof Error && error.message.includes("MongoServerError: E11000 duplicate key error")) {
                 errorMessage = "Der Benutzername ist bereits vergeben.";
             }
@@ -117,7 +117,6 @@ const BenutzerBearbeiten = () => {
                     <Row>
                         <Col sm={4}>
                             {/* Benutzerliste */}
-                            <h2>Benutzerliste:</h2>
                             <ListGroup>
                                 {userList.map((user, index) => (
                                     <ListGroup.Item
