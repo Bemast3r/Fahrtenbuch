@@ -62,7 +62,7 @@ const Benutzerloeschen = () => {
                     <Form.Group as={Row} controlId="formSearch">
                         <Form.Label column sm="2">Benutzer suchen</Form.Label>
                         <Col sm="10">
-                            <Form.Control type="text" placeholder="Vor- und Nachname eingeben" value={searchQuery} onChange={handleSearchChange} />
+                            <Form.Control style={{width: "118%"}} type="text" placeholder="Vor- und Nachname eingeben" value={searchQuery} onChange={handleSearchChange} />
                         </Col>
                     </Form.Group>
                 </Form>
