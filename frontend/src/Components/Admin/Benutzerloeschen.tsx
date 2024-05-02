@@ -35,6 +35,10 @@ const Benutzerloeschen = () => {
         setShowConfirmationModal(true);
     };
 
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // Verhindert das automatische Senden des Formulars
+    };
+
     const confirmDeleteUser = async () => {
         setUsers(prevUsers => prevUsers.filter(user => user.id !== selectedUser?.id));
         await deleteUser(selectedUser!.id!)
@@ -54,7 +58,7 @@ const Benutzerloeschen = () => {
                 <Alert variant="success" show={showAlert} onClose={() => setShowAlert(false)} dismissible className="custom-alert-gut">
                     Benutzer: {selectedUser?.vorname} {selectedUser?.name} erfolgreich gelöscht.
                 </Alert>
-                <Form>
+                <Form onSubmit={handleFormSubmit}>
                     <Form.Group as={Row} controlId="formSearch">
                         <Form.Label column sm="2">Benutzer suchen</Form.Label>
                         <Col sm="10">
