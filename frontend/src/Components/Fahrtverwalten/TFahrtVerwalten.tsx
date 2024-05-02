@@ -450,27 +450,28 @@ const TFahrtVerwalten: React.FC = () => {
 
 
                 <div className="section">
-                  <div className="button-group">
-                    <Button className='ie' variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
-                      {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
-                    </Button>
-                  </div>
-                  <div className="button-group">
-                    <Button className='i' variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
-                      {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
-                    </Button>
-                  </div>
-                  <div className="button-group">
-                    <Button className='i' variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause} disabled={isDisabledPause}>
-                      {isRecordingPause ? "Pause läuft" : "Pause start"}
-                    </Button>
-                  </div>
-                  <div className="button-group">
-                    <Button className='i' variant="primary" onClick={handleOpenModal} disabled={buttonLoading}>
-                      {buttonLoading ? 'Fahrt beendet' : 'Fahrt beenden'}
-                    </Button>
-                  </div>
-                </div>
+    <div className="button-group">
+        <Button className='ie' style={{ backgroundColor: isRecordingLenkzeit ? 'red' : '#0A58CA' }} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
+            {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
+        </Button>
+    </div>
+    <div className="button-group">
+        <Button className='i' style={{ backgroundColor: isRecordingArbeitszeit ? 'red' : '#0A58CA' }} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
+            {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
+        </Button>
+    </div>
+    <div className="button-group">
+        <Button className='i' style={{ backgroundColor: isRecordingPause ? 'red' : '#0A58CA' }} onClick={handlePause} disabled={isDisabledPause}>
+            {isRecordingPause ? "Pause läuft" : "Pause start"}
+        </Button>
+    </div>
+    <div className="button-group">
+        <Button className='i' style={{ backgroundColor: buttonLoading ? 'red' : '#0A58CA' }} onClick={handleOpenModal} disabled={buttonLoading}>
+            {buttonLoading ? 'Fahrt beendet' : 'Fahrt beenden'}
+        </Button>
+    </div>
+</div>
+
 
               </>
             ) : (
