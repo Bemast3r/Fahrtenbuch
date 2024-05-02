@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getJWT, setJWT, getLoginInfo } from '../Contexte/Logincontext';
-import { getFahrt, getUser, postFahrt } from '../../Api/api';
-import { FahrtResource, UserResource } from '../../util/Resources';
+import { useNavigate } from 'react-router-dom';
+import { getJWT, setJWT } from '../Context/Logincontext';
+import { getFahrt, postFahrt } from '../../Api/api';
+import { FahrtResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import Navbar from '../Home/Navbar';
+import { useUser } from '../Context/UserContext';
 
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);
     const [disableFields, setDisableFields] = useState(false);
-    const [user, setUser] = useState<UserResource | null>(null);
+    const { user } = useUser()
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
     const [showAlert, setShowAlert] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -22,6 +23,7 @@ const FahrtErstellen = () => {
     useEffect(() => {
         if (jwt) {
             setJWT(jwt);
+            return
         } else {
             navigate("/");
             return;
@@ -30,20 +32,17 @@ const FahrtErstellen = () => {
 
     useEffect(() => {
         load();
-    }, []);
+    }, [user]);
 
     async function load() {
-        const id = getLoginInfo();
-        if (id && id.userID) {
-            const user = await getUser(id!.userID);
-            setUser(user);
+
+        if (user !== null && user.id) {
+            const fahrten: FahrtResource[] = await getFahrt(user.id);
+            setLetzteFahrt(fahrten[fahrten.length - 1])
             setLoading(false);
-            const x: FahrtResource[] = await getFahrt(id!.userID);
-            setLetzteFahrt(x[x.length - 1]);
-        } else {
-            navigate("/")
         }
     }
+
 
     const handleCheckboxChange = (checkboxId: string) => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -90,10 +89,10 @@ const FahrtErstellen = () => {
                     return;
                 }
                 let abwesendText = '';
-                if (checkbox1Checked) abwesendText = "Kein Fahrzeug geführt.";
-                else if (checkbox2Checked) abwesendText = "Ich bin krank.";
-                else if (checkbox3Checked) abwesendText = "Ich habe Urlaub.";
-                else if (checkbox4Checked) abwesendText = "Ich habe frei.";
+                if (checkbox1Checked) abwesendText = "Ich habe kein Fahrzeug geführt";
+                else if (checkbox2Checked) abwesendText = "Ich bin krank";
+                else if (checkbox3Checked) abwesendText = "Ich habe Urlaub";
+                else if (checkbox4Checked) abwesendText = "Ich habe frei";
 
                 if (user) {
                     const today = new Date()
@@ -106,7 +105,9 @@ const FahrtErstellen = () => {
                         vollname: user.vorname + " " + user.name,
                         kennzeichen: "-",
                         kilometerstand: 0,
+                        kilometerende:0,
                         startpunkt: "-",
+                        endpunkt:"-",
                         abwesend: abwesendText,
                         ruhezeit: [{ start: today, stop: end }],
                         beendet: true,
@@ -255,7 +256,7 @@ const FahrtErstellen = () => {
                                         <Form.Group controlId="formGridCheckbox1">
                                             <Form.Check
                                                 type="checkbox"
-                                                label="Kein Fahrzeug geführt"
+                                                label="Ich habe kein Fahrzeug geführt"
                                                 className="checkbox-label1"
                                                 onChange={() => handleCheckboxChange("formGridCheckbox1")}
                                             />

@@ -1,6 +1,6 @@
 import { requiresAuthentication } from "../Middleware/auth";
-import { createUserFahrt, deleteFahrt, getBeendeteFahrten, getFahrten, getLaufendeFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
-import { FahrtResource } from "../Model/Resources";
+import { createUserFahrt, deleteFahrt, getBeendeteFahrten, getFahrten, getFahrtenOfModUsers, getLaufendeFahrten, getUserFahrten, updateUserfahrt } from "../Services/FahrtService";
+import { FahrtResource } from "../util/Resources";
 import express from "express";
 import { body, validationResult, matchedData, param } from "express-validator";
 
@@ -51,6 +51,28 @@ fahrrouter.get("/admin/fahrt/user/:id", requiresAuthentication,
     }
 );
 
+fahrrouter.get("/mod/alle/fahrten", requiresAuthentication,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "m") {
+                return res.sendStatus(403)
+            }
+            const user = await getFahrtenOfModUsers(req.userId);
+            return res.send(user); // 200 by default
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+
+
+
 fahrrouter.get("/admin/laufende/fahrten", requiresAuthentication,
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -99,6 +121,7 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     body("vollname").isString(),
     body("endpunkt").optional().isString(),
     body("kilometerstand").optional().isNumeric(),
+    body("kilometerende").optional().isNumeric(),
     body("totalArbeitszeit").optional().isNumeric(),
     body("totalPause").optional().isNumeric(),
     body("totalLenkzeit").optional().isNumeric(),
@@ -111,8 +134,6 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors)
-            console.log(req.body)
             return res.status(400).json({ errors: errors.array() });
         }
         try {
@@ -174,6 +195,26 @@ fahrrouter.delete("/admin/loesch/fahrt/:id", requiresAuthentication,
         }
         try {
             if (req.role !== "a") {
+                return res.sendStatus(403)
+            }
+            const res2 = await deleteFahrt(req.params.id);
+            return res.send(res2); // 200 by default
+        } catch (err) {
+            res.status(400);
+            next(err);
+        }
+    }
+);
+
+fahrrouter.delete("/mod/loesch/fahrt/:id", requiresAuthentication,
+    param("id").isMongoId(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            if (req.role !== "m") {
                 return res.sendStatus(403)
             }
             const res2 = await deleteFahrt(req.params.id);

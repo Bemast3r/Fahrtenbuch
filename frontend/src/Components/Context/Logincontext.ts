@@ -3,7 +3,7 @@ import React from "react";
 
 export interface LoginInfo {
     userID: string;
-    role: "u" | "a";
+    role: "u" | "a" | "m";
 }
 
 const JWT_NAME = "jwt";
@@ -16,14 +16,13 @@ export function getLoginInfo(): LoginInfo | null {
     if (!jwt)
         return null;
 
-    const payload: JwtPayload & { role: "u" | "a" } = jwtDecode(jwt);
+    const payload: JwtPayload & { role: "u" | "a" | "m" } = jwtDecode(jwt);
     const exp: number = Number(payload.exp ?? 0);
     const userID: string | undefined = payload.sub;
-    const role: "a" | "u" = payload.role;
+    const role: "a" | "u" | "m" = payload.role;
 
     if (Date.now() >= exp * 1000) {
         removeJWT();
-        alert("Sie müssen sich erneut anmelden.");
         window.location.href = "/";
         return null;
     }

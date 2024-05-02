@@ -1,6 +1,6 @@
 import "./home2.css";
 import { useEffect, useState } from 'react';
-import { getJWT, getLoginInfo, setJWT } from '../Contexte/Logincontext';
+import { getJWT, getLoginInfo, setJWT } from '../Context/Logincontext';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 
@@ -20,8 +20,9 @@ const LandingPage = () => {
     }, [jwt]);
 
     return (
-        <div className="wasgeht">
-            <Navbar></Navbar>
+       
+            <><Navbar></Navbar>
+            <div className="wasgeht">
             <section className="services section-padding" id="services">
                 <div className="container2">
                     <div className="row">
@@ -36,7 +37,7 @@ const LandingPage = () => {
                         <div className="col-12col-md-12col-lg-4">
                             <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
-                                    <i className='bx bx-plus-circle' ></i>
+                                    <i className='bx bx-plus-circle'></i>
                                     <h3 className="card-title">Fahrt erstellen</h3>
                                     <p className="lead">Starte deine Fahrt mit dem Kennzeichen, dem Kilometerstand des Autos und dem Ort der Fahrtaufnahme.</p>
                                     <button className="btn-custom" onClick={() => navigate("/create")}>Fahrt erstellen</button>
@@ -46,10 +47,10 @@ const LandingPage = () => {
                         <div className="col-12col-md-12col-lg-4">
                             <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                 <div className="card-body">
-                                    <i className='bx bxs-car-mechanic' ></i>
+                                    <i className='bx bxs-car-mechanic'></i>
                                     <h3 className="card-title">Fahrt verwalten</h3>
                                     <p className="lead">Verändere Informationen über deine Fahrt wie die Lenkzeit, Arbeitszeit, Pausen oder Beende deine Fahrt.</p>
-                                    <button className="btn-custom" onClick={() => navigate("/verwalten")} >Fahrt verwalten</button>
+                                    <button className="btn-custom" onClick={() => navigate("/verwalten")}>Fahrt verwalten</button>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +58,7 @@ const LandingPage = () => {
                             <div className="col-12col-md-12col-lg-4">
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
-                                        <i className='bx bx-stats' ></i>
+                                        <i className='bx bx-stats'></i>
                                         <h3 className="card-title">Statistiken</h3>
                                         <p className="lead">Siehe alle wichtigen Informationen über alle Fahrten wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
                                         <button className="btn-custom" onClick={() => navigate("/statistiken")}>Erfahre mehr</button>
@@ -66,14 +67,26 @@ const LandingPage = () => {
                             </div>
                         )}
 
-                        {userRole !== "a" && (
+                        {userRole === "u" && (
                             <div className="col-12 col-md-12 col-lg-4">
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
-                                        <i className='bx bx-stats' ></i>
+                                        <i className='bx bx-stats'></i>
                                         <h3 className="card-title">Meine Fahrten</h3>
                                         <p className="lead">Siehe alle wichtigen Informationen über deine Fahrt wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
-                                        <button className="btn bg-warning text-dark" onClick={() => navigate("/fahrten")}>Erfahre Mehr</button>
+                                        <button className="btn-custom" onClick={() => navigate("/fahrten")}>Erfahre Mehr</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {userRole === "m" && (
+                            <div className="col-12 col-md-12 col-lg-4">
+                                <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
+                                    <div className="card-body">
+                                        <i className='bx bx-stats'></i>
+                                        <h3 className="card-title">Statistiken</h3>
+                                        <p className="lead">Siehe alle wichtigen Informationen über deine Fahrer wie als auch die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
+                                        <button className="btn-custom" onClick={() => navigate("/mod-fahrten")}>Erfahre Mehr</button>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +94,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
-        </div>
+        </div></>
     );
 }
 

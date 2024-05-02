@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('../../util/loginHintergrund.jpg');
+    /* background-image: url('../../util/loginHintergrund.jpg'); */
     background-size: cover;
     background-position: center;
 }

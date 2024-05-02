@@ -6,10 +6,11 @@ import PasswortVergessen from './Components/Login/Passwort/PasswortVergessen';
 import PasswortZuruecksetzen from './Components/Login/Passwort/PasswortZuruecksetzen';
 import AdminFormular from './Components/Admin/AdminPanel';
 import FahrtErstellen from './Components/FahrtErstellen/Fahrterstellen';
-import Statistik from './Components/Admin/Statistik';
+import Statistik from './Components/Statistiken/Statistik';
 import UserFahrten from './Components/Statistiken/UserFahrten';
 import Fahrtabschliessen from './Components/Fahrtverwalten/Fahrtabschliessen';
 import TFahrtVerwalten from './Components/Fahrtverwalten/TFahrtVerwalten';
+import ModStatistik from "./Components/Statistiken/ModStatistiken";
 
 const App = () => {
 
@@ -24,10 +25,11 @@ const App = () => {
         <Route path="verwalten" element={<TFahrtVerwalten />} />
         <Route path="passwort-vergessen" element={<PasswortVergessen />} />
         <Route path="passwort-zuruecksetzen/:token" element={<PasswortZuruecksetzen />} />
-        <Route path="user-erstellen" element={<AdminFormular />} />
+        <Route path="user-verwalten" element={<AdminFormular />} />
         <Route path="statistiken" element={<Statistik />} />
         <Route path="fahrten" element={<UserFahrten />} />
         <Route path="fahrten-abschluss" element={<Fahrtabschliessen />} />
+        <Route path="mod-fahrten" element={<ModStatistik />} />
       </Routes>
     </Router>
   );

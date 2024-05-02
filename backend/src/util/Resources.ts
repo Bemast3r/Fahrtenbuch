@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export type UserResource = {
     id?: string;
     vorname: string;
@@ -7,11 +9,12 @@ export type UserResource = {
     password?: string;
     admin?: boolean;
     createdAt?: Date;
-    fahrzeuge?: {
-        datum: string,
-        kennzeichen: string;
+    mod?: boolean;
+    modUser?: {
+        users: string
+        name: string
     }[];
-
+    abwesend: string
 }
 
 export type FahrtResource = {

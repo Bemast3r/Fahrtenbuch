@@ -1,33 +1,17 @@
 body {
   background-image: url('../../util/loginHintergrund.jpg');
-  background-size: cover;
-  background-position: center;
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
-.header {
-  margin-bottom: 2rem;
-  margin-top: 3rem;
-  font-size: 32px;
-  color: #FFFF;
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+.fahrt-verwalten {
+  height: 100vh;
+  /* Vollständige Bildschirmhöhe */
+  overflow-y: auto;
+  /* Vertikale Scrollbar anzeigen, wenn nötig */
 }
 
-/* Animation für das Ein- und Ausblenden */
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.9); } /* Startzustand */
-  100% { opacity: 1; transform: scale(1); } /* Endzustand */
-}
-
-.header {
-  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Laden an */
-}
-
-.header:hover {
-  animation: fadeInOut 0.3s ease; /* Wende die Animation beim Schweben an */
-}
+/* Navbar */
 
 .container {
   margin: 20px auto;
@@ -38,21 +22,59 @@ body {
   width: 90%;
 }
 
+/* Container */
+
+.form-container3 {
+  width: 65%;
+  margin-top: 190px;
+  background-color: #fff;
+  padding: 3.5rem;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
+  /* transition: box-shadow 0.3s ease, transform 0.3s ease; */
+  /* Füge einen Übergangseffekt hinzu */
+  /* transform: translateY(0); */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-container3::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  border-radius: 20px 20px 0 0;
+  /* Runde die oberen Ecken ab */
+}
+
+.Hallo {
+  margin-top: 40px;
+  font-style: bold;
+}
+
+.Text-Abschnitt {
+  font-size: 22px;
+}
+
+.Text-Abschnitt2 {
+  font-size: 22px;
+  margin-top: -1rem;
+}
+
 .section {
-  height: auto;
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 2px solid #ddd;
-  border-radius: 6px;
-  overflow-y: auto;
-  max-height: 200px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: -10px;
 }
 
 .button-group {
-  flex-direction: column; /* Ändere die Ausrichtung in eine Spalte für kleinere Bildschirme */
-  align-items: center; /* Zentriere die Schaltflächen horizontal */
-  margin-bottom: 10px;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px ;
+  /* optional: fügt etwas Abstand zwischen den Button-Gruppen hinzu */
 }
 
 /* .button-group button {
@@ -67,12 +89,14 @@ body {
 /* }  */
 
 .button-group button:last-child {
-  margin-bottom: 0; /* Entferne den Abstand unterhalb der letzten Schaltfläche */
+  margin-bottom: 0;
+  /* Entferne den Abstand unterhalb der letzten Schaltfläche */
 }
 
-/* .button-group button:hover {
+.button-group button:hover {
   background-color: #0056b3;
-} */
+  color: #fff;
+}
 
 .dates {
   margin-top: 20px;
@@ -101,49 +125,291 @@ body {
   text-align: center;
 }
 
+.custom-modal-header {
+  justify-content: flex-start;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.custom-modal-footer {
+  height: 100px;
+}
+
+
+/* Buttons */
+
+.submit-button-beginnen4,
+.submit-button-beginnen4:focus {
+  width: 250px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #eec346;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: -1.5rem 0 0;
+  /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin-bottom: -2rem;
+  margin-top: 1rem;
+  margin-right: auto;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+}
+
+.submit-button-beginnen4:hover {
+  color: #000;
+  background-color: rgb(196, 155, 34);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
+
+.submit-button-beginnen3,
+.submit-button-beginnen3:focus {
+  width: 250px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #bababa;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: -1rem;
+  margin-top: -7.5rem;
+  margin-left: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+}
+
+.submit-button-beginnen3:hover {
+  color: #000;
+  background-color: rgb(160, 159, 159);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
+
+.submit-button-beginnen5,
+.submit-button-beginnen5:focus {
+  width: 200px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #eec346;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: -1.5rem 0 0;
+  /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin-top: 0rem;
+  margin-right: 29px;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+}
+
+.submit-button-beginnen5:hover {
+  color: #000;
+  background-color: rgb(196, 155, 34);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
+
+.submit-button-beginnen6,
+.submit-button-beginnen6:focus {
+  width: 200px;
+  padding: 0.8rem 1rem;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #bababa;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: -1.5rem 0 0;
+  /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin-top: 0rem;
+  margin-right: 15px;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  margin-left: 30px;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+}
+
+.submit-button-beginnen6:hover {
+  color: #000;
+  background-color: rgb(160, 159, 159);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
+
 /* Medienabfragen für größere Bildschirme */
 @media screen and (min-width: 768px) {
   .button-group {
-    flex-direction: row; /* Ändere die Ausrichtung in eine Zeile für größere Bildschirme */
+    flex-direction: row;
+    /* Ändere die Ausrichtung in eine Zeile für größere Bildschirme */
   }
 
   .button-group button {
-    margin-right: 10px; /* Füge einen horizontalen Abstand zwischen den Schaltflächen hinzu */
-    margin-bottom: 0; /* Entferne den vertikalen Abstand zwischen den Schaltflächen */
+    margin-right: 10px;
+    /* Füge einen horizontalen Abstand zwischen den Schaltflächen hinzu */
+    margin-bottom: 0;
+    /* Entferne den vertikalen Abstand zwischen den Schaltflächen */
   }
 
   .button-group button:last-child {
-    margin-right: 0; /* Entferne den horizontalen Abstand rechts von der letzten Schaltfläche */
+    margin-right: 0;
+    /* Entferne den horizontalen Abstand rechts von der letzten Schaltfläche */
   }
 }
-.erstellen{
-  margin-bottom: 10px;
-  margin-right: 10px;
-  background-color: #000000;
-  border-color: #000000;
-  /* color:yellow; */
+
+@media screen and (max-width: 970px) and (min-width: 679px) {
+
+  .submit-button-beginnen4,
+  .submit-button-beginnen4:focus {
+    width: 250px;
+    padding: 0.8rem 1rem;
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #eec346;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: -1.5rem 0 0;
+    /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+    margin-bottom: -2rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  }
 }
 
 
-.erstellen:hover{
-  margin-bottom: 10px;
-  margin-right: 10px;
-  background-color: rgb(0, 0, 0);
-  border-color: #000000;
+@media screen and (max-width: 970px) {
+  .form-container3 {
+    width: 90%;
+  }
+
+  .Text-Abschnitt {
+    font-size: 18px;
+  }
+
+  .Hallo {
+    margin-top: 60px;
+    font-style: bold;
+  }
+
+  .submit-button-beginnen3,
+  .submit-button-beginnen3:focus {
+    width: 250px;
+    padding: 0.8rem 1rem;
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #bababa;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: -1.5rem 0 0;
+    margin-top: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  }
+
+  .Text-Abschnitt2 {
+    font-size: 18px;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .i {
+    width: 250px;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+  .ie {
+    width: 250px;
+    font-size: 18px;
+    margin-top: -10px;
+  }
 }
 
-.hauptmenu{
-  margin-bottom: 10px;
-  background-color: #FFC107;
-  color:rgb(0, 0, 0);
-  border-color: #FFC107;
-  font-weight: 150;
+@media screen and (max-width: 1125px) {
+  .section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .i {
+    width: 250px;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+  .ie {
+    width: 250px;
+    font-size: 18px;
+    margin-top: -10px;
+  }
 }
 
-.hauptmenu:hover{
-  margin-bottom: 10px;
-  background-color: #FFC107;
-  color:rgb(0, 0, 0);
-  border-color: #FFC107;
-  font-weight: 150;
+@media screen and (max-width: 1589px) and (min-width: 1125px) {
+  .i {
+    width: 175px;
+    font-size: 14px;
+    margin: -13px
+  }
+
+  .ie {
+    width: 175px;
+    font-size: 14px;
+    margin: -13px
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .submit-button-beginnen6,
+  .submit-button-beginnen6:focus {
+    width: 160px;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    color: #000;
+    background-color: #bababa;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: -1.5rem 0 0;
+    margin-top: 0rem;
+    margin-right: 15px;
+    margin-left: -30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  }
+
+  .submit-button-beginnen5,
+  .submit-button-beginnen5:focus {
+    width: 160px;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    color: #000;
+    background-color: #eec346;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: -1.5rem 0 0;
+    margin-top: 0rem;
+    margin-right: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  }
+
+  .form-control {
+    width: 100%;
+  }
 }

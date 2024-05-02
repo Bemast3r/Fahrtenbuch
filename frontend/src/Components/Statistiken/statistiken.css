@@ -1,9 +1,350 @@
-.row {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Statistik Cards */
+
+:root {
+    --color-primary: #6C9BCF;
+    --color-danger: #FF0060;
+    --color-success: #1B9C85;
+    --color-warning: #F7D060;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+
+    --light: #F9F9F9;
+	--blue: #3C91E6;
+	--light-blue: #CFE8FF;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #342E37;
+	--red: #DB504A;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+.dark-mode-variables {
+    --color-background: #181a1e;
+    --color-white: #202528;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0, 0, 0, 0.4);
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    user-select: none;
+    overflow-x: hidden;
+    color: var(--color-dark);
+    background-color: var(--color-background);
+}
+
+a {
+    color: var(--color-dark);
+}
+
+img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.lockere {
+    margin-left: 250px;
+}
+
+.uberschrift {
+    font-size: 34px;
+    font-weight: 800;
+    position: relative;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+    margin-top: 11rem;
+    text-align: center;
+}
+
+.uberschrift::after {
+    content: "";
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    width: 500px;
+    height: 1px;
+    background-color: #ccc;
+    transform: translateX(-50%);
+}
+
+.zahlen {
+    font-weight: 800;
+    font-size: 2rem;
+    margin-left: 0.6rem;
+}
+
+.uberschrift-klein {
+    font-weight: 500;
+    font-size: 0.87rem;
+}
+
+small {
+    font-size: 0.76rem;
+}
+
+.prozent {
+    color: var(--color-dark-variant);
+}
+
+b {
+    color: var(--color-dark);
+}
+
+.text-muted {
+    color: var(--color-info-dark);
+}
+
+.primary {
+    color: var(--color-primary);
+}
+
+.danger {
+    color: var(--color-danger);
+}
+
+.success {
+    color: var(--color-success);
+}
+
+.warning {
+    color: var(--color-warning);
+}
+
+main {
+    margin-top: 1.5rem;
+    margin-bottom: 40px;
+}
+
+main .analyse {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+.modmain .analyse {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+main .analyse>div {
+    background-color: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-top: 1rem;
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+main .analyse>div:hover {
+    box-shadow: none;
+}
+
+main .analyse>div .status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+main .analyse h3 {
+    margin-left: 0.6rem;
+    font-size: 1rem;
+}
+
+main .analyse .progresss {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+}
+
+main .analyse svg {
+    width: 7rem;
+    height: 7rem;
+}
+
+main .analyse svg circle {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transform: translate(5px, 5px);
+}
+
+main .analyse .sales svg circle {
+    stroke: var(--color-primary);
+    stroke-dashoffset: -30;
+    stroke-dasharray: 200;
+}
+
+main .analyse .visits svg circle {
+    stroke: var(--color-success);
+    stroke-dashoffset: -90;
+    stroke-dasharray: 200;
+}
+
+main .analyse .searches svg circle {
+    stroke: var(--color-danger);
+    stroke-dashoffset: 30;
+    stroke-dasharray: 200;
+}
+
+main .analyse .fahrer svg circle {
+    stroke: var(--color-info-dark);
+    stroke-dashoffset: 400;
+    stroke-dasharray: 90;
+}
+
+main .analyse .admins svg circle {
+    stroke: var(--color-info-dark);
+    stroke-dashoffset: 100;
+    stroke-dasharray: 100;
+}
+
+main .analyse .progresss .percentage {
+    position: absolute;
+    top: 5px;
+    left: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+/* Fahrten Tabelle */
+
+#content main {
+    display: flex;
+    justify-content: center;
+}
+
+.table-data {
+    margin-bottom: 40px; /* Dies fügt einen unteren Abstand von 40px hinzu */
+}
+
+#content main .table-data {
     display: flex;
     flex-wrap: wrap;
-    margin-left: 15px;
-    margin-right: 15px;
+    grid-gap: 24px;
+    margin-bottom: 0px;
+    width: 85%;
+    color: var(--dark);
+    box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
 }
+
+#content main .table-data>div {
+    border-radius: 20px;
+    background: var(--light);
+    padding: 24px;
+    overflow-x: auto;
+}
+
+#content main .table-data .head {
+    display: flex;
+    align-items: center;
+    grid-gap: 16px;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+#content main .table-data .head h3 {
+    margin-right: auto;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+#content main .table-data .head .bx {
+    cursor: pointer;
+}
+
+#content main .table-data .order {
+    flex-grow: 1;
+    flex-basis: 500px;
+}
+
+#content main .table-data .order table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#content main .table-data .order table th {
+    padding-bottom: 12px;
+    font-size: 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--grey);
+}
+
+#content main .table-data .order table td {
+    padding: 18px 0;
+    font-size: 18px;
+}
+
+#content main .table-data .order table tr td:first-child {
+    display: flex;
+    align-items: center;
+    grid-gap: 12px;
+    padding-left: 6px;
+    font-size: 18px;
+}
+
+/* #content main .table-data .order table td img {
+    width: 36px;
+    height: 136px;
+    border-radius: 50%;
+    object-fit: cover;
+} */
+
+#content main .table-data .order table tbody tr:hover {
+    background: var(--grey);
+}
+
+#content main .table-data .order table tr td .status {
+    font-size: 16px;
+    padding: 8px 22px;
+    color: var(--light);
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+#content main .table-data .order table tr td .status.completed {
+    background: var(--color-success);
+}
+
+#content main .table-data .order table tr td .status.pending {
+    background: var(--orange);
+}
+
+/* Button Styling */
 
 .downloadButton {
     margin-bottom: 10px;
@@ -49,30 +390,11 @@
 
 .downloadButton:active {
     background-color: #FFC107;
-    /* Setze die Hintergrundfarbe auf Gelb */
     color: rgb(0, 0, 0);
-    /* Optional: Setze die Schriftfarbe auf Schwarz */
     border-color: #FFC107;
-    /* Optional: Setze die Rahmenfarbe auf Gelb */
 }
 
-
-.card-text {
-    font-size: large;
-}
-
-.card {
-    width: 100%;
-    margin-bottom: 15px;
-    /* Platz zwischen den Karten */
-    height: fit-content;
-}
-
-.card-body {
-    text-align: left;
-    overflow-y: auto;
-    /* Zentriert den Inhalt horizontal */
-}
+/* Sonstiges Styling */
 
 .mb-0 {
     padding-left: 10px;
@@ -80,19 +402,16 @@
 
 .items {
     padding-left: 10px;
-    /* Zentriert den Inhalt horizontal */
 }
 
 .accordion-button {
     text-align: left;
-    padding-left: 10px;
+    padding-left: 15px;
 }
 
 .col-md {
     flex: 0 0 auto;
     width: 20%;
-    /* Ändern Sie die Breite entsprechend Ihren Anforderungen */
-
 }
 
 .statistikenchart {
@@ -103,6 +422,12 @@
 .fahrtenChart {
     width: 25%;
     height: 25%;
+}
+
+/* Stil für Dropdown-Menüs */
+details.summary.ul {
+    background-color: black;
+    margin-bottom: 10px;
 }
 
 @media only screen and (min-width: 991px) {
@@ -121,33 +446,129 @@
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    .row {
-        display: grid;
+@media only screen and (min-width: 992px) and (max-width: 1350px) {
+    .uberschrift {
+        font-size: 28px;
+        margin-top: 11rem;
     }
 
-    .col-md {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+    .uberschrift::after {
+        top: 50px;
+        width: 400px; 
+    }
+
+    /* Analyse-Grid */
+    main .analyse {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatische Anpassung der Spaltenanzahl */
+        gap: 1rem; /* Verringerte Lücken zwischen den Elementen */
+        margin-left: 2rem; /* Reduzierter linker Seitenabstand */
+        margin-right: 2rem; /* Reduzierter rechter Seitenabstand */
+    }
+
+    /* Tabelle */
+    #content main .table-data {
+        width: 90%; /* Volle Breite für Tabellencontainer */
+    }
+
+    #content main .table-data>div {
+        padding: 16px; /* Kleinere Innenpolsterung für Tabellenelemente */
+    }
+
+    #content main .table-data .head h3 {
+        font-size: 24px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+        margin-bottom: -5px;
+    }
+
+    #content main .table-data .order table {
+        min-width: 300px; /* Mindestbreite für Tabellenelemente */
+    }
+
+    #content main .table-data .order table th {
+        font-size: 20px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+    }
+
+    #content main .table-data .order table td {
+        font-size: 20px; /* Kleinere Schriftgröße für Tabellenzellen */
+    }
+
+    #content main .table-data .order table tr td:first-child {
+        font-size: 20px;
+        padding-left: 0; /* Kein zusätzlicher Abstand für die erste Zelle */
+    }
+
+    #content main .table-data .order table tr td .status {
+        font-size: 14px;
+        padding: 8px 26px;
+        color: var(--light);
+        border-radius: 20px;
+        font-weight: 700;
+    }
+
+    .lockere {
+        margin-left: 0px;
     }
 }
 
-@media only screen and (max-width: 767px) {
-    .row {
-        display: grid;
+@media only screen and (max-width: 991px) {
+    .uberschrift {
+        font-size: 24px;
+        margin-top: 11rem;
     }
 
-    .col-md {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+    .uberschrift::after {
+        top: 40px;
+        width: 250px; 
     }
-}
 
-/* Stil für Dropdown-Menüs */
-details.summary.ul {
-    background-color: black;
-    margin-bottom: 10px;
-    /* Abstand zwischen den Dropdown-Menüs */
-}
+    /* Analyse-Grid */
+    main .analyse {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatische Anpassung der Spaltenanzahl */
+        gap: 1rem; /* Verringerte Lücken zwischen den Elementen */
+        margin-left: 2rem; /* Reduzierter linker Seitenabstand */
+        margin-right: 2rem; /* Reduzierter rechter Seitenabstand */
+    }
+
+    /* Tabelle */
+    #content main .table-data {
+        width: 90%; /* Volle Breite für Tabellencontainer */
+    }
+
+    #content main .table-data>div {
+        padding: 16px; /* Kleinere Innenpolsterung für Tabellenelemente */
+    }
+
+    #content main .table-data .head h3 {
+        font-size: 20px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+        margin-bottom: -5px;
+    }
+
+    #content main .table-data .order table {
+        min-width: 300px; /* Mindestbreite für Tabellenelemente */
+    }
+
+    #content main .table-data .order table th {
+        font-size: 16px; /* Kleinere Schriftgröße für Tabellenüberschriften */
+    }
+
+    #content main .table-data .order table td {
+        font-size: 16px; /* Kleinere Schriftgröße für Tabellenzellen */
+    }
+
+    #content main .table-data .order table tr td:first-child {
+        font-size: 16px;
+        padding-left: 0; /* Kein zusätzlicher Abstand für die erste Zelle */
+    }
+
+    #content main .table-data .order table tr td .status {
+        font-size: 12px;
+        padding: 8px 26px;
+        color: var(--light);
+        border-radius: 20px;
+        font-weight: 700;
+    }
+
+    .lockere {
+        margin-left: 0px;
+    }
+} 
+

@@ -1,4 +1,4 @@
-import { Model, model, Schema } from "mongoose";
+import { Model, model, Schema, Types } from "mongoose";
 import { hash, compare } from "bcryptjs";
 
 /**
@@ -12,10 +12,11 @@ export interface IUser {
     password: string
     admin?: boolean
     createdAt?: Date
-    fahrzeuge: {
-        datum: string;
-        kennzeichen: string;
+    modUser: {
+        users: string
+        name: string
     }[];
+    mod?: boolean
     abwesend: string
 }
 
@@ -25,19 +26,22 @@ export interface IUserMethods {
 
 type UserModel = Model<IUser, {}, IUserMethods>;
 
-const userSchema = new Schema<IUser, IUserMethods>({
+const userSchema = new Schema<IUser, UserModel>({
     vorname: { type: String, required: true },
     name: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     admin: { type: Boolean, default: false },
+    mod: { type: Boolean, default: false },
     createdAt: { type: Date },
-    fahrzeuge: [{
-        datum: { type: String, default: new Date().toLocaleString() },
-        kennzeichen: { type: String, required: true }
-    }],
-    abwesend:{type: String}
+    modUser: [
+        {
+            users: { type: String },
+            name: { type: String }
+        }
+    ],
+    abwesend: { type: String }
 }, { timestamps: true });
 
 userSchema.method("isPasswordCorrect", async function (passwordCandidate: string): Promise<boolean> {

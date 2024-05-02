@@ -1,42 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { FahrtResource, UserResource } from "../../util/Resources";
-import { getFahrt, getUser } from "../../Api/api";
-import Loading from "../../util/Components/LoadingIndicator";
-import ExpandFahrt from "./ExpandFahrt";
-import { Accordion } from "./Accordion";
-import Navbar from "../Home/Navbar";
-import { jsPDF } from "jspdf";
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import html2tocanvas from 'html2canvas'
-import { getLoginInfo } from "../Context/Logincontext";
-import { useUser } from "../Context/UserContext";
-import ProtectedComponent from "../../util/Components/PreotectComponent";
-import { Modal } from "react-bootstrap";
+import { getLoginInfo } from '../Context/Logincontext';
+import { getAlleModUser, getModFahrten } from '../../Api/api';
+import { FahrtResource } from '../../util/Resources';
+import Navbar from '../Home/Navbar';
+import Loading from "../../util/Components/LoadingIndicator";
+import ProtectedComponent from '../../util/Components/PreotectComponent';
+import { Modal } from 'react-bootstrap';
+import ExpandFahrt from './ExpandFahrt';
+import { useUser } from '../Context/UserContext';
+import "./statistiken.css"
 
-const UserFahrten: React.FC = () => {
-    const { user } = useUser()
-    const [meineFahrten, setMeineFahrten] = useState<FahrtResource[] | []>([]);
+const ModStatistik = () => {
+    const { user } = useUser();
+    const [totalModFahrts, setTotalModFahrts] = useState<number>(0);
+    const [totalOngoingModFahrts, setTotalOngoingModFahrts] = useState<number>(0);
+    const [totalEndedModFahrts, setTotalEndedModFahrts] = useState<number>(0);
+    const [totalmoduser, setTotalModUser] = useState<number>(0);
+    const [fahrts, setFahrts] = useState<FahrtResource[] | null>(null);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFahrt, setSelectedFahrt] = useState<FahrtResource | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const navigate = useNavigate()
 
-    async function getU() {
-        const id = getLoginInfo();
-        if (id && id.userID) {
-            const fahrten = await getFahrt(id!.userID);
-            setMeineFahrten(fahrten);
-            setLoading(false);
-        } else {
-            navigate("/")
+    useEffect(() => {
+        loadAllFahrtsAndUser();
+    }, [])
+
+    useEffect(() => {
+        // Überprüfen Sie, ob der Benutzer angemeldet ist und laden Sie die Daten neu
+        if (user && user.id) {
+            loadUser();
+        }
+    }, [user]);
+
+    async function loadAllFahrtsAndUser() {
+        try {
+            const fahrts = await getModFahrten();
+            setFahrts(fahrts);
+            setTotalModFahrts(fahrts.length);
+
+            const ongoingFahrts = fahrts.filter(fahrt => fahrt.beendet === false);
+            const endedFahrts = fahrts.filter(fahrt => fahrt.beendet === true);
+
+            setTotalOngoingModFahrts(ongoingFahrts.length);
+            setTotalEndedModFahrts(endedFahrts.length);
+        } catch (error) {
+            console.error("Fehler beim Laden der Fahrten:", error);
         }
     }
 
-    useEffect(() => {
-        getU();
-    }, []);
 
-    // Funktion zur Gruppierung der Fahrten nach Datum
+    async function loadUser() {
+        if (user && user.id) {
+            const allemoduser = await getAlleModUser(user.id)
+            setTotalModUser(allemoduser.length)
+        }
+    }
+
     function groupFahrtenByDate(fahrten: FahrtResource[]) {
         return fahrten.slice().reverse().reduce((acc: { [date: string]: FahrtResource[] }, fahrt: FahrtResource) => {
             const date = new Date(fahrt.createdAt!).toLocaleDateString();
@@ -51,7 +70,7 @@ const UserFahrten: React.FC = () => {
     async function removeFromFahrts(fahrtToRemove: FahrtResource): Promise<void> {
         try {
             // Entferne die Fahrt aus der Liste
-            setMeineFahrten(prevFahrts => prevFahrts!.filter(fahrt => fahrt._id !== fahrtToRemove._id));
+            setFahrts(prevFahrts => prevFahrts!.filter(fahrt => fahrt._id !== fahrtToRemove._id));
             // Schließe das Modal
             handleCloseModal();
         } catch (error) {
@@ -71,14 +90,82 @@ const UserFahrten: React.FC = () => {
     return (
         <>
             <Navbar></Navbar>
-            <ProtectedComponent requiredRole="u">
-            <h1 className="uberschrift">Meine Fahrten</h1>
+            <ProtectedComponent requiredRole="m">
+                {/* 5 Statistiken */}
+                <main>
+                        <h1 className="uberschrift">Supervisor - Statistiken</h1>
+                        <div className='lockere'>
+                        <div className="analyse">
+                            <div className="sales">
+                                <div className="status">
+                                    <div className="info">
+                                        <h3 className="uberschrift-klein">Alle Fahrten</h3>
+                                        <h1 className="zahlen">{totalModFahrts}</h1>
+                                    </div>
+                                    <div className="progresss">
+                                        <svg>
+                                            <circle cx="38" cy="38" r="36"></circle>
+                                        </svg>
+                                        {/* <div className="percentage">
+                                        <p className="prozent">+81%</p>
+                                    </div> */}
+                                    </div>
+                                </div>
+                            </div>
 
-                {/* Meine Fahrten */}
+                            <div className="visits">
+                                <div className="status">
+                                    <div className="info">
+                                        <h3 className="uberschrift-klein">Laufende Fahrten</h3>
+                                        <h1 className="zahlen">{totalOngoingModFahrts}</h1>
+                                    </div>
+                                    <div className="progresss">
+                                        <svg>
+                                            <circle cx="38" cy="38" r="36"></circle>
+                                        </svg>
+                                        {/* <div className="percentage">
+                                        <p className="prozent">-48%</p>
+                                    </div> */}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="searches">
+                                <div className="status">
+                                    <div className="info">
+                                        <h3 className="uberschrift-klein">Beendete Fahrten</h3>
+                                        <h1 className="zahlen">{totalEndedModFahrts}</h1>
+                                    </div>
+                                    <div className="progresss">
+                                        <svg>
+                                            <circle cx="38" cy="38" r="36"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="fahrer">
+                                <div className="status">
+                                    <div className="info">
+                                        <h3 className="uberschrift-klein">Meine Fahrer</h3>
+                                        <h1 className="zahlen">{totalmoduser}</h1>
+                                    </div>
+                                    <div className="progresss">
+                                        <svg>
+                                            <circle cx="38" cy="38" r="36"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                {/* Alle Fahrten */}
                 <div className="fahrten">
-                    {meineFahrten && meineFahrten.length > 0 ? (
+                    {fahrts && fahrts.length > 0 ? (
                         <>
-                            {Object.entries(groupFahrtenByDate(meineFahrten)).map(([date, fahrten], index) => (
+                            {Object.entries(groupFahrtenByDate(fahrts)).map(([date, fahrten], index) => (
                                 <section key={index} style={{ overflowY: "auto" }}>
                                     <section id="content">
                                         <main>
@@ -130,7 +217,7 @@ const UserFahrten: React.FC = () => {
                             ))}
                         </>
                     ) : (
-                        !meineFahrten ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
+                        !fahrts ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
                     )}
                 </div>
 
@@ -153,4 +240,4 @@ const UserFahrten: React.FC = () => {
     );
 }
 
-export default UserFahrten;
+export default ModStatistik;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './fahrtVerwalten.css';
-import { getJWT, getLoginInfo, setJWT } from '../Contexte/Logincontext';
 import { getUser, getFahrt, updateFahrt } from '../../Api/api';
 import { FahrtResource, UserResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Col, Form, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../Home/Navbar';
+import { getJWT, setJWT, getLoginInfo } from '../Context/Logincontext';
 
 
 const TFahrtVerwalten: React.FC = () => {
@@ -39,6 +39,12 @@ const TFahrtVerwalten: React.FC = () => {
   useEffect(() => {
     last();
   }, [count]);
+
+  const formatTime = (date: Date): string => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
 
   useEffect(() => {
@@ -212,88 +218,126 @@ const TFahrtVerwalten: React.FC = () => {
   }
 
   async function stopRunningTimer() {
+    // Überprüfen und Aufrufen der entsprechenden Funktion basierend auf dem Aufzeichnungsstatus
     if (isRecordingLenkzeit) {
-      setisDisabledLenkzeit(false)
-      setIsRecordingLenkzeit(false);
-      setLenkText('Lenkzeit START');
-      let lenkzeit = 0;
-      if (letzteFahrt!.lenkzeit!.length > 0) {
-        lenkzeit = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.lenkzeit![letzteFahrt!.lenkzeit!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalLenkzeit!
-      } else {
-        lenkzeit = (new Date(Date.now()).getTime() - new Date(letzteFahrt!.createdAt!).getTime()) / 1000
-      }
-      if (usercontexte && letzteFahrt) {
-        const fahrtResource: FahrtResource = {
-          fahrerid: usercontexte.id!,
-          vollname: usercontexte.vorname + ' ' + usercontexte.name,
-          id: letzteFahrt._id!.toString(),
-          _id: letzteFahrt._id!.toString(),
-          kennzeichen: letzteFahrt.kennzeichen.toString(),
-          kilometerstand: letzteFahrt.kilometerstand,
-          startpunkt: letzteFahrt.startpunkt.toString(),
-          lenkzeit: [new Date(Date.now())],
-          beendet: false,
-          totalLenkzeit: lenkzeit
-        };
-        const fahrt = await updateFahrt(fahrtResource);
-        setLetzteFahrt(fahrt);
-        setCounter((count) => count + 1);
-        return;
-      }
+      await stopRunningLenkzeitTimer();
     } else if (isRecordingPause) {
-      setisDisabledPause(false)
-      setIsRecordingPause(false);
-      setPauseText('Pause START');
-      let pause = 0;
-      if (letzteFahrt!.pause!.length >= 1) {
-        pause = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.pause![letzteFahrt!.pause!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalPause!
-      }
-      if (usercontexte && letzteFahrt) {
-        const fahrtResource: FahrtResource = {
-          fahrerid: usercontexte.id!,
-          vollname: usercontexte.vorname + ' ' + usercontexte.name,
-          id: letzteFahrt._id!.toString(),
-          _id: letzteFahrt._id!.toString(),
-          kennzeichen: letzteFahrt.kennzeichen.toString(),
-          kilometerstand: letzteFahrt.kilometerstand,
-          startpunkt: letzteFahrt.startpunkt.toString(),
-          pause: [new Date(Date.now())],
-          beendet: false,
-          totalPause: pause
-        };
-        const fahrt = await updateFahrt(fahrtResource);
-        setLetzteFahrt(fahrt);
-        setCounter((count) => count + 1);
-        return;
-      }
+      await stopRunningPauseTimer();
     } else if (isRecordingArbeitszeit) {
-      setisDisabledArbeitzeit(false)
-      setIsRecordingArbeitszeit(false); // Arbeitszeit deaktivieren
-      setArbeitText('Arbeitszeit START'); // Text für den Arbeitszeit-Button ändern
-      let arbeitszeit = 0;
-      if (letzteFahrt!.arbeitszeit!.length >= 1) {
-        arbeitszeit = ((new Date(Date.now()).getTime() - new Date(letzteFahrt!.arbeitszeit![letzteFahrt!.arbeitszeit!.length - 1]).getTime()) / 1000) + letzteFahrt!.totalArbeitszeit!
-      }
-      if (usercontexte && letzteFahrt) {
-        const fahrtResource: FahrtResource = {
-          fahrerid: usercontexte.id!,
-          vollname: usercontexte.vorname + ' ' + usercontexte.name,
-          id: letzteFahrt._id!.toString(),
-          _id: letzteFahrt._id!.toString(),
-          kennzeichen: letzteFahrt.kennzeichen.toString(),
-          kilometerstand: letzteFahrt.kilometerstand,
-          startpunkt: letzteFahrt.startpunkt.toString(),
-          arbeitszeit: [new Date(Date.now())],
-          beendet: false,
-          totalArbeitszeit: arbeitszeit
-        };
-        const fahrt = await updateFahrt(fahrtResource);
-        setLetzteFahrt(fahrt);
-        setCounter((count) => count + 1);
-        return;
-      }
+      await stopRunningArbeitszeitTimer();
+    }
+
+  }
+
+  async function stopRunningLenkzeitTimer() {
+    setisDisabledLenkzeit(false);
+    setIsRecordingLenkzeit(false);
+    setLenkText('Lenkzeit START');
+    let lenkzeit = 0;
+    if (letzteFahrt!.lenkzeit!.length > 0) {
+      lenkzeit =
+        (new Date(Date.now()).getTime() -
+          new Date(
+            letzteFahrt!.lenkzeit![letzteFahrt!.lenkzeit!.length - 1]
+          ).getTime()) / 1000 +
+        letzteFahrt!.totalLenkzeit!;
+    } else {
+      lenkzeit =
+        (new Date(Date.now()).getTime() -
+          new Date(letzteFahrt!.createdAt!).getTime()) /
+        1000;
+    }
+    if (usercontexte && letzteFahrt) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte.id!,
+        vollname: usercontexte.vorname + ' ' + usercontexte.name,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        lenkzeit: [new Date(Date.now())],
+        beendet: false,
+        totalLenkzeit: lenkzeit
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+      setCounter((count) => count + 1);
+      return;
     }
   }
+
+  async function stopRunningPauseTimer() {
+    setisDisabledPause(false);
+    setIsRecordingPause(false);
+    setPauseText('Pause START');
+    let pause = 0;
+    if (letzteFahrt!.pause!.length >= 1) {
+      pause =
+        (new Date(Date.now()).getTime() -
+          new Date(
+            letzteFahrt!.pause![letzteFahrt!.pause!.length - 1]
+          ).getTime()) / 1000 +
+        letzteFahrt!.totalPause!;
+    }
+    if (usercontexte && letzteFahrt) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte.id!,
+        vollname: usercontexte.vorname + ' ' + usercontexte.name,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        pause: [new Date(Date.now())],
+        beendet: false,
+        totalPause: pause
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+      setCounter((count) => count + 1);
+      return;
+    }
+  }
+
+  async function stopRunningArbeitszeitTimer() {
+    setisDisabledArbeitzeit(false);
+    setIsRecordingArbeitszeit(false);
+    setArbeitText('Arbeitszeit START');
+    let arbeitszeit = 0;
+    if (letzteFahrt!.arbeitszeit!.length >= 1) {
+      arbeitszeit =
+        (new Date(Date.now()).getTime() -
+          new Date(
+            letzteFahrt!.arbeitszeit![letzteFahrt!.arbeitszeit!.length - 1]
+          ).getTime()) / 1000 +
+        letzteFahrt!.totalArbeitszeit!;
+    }
+    if (usercontexte && letzteFahrt) {
+      const fahrtResource: FahrtResource = {
+        fahrerid: usercontexte.id!,
+        vollname: usercontexte.vorname + ' ' + usercontexte.name,
+        id: letzteFahrt._id!.toString(),
+        _id: letzteFahrt._id!.toString(),
+        kennzeichen: letzteFahrt.kennzeichen.toString(),
+        kilometerstand: letzteFahrt.kilometerstand,
+        startpunkt: letzteFahrt.startpunkt.toString(),
+        arbeitszeit: [new Date(Date.now())],
+        beendet: false,
+        totalArbeitszeit: arbeitszeit
+      };
+      const fahrt = await updateFahrt(fahrtResource);
+      setLetzteFahrt(fahrt);
+      setCounter((count) => count + 1);
+      return;
+    }
+  }
+
+
+
+
+
+
 
   async function handleLenkzeit() {
     setisDisabledLenkzeit(true)
@@ -372,67 +416,72 @@ const TFahrtVerwalten: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <h1 className="header">Fahrt verwalten</h1>
+      <div className='fahrt-verwalten'>
         {loading ? (
           <Loading />
         ) : (
-          <div className="container">
-            <h3>Hallo, {usercontexte ? usercontexte.name : ''}.</h3>
+          <div className="form-container3">
+            <h1 className="form-header">Fahrt verwalten</h1>
+            <h3 className="Hallo">Hallo, {usercontexte ? usercontexte.name : ''}!</h3>
             {letzteFahrt && !letzteFahrt.beendet ? (
               <>
-                <p>
-                  Ihre momentane Fahrt startete am{' '}
-                  {letzteFahrt ? new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE') + ' um ' + new Date(letzteFahrt.createdAt!).toLocaleTimeString('de-DE') : 'Keine Fahrt'}, mit dem Kennzeichen{' '}
-                  {letzteFahrt ? letzteFahrt.kennzeichen : 'Kein Kennzeichen'}.{' '}
+
+                <p className='Text-Abschnitt'>
+                  Start der Fahrt: {' '}
+                  {letzteFahrt ?
+                    <>
+                      <strong>{new Date(letzteFahrt.createdAt!).toLocaleDateString('de-DE')} um </strong>
+                      <strong>{formatTime(new Date(letzteFahrt.createdAt!))} Uhr</strong>
+                    </>
+                    : 'Keine Fahrt'}
                 </p>
-                <p>Ihr Startpunkt ist {letzteFahrt ? letzteFahrt?.startpunkt : 'Kein Startpunkt'}.</p>
+                <p className='Text-Abschnitt2'>
+                  Kennzeichen: {' '}
+                  {letzteFahrt ?
+                    <strong>{letzteFahrt.kennzeichen}</strong>
+                    : 'Kein Kennzeichen'}
+                </p>
+                <p className='Text-Abschnitt2'>
+                  Startpunkt: {' '}
+                  {letzteFahrt ?
+                    <strong>{letzteFahrt?.startpunkt}</strong>
+                    : 'Kein Startpunkt'}
+                </p>
+
+
                 <div className="section">
-                  <div className="button-group">
-                    <Button variant={isRecordingLenkzeit ? 'danger' : 'primary'} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
-                      {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
-                    </Button>
-                  </div>
-                </div>
-                <div className="section">
-                  <div className="button-group">
-                    <Button variant={isRecordingArbeitszeit ? 'danger' : 'primary'} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
-                      {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
-                    </Button>
-                  </div>
-                </div>
-                <div className="section">
-                  <div className="button-group">
-                    <Button variant={isRecordingPause ? 'danger' : 'primary'} onClick={handlePause} disabled={isDisabledPause}>
-                      {isRecordingPause ? "Pause läuft" : "Pause start"}
-                    </Button>
-                  </div>
-                </div>
-                <div className="section">
-                  <div className="button-group">
-                    <Button variant="primary" onClick={handleOpenModal} disabled={buttonLoading}>
-                      {buttonLoading ? 'Wird aufgenommen' : 'Fahrt beenden'}
-                    </Button>
-                  </div>
-                </div>
+    <div className="button-group">
+        <Button className='ie' style={{ backgroundColor: isRecordingLenkzeit ? 'red' : '#0A58CA' }} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
+            {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
+        </Button>
+    </div>
+    <div className="button-group">
+        <Button className='i' style={{ backgroundColor: isRecordingArbeitszeit ? 'red' : '#0A58CA' }} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
+            {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
+        </Button>
+    </div>
+    <div className="button-group">
+        <Button className='i' style={{ backgroundColor: isRecordingPause ? 'red' : '#0A58CA' }} onClick={handlePause} disabled={isDisabledPause}>
+            {isRecordingPause ? "Pause läuft" : "Pause start"}
+        </Button>
+    </div>
+    <div className="button-group">
+        <Button className='i' style={{ backgroundColor: buttonLoading ? 'red' : '#0A58CA' }} onClick={handleOpenModal} disabled={buttonLoading}>
+            {buttonLoading ? 'Fahrt beendet' : 'Fahrt beenden'}
+        </Button>
+    </div>
+</div>
+
+
               </>
             ) : (
               <>
-                <p>Erstellen Sie eine Fahrt, um diese zu verwalten.</p>
-                <Link to="/create">
-                  <Button className="erstellen">Fahrt erstellen</Button>
+                <p className='Text-Abschnitt'>Erstelle eine Fahrt, um sie verwalten zu können.</p>
+                <Link to="/create" style={{ textDecoration: "none" }}>
+                  <button className="submit-button-beginnen4">Fahrt beginnen</button>
                 </Link>
-                <Link to="/home">
-                  <Button variant="danger" className="hauptmenu">
-                    Zurück zum Hauptmenü
-                  </Button>
+                <Link to="/home" style={{ textDecoration: "none" }}>
+                  <button className="submit-button-beginnen3">Zum Hauptmenü</button>
                 </Link>
               </>
             )}
@@ -441,31 +490,42 @@ const TFahrtVerwalten: React.FC = () => {
       </div>
 
       <Modal show={showEndModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="custom-modal-header">
           <Modal.Title>Fahrt beenden</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form noValidate validated={validated} id="endModalForm">
             <Form.Group controlId="formBasicEnd">
-              <Form.Label>Kilometerstand am Ende</Form.Label>
-              <Form.Control type="number" placeholder="Kilometerstand eingeben" onChange={(e) => setKilometerstandEnde(parseInt(e.target.value))} required />
-              <Form.Control.Feedback type="invalid">Bitte geben Sie den Kilometerstand am Ende ein.</Form.Control.Feedback>
+              <Form.Label className="verwalten-kilo">Kilometerstand am Ende</Form.Label>
+              <Col sm={11}>
+                <Form.Control onKeyDown={(e) => {
+                  if (e.key === 'e' || e.key === 'E' || e.key === '-') {
+                    e.preventDefault(); // Verhindern Sie die Eingabe von "e", "E" und "-"
+                  }
+                }} type="number" placeholder="Kilometerstand eingeben" onChange={(e) => setKilometerstandEnde(parseInt(e.target.value))} required />
+                <Form.Control.Feedback type="invalid">Bitte geben Sie den Kilometerstand am Ende ein.</Form.Control.Feedback>
+              </Col>
             </Form.Group>
 
             <Form.Group controlId="formBasicEndOrt">
-              <Form.Label>Ort der Fahrtbeendigung</Form.Label>
-              <Form.Control type="text" placeholder="Ort eingeben" onChange={(e) => setOrtFahrtbeendigung(e.target.value)} required />
-              <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
+              <Form.Label className="col-m-4">Ort der Fahrtbeendigung</Form.Label>
+              <Col sm={11}>
+                <Form.Control type="text" placeholder="Ort eingeben" onChange={(e) => setOrtFahrtbeendigung(e.target.value)} required />
+                <Form.Control.Feedback type="invalid">Bitte geben Sie den Ort der Fahrtbeendigung ein.</Form.Control.Feedback>
+              </Col>
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+
+
+        <Modal.Footer className="custom-modal-footer">
+          <button className="submit-button-beginnen6" onClick={handleCloseModal}>
             Abbrechen
-          </Button>
-          <Button variant="primary" onClick={handleEnde} disabled={buttonLoading}>
-            {buttonLoading ? 'Wird aufgenommen' : 'Speichern'}
-          </Button>
+          </button>
+          <button className="submit-button-beginnen5" onClick={handleEnde} disabled={buttonLoading}>
+            {buttonLoading ? 'Speichern...' : 'Speichern'}
+          </button>
         </Modal.Footer>
       </Modal>
     </>

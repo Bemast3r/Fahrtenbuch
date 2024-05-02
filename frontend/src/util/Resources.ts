@@ -1,4 +1,6 @@
+
 export type UserResource = {
+    _id?: string | undefined;
     id?: string;
     vorname: string;
     name: string;
@@ -7,10 +9,11 @@ export type UserResource = {
     password?: string;
     admin?: boolean;
     createdAt?: Date;
-    fahrzeuge?: {
-        datum: string,
-        kennzeichen: string;
-    }[]; 
+    mod?: boolean;
+    modUser?: {
+        users: string
+        name: string
+    }[];
 }
 
 export type FahrtResource = {

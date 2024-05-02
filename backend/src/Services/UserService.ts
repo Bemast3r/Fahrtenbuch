@@ -1,11 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
-
-import { UserResource } from "../Model/Resources";
+import { UserResource } from "../util/Resources";
 import { IUser, User } from "../Model/UserModel";
 import { Types } from "mongoose"
 import { hash } from "bcryptjs";
-
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 
@@ -20,7 +18,9 @@ async function mapUserToResource(user: IUser & { _id: Types.ObjectId; }): Promis
         email: user.email,
         admin: user.admin,
         createdAt: user.createdAt,
-        fahrzeuge: user.fahrzeuge,
+        mod: user.mod,
+        modUser: user.modUser,
+        abwesend: user.abwesend
     };
     return userResource;
 }
@@ -31,6 +31,12 @@ export async function getUser(userid: string) {
         throw new Error(`Kein User mit ID ${userid} gefunden.`);
     }
     const mapped = await mapUserToResource(user);
+    return mapped
+}
+
+
+export async function getAllMods() {
+    const mapped = await User.find({ mod: true }).exec();
     return mapped
 }
 
@@ -51,7 +57,8 @@ export async function createUser(userResource: UserResource): Promise<UserResour
         email: userResource.email,
         password: userResource.password,
         admin: userResource.admin,
-        fahrzeuge: userResource.fahrzeuge
+        mod: userResource.mod,
+        modUser: userResource.modUser
     });
 
     if (!user) {
@@ -67,15 +74,18 @@ export async function updateUser(userResource: UserResource): Promise<UserResour
     }
     const user = await User.findById(userResource.id).exec();
     if (!user) {
+
         throw new Error(`No user with ID ${userResource.id} found, cannot update.`);
     }
+
     if (userResource.vorname) user.vorname = userResource.vorname;
     if (userResource.name) user.name = userResource.name;
     if (userResource.username) user.username = userResource.username;
     if (userResource.email) user.email = userResource.email;
     if (userResource.password) user.password = userResource.password;
-    if (userResource.fahrzeuge) user.fahrzeuge = userResource.fahrzeuge;
+    if (userResource.modUser) user.modUser = (userResource.modUser);
     if (typeof userResource.admin === 'boolean') user.admin = userResource.admin;
+    if (typeof userResource.mod === 'boolean') user.mod = userResource.mod;
     const savedUser = await user.save();
     const mapped = await mapUserToResource(savedUser)
     return mapped
@@ -170,3 +180,41 @@ export async function getAlleAdmin(): Promise<UserResource[]> {
         throw new Error(`Fehler beim Abrufen aller Admin-Benutzer: ${error.message}`);
     }
 }
+
+export async function getAlleModUser(userid: string): Promise<{ users: string; }[]> {
+    try {
+        // Suchen Sie den Benutzer basierend auf der übergebenen Benutzer-ID und laden Sie die Mods
+        const user = await User.findById(userid).populate('modUser.users').exec();
+
+        // Überprüfen Sie, ob der Benutzer gefunden wurde
+        if (!user) {
+            throw new Error('Benutzer nicht gefunden');
+        }
+
+        // Extrahieren Sie die Mods aus dem gefundenen Benutzer
+        const mods = user.modUser;
+        // Rückgabe der gefundenen Mods
+        return mods;
+    } catch (error) {
+        throw new Error(`Fehler beim Abrufen aller Mods-Benutzer: ${error.message}`);
+    }
+}
+
+
+export async function addnewModUsers(userid: string, users: UserResource[]): Promise<boolean> {
+    try {
+        const user = await User.findById(userid).exec()
+        if (!user) {
+            throw new Error("User existiert nicht.")
+        }
+        const modUserIds = users.map(user2 => user.modUser.push({ users: user2.id, name: user2.vorname + " " + user2.name }));
+        // const modUserObjects = modUserIds.map(userId => ({ users: userId }));
+        // user.modUser.push(...modUserIds);
+        await user.save();
+        return true; // Erfolg
+    } catch (error) {
+        console.error(`Fehler beim Hinzufügen von Mod-Usern: ${(error as Error).message}`);
+        return false; // Misserfolg
+    }
+}
+
