@@ -215,7 +215,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
                 <button className="submit-button-beginnen" style={{ margin: '0 10px' }} onClick={() => { downloadPDF(fahrt) }}>Herunterladen</button>
-                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete() }}>Fahrt Löschen</button>
+                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete() }}>Löschen</button>
             </div>
         </div>
     );

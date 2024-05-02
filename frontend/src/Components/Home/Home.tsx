@@ -84,8 +84,8 @@ const LandingPage = () => {
                                 <div className="card text-white text-center bg-dark pb-2" style={{ margin: '0 auto' }}>
                                     <div className="card-body">
                                         <i className='bx bx-stats'></i>
-                                        <h3 className="card-title">Meine Fahrten</h3>
-                                        <p className="lead">Siehe alle wichtigen Informationen über deine Fahrt wie die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
+                                        <h3 className="card-title">Statistiken</h3>
+                                        <p className="lead">Siehe alle wichtigen Informationen über deine Fahrer wie als auch die Anzahl der laufenden oder schon abgeschlossenen Fahrten.</p>
                                         <button className="btn-custom" onClick={() => navigate("/mod-fahrten")}>Erfahre Mehr</button>
                                     </div>
                                 </div>
