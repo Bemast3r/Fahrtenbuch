@@ -526,7 +526,7 @@
   }
 
   .form-control-feedback {
-    margin-left: -3.25rem;
+    /* margin-left: -3.25rem; */
     font-size: 12px;
   }
 }
