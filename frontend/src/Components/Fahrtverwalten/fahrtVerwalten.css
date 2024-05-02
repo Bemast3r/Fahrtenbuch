@@ -323,4 +323,58 @@ body {
     margin-top: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
   }
+
+  .Text-Abschnitt2 {
+    font-size: 18px;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .i {
+    width: 250px;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+  .ie {
+    width: 250px;
+    font-size: 18px;
+    margin-top: -10px;
+  }
+}
+
+@media screen and (max-width: 1119px) {
+  .section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .i {
+    width: 250px;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+  .ie {
+    width: 250px;
+    font-size: 18px;
+    margin-top: -10px;
+  }
+}
+
+@media screen and (max-width: 1589px) and (min-width: 1120px) {
+  .i {
+    width: 175px;
+    font-size: 14px;
+    margin: -13px
+  }
+
+  .ie {
+    width: 175px;
+    font-size: 14px;
+    margin: -13px
+  }
 }
