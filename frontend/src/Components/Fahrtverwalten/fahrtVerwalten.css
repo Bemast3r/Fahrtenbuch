@@ -346,7 +346,7 @@ body {
   }
 }
 
-@media screen and (max-width: 1119px) {
+@media screen and (max-width: 1125px) {
   .section {
     display: flex;
     flex-direction: column;
@@ -365,7 +365,7 @@ body {
   }
 }
 
-@media screen and (max-width: 1589px) and (min-width: 1120px) {
+@media screen and (max-width: 1589px) and (min-width: 1125px) {
   .i {
     width: 175px;
     font-size: 14px;
