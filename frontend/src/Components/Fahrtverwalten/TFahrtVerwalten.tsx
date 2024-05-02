@@ -497,7 +497,7 @@ const TFahrtVerwalten: React.FC = () => {
         <Modal.Body>
           <Form noValidate validated={validated} id="endModalForm">
             <Form.Group controlId="formBasicEnd">
-              <Form.Label className="col-m-4">Kilometerstand am Ende</Form.Label>
+              <Form.Label className="verwalten-kilo">Kilometerstand am Ende</Form.Label>
               <Col sm={11}>
                 <Form.Control onKeyDown={(e) => {
                   if (e.key === 'e' || e.key === 'E' || e.key === '-') {
