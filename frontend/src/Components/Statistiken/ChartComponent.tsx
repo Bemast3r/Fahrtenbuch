@@ -98,10 +98,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         second: 'HH:mm:ss',
                         minute: 'HH:mm',
                         hour: 'HH'
-                    },
-                    min: '00:00',
-                    max: '23:59'
-
+                    }
                 },
             },
             y: {
