@@ -244,7 +244,6 @@ export async function updateFahrt(fahrt: FahrtResource): Promise<FahrtResource> 
 
 export async function updateUser(user: UserResource): Promise<UserResource> {
     try {
-        console.log(user)
         const jwt2 = getJWT();
         const response = await fetch(`${BASE_URL}api/user/admin/user/aendern`, {
             method: "PUT",

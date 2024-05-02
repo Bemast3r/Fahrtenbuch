@@ -53,11 +53,7 @@
     /* Endzustand */
 }
 
-.wasgeht {
-    /* background-image: url('../../util/loginHintergrund.jpg'); */
-    background-size: cover;
-    background-position: center;
-}
+
 
 .section-padding {
     padding: 100px 0;
@@ -242,13 +238,13 @@
     text-align: center;
 }
 
-@media only screen and (min-width: 2000px){
+@media only screen and (min-width: 2000px) {
     .container2 {
         margin-top: 200px;
     }
 }
 
-@media only screen and (min-width: 1500px){
+@media only screen and (min-width: 1500px) {
     .col-12col-md-12col-lg-4 {
         margin-bottom: 20px;
         /* Vergrößern Sie den Abstand zwischen den Cards */
@@ -271,8 +267,10 @@
     }
 
     .card {
-        display: flex; /* Verwende Flexbox */
-        align-items: stretch; /* Strecke die Container, um die gleiche Höhe zu haben */
+        display: flex;
+        /* Verwende Flexbox */
+        align-items: stretch;
+        /* Strecke die Container, um die gleiche Höhe zu haben */
     }
 }
 
@@ -341,6 +339,7 @@
         margin-bottom: 20px;
         /* Vergrößern Sie den Abstand zwischen den Cards */
     }
+
     .subtitle {
         width: 325px;
     }
@@ -354,13 +353,16 @@
     }
 
     .card {
-        width: 90%; /* Ändere die Breite der Karte nach Bedarf */
-        margin-bottom: 20px; /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
+        width: 90%;
+        /* Ändere die Breite der Karte nach Bedarf */
+        margin-bottom: 20px;
+        /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
     }
 
     .section-header {
         font-size: 16px;
-        text-align: justify; /* Ausrichtung des Textes am linken und rechten Rand */
+        text-align: justify;
+        /* Ausrichtung des Textes am linken und rechten Rand */
         width: 600px;
     }
 }
@@ -368,23 +370,25 @@
 
 @media only screen and (max-width: 500px) {
     .container2 {
-        width: calc(100% - 40px); /* Breite auf 100% des Bildschirms minus 40px Abstand */
-        margin: 20px auto; /* Zentrierung des Containers */
+        width: 90%;
         padding: 30px;
+        align-items: center;
         background-color: #fff;
         border-radius: 12px;
         box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
-        margin-top: 90px;
         box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.3s ease, transform 0.3s ease;
         transform: translateY(0);
+        overflow: hidden;
         margin-bottom: -50px;
     }
 
     .card {
-        width: 100%; /* Ändere die Breite der Karte nach Bedarf */
-        max-width: 300px;
-        margin-bottom: 20px; /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
+        width: 100%;
+        /* Ändere die Breite der Karte nach Bedarf */
+        max-width: max-content;
+        margin-bottom: 20px;
+        /* Füge bei Bedarf Abstand zwischen den Karten hinzu */
     }
 
     .subtitle {

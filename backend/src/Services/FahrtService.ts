@@ -74,8 +74,6 @@ export async function createUserFahrt(fahrt: FahrtResource) {
         const savedFahrt = await newFahrt.save();
         return savedFahrt;
     } catch (error) {
-        console.log("wwwwsssssssssssswwww",error)
-
         throw new Error(`Fehler beim Erstellen der Fahrt: ${error.message}`);
     }
 }
@@ -147,7 +145,6 @@ export async function getFahrtenOfModUsers(userid: string) {
         
         return fahrten;
     } catch (error) {
-        console.error(`Fehler beim Abrufen der Fahrten der Mod-User: ${(error as Error).message}`);
         throw error;
     }
 }

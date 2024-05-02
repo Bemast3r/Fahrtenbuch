@@ -35,29 +35,29 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     if (fahrt.lenkzeit) {
         fahrt.lenkzeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit), y: 'Lenkzeit' }); 
+            zeitenData.push({ x: new Date(zeit), y: 'Lenk' });
         });
     }
     if (fahrt.arbeitszeit) {
         fahrt.arbeitszeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit), y: 'Arbeitszeit' }); 
+            zeitenData.push({ x: new Date(zeit), y: 'Arbeit' });
         });
     }
     if (fahrt.pause) {
         fahrt.pause.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit), y: 'Pausezeit' }); 
+            zeitenData.push({ x: new Date(zeit), y: 'Pause' });
         });
     }
     if (fahrt.ruhezeit) {
         fahrt.ruhezeit.forEach(zeit => {
-            zeitenData.push({ x: new Date(zeit.start), y: 'Ruhezeit' }); 
-            zeitenData.push({ x: new Date(zeit.stop), y: 'Ruhezeit' }); 
+            zeitenData.push({ x: new Date(zeit.start), y: 'Ruhe' });
+            zeitenData.push({ x: new Date(zeit.stop), y: 'Ruhe' });
         });
     }
 
     zeitenData.sort((a, b) => a.x.getTime() - b.x.getTime());
 
-    
+
     const data = {
         datasets: [
             {
@@ -70,7 +70,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
         ],
     };
 
-    
+
     const options: any = {
         maintainAspectRatio: false,
         plugins: {
@@ -99,15 +99,14 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
                         minute: 'HH:mm',
                         hour: 'HH'
                     }
-                    
                 },
             },
             y: {
                 type: 'category',
                 barThickness: 2,
-                labels: ['Lenkzeit', 'Arbeitszeit', 'Pausezeit', 'Ruhezeit'],
+                labels: ['Lenk', 'Arbeit', 'Pause', 'Ruhe'],
                 ticks: {
-                    
+
                     font: {
                         size: 16
                     }
@@ -120,7 +119,7 @@ const MyChartComponent: React.FC<{ fahrt: FahrtResource }> = ({ fahrt }) => {
 
     return (
         <div className='line'>
-            <Line data={data} options={options} />
+            <Line className="chartline"  data={data} options={options} />
         </div>
     );
 };

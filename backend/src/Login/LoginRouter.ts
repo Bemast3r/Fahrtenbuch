@@ -22,7 +22,6 @@ loginRouter.post("/",
                 return res.status(201).json(loginRes);
             }
         } catch (error) {
-            console.error(error);
             return res.sendStatus(500);
         }
     }

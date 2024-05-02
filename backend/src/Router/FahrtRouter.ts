@@ -142,7 +142,6 @@ fahrrouter.post("/user/fahrt/erstellen", requiresAuthentication,
             return res.send(fahrt); // 200 by default
         } catch (err) {
             res.status(400);
-            console.log("wwwwwwww",err)
             next(err);
         }
     }
