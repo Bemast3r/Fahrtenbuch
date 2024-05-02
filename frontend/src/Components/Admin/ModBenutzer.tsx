@@ -164,7 +164,7 @@ const ModBenutzer = () => {
                 </div>
                 <br></br>
                 <br></br>
-                <br /><br />
+                <br />
                 <button className="submit-button-beginnen" onClick={addUserToMod}>
                     Fahrer zuweisen
                 </button>

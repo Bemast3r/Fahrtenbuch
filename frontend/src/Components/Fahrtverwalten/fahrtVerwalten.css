@@ -5,9 +5,12 @@ body {
 }
 
 .fahrt-verwalten {
-  height: 100vh; /* Vollständige Bildschirmhöhe */
-  overflow-y: auto; /* Vertikale Scrollbar anzeigen, wenn nötig */
+  height: 100vh;
+  /* Vollständige Bildschirmhöhe */
+  overflow-y: auto;
+  /* Vertikale Scrollbar anzeigen, wenn nötig */
 }
+
 /* Navbar */
 
 .container {
@@ -28,15 +31,18 @@ body {
   padding: 3.5rem;
   border-radius: 12px;
   box-shadow: 0 15px 30px 15px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Füge einen Übergangseffekt hinzu */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  /* Füge einen Übergangseffekt hinzu */
   transform: translateY(0);
   margin-left: auto;
   margin-right: auto;
 }
 
 .form-container3:hover {
-  box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3); /* Ändere den Schatten beim Schweben */
-  transform: translateY(-5px); /* Hebe den Container leicht an */
+  box-shadow: 0 30px 50px 30px rgba(0, 0, 0, 0.3);
+  /* Ändere den Schatten beim Schweben */
+  transform: translateY(-5px);
+  /* Hebe den Container leicht an */
 }
 
 .form-container3::before {
@@ -46,7 +52,8 @@ body {
   left: 0;
   width: 100%;
   height: 20px;
-  border-radius: 20px 20px 0 0; /* Runde die oberen Ecken ab */
+  border-radius: 20px 20px 0 0;
+  /* Runde die oberen Ecken ab */
 }
 
 .Hallo {
@@ -72,8 +79,9 @@ body {
 
 .button-group {
   flex-direction: column;
-  align-items: center; 
-  margin: 0 10px; /* optional: fügt etwas Abstand zwischen den Button-Gruppen hinzu */
+  align-items: center;
+  margin: 0 10px;
+  /* optional: fügt etwas Abstand zwischen den Button-Gruppen hinzu */
 }
 
 /* .button-group button {
@@ -88,7 +96,8 @@ body {
 /* }  */
 
 .button-group button:last-child {
-  margin-bottom: 0; /* Entferne den Abstand unterhalb der letzten Schaltfläche */
+  margin-bottom: 0;
+  /* Entferne den Abstand unterhalb der letzten Schaltfläche */
 }
 
 .button-group button:hover {
@@ -147,18 +156,21 @@ body {
   border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  margin: -1.5rem 0 0; /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin: -1.5rem 0 0;
+  /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
   margin-bottom: -2rem;
   margin-top: 1rem;
-  margin-right: auto; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  margin-right: auto;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
 }
 
 .submit-button-beginnen4:hover {
   color: #000;
   background-color: rgb(196, 155, 34);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
-} 
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
 
 .submit-button-beginnen3,
 .submit-button-beginnen3:focus {
@@ -180,7 +192,8 @@ body {
 .submit-button-beginnen3:hover {
   color: #000;
   background-color: rgb(160, 159, 159);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
 }
 
 .submit-button-beginnen5,
@@ -194,17 +207,20 @@ body {
   border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  margin: -1.5rem 0 0; /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin: -1.5rem 0 0;
+  /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
   margin-top: 0rem;
-  margin-right: 29px; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  margin-right: 29px;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
 }
 
 .submit-button-beginnen5:hover {
   color: #000;
   background-color: rgb(196, 155, 34);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
-} 
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
 
 .submit-button-beginnen6,
 .submit-button-beginnen6:focus {
@@ -217,31 +233,94 @@ body {
   border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  margin: -1.5rem 0 0; /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+  margin: -1.5rem 0 0;
+  /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
   margin-top: 0rem;
-  margin-right: 15px; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
-  margin-left: 30px; /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  margin-right: 15px;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+  margin-left: 30px;
+  /* Hier wird der Abstand zur rechten Seite ausgeglichen */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
 }
 
 .submit-button-beginnen6:hover {
   color: #000;
   background-color: rgb(160, 159, 159);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000; /* Erhöhen des Schattens beim Überfahren */
-} 
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  /* Erhöhen des Schattens beim Überfahren */
+}
 
 /* Medienabfragen für größere Bildschirme */
 @media screen and (min-width: 768px) {
   .button-group {
-    flex-direction: row; /* Ändere die Ausrichtung in eine Zeile für größere Bildschirme */
+    flex-direction: row;
+    /* Ändere die Ausrichtung in eine Zeile für größere Bildschirme */
   }
 
   .button-group button {
-    margin-right: 10px; /* Füge einen horizontalen Abstand zwischen den Schaltflächen hinzu */
-    margin-bottom: 0; /* Entferne den vertikalen Abstand zwischen den Schaltflächen */
+    margin-right: 10px;
+    /* Füge einen horizontalen Abstand zwischen den Schaltflächen hinzu */
+    margin-bottom: 0;
+    /* Entferne den vertikalen Abstand zwischen den Schaltflächen */
   }
 
   .button-group button:last-child {
-    margin-right: 0; /* Entferne den horizontalen Abstand rechts von der letzten Schaltfläche */
+    margin-right: 0;
+    /* Entferne den horizontalen Abstand rechts von der letzten Schaltfläche */
+  }
+}
+
+@media screen and (max-width: 970px) and (min-width: 679px) {
+
+  .submit-button-beginnen4,
+  .submit-button-beginnen4:focus {
+    width: 250px;
+    padding: 0.8rem 1rem;
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #eec346;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: -1.5rem 0 0;
+    /* Hier wird der Abstand oben und unten beibehalten, aber 0 für die rechte Seite gesetzt */
+    margin-bottom: -2rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    /* Hier wird der Abstand zur rechten Seite ausgeglichen */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
+  }
+}
+
+
+@media screen and (max-width: 970px) {
+  .form-container3 {
+    width: 90%;
+  }
+
+  .Text-Abschnitt {
+    font-size: 18px;
+  }
+
+  .Hallo {
+    margin-top: 60px;
+    font-style: bold;
+  }
+
+  .submit-button-beginnen3,
+  .submit-button-beginnen3:focus {
+    width: 250px;
+    padding: 0.8rem 1rem;
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #bababa;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: -1.5rem 0 0;
+    margin-top: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 0 0.5px #000;
   }
 }
