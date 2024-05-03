@@ -130,7 +130,8 @@ const UserFahrten: React.FC = () => {
                             ))}
                         </>
                     ) : (
-                        !meineFahrten ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
+                        !meineFahrten ? <Loading /> : <h2 className='header' style={{ color: "white", textAlign: "center"}}
+                        >Es gibt keine Fahrten</h2>
                     )}
                 </div>
 

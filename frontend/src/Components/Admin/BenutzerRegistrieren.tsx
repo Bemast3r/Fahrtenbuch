@@ -41,9 +41,10 @@ const BenutzerRegistrieren = () => {
 
         // Validierung für Vor- und Nachnamen
         if (name === 'vorname' || name === 'name') {
-            validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß\s]/g, ''); 
+            validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß\s-]/g, ''); 
         } else if (name === 'username') {
-            validatedValue = value.replace(/[^a-zA-Z0-9_.]/g, ''); // Erlaubt nur Buchstaben, Zahlen, Unterstriche (_) und Punkte (.)
+            validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß\s]/g, ''); 
+            // Erlaubt nur Buchstaben, Zahlen, Unterstriche (_) und Punkte (.)
         }
 
         setFormData(prevState => ({
@@ -93,7 +94,7 @@ const BenutzerRegistrieren = () => {
                         mod: false,
                     });
                     setValidated(false);
-                    window.location.reload()
+                    // window.location.reload()
                 }, 1000);
             } else {
                 // Passwortfeld leeren, wenn das Passwort falsch ist

@@ -217,7 +217,8 @@ const ModStatistik = () => {
                             ))}
                         </>
                     ) : (
-                        !fahrts ? <Loading /> : <h2 className='header'>Es gibt keine Fahrten</h2>
+                        !fahrts ? <Loading /> : <h2 className='header' style={{ color: "white", textAlign: "center"}}
+                        >Es gibt keine Fahrten</h2>
                     )}
                 </div>
 

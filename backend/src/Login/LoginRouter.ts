@@ -5,7 +5,7 @@ import { body, validationResult } from "express-validator";
 const loginRouter = express.Router();
 
 loginRouter.post("/",
-    body('username').isLength({ min: 2, max: 12 }).isString(),
+    body('username').isString(),
     body('password').isString(),
     async (req, res, next) => {
         const errors = validationResult(req);
