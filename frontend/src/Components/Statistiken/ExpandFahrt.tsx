@@ -8,7 +8,7 @@ import { jsPDF } from "jspdf";
 import { deleteFahrt, deleteFahrtMod } from "../../Api/api";
 import { useUser } from "../Context/UserContext";
 
-const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  removeFromFahrt?: any}> = ({ fahrt, removeFromFahrt }) => {
+const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource, removeFromFahrt?: any }> = ({ fahrt, removeFromFahrt }) => {
     const [counter, setCounter] = useState<number>(0);
     const { user } = useUser()
 
@@ -39,12 +39,12 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
 
     async function handleDelete() {
         try {
-            if(user?.admin){
+            if (user?.admin) {
                 await deleteFahrt(fahrt);
-            } else if (user?.mod){
+            } else if (user?.mod) {
                 await deleteFahrtMod(fahrt);
             }
-            
+
             // Rufe die Funktion removeFromFahrts aus der Prop auf, um die Fahrt zu entfernen und das Modal zu schließen
             await removeFromFahrt(fahrt);
             setCounter(prev => prev + 1);
@@ -137,7 +137,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
                         </p>
                     ) : (
                         <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
-                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet ? "Sie waren abwesend": "Fahrt läuft noch"}</span>
+                            Gesamtfahrtstrecke: <span style={{ fontWeight: 'bold' }}>{fahrt.beendet ? "Sie waren abwesend" : "Fahrt läuft noch"}</span>
                         </p>
                     )}
                     <p style={{ margin: '5px 0', fontSize: '20px', color: '#555' }}>
@@ -215,8 +215,7 @@ const ExpandFahrt: React.FC<{ fahrt: FahrtResource, user: UserResource ,  remove
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
                 <button className="submit-button-beginnen" style={{ margin: '0 10px' }} onClick={() => { downloadPDF(fahrt) }}>Herunterladen</button>
-                <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete() }}>Löschen</button>
-            </div>
+                {user && (user.mod || user.admin) && <button className="submit-button-beginnen2" style={{ margin: '0 10px' }} onClick={() => { handleDelete() }}>Löschen</button>}            </div>
         </div>
     );
 

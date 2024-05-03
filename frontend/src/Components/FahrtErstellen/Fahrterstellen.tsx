@@ -123,6 +123,7 @@ const FahrtErstellen = () => {
                         beendet: true,
                         totalRuhezeit: dayinMillis
                     };
+                    setValidated(true)
                     const fahrt = await postFahrt(fahrtResource);
                     setShowSuccess(true);
                     setTimeout(() => { navigate("/home") }, 1500)
