@@ -38,7 +38,14 @@ const TFahrtVerwalten: React.FC = () => {
 
   useEffect(() => {
     last();
+  }, []);
+
+  useEffect(() => {
+    if (count !== 0) {
+      last();
+    }
   }, [count]);
+
 
   const formatTime = (date: Date): string => {
     const hours = date.getHours().toString().padStart(2, '0');
@@ -156,6 +163,7 @@ const TFahrtVerwalten: React.FC = () => {
     }
   }
 
+
   async function handleEndePost(formData: any) {
     if (usercontexte && letzteFahrt) {
       await stopRunningTimer()
@@ -163,6 +171,7 @@ const TFahrtVerwalten: React.FC = () => {
       today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
+      const dayinMillis = (24 * 3600 * 1000) / 1000;
       const fahrtendeTime = new Date(Date.now() + 2000)
 
       const timeFromMidnight = letzteFahrt.createdAt ? new Date(letzteFahrt.createdAt).getTime() - today.getTime() : 0;
@@ -191,6 +200,7 @@ const TFahrtVerwalten: React.FC = () => {
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
+      setCounter((count) => count + 1);
     }
   }
 
@@ -331,12 +341,6 @@ const TFahrtVerwalten: React.FC = () => {
     }
   }
 
-
-
-
-
-
-
   async function handleLenkzeit() {
     setisDisabledLenkzeit(true)
 
@@ -416,7 +420,9 @@ const TFahrtVerwalten: React.FC = () => {
       <Navbar />
       <div className='fahrt-verwalten'>
         {loading ? (
-          <Loading />
+          <div style={{marginTop:"200px"}}>
+            <Loading />
+          </div>
         ) : (
           <div className="form-container3">
             <h1 className="form-header">Fahrt verwalten</h1>
@@ -448,27 +454,27 @@ const TFahrtVerwalten: React.FC = () => {
 
 
                 <div className="section">
-    <div className="button-group">
-        <Button className='ie' style={{ backgroundColor: isRecordingLenkzeit ? 'red' : '#0A58CA' }} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
-            {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
-        </Button>
-    </div>
-    <div className="button-group">
-        <Button className='i' style={{ backgroundColor: isRecordingArbeitszeit ? 'red' : '#0A58CA' }} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
-            {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
-        </Button>
-    </div>
-    <div className="button-group">
-        <Button className='i' style={{ backgroundColor: isRecordingPause ? 'red' : '#0A58CA' }} onClick={handlePause} disabled={isDisabledPause}>
-            {isRecordingPause ? "Pause läuft" : "Pause start"}
-        </Button>
-    </div>
-    <div className="button-group">
-        <Button className='i' style={{ backgroundColor: buttonLoading ? 'red' : '#0A58CA' }} onClick={handleOpenModal} disabled={buttonLoading}>
-            {buttonLoading ? 'Fahrt beendet' : 'Fahrt beenden'}
-        </Button>
-    </div>
-</div>
+                  <div className="button-group">
+                    <Button className='ie' style={{ backgroundColor: isRecordingLenkzeit ? 'red' : '#0A58CA' }} onClick={handleLenkzeit} disabled={isDisabledLenkzeit}>
+                      {isRecordingLenkzeit ? "Lenkzeit läuft" : "Lenkzeit start"}
+                    </Button>
+                  </div>
+                  <div className="button-group">
+                    <Button className='i' style={{ backgroundColor: isRecordingArbeitszeit ? 'red' : '#0A58CA' }} onClick={handleArbeitszeit} disabled={isDisabledArbeitzeit}>
+                      {isRecordingArbeitszeit ? "Arbeitszeit läuft" : "Arbeitszeit start"}
+                    </Button>
+                  </div>
+                  <div className="button-group">
+                    <Button className='i' style={{ backgroundColor: isRecordingPause ? 'red' : '#0A58CA' }} onClick={handlePause} disabled={isDisabledPause}>
+                      {isRecordingPause ? "Pause läuft" : "Pause start"}
+                    </Button>
+                  </div>
+                  <div className="button-group">
+                    <Button className='i' style={{ backgroundColor: buttonLoading ? 'red' : '#0A58CA' }} onClick={handleOpenModal} disabled={buttonLoading}>
+                      {buttonLoading ? 'Fahrt beendet' : 'Fahrt beenden'}
+                    </Button>
+                  </div>
+                </div>
 
 
               </>

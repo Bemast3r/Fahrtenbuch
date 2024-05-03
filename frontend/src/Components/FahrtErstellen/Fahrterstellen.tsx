@@ -7,6 +7,8 @@ import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import Navbar from '../Home/Navbar';
 import { useUser } from '../Context/UserContext';
+import "../FahrtErstellen/fahrtErstellen.css";
+
 
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);
@@ -43,8 +45,8 @@ const FahrtErstellen = () => {
         } else {
             const logininfo = getLoginInfo()
             if (logininfo) {
-                const user = await getUser(logininfo.userID)
-                setUser(user)
+                const data = await getUser(logininfo.userID)
+                setUser(data)
                 setLoading(false)
             }
 
@@ -147,16 +149,16 @@ const FahrtErstellen = () => {
                     totalRuhezeit: (new Date(Date.now()).getTime() - today.getTime()) / 1000
                 };
                 const fahrt = await postFahrt(fahrtResource);
-                Object.keys(localStorage).forEach(key => {
-                    if (key !== 'jwt') {
-                        localStorage.removeItem(key);
-                    }
-                });
-                setShowSuccess(true);
-                setTimeout(() => {
-                    navigate("/verwalten");
-                }, 1000);
             }
+            Object.keys(localStorage).forEach(key => {
+                if (key !== 'jwt') {
+                    localStorage.removeItem(key);
+                }
+            });
+            setShowSuccess(true);
+            setTimeout(() => {
+                navigate("/verwalten");
+            }, 1000);
         }
     };
 
@@ -165,12 +167,6 @@ const FahrtErstellen = () => {
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const day = currentDate.getDate().toString().padStart(2, '0');
     const americanDateFormat = `${year}-${month}-${day}`;
-
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLFormElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    };
 
     return (
         <div className="wasgehtsiedasan">
@@ -189,7 +185,7 @@ const FahrtErstellen = () => {
                                 Sie können keine Fahrt erstellen. Bitte beenden Sie zuerst die laufende Fahrt.
                                 <Button variant="primary" type="submit" className="popup-button" onClick={() => { navigate("/verwalten"); }}>Fahrt verwalten</Button>
                             </Alert>
-                            <Form className="row g-3" noValidate validated={validated} onKeyPress={handleKeyPress} onSubmit={handleSubmit}>
+                            <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>
                                 <h2 className="form-header">Fahrt erstellen</h2>
                                 <Row className="mb-1">
                                     <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
@@ -307,7 +303,7 @@ const FahrtErstellen = () => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <button type="submit" className="submit-button-beginnen" onClick={() => handleSubmit}>
+                                <button type="submit" className="submit-button-beginnen">
                                     Fahrt beginnen
                                 </button>
                             </Form>

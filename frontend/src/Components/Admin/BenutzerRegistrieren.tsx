@@ -16,7 +16,7 @@ const BenutzerRegistrieren = () => {
     const [formData, setFormData] = useState<UserResource>({
         vorname: '',
         name: '',
-        username: '',
+        username: '',   
         email: '',
         password: '',
         admin: false,
@@ -41,7 +41,7 @@ const BenutzerRegistrieren = () => {
 
         // Validierung für Vor- und Nachnamen
         if (name === 'vorname' || name === 'name') {
-            validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß]/g, ''); // Entferne alle Zeichen außer Buchstaben
+            validatedValue = value.replace(/[^a-zA-ZÄäÖöÜüß\s]/g, ''); 
         } else if (name === 'username') {
             validatedValue = value.replace(/[^a-zA-Z0-9_.]/g, ''); // Erlaubt nur Buchstaben, Zahlen, Unterstriche (_) und Punkte (.)
         }
@@ -154,7 +154,7 @@ const BenutzerRegistrieren = () => {
                         <Row className="mb-2">
                             <Form.Group as={Col} controlId="formGridEmail" className="form-group">
                                 <Form.Label className="form-label">Email*</Form.Label>
-                                <Form.Control type="email" placeholder="Email" name="email" className={`form-control ${validated && !formData.email ? 'is-invalid' : ''}`} value={formData.email} onChange={handleChange} required />
+                                <Form.Control type="email" placeholder="Email" name="email" className={`form-control ${validated && !formData.email ? 'is-invalid' : ''}`} value={formData.email} onChange={handleChange} required={formData.admin || formData.mod} />
                                 <Form.Control.Feedback type="invalid" className="form-control-feedback">
                                     Bitte geben Sie die E-Mail-Adresse an.
                                 </Form.Control.Feedback>
