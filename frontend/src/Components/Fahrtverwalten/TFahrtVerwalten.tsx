@@ -163,7 +163,6 @@ const TFahrtVerwalten: React.FC = () => {
       today.setHours(0, 0, 0, 0);
       const end = new Date();
       end.setHours(23, 59, 59, 0);
-      const dayinMillis = (24 * 3600 * 1000) / 1000;
       const fahrtendeTime = new Date(Date.now() + 2000)
 
       const timeFromMidnight = letzteFahrt.createdAt ? new Date(letzteFahrt.createdAt).getTime() - today.getTime() : 0;
@@ -192,7 +191,6 @@ const TFahrtVerwalten: React.FC = () => {
       };
       const fahrt = await updateFahrt(fahrtResource);
       setLetzteFahrt(fahrt);
-      setCounter((count) => count + 1);
     }
   }
 

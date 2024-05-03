@@ -16,7 +16,6 @@ import Navbar from '../Home/Navbar';
 
 const Fahrtabschliessen = () => {
     const [loading, setLoading] = useState<boolean>(true);
-    const [disableFields, setDisableFields] = useState(false);
     const [user, setUser] = useState<UserResource | null>(null)
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
     const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -82,14 +81,14 @@ const Fahrtabschliessen = () => {
                     beendet: true
                 };
                 await updateFahrt(fahrtResource)
+                Object.keys(localStorage).forEach(key => {
+                    if (key !== 'jwt') {
+                        localStorage.removeItem(key);
+                    }
+                });
+                setShowSuccess(true);
+                setTimeout(() => { navigate("/home") }, 1000)
             }
-            Object.keys(localStorage).forEach(key => {
-                if (key !== 'jwt') {
-                    localStorage.removeItem(key);
-                }
-            });
-            setShowSuccess(true);
-            setTimeout(() => { navigate("/home") }, 1000)
         }
     }
 

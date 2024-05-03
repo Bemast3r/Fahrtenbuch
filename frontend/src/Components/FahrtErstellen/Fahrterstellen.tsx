@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getJWT, setJWT } from '../Context/Logincontext';
-import { getFahrt, postFahrt } from '../../Api/api';
+import { getJWT, getLoginInfo, setJWT } from '../Context/Logincontext';
+import { getFahrt, getUser, postFahrt } from '../../Api/api';
 import { FahrtResource } from '../../util/Resources';
 import Loading from '../../util/Components/LoadingIndicator';
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
@@ -11,7 +11,7 @@ import { useUser } from '../Context/UserContext';
 const FahrtErstellen = () => {
     const [loading, setLoading] = useState(true);
     const [disableFields, setDisableFields] = useState(false);
-    const { user } = useUser()
+    const { user, setUser } = useUser()
     const [letzteFahrt, setLetzteFahrt] = useState<FahrtResource | null>(null);
     const [showAlert, setShowAlert] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -32,7 +32,7 @@ const FahrtErstellen = () => {
 
     useEffect(() => {
         load();
-    }, [user]);
+    }, []);
 
     async function load() {
 
@@ -40,6 +40,14 @@ const FahrtErstellen = () => {
             const fahrten: FahrtResource[] = await getFahrt(user.id);
             setLetzteFahrt(fahrten[fahrten.length - 1])
             setLoading(false);
+        } else {
+            const logininfo = getLoginInfo()
+            if (logininfo) {
+                const user = await getUser(logininfo.userID)
+                setUser(user)
+                setLoading(false)
+            }
+
         }
     }
 
@@ -105,9 +113,9 @@ const FahrtErstellen = () => {
                         vollname: user.vorname + " " + user.name,
                         kennzeichen: "-",
                         kilometerstand: 0,
-                        kilometerende:0,
+                        kilometerende: 0,
                         startpunkt: "-",
-                        endpunkt:"-",
+                        endpunkt: "-",
                         abwesend: abwesendText,
                         ruhezeit: [{ start: today, stop: end }],
                         beendet: true,
@@ -139,16 +147,16 @@ const FahrtErstellen = () => {
                     totalRuhezeit: (new Date(Date.now()).getTime() - today.getTime()) / 1000
                 };
                 const fahrt = await postFahrt(fahrtResource);
+                Object.keys(localStorage).forEach(key => {
+                    if (key !== 'jwt') {
+                        localStorage.removeItem(key);
+                    }
+                });
+                setShowSuccess(true);
+                setTimeout(() => {
+                    navigate("/verwalten");
+                }, 1000);
             }
-            Object.keys(localStorage).forEach(key => {
-                if (key !== 'jwt') {
-                    localStorage.removeItem(key);
-                }
-            });
-            setShowSuccess(true);
-            setTimeout(() => {
-                navigate("/verwalten");
-            }, 1000);
         }
     };
 
@@ -157,6 +165,12 @@ const FahrtErstellen = () => {
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const day = currentDate.getDate().toString().padStart(2, '0');
     const americanDateFormat = `${year}-${month}-${day}`;
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLFormElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    };
 
     return (
         <div className="wasgehtsiedasan">
@@ -175,7 +189,7 @@ const FahrtErstellen = () => {
                                 Sie können keine Fahrt erstellen. Bitte beenden Sie zuerst die laufende Fahrt.
                                 <Button variant="primary" type="submit" className="popup-button" onClick={() => { navigate("/verwalten"); }}>Fahrt verwalten</Button>
                             </Alert>
-                            <Form className="row g-3" noValidate validated={validated} onSubmit={handleSubmit}>
+                            <Form className="row g-3" noValidate validated={validated} onKeyPress={handleKeyPress} onSubmit={handleSubmit}>
                                 <h2 className="form-header">Fahrt erstellen</h2>
                                 <Row className="mb-1">
                                     <Form.Group as={Col} controlId="formGridFahrer" className="form-group">
@@ -293,7 +307,7 @@ const FahrtErstellen = () => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <button type="submit" className="submit-button-beginnen">
+                                <button type="submit" className="submit-button-beginnen" onClick={() => handleSubmit}>
                                     Fahrt beginnen
                                 </button>
                             </Form>
